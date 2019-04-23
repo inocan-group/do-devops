@@ -1,0 +1,39 @@
+{
+  "name": "devops",
+  "version": "0.1.0",
+  "description": "Devops commands for your nodejs projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --require ts-node/register test/**/*-spec.ts --exit",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inocan-group/devops.git"
+  },
+  "keywords": [
+    "devops",
+    "nodejs"
+  ],
+  "author": "Ken Snyder",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inocan-group/devops/issues"
+  },
+  "homepage": "https://github.com/inocan-group/devops#readme",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^5.0.5",
+    "inquirer": "^6.3.1"
+  },
+  "devDependencies": {
+    "@types/command-line-args": "^5.0.0",
+    "@types/command-line-usage": "^5.0.1",
+    "@types/inquirer": "^6.0.0",
+    "@types/node": "^11.13.6",
+    "ts-node": "^8.1.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.4"
+  }
+}
