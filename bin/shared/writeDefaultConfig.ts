@@ -14,7 +14,7 @@ export function writeConfig(c: IDoConfig) {
   const filename = getConfigFilename();
   writeFileSync(
     filename,
-    "import IDoConfig from 'devops';\nexport default " +
+    "import IDoConfig from 'do-devops';\nexport default " +
       JSON.stringify(c, null, 2) +
       " as IDoConfig\n",
     {

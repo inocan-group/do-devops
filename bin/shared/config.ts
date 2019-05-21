@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import chalk from "chalk";
 import { writeConfig, writeWholeFile } from "./writeDefaultConfig";
 import * as defaults from "../commands/defaults";
@@ -74,21 +74,9 @@ export function getDefaultConfig() {
  */
 export async function getConfig() {
   const filename = getConfigFilename();
-  try {
-    const config = await import(filename);
-    try {
-      return JSON.parse(config) as IDoConfig;
-    } catch (e) {
-      console.log("- Problem parsing the config file: %s", chalk.grey(e.message));
-      console.log(
-        "- Either edit the file to the correct %s or delete and %s will recreate the config with default values\n",
-        chalk.italic("typing"),
-        chalk.bold("'do'")
-      );
-      process.exit();
-    }
-  } catch (e) {
-    console.log(`- configuration file not found [ %s ]`, chalk.grey(process.env.PWD), e);
+  let config: IDoConfig;
+  if (!existsSync(filename)) {
+    console.log(`- configuration file not found [ %s ]`, chalk.grey(process.env.PWD));
     writeWholeFile();
     console.log(
       `- default configuration was written to "%s" in project root`,
@@ -96,6 +84,20 @@ export async function getConfig() {
     );
     console.log(
       `- please review/edit configuration first before running additional commands\n`
+    );
+    process.exit();
+  }
+
+  try {
+    config = await import(filename);
+  } catch (e) {
+    console.log(
+      "- \ud83d\udca9  Problem importing the config file: %s",
+      chalk.grey(e.message)
+    );
+    console.log(
+      "- Either edit the file to the correct %s or delete the config and it will be recreated with the default values\n",
+      chalk.italic("typing")
     );
     process.exit();
   }

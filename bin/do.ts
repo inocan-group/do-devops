@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node
 import { OptionDefinition } from "command-line-args";
 import { DoGlobalOptions, inverted } from "./shared";
 import commandLineArgs = require("command-line-args");
