@@ -1,4 +1,4 @@
-import { inverted } from ".";
+import { inverted } from "../shared";
 
 export const DoGlobalOptions = [
   {

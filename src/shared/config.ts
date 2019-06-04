@@ -3,6 +3,7 @@ import chalk from "chalk";
 import { writeConfig, writeWholeFile } from "./writeDefaultConfig";
 import * as defaults from "../commands/defaults";
 import { IDoRootConfig, IDoConfig } from "../commands/defaults";
+import fs from "fs";
 
 export type IDoConfigSections = keyof typeof defaults;
 
@@ -12,7 +13,7 @@ export type IDoConfigSections = keyof typeof defaults;
  * returns the path to the configuration filename
  */
 export function getConfigFilename() {
-  return `${process.env.PWD}/do.config.ts`;
+  return `${process.env.PWD}/do.config.js`;
 }
 
 /**
@@ -70,7 +71,7 @@ export function getDefaultConfig() {
 /**
  * **getConfig**
  *
- * Gets the current configuration based on the `do.config.ts` file.
+ * Gets the current configuration based on the `do.config.js` file.
  */
 export async function getConfig() {
   const filename = getConfigFilename();
@@ -80,19 +81,16 @@ export async function getConfig() {
     writeWholeFile();
     console.log(
       `- default configuration was written to "%s" in project root`,
-      chalk.bold.italic("do.config.ts")
+      chalk.bold.italic("do.config.js")
     );
-    console.log(
-      `- please review/edit configuration first before running additional commands\n`
-    );
-    process.exit();
   }
 
   try {
     config = await import(filename);
   } catch (e) {
     console.log(
-      "- \ud83d\udca9  Problem importing the config file: %s",
+      "- \ud83d\udca9  Problem importing the config file [ %s ]: %s",
+      filename,
       chalk.grey(e.message)
     );
     console.log(

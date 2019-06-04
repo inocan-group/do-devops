@@ -2,13 +2,14 @@
   "name": "do-devops",
   "version": "0.1.1",
   "description": "Devops commands for your nodejs projects",
-  "main": "index.ts",
+  "main": "`index.js",
   "bin": {
-    "do": "bin/do.ts"
+    "do": "./bin/do.js"
   },
   "scripts": {
     "test": "mocha --require ts-node/register test/**/*-spec.ts --exit",
-    "build": "tsc"
+    "build": "tsc",
+    "do": "./bin/do.js"
   },
   "repository": {
     "type": "git",
@@ -16,7 +17,8 @@
   },
   "keywords": [
     "devops",
-    "nodejs"
+    "nodejs",
+    "serverless"
   ],
   "author": "Ken Snyder",
   "license": "MIT",
@@ -28,18 +30,21 @@
     "chalk": "^2.4.2",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^5.0.5",
+    "common-types": "^1.11.11",
     "fast-glob": "^2.2.7",
     "inquirer": "^6.3.1",
-    "table": "^5.3.3",
-    "ts-node": "^8.1.0"
+    "table": "^5.4.0",
+    "ts-node": "^8.2.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
+    "@types/chalk": "^2.2.0",
     "@types/command-line-args": "^5.0.0",
     "@types/command-line-usage": "^5.0.1",
-    "@types/inquirer": "^6.0.0",
-    "@types/mocha": "^5.2.6",
+    "@types/inquirer": "^6.0.3",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^11.13.6",
+    "@types/table": "^4.0.5",
     "async-shelljs": "^0.1.2",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",

@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env node
 import { OptionDefinition } from "command-line-args";
 import { DoGlobalOptions, inverted } from "./shared";
 import commandLineArgs = require("command-line-args");
@@ -32,9 +32,9 @@ import { help } from "./commands/help";
     await subModule.handler(argv, opts);
   } else {
     console.log(
-      `${chalk.bold.red("SSM:")} "${cmd}" is an unknown command!\n\n` +
+      `${chalk.bold.red("DO:")} "${cmd}" is an unknown command!\n\n` +
         `- Valid command syntax is: ${chalk.bold(
-          "ssm [command] <options>"
+          "do [command] <options>"
         )}\n  where valid commands are: ${chalk.italic(commands().join(", "))}\n` +
         `- If you want more help use the ${inverted(" --help ")} option\n`
     );
