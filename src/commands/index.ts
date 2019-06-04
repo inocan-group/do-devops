@@ -1,6 +1,7 @@
 import * as help from "./help";
 import * as build from "./build";
-import * as version from "./version";
+import * as info from "./info";
+import * as autoindex from "./autoindex";
 import * as defaults from "./defaults";
 
-export { help, build, version, defaults };
+export { help, build, info, autoindex, defaults };

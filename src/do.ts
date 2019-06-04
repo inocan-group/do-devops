@@ -18,9 +18,7 @@ import { help } from "./commands/help";
   const opts = mainCommand.global;
 
   console.log(
-    chalk.bold.white.underline(
-      `DevOps [DO] ${chalk.italic.bold(cmd ? cmd + " " : "Help")}\n`
-    )
+    chalk.bold.white(`do ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
   );
 
   if (!cmd) {

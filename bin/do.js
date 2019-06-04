@@ -33,7 +33,7 @@ const help_1 = require("./commands/help");
     const cmd = (mainCommand._all || {}).command;
     let argv = mainCommand._unknown || [];
     const opts = mainCommand.global;
-    console.log(chalk_1.default.bold.white.underline(`DevOps [DO] ${chalk_1.default.italic.bold(cmd ? cmd + " " : "Help")}\n`));
+    console.log(chalk_1.default.bold.white(`do ${chalk_1.default.green.italic.bold(cmd ? cmd + " " : "Help")}\n`));
     if (!cmd) {
         help_1.help(shared_1.DoGlobalOptions, cmd);
     }

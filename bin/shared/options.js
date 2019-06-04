@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require(".");
+const shared_1 = require("../shared");
 exports.DoGlobalOptions = [
     {
         name: "profile",
@@ -31,6 +31,6 @@ exports.DoGlobalOptions = [
         alias: "h",
         type: Boolean,
         group: "global",
-        description: `shows help for the ${_1.inverted(" ssm ")} command in general but also the specifics of a particular sub-command if stated`
+        description: `shows help for the ${shared_1.inverted(" ssm ")} command in general but also the specifics of a particular sub-command if stated`
     }
 ];

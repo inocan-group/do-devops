@@ -26,7 +26,7 @@ export async function handler() {
     silent: true
   })).split("\n").length;
 
-  const { name, version, scripts, repository } = getPackageJson();
+  const { name, version, scripts, repository, description } = getPackageJson();
 
   console.log(`Info on package ${chalk.green.bold(name)}`);
   const data = [
@@ -35,6 +35,12 @@ export async function handler() {
       `Latest published ${chalk.bold.green(
         versions.pop()
       )}; locally in package.json is ${chalk.bold.green(version)}`
+    ],
+    [
+      "Desc ",
+      description
+        ? chalk.italic(description)
+        : chalk.grey.italic("no description provided")
     ],
     [
       "Repo ",
