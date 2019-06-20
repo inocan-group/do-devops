@@ -4,7 +4,9 @@ const fs_1 = require("fs");
 const config_1 = require("./config");
 function writeConfig(c) {
     const filename = config_1.getConfigFilename();
-    fs_1.writeFileSync(filename, "const config = " + JSON.stringify(c, null, 2) + ";\nmodule.exports = config;", {
+    fs_1.writeFileSync(filename, "const config = " +
+        JSON.stringify(c, null, 2) +
+        ";\nmodule.exports = config;", {
         encoding: "utf-8"
     });
 }

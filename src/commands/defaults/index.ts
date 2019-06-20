@@ -1,12 +1,14 @@
-import { IDoRootConfig } from "./root";
+import { IDoGlobalConfig } from "./global";
 import { IDoBuildConfig } from "./build";
 import { IDoDeployConfig } from "./deploy";
 
-export interface IDoConfig extends IDoRootConfig {
+export interface IDoConfig {
+  global: IDoGlobalConfig;
+
   build: IDoBuildConfig;
   deploy: IDoDeployConfig;
 }
 
-export * from "./root";
+export * from "./global";
 export * from "./build";
 export * from "./deploy";

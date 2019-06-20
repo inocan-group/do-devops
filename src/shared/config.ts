@@ -2,8 +2,7 @@ import { readFileSync, existsSync } from "fs";
 import chalk from "chalk";
 import { writeConfig, writeWholeFile } from "./writeDefaultConfig";
 import * as defaults from "../commands/defaults";
-import { IDoRootConfig, IDoConfig } from "../commands/defaults";
-import fs from "fs";
+import { IDoConfig } from "../commands/defaults";
 
 export type IDoConfigSections = keyof typeof defaults;
 
@@ -31,7 +30,7 @@ export function getCurrentConfig() {
  * **getConfigSectionNames**
  *
  * returns a list of configuration section names; this includes
- * the `root` section.
+ * the `global` section.
  */
 export function getConfigSectionNames(): string[] {
   return Object.keys(defaults).filter((section: IDoConfigSections) => {
@@ -48,6 +47,8 @@ export function getDefaultForConfigSection(section: IDoConfigSections) {
   return defaults[section]();
 }
 
+export async function askUserForConfigDefaults(section: IDoConfigSections) {}
+
 /**
  * **getDefaultConfig**
  *
@@ -57,11 +58,7 @@ export function getDefaultForConfigSection(section: IDoConfigSections) {
 export function getDefaultConfig() {
   return getConfigSectionNames().reduce(
     (acc, section: IDoConfigSections) => {
-      if (section === "root") {
-        acc = { ...acc, ...getDefaultForConfigSection(section as any) };
-      } else {
-        acc = { ...acc, [section]: getDefaultForConfigSection(section) };
-      }
+      acc = { ...acc, [section]: getDefaultForConfigSection(section) };
       return acc;
     },
     {} as Partial<IDoConfig>
@@ -72,12 +69,25 @@ export function getDefaultConfig() {
  * **getConfig**
  *
  * Gets the current configuration based on the `do.config.js` file.
+ * This will include global as well as command-specific configuration.
+ *
+ * The _command-specific_ config should be stored off the root of
+ * the configuration with the same name as the command. The _global_ 
+ * config is stored off the root config on the property of `global`. 
+ * This allows for consumers of this function to isolate like so:
+ * 
+```typescript
+const { global, myCommand } = await getConfig();
+```
  */
 export async function getConfig() {
   const filename = getConfigFilename();
   let config: IDoConfig;
   if (!existsSync(filename)) {
-    console.log(`- configuration file not found [ %s ]`, chalk.grey(process.env.PWD));
+    console.log(
+      `- configuration file not found [ %s ]`,
+      chalk.grey(process.env.PWD)
+    );
     writeWholeFile();
     console.log(
       `- default configuration was written to "%s" in project root`,
@@ -87,6 +97,7 @@ export async function getConfig() {
 
   try {
     config = await import(filename);
+    return config;
   } catch (e) {
     console.log(
       "- \ud83d\udca9  Problem importing the config file [ %s ]: %s",

@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function deploy() {
     return {
         preDeployHooks: ["clean"],
-        deployTool: "serverless"
+        target: "serverless",
+        showUnderlyingCommands: true
     };
 }
 exports.deploy = deploy;

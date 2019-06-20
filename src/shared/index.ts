@@ -6,3 +6,4 @@ export * from "./options";
 export * from "./config";
 export * from "./utils";
 export * from "./emoji";
+export * from "./runHooks";

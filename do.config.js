@@ -1,15 +1,18 @@
 const config = {
-  projectType: "serverless-library",
-  build: {
-    preBuildHooks: ["clean"],
-    targetDirectory: "dist",
-    buildTool: "tsc"
+  "projectType": "serverless-library",
+  "build": {
+    "preBuildHooks": [
+      "clean"
+    ],
+    "targetDirectory": "dist",
+    "buildTool": "tsc"
   },
-  deploy: {
-    preDeployHooks: ["clean"],
-    deployTool: "serverless"
-  },
-  version: {}
+  "deploy": {
+    "preDeployHooks": [
+      "clean"
+    ],
+    "deployTool": "serverless",
+    "showUnderlyingCommands": true
+  }
 };
-
 module.exports = config;

@@ -1,14 +1,21 @@
 export interface IDoDeployConfig {
   preDeployHooks?: string[];
   /**
-   * Which tool are you using for running your build pipeline?
+   * Which deployment target is your default
    */
-  deployTool: "serverless" | "npm" | "bespoke";
+  target: "serverless" | "npm" | "bespoke";
+  /**
+   * In many/most cases we are wrapping commands provided by
+   * different libraries. Should these underlying commands be
+   * displayed as part of the CLI output?
+   */
+  showUnderlyingCommands: boolean;
 }
 
 export function deploy(): IDoDeployConfig {
   return {
     preDeployHooks: ["clean"],
-    deployTool: "serverless"
+    target: "serverless",
+    showUnderlyingCommands: true
   };
 }

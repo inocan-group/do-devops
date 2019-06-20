@@ -7,13 +7,14 @@ export type IDoProjectType =
    * a library of typescript functions which are being exported to
    * be consumed by other JS/TS clients
    */
-  | "library";
+  | "library"
+  | "vuejs-app";
 
-export interface IDoRootConfig {
+export interface IDoGlobalConfig {
   projectType: IDoProjectType;
 }
 
-export function root(): IDoRootConfig {
+export function root(): IDoGlobalConfig {
   return {
     projectType: "serverless-library"
   };

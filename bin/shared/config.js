@@ -44,7 +44,7 @@ exports.getCurrentConfig = getCurrentConfig;
  * **getConfigSectionNames**
  *
  * returns a list of configuration section names; this includes
- * the `root` section.
+ * the `global` section.
  */
 function getConfigSectionNames() {
     return Object.keys(defaults).filter((section) => {
@@ -61,6 +61,10 @@ function getDefaultForConfigSection(section) {
     return defaults[section]();
 }
 exports.getDefaultForConfigSection = getDefaultForConfigSection;
+function askUserForConfigDefaults(section) {
+    return __awaiter(this, void 0, void 0, function* () { });
+}
+exports.askUserForConfigDefaults = askUserForConfigDefaults;
 /**
  * **getDefaultConfig**
  *
@@ -69,12 +73,7 @@ exports.getDefaultForConfigSection = getDefaultForConfigSection;
  */
 function getDefaultConfig() {
     return getConfigSectionNames().reduce((acc, section) => {
-        if (section === "root") {
-            acc = Object.assign({}, acc, getDefaultForConfigSection(section));
-        }
-        else {
-            acc = Object.assign({}, acc, { [section]: getDefaultForConfigSection(section) });
-        }
+        acc = Object.assign({}, acc, { [section]: getDefaultForConfigSection(section) });
         return acc;
     }, {});
 }
@@ -83,6 +82,16 @@ exports.getDefaultConfig = getDefaultConfig;
  * **getConfig**
  *
  * Gets the current configuration based on the `do.config.js` file.
+ * This will include global as well as command-specific configuration.
+ *
+ * The _command-specific_ config should be stored off the root of
+ * the configuration with the same name as the command. The _global_
+ * config is stored off the root config on the property of `global`.
+ * This allows for consumers of this function to isolate like so:
+ *
+```typescript
+const { global, myCommand } = await getConfig();
+```
  */
 function getConfig() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -95,6 +104,7 @@ function getConfig() {
         }
         try {
             config = yield Promise.resolve().then(() => __importStar(require(filename)));
+            return config;
         }
         catch (e) {
             console.log("- \ud83d\udca9  Problem importing the config file [ %s ]: %s", filename, chalk_1.default.grey(e.message));

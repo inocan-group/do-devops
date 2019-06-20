@@ -14,7 +14,9 @@ export function writeConfig(c: IDoConfig) {
   const filename = getConfigFilename();
   writeFileSync(
     filename,
-    "const config = " + JSON.stringify(c, null, 2) + ";\nmodule.exports = config;",
+    "const config = " +
+      JSON.stringify(c, null, 2) +
+      ";\nmodule.exports = config;",
     {
       encoding: "utf-8"
     }

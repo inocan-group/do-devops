@@ -1,10 +1,13 @@
-import commandLineUsage from "command-line-usage";
+import commandLineUsage, { Section } from "command-line-usage";
 import commandLineArgs from "command-line-args";
 import chalk from "chalk";
 
 import { inverted, commands } from "../shared";
 
-export function help(optionList: commandLineArgs.CommandLineOptions[], fn?: string) {
+export function help(
+  optionList: commandLineArgs.CommandLineOptions[],
+  fn?: string
+) {
   const sections: commandLineUsage.Section[] = [
     {
       header: "Description",
@@ -31,7 +34,7 @@ export function help(optionList: commandLineArgs.CommandLineOptions[], fn?: stri
   sections.push({
     header: "Options",
     optionList
-  });
+  } as Section);
 
   console.log(commandLineUsage(sections));
   process.exit();

@@ -13,3 +13,4 @@ __export(require("./options"));
 __export(require("./config"));
 __export(require("./utils"));
 __export(require("./emoji"));
+__export(require("./runHooks"));
