@@ -2,7 +2,9 @@ import { getServerlessYml } from "./serverlessConfig";
 import { getConfig } from "../shared";
 import inquirer = require("inquirer");
 import fs from "fs";
+import path from "path";
 import { IDictionary } from "common-types";
+import { readFile } from "./readFile";
 
 /**
  * Gets the "default" profile for a given repo based on:
@@ -26,62 +28,72 @@ export async function getDefaultAwsProfile() {
 }
 
 /**
- * Interogates the `~/.aws/credentials` file to get a list of
- * profiles the user has available. Returns _false_ if the credentials file
- * is not found.
+ * Returns the path to the file if found, if not found then returns
+ * `false`.
+ */
+export function hasAwsProfileCredentialsFile() {
+  const homedir = require("os").homedir();
+  const filePath = path.join(homedir, ".aws/credentials");
+  return fs.existsSync(filePath) ? filePath : false;
+}
+
+/**
+ * Interogates the `~/.aws/credentials` file to get a hash of
+ * profiles (name/dictionary of values) the user has available.
+ * Returns _false_ if the credentials file is not found.
  *
  * Alternatively you can state a particular `profile` which you
  * want the details on by specifying the profile name as part of
  * the calling arguments. In this case if the profile stated is
  * not found it will throw the error `do-devops/not-found`
  */
-export async function getAwsProfileList(
-  profile?: string
-): Promise<IDictionary<string> | Array<IDictionary<string>> | false> {
+export async function getAwsProfileList(profile?: string) {
   try {
-    const homedir = require("os").homedir();
-    const filter = profile ? i => i[0].includes(profile) : i => i;
-    let credentials = fs
-      .readFileSync(`${homedir}/.aws/credentials`, { encoding: "utf-8" })
-      .split("[")
-      .map(i => i.split("\n"))
-      .filter(filter)
-      .map(x => {
-        return x.map(i => {
-          let obj: { accessKeyId?: string; secretAccessKey?: string };
-          if (i.includes("aws_access_key_id")) {
-            obj.accessKeyId = i.replace(/.*aws_access_key_id\s*=\s*/, "");
-          }
-          if (i.includes("aws_secret_access_key")) {
-            obj.secretAccessKey = i.replace(
-              /.*aws_secret_access_key\s*=\s*/,
-              ""
+    const credentialsFile = hasAwsProfileCredentialsFile();
+    if (!credentialsFile) {
+      return false;
+    }
+
+    const filter = profile
+      ? /* filter down to only a given profile */
+        (i: string) => i.includes(profile)
+      : /** accept all profiles */
+        (i: string) => true;
+
+    const data = await readFile(credentialsFile);
+    const targets = ["aws_access_key_id", "aws_secret_access_key", "region"];
+
+    // extracts structured information from the semi-structured
+    // array of arrays
+    const extractor = (
+      agg: IDictionary<IDictionary<string>>,
+      curr: string[]
+    ) => {
+      let profileSection = "unknown";
+      curr.forEach(lineOfFile => {
+        if (lineOfFile.slice(-1) === "]") {
+          profileSection = lineOfFile.slice(0, lineOfFile.length - 1);
+          agg[profileSection] = {};
+        }
+        targets.forEach(t => {
+          if (lineOfFile.includes(t)) {
+            const [devnull, key, value] = lineOfFile.match(
+              /\s*(\S+)\s*=\s*(\S+)/
             );
+
+            agg[profileSection][key] = value;
           }
-          return obj;
         });
       });
-    // .pop()
-    // .slice(1, 3);
+      return agg;
+    };
+    const credentials = data
+      .split("[")
+      .filter(filter)
+      .map(i => i.split("\n"))
+      .reduce(extractor, {} as IDictionary<IDictionary<string>>);
 
-    // const credentialsObj = {
-    //   accessKeyId: "",
-    //   secretAccessKey: ""
-    // };
-    // credentials.map(i => {
-    //   if (i.includes("aws_access_key_id")) {
-    //     credentialsObj.accessKeyId = i.replace(
-    //       /.*aws_access_key_id\s*=\s*/,
-    //       ""
-    //     );
-    //   }
-    //   if (i.includes("aws_secret_access_key")) {
-    //     credentialsObj.secretAccessKey = i.replace(
-    //       /.*aws_secret_access_key\s*=\s*/,
-    //       ""
-    //     );
-
-    return profile ? credentials[0] : credentials;
+    return profile ? credentials[profile] : credentials;
   } catch (e) {
     return false;
   }
@@ -94,7 +106,7 @@ function getAwsProfileInfo(profile: string) {}
  */
 export async function askForAwsProfile(): Promise<string> {
   const profiles = await getAwsProfileList();
-  const question: inquirer.Question = {
+  const question: inquirer.InputQuestion = {
     type: "input",
     name: "profile",
     message: "Choose an AWS profile from your credentials file"
@@ -107,10 +119,11 @@ export async function askForAwsProfile(): Promise<string> {
  * Asks the user to choose an AWS region
  */
 export async function askForAwsRegion(): Promise<string> {
-  const question: inquirer.Question = {
+  const question: inquirer.ListQuestion = {
     type: "list",
     name: "region",
     message: "What AWS region do you want to target?",
+    default: "us-east-1",
     choices: [
       "us-east-1",
       "us-east-2",
@@ -129,8 +142,7 @@ export async function askForAwsRegion(): Promise<string> {
       "ap-northeast-3",
       "ap-southeast-1",
       "ap-southeast-2"
-    ],
-    default: "us-east-1"
+    ]
   };
   return;
 }

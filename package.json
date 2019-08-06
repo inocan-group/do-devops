@@ -7,7 +7,7 @@
     "do": "./bin/do.js"
   },
   "scripts": {
-    "test": "mocha --require ts-node/register test/**/*-spec.ts --exit",
+    "test": "mocha --require ts-node/register test/**/*-spec.ts",
     "build": "tsc",
     "do": "./bin/do.js"
   },
@@ -44,14 +44,14 @@
     "@types/command-line-args": "^5.0.0",
     "@types/command-line-usage": "^5.0.1",
     "@types/globby": "^9.1.0",
-    "@types/inquirer": "^6.0.3",
+    "@types/inquirer": "^6.5.0",
     "@types/js-yaml": "^3.12.1",
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.8.0",
-    "@types/table": "^4.0.5",
+    "@types/table": "^4.0.6",
     "async-shelljs": "^0.1.2",
     "chai": "^4.2.0",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.0",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "typescript": "^3.5.3"
