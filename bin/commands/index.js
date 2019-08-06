@@ -17,5 +17,5 @@ const autoindex = __importStar(require("./autoindex"));
 exports.autoindex = autoindex;
 const deploy = __importStar(require("./deploy"));
 exports.deploy = deploy;
-const defaults = __importStar(require("./defaults"));
-exports.defaults = defaults;
+const ssm = __importStar(require("./ssm"));
+exports.ssm = ssm;

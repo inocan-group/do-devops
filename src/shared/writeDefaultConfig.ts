@@ -7,9 +7,16 @@ import {
   getDefaultForConfigSection,
   IDoConfigSections,
   getConfigFilename,
-  getCurrentConfig
+  getCurrentConfig,
+  getConfig
 } from "./config";
+import { IDictionary } from "common-types";
 
+/**
+ * **writeConfig**
+ *
+ * Writes the `do-devops` config file
+ */
 export function writeConfig(c: IDoConfig) {
   const filename = getConfigFilename();
   writeFileSync(
@@ -23,9 +30,12 @@ export function writeConfig(c: IDoConfig) {
   );
 }
 
-export function writeSection(section: IDoConfigSections) {
-  const sectionMeta = getDefaultForConfigSection(section);
-  const currentConfig = getCurrentConfig();
+export async function writeSection(
+  section: IDoConfigSections,
+  content?: IDictionary
+) {
+  const sectionMeta = content ? content : getDefaultForConfigSection(section);
+  const currentConfig = await getConfig();
   writeConfig({ ...currentConfig, [section]: sectionMeta });
 }
 

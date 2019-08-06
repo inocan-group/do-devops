@@ -9,7 +9,7 @@ const path_1 = __importDefault(require("path"));
  * returns `package.json` of the local repo as a typed object
  */
 function getPackageJson() {
-    const filename = path_1.default.join(process.env.CWD, "package.json");
+    const filename = path_1.default.join(process.cwd(), "package.json");
     const hasServerlessConfig = fs_1.default.existsSync(filename);
     if (hasServerlessConfig) {
         const file = JSON.parse(fs_1.default.readFileSync(filename, { encoding: "utf-8" }));

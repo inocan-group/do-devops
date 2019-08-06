@@ -3,6 +3,6 @@ import * as build from "./build";
 import * as info from "./info";
 import * as autoindex from "./autoindex";
 import * as deploy from "./deploy";
-import * as defaults from "./defaults";
+import * as ssm from "./ssm";
 
-export { help, build, info, autoindex, deploy, defaults };
+export { help, build, info, autoindex, deploy, ssm };

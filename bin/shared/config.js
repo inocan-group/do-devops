@@ -37,6 +37,7 @@ exports.getConfigFilename = getConfigFilename;
  * returns the current configuration as a `IDoConfig` object
  */
 function getCurrentConfig() {
+    console.log("config filename:", getConfigFilename());
     return JSON.parse(fs_1.readFileSync(getConfigFilename(), { encoding: "utf-8" }));
 }
 exports.getCurrentConfig = getCurrentConfig;

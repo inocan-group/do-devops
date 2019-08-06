@@ -15,7 +15,9 @@ function getPackageJson(pathOveride) {
 exports.getPackageJson = getPackageJson;
 let _devDeps;
 function hasDevDependency(dep, pathOveride) {
-    const devDeps = _devDeps ? _devDeps : getPackageJson(pathOveride).devDependencies;
+    const devDeps = _devDeps
+        ? _devDeps
+        : getPackageJson(pathOveride).devDependencies;
     _devDeps = devDeps;
     return Object.keys(devDeps).includes(dep);
 }

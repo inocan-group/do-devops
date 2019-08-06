@@ -21,6 +21,8 @@ export function getConfigFilename() {
  * returns the current configuration as a `IDoConfig` object
  */
 export function getCurrentConfig() {
+  console.log("config filename:", getConfigFilename());
+
   return JSON.parse(
     readFileSync(getConfigFilename(), { encoding: "utf-8" })
   ) as IDoConfig;
@@ -80,7 +82,7 @@ export function getDefaultConfig() {
 const { global, myCommand } = await getConfig();
 ```
  */
-export async function getConfig() {
+export async function getConfig(): Promise<IDoConfig> {
   const filename = getConfigFilename();
   let config: IDoConfig;
   if (!existsSync(filename)) {
