@@ -16,6 +16,8 @@ const shared_1 = require("../shared");
 const inquirer = require("inquirer");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const readFile_1 = require("./readFile");
+const DevopsError_1 = require("./DevopsError");
 /**
  * Gets the "default" profile for a given repo based on:
  *
@@ -52,9 +54,9 @@ function hasAwsProfileCredentialsFile() {
 }
 exports.hasAwsProfileCredentialsFile = hasAwsProfileCredentialsFile;
 /**
- * Interogates the `~/.aws/credentials` file to get a list of
- * profiles the user has available. Returns _false_ if the credentials file
- * is not found.
+ * Interogates the `~/.aws/credentials` file to get a hash of
+ * profiles (name/dictionary of values) the user has available.
+ * Returns _false_ if the credentials file is not found.
  *
  * Alternatively you can state a particular `profile` which you
  * want the details on by specifying the profile name as part of
@@ -68,31 +70,34 @@ function getAwsProfileList(profile) {
             if (!credentialsFile) {
                 return false;
             }
-            const filter = profile
-                ? /* filter down to only a given profile */
-                    (i) => i.includes(profile)
-                : /** accept all profiles */
-                    (i) => true;
-            let credentials = fs_1.default
-                .readFileSync(credentialsFile, { encoding: "utf-8" })
-                .split("[")
-                .filter(filter)
-                .map(i => i.split("\n"))
-                .map(x => {
-                return x.map(i => {
-                    let obj;
-                    if (i.includes("aws_access_key_id")) {
-                        obj.accessKeyId = i.replace(/.*aws_access_key_id\s*=\s*/, "");
+            const data = yield readFile_1.readFile(credentialsFile);
+            const targets = ["aws_access_key_id", "aws_secret_access_key", "region"];
+            // extracts structured information from the semi-structured
+            // array of arrays
+            const extractor = (agg, curr) => {
+                let profileSection = "unknown";
+                curr.forEach(lineOfFile => {
+                    if (lineOfFile.slice(-1) === "]") {
+                        profileSection = lineOfFile.slice(0, lineOfFile.length - 1);
+                        agg[profileSection] = {};
                     }
-                    if (i.includes("aws_secret_access_key")) {
-                        obj.secretAccessKey = i.replace(/.*aws_secret_access_key\s*=\s*/, "");
-                    }
-                    return obj;
+                    targets.forEach(t => {
+                        if (lineOfFile.includes(t)) {
+                            const [devnull, key, value] = lineOfFile.match(/\s*(\S+)\s*=\s*(\S+)/);
+                            agg[profileSection][key] = value;
+                        }
+                    });
                 });
-            })
-                .pop()
-                .slice(1, 3);
-            return profile ? credentials[0] : credentials;
+                return agg;
+            };
+            const credentials = data
+                .split("[")
+                .map(i => i.split("\n"))
+                .reduce(extractor, {});
+            if (profile && !credentials[profile]) {
+                throw new DevopsError_1.DevopsError(`The profile "${profile}" was not found in the credentials file.`, "devops/not-found");
+            }
+            return profile ? credentials[profile] : credentials;
         }
         catch (e) {
             return false;
@@ -100,7 +105,19 @@ function getAwsProfileList(profile) {
     });
 }
 exports.getAwsProfileList = getAwsProfileList;
-function getAwsProfileInfo(profile) { }
+/**
+ * Get a specific _named profile_ in the AWS `credentials` file
+ */
+function getAwsProfile(profileName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const profile = yield getAwsProfileList(profileName);
+        if (!profile) {
+            throw new DevopsError_1.DevopsError(`Attempt to get the AWS profile "${profileName}" failed because the AWS credentials file does not exist!`, "devops/not-ready");
+        }
+        return profile;
+    });
+}
+exports.getAwsProfile = getAwsProfile;
 /**
  * Asks the user to choose an AWS profile
  */
