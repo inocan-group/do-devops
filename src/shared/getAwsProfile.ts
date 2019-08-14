@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import { IDictionary } from "common-types";
 import { readFile } from "./readFile";
+import { DevopsError } from "./DevopsError";
 
 /**
  * Gets the "default" profile for a given repo based on:
@@ -54,12 +55,6 @@ export async function getAwsProfileList(profile?: string) {
       return false;
     }
 
-    const filter = profile
-      ? /* filter down to only a given profile */
-        (i: string) => i.includes(profile)
-      : /** accept all profiles */
-        (i: string) => true;
-
     const data = await readFile(credentialsFile);
     const targets = ["aws_access_key_id", "aws_secret_access_key", "region"];
 
@@ -89,9 +84,15 @@ export async function getAwsProfileList(profile?: string) {
     };
     const credentials = data
       .split("[")
-      .filter(filter)
       .map(i => i.split("\n"))
       .reduce(extractor, {} as IDictionary<IDictionary<string>>);
+
+    if (profile && !credentials[profile]) {
+      throw new DevopsError(
+        `The profile "${profile}" was not found in the credentials file.`,
+        "devops/not-found"
+      );
+    }
 
     return profile ? credentials[profile] : credentials;
   } catch (e) {
@@ -99,7 +100,19 @@ export async function getAwsProfileList(profile?: string) {
   }
 }
 
-function getAwsProfileInfo(profile: string) {}
+/**
+ * Get a specific _named profile_ in the AWS `credentials` file
+ */
+export async function getAwsProfile(profileName: string) {
+  const profile = await getAwsProfileList(profileName);
+  if (!profile) {
+    throw new DevopsError(
+      `Attempt to get the AWS profile "${profileName}" failed because the AWS credentials file does not exist!`,
+      "devops/not-ready"
+    );
+  }
+  return profile;
+}
 
 /**
  * Asks the user to choose an AWS profile
