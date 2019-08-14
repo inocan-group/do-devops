@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function info() {
+function ssm() {
     return {};
 }
-exports.info = info;
+exports.ssm = ssm;

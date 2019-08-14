@@ -1,5 +1,5 @@
 export interface IDoVersionConfig {}
 
-export function build(): IDoVersionConfig {
+export function info(): IDoVersionConfig {
   return {};
 }

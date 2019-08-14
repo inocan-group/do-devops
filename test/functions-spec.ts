@@ -8,7 +8,7 @@ import {
   reduceToRelativePath,
   validateExports,
   createFunctionDictionary
-} from "../bin/shared/functions";
+} from "../src/shared/functions";
 import path from "path";
 
 const expect = chai.expect;
@@ -16,12 +16,16 @@ const TEST_PATH = path.join(process.env.PWD, "/test/test-src");
 
 describe("functions => ", () => {
   it("detects all files", async () => {
-    const fns = findFunctionConfigurations(path.join(process.env.PWD, "/test/test-src"));
+    const fns = findFunctionConfigurations(
+      path.join(process.env.PWD, "/test/test-src")
+    );
     expect(fns).to.have.lengthOf(3);
   });
 
   it("parse of serverless function names works", async () => {
-    const fns = findFunctionConfigurations(path.join(process.env.PWD, "/test/test-src"));
+    const fns = findFunctionConfigurations(
+      path.join(process.env.PWD, "/test/test-src")
+    );
     const lookup = getFunctionNames(fns);
     const expected = ["myBar", "rootPath"];
     expect(Object.keys(lookup)).to.have.lengthOf(3);
@@ -84,6 +88,9 @@ describe("functions => ", () => {
 
   it.only("rejects files without default export", async () => {
     // const fns = findFunctionConfigurations(path.join(process.env.PWD, "/test/test-src"));
-    writeServerlessFunctionExports(TEST_PATH, path.join(TEST_PATH, "functions.ts"));
+    writeServerlessFunctionExports(
+      TEST_PATH,
+      path.join(TEST_PATH, "functions.ts")
+    );
   });
 });

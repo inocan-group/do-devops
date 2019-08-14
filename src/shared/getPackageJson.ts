@@ -5,7 +5,7 @@ import { IPackageJson } from "common-types";
  * returns `package.json` of the local repo as a typed object
  */
 export function getPackageJson() {
-  const filename = path.join(process.env.CWD, "package.json");
+  const filename = path.join(process.cwd(), "package.json");
   const hasServerlessConfig = fs.existsSync(filename);
   if (hasServerlessConfig) {
     const file = JSON.parse(

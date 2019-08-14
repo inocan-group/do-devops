@@ -1,5 +1,7 @@
 const config = {
-  "projectType": "serverless-library",
+  "root": {
+    "projectType": "serverless-library"
+  },
   "build": {
     "preBuildHooks": [
       "clean"
@@ -11,8 +13,32 @@ const config = {
     "preDeployHooks": [
       "clean"
     ],
-    "deployTool": "serverless",
+    "target": "serverless",
     "showUnderlyingCommands": true
+  },
+  "ssm": {
+    "hasAwsInstalled": true,
+    "findProfileIn": "default"
+  },
+  "default": {
+    "root": {
+      "projectType": "serverless-library"
+    },
+    "build": {
+      "preBuildHooks": [
+        "clean"
+      ],
+      "targetDirectory": "dist",
+      "buildTool": "tsc"
+    },
+    "deploy": {
+      "preDeployHooks": [
+        "clean"
+      ],
+      "target": "serverless",
+      "showUnderlyingCommands": true
+    },
+    "ssm": {}
   }
 };
 module.exports = config;

@@ -1,5 +1,4 @@
-import IDoConfig from 'do-devops';
-export default {
+const config = {
   "projectType": "serverless-library",
   "build": {
     "preBuildHooks": [
@@ -12,6 +11,8 @@ export default {
     "preDeployHooks": [
       "clean"
     ],
-    "deployTool": "serverless"
+    "deployTool": "serverless",
+    "showUnderlyingCommands": true
   }
-} as IDoConfig
+};
+module.exports = config;

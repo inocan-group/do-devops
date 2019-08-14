@@ -2,7 +2,7 @@ import commandLineUsage, { Section } from "command-line-usage";
 import commandLineArgs from "command-line-args";
 import chalk from "chalk";
 
-import { inverted, commands } from "../shared";
+import { commands } from "../shared";
 
 export function help(
   optionList: commandLineArgs.CommandLineOptions[],
