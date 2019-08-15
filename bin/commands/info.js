@@ -27,7 +27,7 @@ function handler() {
         const gitLastCommit = stripCarraigeReturn(yield async_shelljs_1.asyncExec("git rev-parse --short HEAD ", {
             silent: true
         }));
-        const gitBranch = stripCarraigeReturn(yield async_shelljs_1.asyncExec("git branch | sed -n '/* /s///p'", { silent: true }));
+        const branch = yield shared_1.gitBranch();
         const localFilesChanged = (yield async_shelljs_1.asyncExec("git diff --name-only", {
             silent: true
         })).split("\n").length;
@@ -56,7 +56,7 @@ function handler() {
             ["Scripts", Object.keys(scripts).join(", ")],
             [
                 "GIT",
-                `Latest commit ${chalk_1.default.bold.green(gitLastCommit)} ${chalk_1.default.bold.italic("@ " + gitBranch)}; ${chalk_1.default.bold.green(String(localFilesChanged))} files changed locally`
+                `Latest commit ${chalk_1.default.bold.green(gitLastCommit)} ${chalk_1.default.bold.italic("@ " + branch)}; ${chalk_1.default.bold.green(String(localFilesChanged))} files changed locally`
             ]
         ];
         const config = {

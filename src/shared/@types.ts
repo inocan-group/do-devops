@@ -10,3 +10,5 @@ export interface IServerlessAccountInfo {
   region?: string;
   profile?: string;
 }
+
+export type ISandboxStrategy = "dev" | "user" | "branch";

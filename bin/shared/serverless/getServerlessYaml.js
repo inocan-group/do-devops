@@ -17,7 +17,7 @@ const path_1 = __importDefault(require("path"));
  * Get the `serverless.yml` file in the root of the project; if
  * the file does not exist then return _false_
  */
-function getServerlessYml() {
+function getServerlessYaml() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const config = js_yaml_1.safeLoad(path_1.default.join(process.cwd(), "serverless.yml"));
@@ -28,4 +28,4 @@ function getServerlessYml() {
         }
     });
 }
-exports.getServerlessYml = getServerlessYml;
+exports.getServerlessYaml = getServerlessYaml;

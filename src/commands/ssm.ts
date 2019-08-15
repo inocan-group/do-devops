@@ -2,7 +2,7 @@ import { getConfig } from "../shared";
 import { writeSection } from "../shared/writeDefaultConfig";
 import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
-import { isServerless } from "../shared/isServerless";
+import { isServerless } from "../shared/serverless/isServerless";
 import { IDoSsmConfig } from "./defaults";
 import commandLineArgs = require("command-line-args");
 import { DoSsmOptions } from "./options/ssm";

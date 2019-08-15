@@ -7,25 +7,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const js_yaml_1 = require("js-yaml");
-const path_1 = __importDefault(require("path"));
+const async_shelljs_1 = require("async-shelljs");
 /**
- * Get the `serverless.yml` file in the root of the project; if
- * the file does not exist then return _false_
+ * returns the current git branch in the given repo
  */
-function getServerlessYml() {
+function gitBranch() {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const config = js_yaml_1.safeLoad(path_1.default.join(process.cwd(), "serverless.yml"));
-            return config;
-        }
-        catch (e) {
-            return false;
-        }
+        const branch = (yield async_shelljs_1.asyncExec("git branch | sed -n '/* /s///p'", {
+            silent: true
+        })).replace("\n", "");
+        return branch;
     });
 }
-exports.getServerlessYml = getServerlessYml;
+exports.gitBranch = gitBranch;

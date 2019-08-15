@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const npm_1 = require("./npm");
+const npm_1 = require("../npm");
 /**
  * returns a set of flags indicating whether it appears the serverless framework
  * is being used in this repo

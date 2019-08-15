@@ -14,7 +14,7 @@ export interface IServerlessFunctionDefinitions {
   usingTypescriptMicroservices: boolean;
   /**
    * Detects if there are any conflicts between configuration
-   * types. If this repo  
+   * types. If this repo
    */
   hasConflicts: boolean;
   inServerlessConfigDir: string[];

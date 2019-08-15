@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { getConfig, getPackageJson } from "../shared";
+import { getConfig, getPackageJson, gitBranch } from "../shared";
 import { asyncExec } from "async-shelljs";
 import { IDictionary } from "common-types";
 import { table } from "table";
@@ -19,9 +19,7 @@ export async function handler() {
       silent: true
     })
   );
-  const gitBranch = stripCarraigeReturn(
-    await asyncExec("git branch | sed -n '/* /s///p'", { silent: true })
-  );
+  const branch = await gitBranch();
   const localFilesChanged = (await asyncExec("git diff --name-only", {
     silent: true
   })).split("\n").length;
@@ -55,7 +53,7 @@ export async function handler() {
     [
       "GIT",
       `Latest commit ${chalk.bold.green(gitLastCommit)} ${chalk.bold.italic(
-        "@ " + gitBranch
+        "@ " + branch
       )}; ${chalk.bold.green(String(localFilesChanged))} files changed locally`
     ]
   ];

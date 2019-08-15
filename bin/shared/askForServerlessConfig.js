@@ -7,25 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const js_yaml_1 = require("js-yaml");
-const path_1 = __importDefault(require("path"));
 /**
- * Get the `serverless.yml` file in the root of the project; if
- * the file does not exist then return _false_
+ * For people using the `typescript-microservice` template,
+ * this function will interactively ask a user questions
+ * so that the serverless configuration can be built.
  */
-function getServerlessYml() {
+function askForServerlessConfig() {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const config = js_yaml_1.safeLoad(path_1.default.join(process.cwd(), "serverless.yml"));
-            return config;
-        }
-        catch (e) {
-            return false;
-        }
+        //
     });
 }
-exports.getServerlessYml = getServerlessYml;
+exports.askForServerlessConfig = askForServerlessConfig;

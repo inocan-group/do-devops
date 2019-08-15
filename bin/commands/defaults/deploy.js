@@ -4,7 +4,8 @@ function deploy() {
     return {
         preDeployHooks: ["clean"],
         target: "serverless",
-        showUnderlyingCommands: true
+        showUnderlyingCommands: true,
+        sandboxing: "user"
     };
 }
 exports.deploy = deploy;
