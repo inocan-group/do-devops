@@ -22,7 +22,7 @@ const shared_1 = require("../shared");
 const writeDefaultConfig_1 = require("../shared/writeDefaultConfig");
 const async_shelljs_1 = require("async-shelljs");
 const chalk_1 = __importDefault(require("chalk"));
-const isServerless_1 = require("../shared/isServerless");
+const isServerless_1 = require("../shared/serverless/isServerless");
 const commandLineArgs = require("command-line-args");
 const ssm_1 = require("./options/ssm");
 function handler(argv, opts) {

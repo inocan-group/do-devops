@@ -1,23 +1,8 @@
-import fg from "fast-glob";
 import path from "path";
 import { IDictionary } from "common-types";
-import { emoji } from "./emoji";
+import { emoji } from "../emoji";
 import { writeFileSync } from "fs";
-/**
- * **findFunctionConfigurations**
- *
- * Looks through `${PWD}/src` directory to find `*.defn.ts` files which will be registered
- * as serverless configuration files.
- *
- * @param basePath you can optionally express where to start looking for config files
- * instead of the default of `${PWD}/src`
- */
-export function findFunctionConfigurations(basePath?: string) {
-  const glob =
-    path.join(basePath, "**/*.defn.ts") ||
-    path.join(process.env.PWD, "/src/**/*.defn.ts");
-  return fg.sync([glob]) as string[];
-}
+import { findInlineFunctionDefnFiles } from ".";
 
 export interface IFunctionDictionary {
   /** full path to the handler files */
@@ -38,7 +23,9 @@ export interface IFunctionDictionary {
 
 export async function createFunctionDictionary(rootPath?: string) {
   const root = rootPath || process.env.PWD;
-  const fns = findFunctionConfigurations(rootPath || path.join(process.env.PWD, "/src"));
+  const fns = findInlineFunctionDefnFiles(
+    rootPath || path.join(process.env.PWD, "/src")
+  );
   const serverlessNameLookup = getNamespacedLookup(fns, root);
   const { valid, invalid } = await validateExports(fns);
   return fns.map(filePath => {
@@ -75,7 +62,7 @@ export async function writeServerlessFunctionExports(
   const root = basePath || process.env.PWD;
   const outputFilename =
     output || path.join(process.env.PWD, "/serverless-config/functions.ts");
-  const functionDefns = findFunctionConfigurations(basePath).map(p =>
+  const functionDefns = findInlineFunctionDefnFiles(basePath).map(p =>
     reduceToRelativePath(root, p)
   );
   const dict = await createFunctionDictionary(basePath);
@@ -88,7 +75,10 @@ export async function writeServerlessFunctionExports(
         i =>
           `${
             i.validHandlerDefinition
-              ? `import ${i.serverlessFn} from '.${i.relativePath.replace(".ts", "")}';`
+              ? `import ${i.serverlessFn} from '.${i.relativePath.replace(
+                  ".ts",
+                  ""
+                )}';`
               : `// invalid handler definition for "${
                   i.serverlessFn
                 }"; please check handler definition and then rebuild `
@@ -193,7 +183,9 @@ export async function validateExports(fnDefns: string[]) {
  * the passed in
  */
 export function getNamespacedLookup(fns: string[], basePath?: string) {
-  const root = basePath ? path.resolve(basePath) : path.join(process.env.PWD, "/src");
+  const root = basePath
+    ? path.resolve(basePath)
+    : path.join(process.env.PWD, "/src");
   return fns.reduce(
     (acc, fn) => {
       const parts = fn
@@ -231,7 +223,9 @@ export function getFunctionNames(paths: string[]) {
   );
 }
 
-export function detectDuplicateFunctionDefinitions(lookup: IDictionary<string>) {
+export function detectDuplicateFunctionDefinitions(
+  lookup: IDictionary<string>
+) {
   const vals = Object.values(lookup);
   const found = [];
   const dups: Array<{ fn: string; message: string; locations: string[] }> = [];
@@ -249,7 +243,9 @@ export function detectDuplicateFunctionDefinitions(lookup: IDictionary<string>) 
       if (locations.length > 1) {
         dups.push({
           fn,
-          message: `- ${emoji.angry}  the function "${fn}" is defined more than once [ ${
+          message: `- ${
+            emoji.angry
+          }  the function "${fn}" is defined more than once [ ${
             locations.length
           } ]: ${locations.join(", ")}`,
           locations

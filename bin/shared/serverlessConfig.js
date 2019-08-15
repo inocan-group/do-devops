@@ -29,14 +29,3 @@ function getServerlessYml() {
     });
 }
 exports.getServerlessYml = getServerlessYml;
-/**
- * For people using the `typescript-microservice` template,
- * this function will interactively ask a user questions
- * so that the serverless configuration can be built.
- */
-function askAboutConfig() {
-    return __awaiter(this, void 0, void 0, function* () {
-        //
-    });
-}
-exports.askAboutConfig = askAboutConfig;

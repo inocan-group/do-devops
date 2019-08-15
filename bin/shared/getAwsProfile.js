@@ -11,7 +11,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const serverlessConfig_1 = require("./serverlessConfig");
+const getServerlessYaml_1 = require("./serverless/getServerlessYaml");
 const shared_1 = require("../shared");
 const inquirer = require("inquirer");
 const fs_1 = __importDefault(require("fs"));
@@ -28,7 +28,7 @@ const DevopsError_1 = require("./DevopsError");
  */
 function getDefaultAwsProfile() {
     return __awaiter(this, void 0, void 0, function* () {
-        const serverlessYaml = yield serverlessConfig_1.getServerlessYml();
+        const serverlessYaml = yield getServerlessYaml_1.getServerlessYaml();
         const config = yield shared_1.getConfig();
         let profile;
         if (serverlessYaml && serverlessYaml.provider.profile) {

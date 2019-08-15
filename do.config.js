@@ -1,44 +1,37 @@
 const config = {
-  "root": {
-    "projectType": "serverless-library"
+  root: {
+    projectType: "serverless-library"
   },
-  "build": {
-    "preBuildHooks": [
-      "clean"
-    ],
-    "targetDirectory": "dist",
-    "buildTool": "tsc"
+  build: {
+    preBuildHooks: ["clean"],
+    targetDirectory: "dist",
+    buildTool: "tsc"
   },
-  "deploy": {
-    "preDeployHooks": [
-      "clean"
-    ],
-    "target": "serverless",
-    "showUnderlyingCommands": true
+  deploy: {
+    preDeployHooks: [],
+    target: "serverless",
+    showUnderlyingCommands: true,
+    sandboxing: "user"
   },
-  "ssm": {
-    "hasAwsInstalled": true,
-    "findProfileIn": "default"
+  ssm: {
+    hasAwsInstalled: true,
+    findProfileIn: "default"
   },
-  "default": {
-    "root": {
-      "projectType": "serverless-library"
+  default: {
+    root: {
+      projectType: "serverless-library"
     },
-    "build": {
-      "preBuildHooks": [
-        "clean"
-      ],
-      "targetDirectory": "dist",
-      "buildTool": "tsc"
+    build: {
+      preBuildHooks: ["clean"],
+      targetDirectory: "dist",
+      buildTool: "tsc"
     },
-    "deploy": {
-      "preDeployHooks": [
-        "clean"
-      ],
-      "target": "serverless",
-      "showUnderlyingCommands": true
+    deploy: {
+      preDeployHooks: ["clean"],
+      target: "serverless",
+      showUnderlyingCommands: true
     },
-    "ssm": {}
+    ssm: {}
   }
 };
 module.exports = config;

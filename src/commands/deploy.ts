@@ -13,7 +13,12 @@ import { getConfig, runHooks } from "../shared";
  *
  * Over time we may add other targets for deployment.
  */
-export async function handler() {
+export async function handler(argv: string[], opts: any) {
   const { deploy, global } = await getConfig();
+  console.log(argv, opts);
+
   await runHooks(deploy.preDeployHooks);
+  const helper = (await import(`./deploy-helpers/${deploy.target}-deploy`))
+    .default;
+  await helper(deploy, global);
 }
