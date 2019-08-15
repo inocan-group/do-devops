@@ -23,6 +23,7 @@ function handler(args, opt) {
             process.exit();
         }
         else if (status.isUsingTypescriptMicroserviceTemplate) {
+            console.log(`- detected use of the ${chalk_1.default.blue("typescript-microservice")} template; rebuilding functions from config.`);
             // await rebuildTypescriptMicroserviceProject();
         }
         try {

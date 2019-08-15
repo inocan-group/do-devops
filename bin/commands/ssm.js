@@ -20,7 +20,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
 const writeDefaultConfig_1 = require("../shared/writeDefaultConfig");
-const async_shelljs_1 = require("async-shelljs");
 const chalk_1 = __importDefault(require("chalk"));
 const isServerless_1 = require("../shared/serverless/isServerless");
 const commandLineArgs = require("command-line-args");
@@ -33,33 +32,35 @@ function handler(argv, opts) {
             argv: argv.slice(1),
             partial: true
         });
-        // if no SSM config go get it
-        if (config.ssm === undefined || config.ssm.hasAwsInstalled === undefined) {
-            const whereIsConfig = yield isServerless_1.isServerless();
-            const ssmConfig = {
-                hasAwsInstalled: yield checkIfAwsInstalled(),
-                findProfileIn: !whereIsConfig
-                    ? "default"
-                    : whereIsConfig.isUsingTypescriptMicroserviceTemplate
-                        ? "typescript-microservice"
-                        : whereIsConfig.hasServerlessConfig
-                            ? "serverless-yaml"
-                            : undefined
-            };
+        // if no SSM config; write default value
+        if (config.ssm === undefined) {
+            const ssmConfig = {};
             yield writeDefaultConfig_1.writeSection("ssm", ssmConfig);
             config.ssm = ssmConfig;
-        }
-        if (!config.ssm.hasAwsInstalled) {
-            console.log(`- In order to run SSM commands you must install the AWS CLI`);
-            console.log(chalk_1.default.grey("- for more info check out: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html"));
-            console.log();
-            process.exit();
         }
         const ssmCommands = ["list", "get", "set"];
         if (!ssmCommands.includes(subCommand)) {
             console.log(`- please choose a ${chalk_1.default.italic("valid")} ${chalk_1.default.bold.yellow("SSM")} command; these are: ${ssmCommands.join(", ")}`);
             console.log();
             process.exit();
+        }
+        const serverless = yield isServerless_1.isServerless();
+        if (serverless && serverless.isUsingTypescriptMicroserviceTemplate) {
+            // TODO: build provider section from config
+        }
+        let slsConfig;
+        if (serverless && serverless.hasServerlessConfig) {
+            try {
+                slsConfig = yield shared_1.getServerlessYaml();
+                ssmCmd.ssm.region = ssmCmd.ssm.region || slsConfig.provider.region;
+                ssmCmd.ssm.profile = ssmCmd.ssm.profile || slsConfig.provider.profile;
+                ssmCmd.ssm.stage = ssmCmd.ssm.stage || slsConfig.provider.stage;
+            }
+            catch (e) {
+                console.log("- Problem loading the serverless.yml file!\n");
+                console.log(chalk_1.default.red("  " + e.message));
+                process.exit();
+            }
         }
         let importPath;
         switch (subCommand) {
@@ -73,21 +74,14 @@ function handler(argv, opts) {
                 importPath = "./ssm/get";
                 break;
         }
-        const { execute } = yield Promise.resolve().then(() => __importStar(require(importPath)));
-        yield execute(ssmCmd);
-        let profile;
-        // if (config.ssm.findProfileIn === "typescript-microservice") {
-        //   profile =
-        // }
+        const { execute } = (yield Promise.resolve().then(() => __importStar(require(importPath))));
+        try {
+            yield execute(ssmCmd);
+        }
+        catch (e) {
+            console.log(`- Ran into error when running "ssm ${subCommand}":\n  ${chalk_1.default.red(e.message)}\n`);
+            process.exit();
+        }
     });
 }
 exports.handler = handler;
-function checkIfAwsInstalled() {
-    try {
-        const test = async_shelljs_1.asyncExec(`aws`, { silent: true });
-        return true;
-    }
-    catch (e) {
-        return false;
-    }
-}

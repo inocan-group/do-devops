@@ -11,6 +11,11 @@ export async function handler(args: string[], opt: IDictionary) {
     console.log("- this project does not appear to be a Serverless project!\n");
     process.exit();
   } else if (status.isUsingTypescriptMicroserviceTemplate) {
+    console.log(
+      `- detected use of the ${chalk.blue(
+        "typescript-microservice"
+      )} template; rebuilding functions from config.`
+    );
     // await rebuildTypescriptMicroserviceProject();
   }
 

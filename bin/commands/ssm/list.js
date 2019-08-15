@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const chalk_1 = __importDefault(require("chalk"));
-const async_shelljs_1 = require("async-shelljs");
 const table_1 = require("table");
 const date_fns_1 = require("date-fns");
+const aws_ssm_1 = require("aws-ssm");
 function execute(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const profile = options.ssm.profile;
@@ -24,7 +24,8 @@ function execute(options) {
             ? `; results reduced to those with "${chalk_1.default.bold(filterBy)}" in the name.`
             : ""}`);
         console.log();
-        const list = JSON.parse(yield async_shelljs_1.asyncExec(`aws --profile ${profile} --region ${region} ssm describe-parameters`, { silent: true }));
+        const ssm = new aws_ssm_1.SSM({ profile, region });
+        const list = yield ssm.describeParameters();
         let tableData = [
             [
                 chalk_1.default.bold("Name"),
@@ -34,12 +35,15 @@ function execute(options) {
                 chalk_1.default.bold("User")
             ]
         ];
-        list.Parameters.filter(i => filterBy ? i.Name.toLowerCase().includes(filterBy.toLowerCase()) : true).forEach(i => {
+        // list.filter(i =>
+        //   filterBy ? i.Name.toLowerCase().includes(filterBy.toLowerCase()) : true
+        // ).forEach(i => {
+        list.forEach(i => {
             tableData.push([
                 i.Name,
                 String(i.Version),
                 i.Type,
-                date_fns_1.format(i.LastModifiedDate * 1000, "DD MMM, YYYY"),
+                date_fns_1.format(i.LastModifiedDate, "DD MMM, YYYY"),
                 i.LastModifiedUser.replace(/.*user\//, "")
             ]);
         });

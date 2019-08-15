@@ -1,8 +1,8 @@
 import { CommandLineOptions } from "command-line-args";
 import chalk from "chalk";
-import { asyncExec } from "async-shelljs";
 import { table } from "table";
 import { format } from "date-fns";
+import { SSM } from "aws-ssm";
 
 export async function execute(options: CommandLineOptions) {
   const profile = options.ssm.profile;
@@ -22,12 +22,8 @@ export async function execute(options: CommandLineOptions) {
   );
   console.log();
 
-  const list: { Parameters: ISsmDescribeParameter[] } = JSON.parse(
-    await asyncExec(
-      `aws --profile ${profile} --region ${region} ssm describe-parameters`,
-      { silent: true }
-    )
-  );
+  const ssm = new SSM({ profile, region });
+  const list = await ssm.describeParameters();
 
   let tableData = [
     [
@@ -38,14 +34,16 @@ export async function execute(options: CommandLineOptions) {
       chalk.bold("User")
     ]
   ];
-  list.Parameters.filter(i =>
-    filterBy ? i.Name.toLowerCase().includes(filterBy.toLowerCase()) : true
-  ).forEach(i => {
+  // list.filter(i =>
+  //   filterBy ? i.Name.toLowerCase().includes(filterBy.toLowerCase()) : true
+  // ).forEach(i => {
+
+  list.forEach(i => {
     tableData.push([
       i.Name,
       String(i.Version),
       i.Type,
-      format(i.LastModifiedDate * 1000, "DD MMM, YYYY"),
+      format(i.LastModifiedDate, "DD MMM, YYYY"),
       i.LastModifiedUser.replace(/.*user\//, "")
     ]);
   });
@@ -59,12 +57,4 @@ export async function execute(options: CommandLineOptions) {
     }
   };
   console.log(table(tableData, tableConfig as any));
-}
-
-interface ISsmDescribeParameter {
-  Name: string;
-  Version: number;
-  LastModifiedDate: number;
-  LastModifiedUser: string;
-  Type: string;
 }
