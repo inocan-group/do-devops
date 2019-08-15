@@ -1,6 +1,7 @@
 import { IServerlessConfig } from "common-types";
 import { safeLoad } from "js-yaml";
 import path from "path";
+import fs from "fs";
 import { DevopsError } from "../errors";
 
 /**
@@ -10,7 +11,9 @@ import { DevopsError } from "../errors";
 export async function getServerlessYaml(): Promise<IServerlessConfig> {
   try {
     const config: IServerlessConfig = safeLoad(
-      path.join(process.cwd(), "serverless.yml")
+      fs.readFileSync(path.join(process.cwd(), "serverless.yml"), {
+        encoding: "utf-8"
+      })
     );
     return config;
   } catch (e) {

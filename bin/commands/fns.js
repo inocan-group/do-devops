@@ -7,10 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
+const table_1 = require("table");
+const chalk_1 = __importDefault(require("chalk"));
 function handler(args, opt) {
     return __awaiter(this, void 0, void 0, function* () {
+        const filterBy = args.length > 0 ? (fn) => fn.includes(args[0]) : () => true;
         const status = shared_1.isServerless();
         if (!status) {
             console.log("- this project does not appear to be a Serverless project!\n");
@@ -20,7 +26,55 @@ function handler(args, opt) {
             // await rebuildTypescriptMicroserviceProject();
         }
         try {
-            const functions = (yield shared_1.getServerlessYaml()).functions;
+            const { width } = yield shared_1.consoleDimensions();
+            const fns = (yield shared_1.getServerlessYaml()).functions;
+            let tableData = [
+                [
+                    chalk_1.default.bold.yellow("function"),
+                    chalk_1.default.bold.yellow("events"),
+                    chalk_1.default.bold.yellow("memory"),
+                    chalk_1.default.bold.yellow("timeout"),
+                    chalk_1.default.bold.yellow("description")
+                ]
+            ];
+            Object.keys(fns)
+                .filter(filterBy)
+                .forEach(key => {
+                const events = fns[key].events || [];
+                tableData.push([
+                    key,
+                    events.map(i => Object.keys(i)).join(", "),
+                    String(fns[key].memorySize || chalk_1.default.grey("1024")),
+                    String(fns[key].timeout || chalk_1.default.grey("3")),
+                    fns[key].description
+                ]);
+            });
+            const tableConfig = {
+                columns: {
+                    0: { width: 30, alignment: "left" },
+                    1: { width: 16, alignment: "left" },
+                    2: { width: 7, alignment: "center" },
+                    3: { width: 8, alignment: "center" },
+                    4: { width: 46, alignment: "left" }
+                }
+            };
+            let output = table_1.table(tableData, tableConfig);
+            if (width < 70) {
+                delete tableConfig.columns["2"];
+                delete tableConfig.columns["3"];
+                delete tableConfig.columns["4"];
+                output = table_1.table(tableData.map(i => i.slice(0, 2), tableConfig));
+            }
+            else if (width < 80) {
+                delete tableConfig.columns["3"];
+                delete tableConfig.columns["4"];
+                output = table_1.table(tableData.map(i => i.slice(0, 3), tableConfig));
+            }
+            else if (width < 125) {
+                delete tableConfig.columns["4"];
+                output = table_1.table(tableData.map(i => i.slice(0, 4), tableConfig));
+            }
+            console.log(output);
         }
         catch (e) {
             console.log(`- Error finding functions: ${e.message}\n`);
