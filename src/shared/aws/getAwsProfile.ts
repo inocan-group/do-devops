@@ -3,7 +3,7 @@ import { getConfig } from "..";
 import inquirer = require("inquirer");
 import fs from "fs";
 import path from "path";
-import { IDictionary } from "common-types";
+import { IDictionary, IServerlessConfig } from "common-types";
 import { readFile } from "../readFile";
 import { DevopsError } from "../errors/DevopsError";
 
@@ -16,7 +16,12 @@ import { DevopsError } from "../errors/DevopsError";
  * If not found it will switch over to _interactive mode_.
  */
 export async function getDefaultAwsProfile() {
-  const serverlessYaml = await getServerlessYaml();
+  let serverlessYaml: false | IServerlessConfig;
+  try {
+    serverlessYaml = await getServerlessYaml();
+  } catch (e) {
+    serverlessYaml = false;
+  }
   const config = await getConfig();
   let profile: string;
   if (serverlessYaml && serverlessYaml.provider.profile) {

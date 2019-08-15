@@ -1,6 +1,5 @@
 import chai from "chai";
 import {
-  findFunctionConfigurations,
   getFunctionNames,
   detectDuplicateFunctionDefinitions,
   getNamespacedLookup,
@@ -8,7 +7,7 @@ import {
   reduceToRelativePath,
   validateExports,
   createFunctionDictionary
-} from "../src/shared/functions";
+} from "../src/shared";
 import path from "path";
 
 const expect = chai.expect;

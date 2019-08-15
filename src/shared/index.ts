@@ -6,6 +6,8 @@ export * from "./options";
 export * from "./config";
 export * from "./emoji";
 export * from "./runHooks";
+export * from "./getExportsFromFile";
+
 export * from "./serverless/index";
 export * from "./aws/index";
 export * from "./git/index";

@@ -9,3 +9,5 @@ __export(require("./getMicroserviceConfig"));
 __export(require("./getServerlessYaml"));
 __export(require("./findInlineFunctionDefnFiles"));
 __export(require("./findConfigFunctionDefnFiles"));
+__export(require("./isServerless"));
+__export(require("./isTypescriptMicroserviceProject"));

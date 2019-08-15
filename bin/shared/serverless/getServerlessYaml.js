@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const js_yaml_1 = require("js-yaml");
 const path_1 = __importDefault(require("path"));
+const errors_1 = require("../errors");
 /**
  * Get the `serverless.yml` file in the root of the project; if
  * the file does not exist then return _false_
@@ -24,7 +25,7 @@ function getServerlessYaml() {
             return config;
         }
         catch (e) {
-            return false;
+            throw new errors_1.DevopsError(`Failure getting serverless.yml: ${e.message}`, e.name);
         }
     });
 }

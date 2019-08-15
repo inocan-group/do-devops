@@ -28,7 +28,13 @@ const DevopsError_1 = require("../errors/DevopsError");
  */
 function getDefaultAwsProfile() {
     return __awaiter(this, void 0, void 0, function* () {
-        const serverlessYaml = yield getServerlessYaml_1.getServerlessYaml();
+        let serverlessYaml;
+        try {
+            serverlessYaml = yield getServerlessYaml_1.getServerlessYaml();
+        }
+        catch (e) {
+            serverlessYaml = false;
+        }
         const config = yield __1.getConfig();
         let profile;
         if (serverlessYaml && serverlessYaml.provider.profile) {
