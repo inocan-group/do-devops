@@ -1,23 +1,8 @@
-import fg from "fast-glob";
 import path from "path";
 import { IDictionary } from "common-types";
 import { emoji } from "../emoji";
 import { writeFileSync } from "fs";
-/**
- * **findFunctionConfigurations**
- *
- * Looks through `${PWD}/src` directory to find `*.defn.ts` files which will be registered
- * as serverless configuration files.
- *
- * @param basePath you can optionally express where to start looking for config files
- * instead of the default of `${PWD}/src`
- */
-export function findFunctionConfigurations(basePath?: string) {
-  const glob =
-    path.join(basePath, "**/*.defn.ts") ||
-    path.join(process.env.PWD, "/src/**/*.defn.ts");
-  return fg.sync([glob]) as string[];
-}
+import { findInlineFunctionDefnFiles } from ".";
 
 export interface IFunctionDictionary {
   /** full path to the handler files */
@@ -38,7 +23,7 @@ export interface IFunctionDictionary {
 
 export async function createFunctionDictionary(rootPath?: string) {
   const root = rootPath || process.env.PWD;
-  const fns = findFunctionConfigurations(
+  const fns = findInlineFunctionDefnFiles(
     rootPath || path.join(process.env.PWD, "/src")
   );
   const serverlessNameLookup = getNamespacedLookup(fns, root);
@@ -77,7 +62,7 @@ export async function writeServerlessFunctionExports(
   const root = basePath || process.env.PWD;
   const outputFilename =
     output || path.join(process.env.PWD, "/serverless-config/functions.ts");
-  const functionDefns = findFunctionConfigurations(basePath).map(p =>
+  const functionDefns = findInlineFunctionDefnFiles(basePath).map(p =>
     reduceToRelativePath(root, p)
   );
   const dict = await createFunctionDictionary(basePath);

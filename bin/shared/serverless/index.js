@@ -7,3 +7,5 @@ __export(require("./askForServerlessConfig"));
 __export(require("./functions"));
 __export(require("./getMicroserviceConfig"));
 __export(require("./getServerlessYaml"));
+__export(require("./findInlineFunctionDefnFiles"));
+__export(require("./findConfigFunctionDefnFiles"));

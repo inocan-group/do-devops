@@ -7,3 +7,4 @@ __export(require("./global"));
 __export(require("./build"));
 __export(require("./deploy"));
 __export(require("./ssm"));
+__export(require("./fns"));

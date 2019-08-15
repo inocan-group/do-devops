@@ -18,28 +18,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fast_glob_1 = __importDefault(require("fast-glob"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = require("fs");
-/**
- * **findFunctionConfigurations**
- *
- * Looks through `${PWD}/src` directory to find `*.defn.ts` files which will be registered
- * as serverless configuration files.
- *
- * @param basePath you can optionally express where to start looking for config files
- * instead of the default of `${PWD}/src`
- */
-function findFunctionConfigurations(basePath) {
-    const glob = path_1.default.join(basePath, "**/*.defn.ts") ||
-        path_1.default.join(process.env.PWD, "/src/**/*.defn.ts");
-    return fast_glob_1.default.sync([glob]);
-}
-exports.findFunctionConfigurations = findFunctionConfigurations;
+const _1 = require(".");
 function createFunctionDictionary(rootPath) {
     return __awaiter(this, void 0, void 0, function* () {
         const root = rootPath || process.env.PWD;
-        const fns = findFunctionConfigurations(rootPath || path_1.default.join(process.env.PWD, "/src"));
+        const fns = _1.findInlineFunctionDefnFiles(rootPath || path_1.default.join(process.env.PWD, "/src"));
         const serverlessNameLookup = getNamespacedLookup(fns, root);
         const { valid, invalid } = yield validateExports(fns);
         return fns.map(filePath => {
@@ -74,7 +59,7 @@ function writeServerlessFunctionExports(basePath = undefined, output = undefined
     return __awaiter(this, void 0, void 0, function* () {
         const root = basePath || process.env.PWD;
         const outputFilename = output || path_1.default.join(process.env.PWD, "/serverless-config/functions.ts");
-        const functionDefns = findFunctionConfigurations(basePath).map(p => reduceToRelativePath(root, p));
+        const functionDefns = _1.findInlineFunctionDefnFiles(basePath).map(p => reduceToRelativePath(root, p));
         const dict = yield createFunctionDictionary(basePath);
         let template = `##imports##\n\n##exports##\n\n##interface##`;
         template = template.replace("##imports##", dict

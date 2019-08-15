@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-function handler() {
+const shared_1 = require("../shared");
+function handler(args, opt) {
     return __awaiter(this, void 0, void 0, function* () {
-        // const fns = await import()
+        const inlineFns = yield shared_1.findInlineFunctionDefnFiles();
+        const configFiles = yield shared_1.findConfigFunctionDefnFiles();
+        console.log(inlineFns);
+        console.log(configFiles);
     });
 }
 exports.handler = handler;
