@@ -1,1 +1,2 @@
-export * from "./gitBranch";
+export * from "./getGitBranch";
+export * from "./getGitLastCommit";

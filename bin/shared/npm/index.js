@@ -5,3 +5,5 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./getPackageJson"));
 __export(require("./hasDevDependency"));
+__export(require("./getPackageInfo"));
+__export(require("./isNpmPackage"));

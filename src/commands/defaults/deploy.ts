@@ -3,19 +3,24 @@ import { ISandboxStrategy } from "../../shared/@types";
 export type IDoDeployConfig =
   | IDoDeployServerless
   | IDoDeployNpm
-  | IDoDeployBespoke;
+  | IDoDeployBespoke
+  | IDoDeployUnknown;
 export interface IDoDeployConfigBase {
   preDeployHooks?: string[];
   /**
    * Which deployment target is your default
    */
-  target: "serverless" | "npm" | "bespoke";
+  target: "serverless" | "npm" | "bespoke" | "unknown";
   /**
    * In many/most cases we are wrapping commands provided by
    * different libraries. Should these underlying commands be
    * displayed as part of the CLI output?
    */
   showUnderlyingCommands: boolean;
+}
+
+export interface IDoDeployUnknown extends IDoDeployConfigBase {
+  target: "unknown";
 }
 
 export interface IDoDeployServerless extends IDoDeployConfigBase {

@@ -8,6 +8,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const subCommands = __importStar(require("../commands"));
+/**
+ * returns a list of commands (e.g., ssm, info, etc.)
+ */
 function commands() {
     return Object.keys(subCommands).filter(i => i !== "help");
 }

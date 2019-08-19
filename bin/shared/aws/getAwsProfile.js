@@ -63,13 +63,8 @@ exports.hasAwsProfileCredentialsFile = hasAwsProfileCredentialsFile;
  * Interogates the `~/.aws/credentials` file to get a hash of
  * profiles (name/dictionary of values) the user has available.
  * Returns _false_ if the credentials file is not found.
- *
- * Alternatively you can state a particular `profile` which you
- * want the details on by specifying the profile name as part of
- * the calling arguments. In this case if the profile stated is
- * not found it will throw the error `do-devops/not-found`
  */
-function getAwsProfileList(profile) {
+function getAwsProfileList() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const credentialsFile = hasAwsProfileCredentialsFile();
@@ -100,10 +95,7 @@ function getAwsProfileList(profile) {
                 .split("[")
                 .map(i => i.split("\n"))
                 .reduce(extractor, {});
-            if (profile && !credentials[profile]) {
-                throw new DevopsError_1.DevopsError(`The profile "${profile}" was not found in the credentials file.`, "devops/not-found");
-            }
-            return profile ? credentials[profile] : credentials;
+            return credentials;
         }
         catch (e) {
             return false;
@@ -116,11 +108,11 @@ exports.getAwsProfileList = getAwsProfileList;
  */
 function getAwsProfile(profileName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const profile = yield getAwsProfileList(profileName);
+        const profile = yield getAwsProfileList();
         if (!profile) {
             throw new DevopsError_1.DevopsError(`Attempt to get the AWS profile "${profileName}" failed because the AWS credentials file does not exist!`, "devops/not-ready");
         }
-        return profile;
+        return profile[profileName];
     });
 }
 exports.getAwsProfile = getAwsProfile;

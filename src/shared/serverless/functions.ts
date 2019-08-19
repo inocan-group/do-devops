@@ -1,6 +1,6 @@
 import path from "path";
 import { IDictionary } from "common-types";
-import { emoji } from "../emoji";
+import { emoji } from "../ui/emoji";
 import { writeFileSync } from "fs";
 import { findInlineFunctionDefnFiles } from ".";
 

@@ -28,6 +28,13 @@ export const DoSsmOptions = [
     typeLabel: "<filename>"
   },
   {
+    name: "nonStandardPath",
+    type: Boolean,
+    group: "ssm",
+    description:
+      "allows the naming convention for SSM paths to be ignored for a given operation"
+  },
+  {
     name: "help",
     alias: "h",
     type: Boolean,

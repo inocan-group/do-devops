@@ -1,6 +1,11 @@
 import globby from "globby";
 import fs from "fs";
 import chalk from "chalk";
+
+export function description() {
+  return `automates the building of "index.ts" files for exporting`;
+}
+
 /**
  * Finds all `index.ts` and `index.js` files and looks for the `#autoindex`
  * signature. If found then it _auto_-builds this file based on files in
@@ -38,8 +43,9 @@ async function findAutoCompleteFiles(paths: string[]) {
 
     console.log("  " + chalk.whiteBright.bgBlue("//#autoindex:[CMD] \n"));
     console.log(
-      chalk.dim.italic("  where the valid commands are (aka, CMD from above): ") +
-        chalk.italic("named,defaults")
+      chalk.dim.italic(
+        "  where the valid commands are (aka, CMD from above): "
+      ) + chalk.italic("named,defaults")
     );
   }
   console.log();

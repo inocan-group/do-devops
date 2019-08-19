@@ -12,3 +12,17 @@ export interface IServerlessAccountInfo {
 }
 
 export type ISandboxStrategy = "dev" | "user" | "branch";
+
+export interface ICommandDescription {
+  name: string;
+  summary: string;
+}
+
+export interface IHelpConfig {
+  /** the syntax to invoke a command */
+  syntax: string;
+  /** you can add a text that goes below the syntax that provides additional context */
+  syntaxDescription?: string;
+  /** the sub-commands which this command allows for */
+  subCommands: ICommandDescription[];
+}

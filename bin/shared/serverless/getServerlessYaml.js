@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const js_yaml_1 = require("js-yaml");
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 const errors_1 = require("../errors");
 /**
  * Get the `serverless.yml` file in the root of the project; if
@@ -21,7 +22,9 @@ const errors_1 = require("../errors");
 function getServerlessYaml() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const config = js_yaml_1.safeLoad(path_1.default.join(process.cwd(), "serverless.yml"));
+            const config = js_yaml_1.safeLoad(fs_1.default.readFileSync(path_1.default.join(process.cwd(), "serverless.yml"), {
+                encoding: "utf-8"
+            }));
             return config;
         }
         catch (e) {

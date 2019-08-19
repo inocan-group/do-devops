@@ -1,11 +1,18 @@
-import { getConfig } from "../shared";
+import { getConfig, checkIfAwsInstalled, getServerlessYaml } from "../shared";
 import { writeSection } from "../shared/writeDefaultConfig";
-import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
 import { isServerless } from "../shared/serverless/isServerless";
 import { IDoSsmConfig } from "./defaults";
 import commandLineArgs = require("command-line-args");
 import { DoSsmOptions } from "./options/ssm";
+import { IServerlessConfig } from "common-types";
+
+/**
+ * Description of command for help text
+ */
+export function description() {
+  return "allows an easy CRUD-based interaction with AWS's SSM parameter system for managing secrets.";
+}
 
 export async function handler(argv: string[], opts: any) {
   const config = await getConfig();
@@ -15,32 +22,11 @@ export async function handler(argv: string[], opts: any) {
     partial: true
   });
 
-  // if no SSM config go get it
-  if (config.ssm === undefined || config.ssm.hasAwsInstalled === undefined) {
-    const whereIsConfig = await isServerless();
-    const ssmConfig: IDoSsmConfig = {
-      hasAwsInstalled: await checkIfAwsInstalled(),
-      findProfileIn: !whereIsConfig
-        ? "default"
-        : whereIsConfig.isUsingTypescriptMicroserviceTemplate
-        ? "typescript-microservice"
-        : whereIsConfig.hasServerlessConfig
-        ? "serverless-yaml"
-        : undefined
-    };
+  // if no SSM config; write default value
+  if (config.ssm === undefined) {
+    const ssmConfig: IDoSsmConfig = {};
     await writeSection("ssm", ssmConfig);
     config.ssm = ssmConfig;
-  }
-
-  if (!config.ssm.hasAwsInstalled) {
-    console.log(`- In order to run SSM commands you must install the AWS CLI`);
-    console.log(
-      chalk.grey(
-        "- for more info check out: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html"
-      )
-    );
-    console.log();
-    process.exit();
   }
 
   const ssmCommands = ["list", "get", "set"];
@@ -48,13 +34,34 @@ export async function handler(argv: string[], opts: any) {
     console.log(
       `- please choose a ${chalk.italic("valid")} ${chalk.bold.yellow(
         "SSM"
-      )} command; these are: ${ssmCommands.join(", ")}`
+      )} sub-command: ${ssmCommands.join(", ")}`
     );
     console.log();
     process.exit();
   }
 
+  const serverless = await isServerless();
+  if (serverless && serverless.isUsingTypescriptMicroserviceTemplate) {
+    // TODO: build provider section from config
+  }
+
+  let slsConfig: IServerlessConfig;
+  if (serverless && serverless.hasServerlessConfig) {
+    try {
+      slsConfig = await getServerlessYaml();
+      ssmCmd.ssm.region = ssmCmd.ssm.region || slsConfig.provider.region;
+      ssmCmd.ssm.profile = ssmCmd.ssm.profile || slsConfig.provider.profile;
+      ssmCmd.ssm.stage = ssmCmd.ssm.stage || slsConfig.provider.stage;
+    } catch (e) {
+      console.log("- Problem loading the serverless.yml file!\n");
+      console.log(chalk.red("  " + e.message));
+
+      process.exit();
+    }
+  }
+
   let importPath: string;
+
   switch (subCommand) {
     case "list":
       importPath = "./ssm/list";
@@ -66,21 +73,20 @@ export async function handler(argv: string[], opts: any) {
       importPath = "./ssm/get";
       break;
   }
-  const { execute } = await import(importPath);
 
-  await execute(ssmCmd);
+  const { execute } = (await import(importPath)) as {
+    execute: (options: commandLineArgs.CommandLineOptions) => Promise<void>;
+  };
 
-  let profile: string;
-  // if (config.ssm.findProfileIn === "typescript-microservice") {
-  //   profile =
-  // }
-}
-
-function checkIfAwsInstalled() {
   try {
-    const test = asyncExec(`aws`, { silent: true });
-    return true;
+    await execute(ssmCmd);
   } catch (e) {
-    return false;
+    console.log(
+      `- Ran into error when running "ssm ${subCommand}":\n  ${chalk.red(
+        e.message
+      )}\n`
+    );
+
+    process.exit();
   }
 }

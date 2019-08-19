@@ -1,6 +1,6 @@
 import { ISandboxStrategy } from "./@types";
 import { asyncExec } from "async-shelljs";
-import { gitBranch } from "./git/index";
+import { getGitBranch } from "./git/index";
 
 /**
  * Determines the `stage` to replace "dev" with a more
@@ -16,7 +16,7 @@ export async function sandbox(strategy: ISandboxStrategy) {
         .toLowerCase();
       return user || "dev";
     case "branch":
-      const branch = await gitBranch();
+      const branch = await getGitBranch();
       switch (branch) {
         case "develop":
           return "dev";

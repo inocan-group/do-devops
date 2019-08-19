@@ -43,17 +43,20 @@ export function hasAwsProfileCredentialsFile() {
   return fs.existsSync(filePath) ? filePath : false;
 }
 
+export interface IAwsProfile {
+  aws_access_key_id: string;
+  aws_secret_access_key: string;
+  region?: string;
+}
+
 /**
  * Interogates the `~/.aws/credentials` file to get a hash of
  * profiles (name/dictionary of values) the user has available.
  * Returns _false_ if the credentials file is not found.
- *
- * Alternatively you can state a particular `profile` which you
- * want the details on by specifying the profile name as part of
- * the calling arguments. In this case if the profile stated is
- * not found it will throw the error `do-devops/not-found`
  */
-export async function getAwsProfileList(profile?: string) {
+export async function getAwsProfileList(): Promise<
+  IDictionary<IAwsProfile> | false
+> {
   try {
     const credentialsFile = hasAwsProfileCredentialsFile();
     if (!credentialsFile) {
@@ -66,7 +69,7 @@ export async function getAwsProfileList(profile?: string) {
     // extracts structured information from the semi-structured
     // array of arrays
     const extractor = (
-      agg: IDictionary<IDictionary<string>>,
+      agg: IDictionary<Partial<IAwsProfile>>,
       curr: string[]
     ) => {
       let profileSection = "unknown";
@@ -81,25 +84,20 @@ export async function getAwsProfileList(profile?: string) {
               /\s*(\S+)\s*=\s*(\S+)/
             );
 
-            agg[profileSection][key] = value;
+            agg[profileSection][key as keyof IAwsProfile] = value;
           }
         });
       });
-      return agg;
+      return agg as IDictionary<IAwsProfile>;
     };
     const credentials = data
       .split("[")
       .map(i => i.split("\n"))
-      .reduce(extractor, {} as IDictionary<IDictionary<string>>);
+      .reduce(extractor, {} as IDictionary<IAwsProfile>) as IDictionary<
+      IAwsProfile
+    >;
 
-    if (profile && !credentials[profile]) {
-      throw new DevopsError(
-        `The profile "${profile}" was not found in the credentials file.`,
-        "devops/not-found"
-      );
-    }
-
-    return profile ? credentials[profile] : credentials;
+    return credentials;
   } catch (e) {
     return false;
   }
@@ -109,14 +107,14 @@ export async function getAwsProfileList(profile?: string) {
  * Get a specific _named profile_ in the AWS `credentials` file
  */
 export async function getAwsProfile(profileName: string) {
-  const profile = await getAwsProfileList(profileName);
+  const profile = await getAwsProfileList();
   if (!profile) {
     throw new DevopsError(
       `Attempt to get the AWS profile "${profileName}" failed because the AWS credentials file does not exist!`,
       "devops/not-ready"
     );
   }
-  return profile;
+  return profile[profileName];
 }
 
 /**
