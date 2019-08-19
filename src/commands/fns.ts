@@ -1,4 +1,9 @@
-import { getServerlessYaml, isServerless, consoleDimensions } from "../shared";
+import {
+  getServerlessYaml,
+  isServerless,
+  consoleDimensions,
+  buildServerlessMicroserviceProject
+} from "../shared";
 import { IDictionary } from "common-types";
 import { table } from "table";
 import chalk from "chalk";
@@ -20,7 +25,7 @@ export async function handler(args: string[], opt: IDictionary) {
         "typescript-microservice"
       )} template; rebuilding functions from config.`
     );
-    // await rebuildTypescriptMicroserviceProject();
+    await buildServerlessMicroserviceProject();
   }
 
   try {

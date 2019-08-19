@@ -5,7 +5,6 @@ import {
   saveToServerlessYaml
 } from ".";
 import chalk from "chalk";
-import { IServerlessAccountInfo } from "../@types";
 import { IServerlessConfig } from "common-types";
 import { emoji } from "../ui";
 
@@ -21,6 +20,7 @@ import { emoji } from "../ui";
  * 2. ask the user for the information (saving values as default for next time)
  */
 export async function buildServerlessMicroserviceProject() {
+  let stage = "starting";
   const accountInfo =
     (await getAccountInfoFromServerlessYaml()) || (await askForAccountInfo());
   console.log(
@@ -28,13 +28,18 @@ export async function buildServerlessMicroserviceProject() {
       accountInfo.accountId
     }} {bold ]} {bold ]} has been gathered; ready to build {green serverless.yml}`
   );
-  const config = (await getMicroserviceConfig(accountInfo)).replace(
-    /^.*\}\'(.*)/,
-    "$1"
-  );
   try {
+    const config = (await getMicroserviceConfig(accountInfo)).replace(
+      /^.*\}\'(.*)/,
+      "$1"
+    );
+    stage = "config-returned";
+    console.log(config);
+
     const configComplete: IServerlessConfig = JSON.parse(config);
+    stage = "config-parsed";
     await saveToServerlessYaml(configComplete);
+    stage = "config-parsed";
     console.log(
       chalk`- The {green {bold serverless.yml}} file has been updated! ${
         emoji.rocket
@@ -44,11 +49,15 @@ export async function buildServerlessMicroserviceProject() {
     return configComplete;
   } catch (e) {
     console.log(
-      chalk`- {red the attempt to parse the serverless config has failed!} ${
+      chalk`- {red the attempt to parse the serverless config has failed at stage "${stage}"!} ${
         emoji.poop
       }`
     );
-    console.log(e.message);
+    console.log(
+      `- The config sent in was:\n${JSON.stringify(accountInfo, null, 2)}`
+    );
+
+    console.log("- " + e.message);
     console.log(chalk`{dim ${e.stack}}`);
     console.log();
 

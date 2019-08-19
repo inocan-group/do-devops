@@ -28,7 +28,7 @@ function handler(args, opt) {
         }
         else if (status.isUsingTypescriptMicroserviceTemplate) {
             console.log(`- detected use of the ${chalk_1.default.blue("typescript-microservice")} template; rebuilding functions from config.`);
-            // await rebuildTypescriptMicroserviceProject();
+            yield shared_1.buildServerlessMicroserviceProject();
         }
         try {
             const { width } = yield shared_1.consoleDimensions();

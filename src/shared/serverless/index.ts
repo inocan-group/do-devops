@@ -12,3 +12,4 @@ export * from "./getAwsProfileFromServerless";
 export * from "./buildServerlessMicroserviceProject";
 export * from "./getAccountInfoFromServerlessYaml";
 export * from "./saveToServerlessYaml";
+export * from "./findAllHandlerFiles";

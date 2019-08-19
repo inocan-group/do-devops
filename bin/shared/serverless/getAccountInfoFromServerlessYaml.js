@@ -7,8 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const getServerlessYaml_1 = require("./getServerlessYaml");
+const chalk_1 = __importDefault(require("chalk"));
 /**
  * Gets the `accountInfo` from the `serverless.yml` file if
  * possible. If not it returns nothing.
@@ -18,13 +22,14 @@ function getAccountInfoFromServerlessYaml() {
         try {
             const config = yield getServerlessYaml_1.getServerlessYaml();
             return {
-                name: config.provider.name,
+                name: config.service,
                 accountId: config.custom.accountId,
                 region: config.provider.region,
                 profile: config.provider.profile
             };
         }
         catch (e) {
+            console.log(chalk_1.default `- Problems getting account info from {green serverless.yml}.`);
             //
         }
     });

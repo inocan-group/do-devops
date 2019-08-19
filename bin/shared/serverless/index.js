@@ -17,3 +17,4 @@ __export(require("./getAwsProfileFromServerless"));
 __export(require("./buildServerlessMicroserviceProject"));
 __export(require("./getAccountInfoFromServerlessYaml"));
 __export(require("./saveToServerlessYaml"));
+__export(require("./findAllHandlerFiles"));

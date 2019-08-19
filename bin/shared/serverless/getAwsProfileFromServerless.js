@@ -40,17 +40,6 @@ function getAwsProfileFromServerless() {
                 console.log(chalk_1.default `- it appears that the {green serverless.yml} does not have the {bold provider} section; will build from {italic serverless-microservice} config ${"\uD83E\uDD16" /* robot */}`);
             }
             yield index_1.buildServerlessMicroserviceProject();
-            // const stats = await buildServerlessMicroserviceProject();
-            // console.log(
-            //   chalk`- built the {italic microservice} configuration into the serverless.yml file ${
-            //     emoji.rocket
-            //   }`
-            // );
-            // console.log(
-            //   chalk`- {grey ${stats.functions} functions found, ${
-            //     stats.stepFunctions
-            //   } step functions}`
-            // );
         }
         try {
             config = yield getServerlessYaml_1.getServerlessYaml();
