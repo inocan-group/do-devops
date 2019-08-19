@@ -21,7 +21,7 @@ exports.description = description;
 function handler(args, opt) {
     return __awaiter(this, void 0, void 0, function* () {
         const filterBy = args.length > 0 ? (fn) => fn.includes(args[0]) : () => true;
-        const status = shared_1.isServerless();
+        const status = yield shared_1.isServerless();
         if (!status) {
             console.log("- this project does not appear to be a Serverless project!\n");
             process.exit();

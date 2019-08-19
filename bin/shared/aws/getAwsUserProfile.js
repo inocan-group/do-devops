@@ -8,15 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const isServerless_1 = require("./isServerless");
-/**
- * Returns a boolean flag on whether or not this project appears to be
- * based on the `typescript-microservice` yeoman template.
- */
-function isTypescriptMicroserviceProject() {
+const aws_sdk_1 = require("aws-sdk");
+function getAwsUserProfile(awsProfile) {
     return __awaiter(this, void 0, void 0, function* () {
-        const status = yield isServerless_1.isServerless();
-        return status && status.isUsingTypescriptMicroserviceTemplate ? true : false;
+        const up = new aws_sdk_1.IAM({
+            accessKeyId: awsProfile.aws_access_key_id,
+            secretAccessKey: awsProfile.aws_secret_access_key
+        })
+            .getUser()
+            .promise();
+        return up;
     });
 }
-exports.isTypescriptMicroserviceProject = isTypescriptMicroserviceProject;
+exports.getAwsUserProfile = getAwsUserProfile;

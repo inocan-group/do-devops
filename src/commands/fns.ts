@@ -10,7 +10,7 @@ export function description() {
 export async function handler(args: string[], opt: IDictionary) {
   const filterBy =
     args.length > 0 ? (fn: string) => fn.includes(args[0]) : () => true;
-  const status = isServerless();
+  const status = await isServerless();
   if (!status) {
     console.log("- this project does not appear to be a Serverless project!\n");
     process.exit();
