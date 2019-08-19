@@ -1,6 +1,6 @@
 {
   "name": "do-devops",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Devops commands for your nodejs projects",
   "main": "index.js",
   "bin": {
