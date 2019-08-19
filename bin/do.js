@@ -35,12 +35,12 @@ const help_1 = require("./commands/help");
             commandLineArgs(yield shared_1.globalAndLocalOptions({}, cmd), {
                 partial: true
             }) || {};
-        if (opts.help) {
-            yield help_1.help(opts, cmd);
-        }
         let subModule = shared_1.getCommandInterface(cmd);
         const subModuleArgv = opts._unknown.filter((i) => i !== cmd);
         const subModuleOpts = opts._all;
+        if (subModuleOpts.help) {
+            yield help_1.help(subModuleOpts, cmd);
+        }
         yield subModule.handler(subModuleArgv, subModuleOpts);
     }
     else {

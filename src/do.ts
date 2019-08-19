@@ -36,13 +36,15 @@ import { help } from "./commands/help";
       commandLineArgs(await globalAndLocalOptions({}, cmd), {
         partial: true
       }) || {};
-    if (opts.help) {
-      await help(opts, cmd);
-    }
-    let subModule = getCommandInterface(cmd);
 
+    let subModule = getCommandInterface(cmd);
     const subModuleArgv = opts._unknown.filter((i: any) => i !== cmd);
     const subModuleOpts = opts._all;
+
+    if (subModuleOpts.help) {
+      await help(subModuleOpts, cmd);
+    }
+
     await subModule.handler(subModuleArgv, subModuleOpts);
   } else {
     console.log(

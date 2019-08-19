@@ -3,7 +3,8 @@ import {
   runHooks,
   getOptions,
   emoji,
-  isServerless
+  isServerless,
+  isNpmPackage
 } from "../shared";
 import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
@@ -12,23 +13,22 @@ import { IDoDeployConfig } from "./defaults";
 export async function description(opts: IDictionary) {
   const base = `Deployment services that for {bold Serverless} or {bold NPM} publishing.\n\n`;
   const { deploy: config } = await getConfig();
-  const target = opts.target || config.target;
-
-  const detected: IDetectedTarget = { target: "serverless", override: false };
+  const detect = await detectTarget();
 
   const possibleTargets = {
-    serverless: `This project was detected to be a "serverless" project. Unless you state explicitly that you want to use "NPM" targetting it will use "serverless". Note that the {italic options} listed below are only those which related to "serverless".`,
-    npm: `This project was detected to be a "npm" project. Unless you state explicitly that you want to use "serverless" targetting it will use "NPM". Note that the {italic options} listed below are only those which related to "serverless".`,
-    both: `This project was detected to have both {bold Serverless} functions {italic and} be an {bold NPM} library. By default the deploy command will assume you want to use {bold Serverless} deployment but the {italic options} listed below are for both possibilities.`,
+    serverless: `This project was detected to be a {bold Serverless} project. Unless you state explicitly that you want to use {bold NPM} targetting it will use Serverless.`,
+    npm: `This project was detected to be a {bold NPM} project. Unless you state explicitly that you want to use "serverless" targetting it will use NPM. `,
+    both: `This project was detected to have both {bold Serverless} functions {italic and} be an {bold NPM} library. By default the deploy command will assume you want to use {bold Serverless} deployment but the {italic options} listed below allow for both targets.`,
     bespoke: "not implemented yet"
   };
 
-  return base + possibleTargets[detected.target];
+  return base + possibleTargets[detect.target as keyof typeof possibleTargets];
 }
 
 export type IDetectedTarget = {
-  target: IDoDeployConfig["target"];
+  detected: IDoDeployConfig["target"] | "both";
   override: boolean;
+  target: IDoDeployConfig["target"] | "both";
 };
 
 /**
@@ -38,12 +38,20 @@ async function detectTarget(opts?: IDictionary): Promise<IDetectedTarget> {
   const { deploy: config } = await getConfig();
   const override = opts ? opts.target : undefined;
   const serverless = isServerless();
-  // const npm = isNpmPackage();
-  let detect: IDoDeployConfig["target"];
+  const npm = await isNpmPackage();
+  const detected: IDoDeployConfig["target"] | "both" =
+    serverless && !npm
+      ? "serverless"
+      : npm && !serverless
+      ? "npm"
+      : npm && serverless
+      ? "both"
+      : "unknown";
 
   return {
-    target: "serverless",
-    override: override && override !== detect ? true : false
+    detected,
+    override: override && override !== detected ? override : false,
+    target: override || detected
   };
 }
 

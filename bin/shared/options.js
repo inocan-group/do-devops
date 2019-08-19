@@ -7,8 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const getCommandInterface_1 = require("./getCommandInterface");
+const chalk_1 = __importDefault(require("chalk"));
 /**
  * A list of all options from all commands (including global options)
  */
@@ -32,8 +36,15 @@ exports.globalOptions = [
         alias: "o",
         type: String,
         group: "global",
-        description: "sends output to the filename specified",
+        description: "sends output to the filename specified (in JSON format)",
         typeLabel: "<filename>"
+    },
+    {
+        name: "quiet",
+        alias: "q",
+        type: Boolean,
+        group: "global",
+        description: chalk_1.default `stops all output to {italic stdout}`
     },
     {
         name: "verbose",

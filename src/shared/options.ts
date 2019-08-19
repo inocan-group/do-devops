@@ -1,6 +1,7 @@
 import { OptionDefinition } from "command-line-usage";
 import { getCommandInterface } from "./getCommandInterface";
 import { IDictionary } from "common-types";
+import chalk from "chalk";
 
 /**
  * A list of all options from all commands (including global options)
@@ -25,8 +26,15 @@ export const globalOptions: OptionDefinition[] = [
     alias: "o",
     type: String,
     group: "global",
-    description: "sends output to the filename specified",
+    description: "sends output to the filename specified (in JSON format)",
     typeLabel: "<filename>"
+  },
+  {
+    name: "quiet",
+    alias: "q",
+    type: Boolean,
+    group: "global",
+    description: chalk`stops all output to {italic stdout}`
   },
   {
     name: "verbose",
