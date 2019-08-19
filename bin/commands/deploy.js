@@ -16,11 +16,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
+const deploy_helpers_1 = require("./deploy-helpers");
 function description(opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const base = `Deployment services that for {bold Serverless} or {bold NPM} publishing.\n\n`;
         const { deploy: config } = yield shared_1.getConfig();
-        const detect = yield detectTarget();
+        const detect = yield deploy_helpers_1.detectTarget();
         const possibleTargets = {
             serverless: `This project was detected to be a {bold Serverless} project. Unless you state explicitly that you want to use {bold NPM} targetting it will use Serverless.`,
             npm: `This project was detected to be a {bold NPM} project. Unless you state explicitly that you want to use "serverless" targetting it will use NPM. `,
@@ -31,29 +32,6 @@ function description(opts) {
     });
 }
 exports.description = description;
-/**
- * Detects the type of
- */
-function detectTarget(opts) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { deploy: config } = yield shared_1.getConfig();
-        const override = opts ? opts.target : undefined;
-        const serverless = shared_1.isServerless();
-        const npm = yield shared_1.isNpmPackage();
-        const detected = serverless && !npm
-            ? "serverless"
-            : npm && !serverless
-                ? "npm"
-                : npm && serverless
-                    ? "both"
-                    : "unknown";
-        return {
-            detected,
-            override: override && override !== detected ? override : false,
-            target: override || detected
-        };
-    });
-}
 exports.syntax = "do deploy [fn1] [fn2] <options>\n\n{dim Note: {italic stating particular functions is {italic optional} and if excluded will result in a full deployment of all functions.}}";
 function options(opts) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -95,14 +73,14 @@ exports.options = options;
 function handler(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const { deploy, global } = yield shared_1.getConfig();
-        const target = opts.target || deploy.target;
-        console.log(opts);
+        const detect = yield deploy_helpers_1.detectTarget();
+        const target = detect.target;
         if (!target) {
             console.log(`  - ${"\uD83D\uDCA9" /* poop */} You must state a valid "target" [ ${target ? target + "{italic not valid}" : "no target stated"} ]`);
         }
-        yield shared_1.runHooks(deploy.preDeployHooks);
-        const helper = (yield Promise.resolve().then(() => __importStar(require(`./deploy-helpers/${target}-deploy`)))).default;
-        yield helper(deploy, global);
+        // await runHooks(deploy.preDeployHooks);
+        const helper = (yield Promise.resolve().then(() => __importStar(require(`./deploy-helpers/deploy-${target}`)))).default;
+        yield helper(argv, opts);
     });
 }
 exports.handler = handler;

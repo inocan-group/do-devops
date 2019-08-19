@@ -1,14 +1,7 @@
-import {
-  getConfig,
-  runHooks,
-  getOptions,
-  emoji,
-  isServerless,
-  isNpmPackage
-} from "../shared";
+import { getConfig, runHooks, emoji } from "../shared";
 import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
-import { IDoDeployConfig } from "./defaults";
+import { detectTarget } from "./deploy-helpers";
 
 export async function description(opts: IDictionary) {
   const base = `Deployment services that for {bold Serverless} or {bold NPM} publishing.\n\n`;
@@ -23,36 +16,6 @@ export async function description(opts: IDictionary) {
   };
 
   return base + possibleTargets[detect.target as keyof typeof possibleTargets];
-}
-
-export type IDetectedTarget = {
-  detected: IDoDeployConfig["target"] | "both";
-  override: boolean;
-  target: IDoDeployConfig["target"] | "both";
-};
-
-/**
- * Detects the type of
- */
-async function detectTarget(opts?: IDictionary): Promise<IDetectedTarget> {
-  const { deploy: config } = await getConfig();
-  const override = opts ? opts.target : undefined;
-  const serverless = isServerless();
-  const npm = await isNpmPackage();
-  const detected: IDoDeployConfig["target"] | "both" =
-    serverless && !npm
-      ? "serverless"
-      : npm && !serverless
-      ? "npm"
-      : npm && serverless
-      ? "both"
-      : "unknown";
-
-  return {
-    detected,
-    override: override && override !== detected ? override : false,
-    target: override || detected
-  };
 }
 
 export const syntax =
@@ -96,8 +59,8 @@ export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
  */
 export async function handler(argv: string[], opts: any) {
   const { deploy, global } = await getConfig();
-  const target = opts.target || deploy.target;
-  console.log(opts);
+  const detect = await detectTarget();
+  const target = detect.target;
 
   if (!target) {
     console.log(
@@ -107,7 +70,7 @@ export async function handler(argv: string[], opts: any) {
     );
   }
 
-  await runHooks(deploy.preDeployHooks);
-  const helper = (await import(`./deploy-helpers/${target}-deploy`)).default;
-  await helper(deploy, global);
+  // await runHooks(deploy.preDeployHooks);
+  const helper = (await import(`./deploy-helpers/deploy-${target}`)).default;
+  await helper(argv, opts);
 }

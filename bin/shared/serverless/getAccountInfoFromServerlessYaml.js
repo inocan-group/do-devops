@@ -8,15 +8,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const isServerless_1 = require("./isServerless");
+const getServerlessYaml_1 = require("./getServerlessYaml");
 /**
- * Returns a boolean flag on whether or not this project appears to be
- * based on the `typescript-microservice` yeoman template.
+ * Gets the `accountInfo` from the `serverless.yml` file if
+ * possible. If not it returns nothing.
  */
-function isTypescriptMicroserviceProject() {
+function getAccountInfoFromServerlessYaml() {
     return __awaiter(this, void 0, void 0, function* () {
-        const status = yield isServerless_1.isServerless();
-        return status && status.isUsingTypescriptMicroserviceTemplate ? true : false;
+        try {
+            const config = yield getServerlessYaml_1.getServerlessYaml();
+            return {
+                name: config.provider.name,
+                accountId: config.custom.accountId,
+                region: config.provider.region,
+                profile: config.provider.profile
+            };
+        }
+        catch (e) {
+            //
+        }
     });
 }
-exports.isTypescriptMicroserviceProject = isTypescriptMicroserviceProject;
+exports.getAccountInfoFromServerlessYaml = getAccountInfoFromServerlessYaml;
