@@ -3,6 +3,10 @@ import { IDictionary } from "common-types";
 import { table } from "table";
 import chalk from "chalk";
 
+export function description() {
+  return `Lists all serverless function handlers and basic meta about them`;
+}
+
 export async function handler(args: string[], opt: IDictionary) {
   const filterBy =
     args.length > 0 ? (fn: string) => fn.includes(args[0]) : () => true;

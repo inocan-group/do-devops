@@ -29,6 +29,7 @@ function execute(options) {
         const profile = options.ssm.profile;
         const region = options.ssm.region;
         const secrets = options["_unknown"];
+        const nonStandardPath = options.ssm.nonStandardPath;
         const { width } = yield shared_1.consoleDimensions();
         if (!region) {
             throw new shared_1.DevopsError(`Getting SSM secrets requires an ${chalk_1.default.bold("AWS Region")} and none could be deduced. You can explicitly state this by adding "--region XYZ" to the command.`);
@@ -37,25 +38,37 @@ function execute(options) {
             throw new shared_1.DevopsError(`Getting SSM secrets requires an ${chalk_1.default.bold("AWS Profile")} and none could be deduced. You can explicitly state this by adding "--profile XYZ" to the command.`);
         }
         console.log(`- Getting SSM details for: ${chalk_1.default.italic.grey.bold(secrets.join(", "))}\n`);
-        let tableData = [
-            [
-                chalk_1.default.bold("Path"),
-                chalk_1.default.bold("Value"),
-                chalk_1.default.bold("Version"),
-                chalk_1.default.bold("LastUpdated")
-            ]
-        ];
+        const tableConfig = {
+            columns: {
+                0: { width: 30, alignment: "left" },
+                1: { width: width > 125 ? 60 : width > 100 ? 40 : 35 },
+                2: { width: 8, alignment: "center" },
+                3: { width: 16, alignment: "center" }
+            }
+        };
         const ssm = new aws_ssm_1.SSM({ profile, region });
         try {
             for (var secrets_1 = __asyncValues(secrets), secrets_1_1; secrets_1_1 = yield secrets_1.next(), !secrets_1_1.done;) {
                 const secret = secrets_1_1.value;
-                const data = yield ssm.get(secret, { decrypt: true });
+                let tableData = [
+                    [
+                        chalk_1.default.yellow.bold("Path"),
+                        chalk_1.default.yellow.bold("ARN"),
+                        chalk_1.default.yellow.bold("Version"),
+                        chalk_1.default.yellow.bold("LastUpdated")
+                    ]
+                ];
+                const data = yield ssm.get(secret, { decrypt: true, nonStandardPath });
                 tableData.push([
                     data.path,
-                    String(data.value),
+                    data.arn,
                     String(data.version),
                     date_fns_1.format(data.lastUpdated, "DD MMM, YYYY")
                 ]);
+                console.log(table_1.table(tableData, tableConfig));
+                console.log(chalk_1.default.yellow.bold("VALUE:\n"));
+                console.log(String(data.value));
+                console.log();
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -65,28 +78,6 @@ function execute(options) {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        const tableConfig = {
-            columns: {
-                0: { width: 30, alignment: "left" },
-                1: { width: 60 },
-                2: { width: 8, alignment: "center" },
-                3: { width: 16, alignment: "center" }
-            }
-        };
-        let content;
-        if (width > 130) {
-            content = table_1.table(tableData, tableConfig);
-        }
-        else if (width > 115) {
-            delete tableConfig.columns["3"];
-            content = table_1.table(tableData.map(i => i.slice(0, 3)), tableConfig);
-        }
-        else {
-            delete tableConfig.columns["2"];
-            delete tableConfig.columns["3"];
-            content = table_1.table(tableData.map(i => i.slice(0, 2)), tableConfig);
-        }
-        console.log(content);
     });
 }
 exports.execute = execute;

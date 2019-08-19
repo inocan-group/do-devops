@@ -34,9 +34,6 @@ export async function execute(options: CommandLineOptions) {
       chalk.bold("User")
     ]
   ];
-  // list.filter(i =>
-  //   filterBy ? i.Name.toLowerCase().includes(filterBy.toLowerCase()) : true
-  // ).forEach(i => {
 
   list.forEach(i => {
     tableData.push([

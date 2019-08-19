@@ -14,6 +14,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
 const table_1 = require("table");
 const chalk_1 = __importDefault(require("chalk"));
+function description() {
+    return `Lists all serverless function handlers and basic meta about them`;
+}
+exports.description = description;
 function handler(args, opt) {
     return __awaiter(this, void 0, void 0, function* () {
         const filterBy = args.length > 0 ? (fn) => fn.includes(args[0]) : () => true;

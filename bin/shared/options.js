@@ -1,23 +1,32 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const shared_1 = require("../shared");
-exports.DoGlobalOptions = [
-    {
-        name: "profile",
-        alias: "p",
-        type: String,
-        group: "global",
-        description: "explicitly state the AWS profile to use (otherwise assumes value in current repos 'serverless.yml')",
-        typeLabel: "<name>"
-    },
-    {
-        name: "region",
-        alias: "r",
-        type: String,
-        group: "global",
-        description: "explicitly state the AWS region (note: this overrides profile if set)",
-        typeLabel: "<region>"
-    },
+const getCommandInterface_1 = require("./getCommandInterface");
+/**
+ * A list of all options from all commands (including global options)
+ */
+function globalAndLocalOptions(optsSet, fn) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let options = exports.globalOptions;
+        const cmdDefn = getCommandInterface_1.getCommandInterface(fn);
+        if (cmdDefn.options) {
+            const localOptions = typeof cmdDefn.options === "object"
+                ? cmdDefn.options
+                : yield cmdDefn.options(optsSet);
+            options = options.concat(localOptions);
+        }
+        return options;
+    });
+}
+exports.globalAndLocalOptions = globalAndLocalOptions;
+exports.globalOptions = [
     {
         name: "output",
         alias: "o",
@@ -27,10 +36,17 @@ exports.DoGlobalOptions = [
         typeLabel: "<filename>"
     },
     {
+        name: "verbose",
+        alias: "v",
+        type: Boolean,
+        group: "global",
+        description: "makes the output more verbose"
+    },
+    {
         name: "help",
         alias: "h",
         type: Boolean,
         group: "global",
-        description: `shows help for the ${shared_1.inverted(" ssm ")} command in general but also the specifics of a particular sub-command if stated`
+        description: "shows help for given command"
     }
 ];

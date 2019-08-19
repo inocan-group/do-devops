@@ -46,7 +46,7 @@
   dependencies:
     aws-sdk "*"
 
-"@types/chai@^4.1.7":
+"@types/chai@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.0.tgz#2478260021408dec32c123a7cad3414beb811a07"
   integrity sha512-zw8UvoBEImn392tLjxoavuonblX/4Yb9ha4KBU10FirCfwgzhKO0dvyJSF9ByxV1xK1r2AgnAi/tvQaLgxQqxA==
@@ -231,10 +231,25 @@ async-shelljs@^0.1.2:
     "@types/shelljs" "^0.7.7"
     shelljs "^0.8.1"
 
-aws-sdk@*, aws-sdk@^2.510.0:
+aws-sdk@*:
   version "2.510.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.510.0.tgz#2bf73d7fadccfe2e68ffb2e86e7f5f36600bfe2e"
   integrity sha512-K75v+hCb4Kc/X8rd985ttTRKrdeI8xru1GQBlnmop01tjalA6SUzS81R3Fryh2yxDv45Hp46QBET1Gri0YpEfg==
+  dependencies:
+    buffer "4.9.1"
+    events "1.1.1"
+    ieee754 "1.1.8"
+    jmespath "0.15.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    uuid "3.3.2"
+    xml2js "0.4.19"
+
+aws-sdk@^2.512.0:
+  version "2.512.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.512.0.tgz#2480184c37964a224b2db1259aa07231403a09cc"
+  integrity sha512-ioZZ6dTiZyETpJJ3aYy81OS3idnU5n8eyFssvgMXdsX8PRJ3KJZ/dQAdCD/680xDt3ymRNClGvlkPcOLPNlDKQ==
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -401,10 +416,17 @@ commander@^2.12.1:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
 
-common-types@^1.10.5, common-types@^1.11.13:
+common-types@^1.10.5:
   version "1.11.15"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.11.15.tgz#9e2608d105369855d00f0a97d2bf8d52f1013108"
   integrity sha512-NIV2Jz0aVVjdtn/BSqOibu/gb5zpbx3ZITp2FB3hkBZFpLpgHbHi/RmuoVxBK3nJ4It5U030IF1h4P9UhLzz+g==
+  dependencies:
+    "@types/json-schema" "^7.0.3"
+
+common-types@^1.11.16:
+  version "1.11.16"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.11.16.tgz#759698bc998aaf74a418812a56f2197cdc2d0d6b"
+  integrity sha512-v8zeVRdPsYGMQ59WOtnjUM45AzZnANKKfPrANCTgNAnGAeL3h1KcSMmoCpJeyHzAjF1QynDEgkk3y/L/1MI6qg==
   dependencies:
     "@types/json-schema" "^7.0.3"
 
@@ -412,6 +434,11 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
+
+console-badge@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/console-badge/-/console-badge-1.1.0.tgz#cee7632a8476d61a16e9587c6b821235258f327c"
+  integrity sha512-om5KsTeamYLRmA0tUlVpJ6UljRixh73fFfgShYLWu0pqVPit5Og6XAf7SXkr7V8FOjyabbTEn58tE12ikuiygg==
 
 cross-spawn@^6.0.0:
   version "6.0.5"
@@ -1436,10 +1463,10 @@ table-layout@^1.0.0:
     typical "^5.0.0"
     wordwrapjs "^4.0.0"
 
-table@^5.4.1:
-  version "5.4.5"
-  resolved "https://registry.yarnpkg.com/table/-/table-5.4.5.tgz#c8f4ea2d8fee08c0027fac27b0ec0a4fe01dfa42"
-  integrity sha512-oGa2Hl7CQjfoaogtrOHEJroOcYILTx7BZWLGsJIlzoWmB2zmguhNfPJZsWPKYek/MgCxfco54gEi31d1uN2hFA==
+table@^5.4.6:
+  version "5.4.6"
+  resolved "https://registry.yarnpkg.com/table/-/table-5.4.6.tgz#1292d19500ce3f86053b05f0e8e7e4a3bb21079e"
+  integrity sha512-wmEc8m4fjnob4gt5riFRtTu/6+4rSe12TpAELNSqHMfF3IqnA+CH37USM6/YR3qRZv7e56kAEAtd6nKZaxe0Ug==
   dependencies:
     ajv "^6.10.2"
     lodash "^4.17.14"

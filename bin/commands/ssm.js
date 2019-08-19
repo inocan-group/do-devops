@@ -24,6 +24,13 @@ const chalk_1 = __importDefault(require("chalk"));
 const isServerless_1 = require("../shared/serverless/isServerless");
 const commandLineArgs = require("command-line-args");
 const ssm_1 = require("./options/ssm");
+/**
+ * Description of command for help text
+ */
+function description() {
+    return "allows an easy CRUD-based interaction with AWS's SSM parameter system for managing secrets.";
+}
+exports.description = description;
 function handler(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const config = yield shared_1.getConfig();
@@ -40,7 +47,7 @@ function handler(argv, opts) {
         }
         const ssmCommands = ["list", "get", "set"];
         if (!ssmCommands.includes(subCommand)) {
-            console.log(`- please choose a ${chalk_1.default.italic("valid")} ${chalk_1.default.bold.yellow("SSM")} command; these are: ${ssmCommands.join(", ")}`);
+            console.log(`- please choose a ${chalk_1.default.italic("valid")} ${chalk_1.default.bold.yellow("SSM")} sub-command: ${ssmCommands.join(", ")}`);
             console.log();
             process.exit();
         }

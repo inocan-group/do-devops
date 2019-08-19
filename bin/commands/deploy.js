@@ -16,6 +16,63 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
+function description(opts) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const base = `Deployment services that for {bold Serverless} or {bold NPM} publishing.\n\n`;
+        const { deploy: config } = yield shared_1.getConfig();
+        const target = opts.target || config.target;
+        const detected = { target: "serverless", override: false };
+        const possibleTargets = {
+            serverless: `This project was detected to be a "serverless" project. Unless you state explicitly that you want to use "NPM" targetting it will use "serverless". Note that the {italic options} listed below are only those which related to "serverless".`,
+            npm: `This project was detected to be a "npm" project. Unless you state explicitly that you want to use "serverless" targetting it will use "NPM". Note that the {italic options} listed below are only those which related to "serverless".`,
+            both: `This project was detected to have both {bold Serverless} functions {italic and} be an {bold NPM} library. By default the deploy command will assume you want to use {bold Serverless} deployment but the {italic options} listed below are for both possibilities.`,
+            bespoke: "not implemented yet"
+        };
+        return base + possibleTargets[detected.target];
+    });
+}
+exports.description = description;
+/**
+ * Detects the type of
+ */
+function detectTarget(opts) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { deploy: config } = yield shared_1.getConfig();
+        const override = opts ? opts.target : undefined;
+        const serverless = shared_1.isServerless();
+        // const npm = isNpmPackage();
+        let detect;
+        return {
+            target: "serverless",
+            override: override && override !== detect ? true : false
+        };
+    });
+}
+exports.syntax = "do deploy [fn1] [fn2] <options>\n\n{dim Note: {italic stating particular functions is {italic optional} and if excluded will result in a full deployment of all functions.}}";
+function options(opts) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { deploy: config } = yield shared_1.getConfig();
+        const target = opts.target || config.target;
+        return [
+            {
+                name: "interactive",
+                alias: "i",
+                type: Boolean,
+                group: "serverlessDeploy",
+                description: `allow interactive choices for the functions you want to deploy`
+            },
+            {
+                name: "target",
+                alias: "t",
+                typeLabel: "<target>",
+                type: String,
+                group: "deploy",
+                description: "manually override the project target (serverless, npm)"
+            }
+        ];
+    });
+}
+exports.options = options;
 /**
  * **Deploy Handler**
  *
@@ -32,10 +89,13 @@ const shared_1 = require("../shared");
 function handler(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const { deploy, global } = yield shared_1.getConfig();
-        console.log(argv, opts);
+        const target = opts.target || deploy.target;
+        console.log(opts);
+        if (!target) {
+            console.log(`  - ${"\uD83D\uDCA9" /* poop */} You must state a valid "target" [ ${target ? target + "{italic not valid}" : "no target stated"} ]`);
+        }
         yield shared_1.runHooks(deploy.preDeployHooks);
-        const helper = (yield Promise.resolve().then(() => __importStar(require(`./deploy-helpers/${deploy.target}-deploy`))))
-            .default;
+        const helper = (yield Promise.resolve().then(() => __importStar(require(`./deploy-helpers/${target}-deploy`)))).default;
         yield helper(deploy, global);
     });
 }

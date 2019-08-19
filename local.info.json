@@ -1,0 +1,144 @@
+yarn info v1.17.3
+{ name:
+   'do-devops',
+  'dist-tags':
+   { latest:
+      '0.1.3' },
+  versions:
+   [ '0.1.0',
+     '0.1.1',
+     '0.1.2',
+     '0.1.3' ],
+  time:
+   { created:
+      '2019-04-23T01:09:16.285Z',
+     '0.1.0':
+      '2019-04-23T01:09:16.384Z',
+     modified:
+      '2019-08-15T11:58:28.148Z',
+     '0.1.1':
+      '2019-05-21T05:59:22.852Z',
+     '0.1.2':
+      '2019-08-15T06:23:11.290Z',
+     '0.1.3':
+      '2019-08-15T11:58:25.702Z' },
+  maintainers:
+   [ { name:
+        'ksnyde',
+       email:
+        'ken@ken.net' } ],
+  description:
+   'Devops commands for your nodejs projects',
+  homepage:
+   'https://github.com/inocan-group/devops#readme',
+  keywords:
+   [ 'devops',
+     'nodejs',
+     'serverless' ],
+  repository:
+   { type:
+      'git',
+     url:
+      'git+https://github.com/inocan-group/devops.git' },
+  author:
+   { name:
+      'Ken Snyder' },
+  bugs:
+   { url:
+      'https://github.com/inocan-group/devops/issues' },
+  license:
+   'MIT',
+  readmeFilename:
+   'README.md',
+  version:
+   '0.1.3',
+  main:
+   'index.js',
+  bin:
+   { do:
+      './bin/do.js' },
+  scripts:
+   { test:
+      'mocha --require ts-node/register test/**/*-spec.ts',
+     build:
+      'tsc',
+     do:
+      './bin/do.js' },
+  dependencies:
+   { 'aws-sdk':
+      '^2.510.0',
+     'aws-ssm':
+      '^0.3.3',
+     chalk:
+      '^2.4.2',
+     'command-line-args':
+      '^5.1.1',
+     'command-line-usage':
+      '^6.0.2',
+     'common-types':
+      '^1.11.13',
+     'date-fns':
+      '^1.30.1',
+     'fast-glob':
+      '^3.0.4',
+     globby:
+      '^10.0.1',
+     inquirer:
+      '^6.5.0',
+     'js-yaml':
+      '^3.13.1',
+     table:
+      '^5.4.1' },
+  devDependencies:
+   { '@types/aws-sdk':
+      '^2.7.0',
+     '@types/chai':
+      '^4.1.7',
+     '@types/chalk':
+      '^2.2.0',
+     '@types/command-line-args':
+      '^5.0.0',
+     '@types/command-line-usage':
+      '^5.0.1',
+     '@types/globby':
+      '^9.1.0',
+     '@types/inquirer':
+      '^6.5.0',
+     '@types/js-yaml':
+      '^3.12.1',
+     '@types/mocha':
+      '^5.2.7',
+     '@types/node':
+      '^10.8.0',
+     '@types/table':
+      '^4.0.6',
+     'async-shelljs':
+      '^0.1.2',
+     chai:
+      '^4.2.0',
+     mocha:
+      '^6.2.0',
+     'ts-node':
+      '^8.3.0',
+     tslint:
+      '^5.18.0',
+     typescript:
+      '^3.5.3' },
+  gitHead:
+   '903bc260e0a07cc18f8eca70ed9649851e519285',
+  dist:
+   { integrity:
+      'sha512-b7DkqLAyYxOQ6QfPVZLoOy5w8rfOFhHV31MxJ2VkKjaIeQDV2oL0iPRNWkSl1RbtolbMA8HpWJFyHwYmhSkqyg==',
+     shasum:
+      '9af2e9bba85f69a1ad22f654ab59d86d4a9d00e7',
+     tarball:
+      'https://registry.npmjs.org/do-devops/-/do-devops-0.1.3.tgz',
+     fileCount:
+      156,
+     unpackedSize:
+      275876,
+     'npm-signature':
+      '-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJdVUjiCRA9TVsSAnZWagAAOOMP/jSpIlSJzHDwJAisNeRe\no9tzNB71G+k3+mn3Vi+SPW3/qufqRsKkHz2vCiGonZZne8OJ/kXVFKU9C+nb\nsLJHCd4EjJT1jnYuVPKIKgswdw0FSzs9dDIcLmfOPGuICIUPri+OQf6rtSPM\n/R8W3YoR3SwMFD01TVsWrg7hhp1nb9OsWvQMj3kd05sl77aAlgPpKii4UY4m\njOjRJ6AGcjLn1Ex5dBabOfP8GzobLlGC/Bdh2XrNzhf6LQgJ2LeHh07Lxa2h\n+l6X9i6oc6uCPv4SJIR5dVaFgGwmkcOuzXAemwOuoDjBf+tUwSL0PiEiB8Mx\nvaiZXxT8Ckc6v2fI/KeArnj8gAQiNYpGBZojNTyg/jo51lImDn8kKHyK9Y2q\nCcKmJWbbYkverOLAV0v4KO051+nOW9J8BeCHulj59ySR91g8occNPFTe1mpd\n6/xbLowYTYhHCWd70sWhIEfgU5LUJ6XWYQOSLAUTkfFnOjEb2bWiWO2hTbrc\nJDofy4nS0wTD8bHZCPlgiO+4eFbQRjRUg//OD8GwX7urBv6y9wnhcN7o3UHe\n86Dikbl8BWSeBZ34jCpUhjBwqE7gii0S/fKPN+l/TwTAKUd4Ri9Qs6JIWBqb\nW68rDGccyQwJ6krztqiKSHypqf3P7PACQSrUFhLLfzKYk9rKkA/6EtDQOnBX\nqv4X\r\n=3WqW\r\n-----END PGP SIGNATURE-----\r\n' },
+  directories:
+   {} }
+Done in 0.14s.

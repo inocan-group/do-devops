@@ -7,6 +7,13 @@ import commandLineArgs = require("command-line-args");
 import { DoSsmOptions } from "./options/ssm";
 import { IServerlessConfig } from "common-types";
 
+/**
+ * Description of command for help text
+ */
+export function description() {
+  return "allows an easy CRUD-based interaction with AWS's SSM parameter system for managing secrets.";
+}
+
 export async function handler(argv: string[], opts: any) {
   const config = await getConfig();
   const subCommand = argv[0];
@@ -27,7 +34,7 @@ export async function handler(argv: string[], opts: any) {
     console.log(
       `- please choose a ${chalk.italic("valid")} ${chalk.bold.yellow(
         "SSM"
-      )} command; these are: ${ssmCommands.join(", ")}`
+      )} sub-command: ${ssmCommands.join(", ")}`
     );
     console.log();
     process.exit();

@@ -35,9 +35,6 @@ function execute(options) {
                 chalk_1.default.bold("User")
             ]
         ];
-        // list.filter(i =>
-        //   filterBy ? i.Name.toLowerCase().includes(filterBy.toLowerCase()) : true
-        // ).forEach(i => {
         list.forEach(i => {
             tableData.push([
                 i.Name,

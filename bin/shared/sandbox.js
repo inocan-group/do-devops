@@ -25,7 +25,7 @@ function sandbox(strategy) {
                     .toLowerCase();
                 return user || "dev";
             case "branch":
-                const branch = yield index_1.gitBranch();
+                const branch = yield index_1.getGitBranch();
                 switch (branch) {
                     case "develop":
                         return "dev";
