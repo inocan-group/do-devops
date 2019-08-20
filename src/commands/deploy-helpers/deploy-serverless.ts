@@ -49,14 +49,23 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   fns.forEach(fn => console.log(chalk.grey(`    - ${fn}`)));
 
   const promises: any[] = [];
-  fns.map(fn => {
-    promises.push(
-      asyncExec(
-        `sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`
-      )
+  try {
+    fns.map(fn => {
+      promises.push(
+        asyncExec(
+          `sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`
+        )
+      );
+    });
+    await Promise.all(promises);
+    console.log(chalk`- The functions were all deployed! ${emoji.rocket}`);
+  } catch (e) {
+    console.log(
+      chalk`- {red {bold problems deploying functions!}} ${emoji.poop}`
     );
-  });
-  await Promise.all(promises);
+    console.log(`- ${e.message}`);
+    console.log(chalk`- {dim ${e.stack}}`);
+  }
 }
 
 async function fullDeploy(meta: IServerlessDeployMeta) {
@@ -74,6 +83,7 @@ async function fullDeploy(meta: IServerlessDeployMeta) {
       await asyncExec(
         `sls deploy --aws-s3-accelerate  --stage ${stage} --verbose`
       );
+      console.log(chalk`\n- The full deploy was successful! ${emoji.rocket}\n`);
     } catch (e) {
       console.log(chalk`- {red Error running deploy!}`);
       console.log(
