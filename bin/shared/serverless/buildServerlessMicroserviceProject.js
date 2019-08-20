@@ -37,6 +37,7 @@ function buildServerlessMicroserviceProject() {
             stage = "config-parsed";
             yield _1.saveFunctionsTypeDefinition(configComplete);
             console.log(chalk_1.default `- The function enumeration at {bold src/@types/build.ts} has been updated`);
+            stage = "type-definitions-written";
             yield _1.saveToServerlessYaml(configComplete);
             console.log(chalk_1.default `- The {green {bold serverless.yml}} file has been updated! ${"\uD83D\uDE80" /* rocket */}\n`);
             return configComplete;

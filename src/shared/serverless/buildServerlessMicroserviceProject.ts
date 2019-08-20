@@ -44,6 +44,7 @@ export async function buildServerlessMicroserviceProject() {
     console.log(
       chalk`- The function enumeration at {bold src/@types/build.ts} has been updated`
     );
+    stage = "type-definitions-written";
     await saveToServerlessYaml(configComplete);
     console.log(
       chalk`- The {green {bold serverless.yml}} file has been updated! ${
