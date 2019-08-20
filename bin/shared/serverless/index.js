@@ -19,4 +19,3 @@ __export(require("./getAccountInfoFromServerlessYaml"));
 __export(require("./saveFunctionsTypeDefinition"));
 __export(require("./saveToServerlessYaml"));
 __export(require("./findAllHandlerFiles"));
-__export(require("./clearOutFilesPriorToBuild"));

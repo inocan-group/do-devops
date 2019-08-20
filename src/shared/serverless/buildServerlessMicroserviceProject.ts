@@ -3,8 +3,7 @@ import {
   getAccountInfoFromServerlessYaml,
   askForAccountInfo,
   saveToServerlessYaml,
-  saveFunctionsTypeDefinition,
-  clearOutFilesPriorToBuild
+  saveFunctionsTypeDefinition
 } from ".";
 import chalk from "chalk";
 import { IServerlessConfig } from "common-types";
