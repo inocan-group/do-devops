@@ -2,7 +2,9 @@ import { getMicroserviceConfig } from "./getMicroserviceConfig";
 import {
   getAccountInfoFromServerlessYaml,
   askForAccountInfo,
-  saveToServerlessYaml
+  saveToServerlessYaml,
+  saveFunctionsTypeDefinition,
+  clearOutFilesPriorToBuild
 } from ".";
 import chalk from "chalk";
 import { IServerlessConfig } from "common-types";
@@ -26,24 +28,28 @@ export async function buildServerlessMicroserviceProject() {
   console.log(
     chalk`- The account info for {bold ${accountInfo.name} [ }{dim ${
       accountInfo.accountId
-    }} {bold ]} {bold ]} has been gathered; ready to build {green serverless.yml}`
+    }} {bold ]} has been gathered; ready to build {green serverless.yml}`
   );
+
   try {
     const config = (await getMicroserviceConfig(accountInfo)).replace(
       /^.*\}\'(.*)/,
       "$1"
     );
-    stage = "config-returned";
-    console.log(config);
 
+    stage = "config-returned";
     const configComplete: IServerlessConfig = JSON.parse(config);
     stage = "config-parsed";
+
+    await saveFunctionsTypeDefinition(configComplete);
+    console.log(
+      chalk`- The function enumeration at {bold src/@types/build.ts} has been updated`
+    );
     await saveToServerlessYaml(configComplete);
-    stage = "config-parsed";
     console.log(
       chalk`- The {green {bold serverless.yml}} file has been updated! ${
         emoji.rocket
-      }`
+      }\n`
     );
 
     return configComplete;

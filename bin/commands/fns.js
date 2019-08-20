@@ -18,7 +18,15 @@ function description() {
     return `Lists all serverless function handlers and basic meta about them`;
 }
 exports.description = description;
-function handler(args, opt) {
+exports.options = [
+    {
+        name: "forceBuild",
+        alias: "f",
+        type: Boolean,
+        description: chalk_1.default `by default functions will be derived from {italic serverless.yml} but if you are in a {italic typescript-microservice} project you can force a rebuild prior to listing the functions`
+    }
+];
+function handler(args, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const filterBy = args.length > 0 ? (fn) => fn.includes(args[0]) : () => true;
         const status = yield shared_1.isServerless();
@@ -27,8 +35,13 @@ function handler(args, opt) {
             process.exit();
         }
         else if (status.isUsingTypescriptMicroserviceTemplate) {
-            console.log(`- detected use of the ${chalk_1.default.blue("typescript-microservice")} template; rebuilding functions from config.`);
-            yield shared_1.buildServerlessMicroserviceProject();
+            if (opts.forceBuild) {
+                console.log(`- detected use of the ${chalk_1.default.blue("typescript-microservice")} template; rebuilding functions from config.`);
+                yield shared_1.buildServerlessMicroserviceProject();
+            }
+            else {
+                console.log(chalk_1.default `- detected use of the {blue typescript-microservice} template; use {bold {blue --forceBuild}} to rebuild prior to listing functions.\n`);
+            }
         }
         try {
             const { width } = yield shared_1.consoleDimensions();

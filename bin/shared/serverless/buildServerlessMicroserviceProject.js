@@ -29,16 +29,16 @@ function buildServerlessMicroserviceProject() {
     return __awaiter(this, void 0, void 0, function* () {
         let stage = "starting";
         const accountInfo = (yield _1.getAccountInfoFromServerlessYaml()) || (yield _1.askForAccountInfo());
-        console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} {bold ]} has been gathered; ready to build {green serverless.yml}`);
+        console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered; ready to build {green serverless.yml}`);
         try {
             const config = (yield getMicroserviceConfig_1.getMicroserviceConfig(accountInfo)).replace(/^.*\}\'(.*)/, "$1");
             stage = "config-returned";
-            console.log(config);
             const configComplete = JSON.parse(config);
             stage = "config-parsed";
+            yield _1.saveFunctionsTypeDefinition(configComplete);
+            console.log(chalk_1.default `- The function enumeration at {bold src/@types/build.ts} has been updated`);
             yield _1.saveToServerlessYaml(configComplete);
-            stage = "config-parsed";
-            console.log(chalk_1.default `- The {green {bold serverless.yml}} file has been updated! ${"\uD83D\uDE80" /* rocket */}`);
+            console.log(chalk_1.default `- The {green {bold serverless.yml}} file has been updated! ${"\uD83D\uDE80" /* rocket */}\n`);
             return configComplete;
         }
         catch (e) {

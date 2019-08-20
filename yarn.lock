@@ -261,10 +261,10 @@ aws-sdk@^2.512.0:
     uuid "3.3.2"
     xml2js "0.4.19"
 
-aws-ssm@^0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/aws-ssm/-/aws-ssm-0.3.3.tgz#e85af69cebf2a8460947df79ac46141264068393"
-  integrity sha512-fCJMSkhn5rclQdod9NrljMLOXfhahh86J+pN/XOCF8y+EjBjnruRRe3BdIxf98jIFqREnKNXwLPdiTIUX9+Qsw==
+aws-ssm@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/aws-ssm/-/aws-ssm-0.3.4.tgz#e27ac1da74e26ce04e641974771ae0df9254e2b6"
+  integrity sha512-yuKgojp6xX60vKqMv6ch8MXw80TvKr3zDeuZgke3B3kKWJBboy9r9b19pm8wGt5sqgKWTVYjLz8AD6yKH+UOLw==
   dependencies:
     common-types "^1.10.5"
 

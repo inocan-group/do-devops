@@ -19,6 +19,7 @@ export async function getMicroserviceConfig(
       `yarn ts-node ${cliFile} '${JSON.stringify(accountInfo)}'`,
       { silent: true }
     );
+
     return config;
   } catch (e) {
     console.log(chalk`{yellow - failed executing ${cliFile}}`);

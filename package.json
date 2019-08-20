@@ -3,6 +3,7 @@
   "version": "0.1.5",
   "description": "Devops commands for your nodejs projects",
   "main": "index.js",
+  "typings": "./bin/index.map.ts",
   "bin": {
     "do": "./bin/do.js"
   },
@@ -28,7 +29,7 @@
   "homepage": "https://github.com/inocan-group/devops#readme",
   "dependencies": {
     "aws-sdk": "^2.512.0",
-    "aws-ssm": "^0.3.3",
+    "aws-ssm": "^0.3.4",
     "chalk": "^2.4.2",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.0.2",
