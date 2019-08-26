@@ -19,7 +19,9 @@ export async function getCommands(fn?: string) {
         summary: bold
           ? chalk.bold(ref.description ? ref.description() : "")
           : ref.description
-          ? ref.description()
+          ? typeof ref.description === "function"
+            ? await ref.description()
+            : ref.description
           : ""
       });
     }
