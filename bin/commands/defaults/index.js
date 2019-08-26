@@ -6,5 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./global"));
 __export(require("./build"));
 __export(require("./deploy"));
+__export(require("./pkg"));
 __export(require("./ssm"));
 __export(require("./fns"));

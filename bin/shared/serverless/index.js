@@ -9,6 +9,7 @@ __export(require("./functions"));
 __export(require("./getMicroserviceConfig"));
 __export(require("./getServerlessYaml"));
 __export(require("./getStage"));
+__export(require("./getRegion"));
 __export(require("./findInlineFunctionDefnFiles"));
 __export(require("./findConfigFunctionDefnFiles"));
 __export(require("./isServerless"));

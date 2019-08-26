@@ -4,6 +4,7 @@ export * from "./functions";
 export * from "./getMicroserviceConfig";
 export * from "./getServerlessYaml";
 export * from "./getStage";
+export * from "./getRegion";
 export * from "./findInlineFunctionDefnFiles";
 export * from "./findConfigFunctionDefnFiles";
 export * from "./isServerless";

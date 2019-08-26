@@ -37,7 +37,9 @@ function getCommands(fn) {
                     summary: bold
                         ? chalk_1.default.bold(ref.description ? ref.description() : "")
                         : ref.description
-                            ? ref.description()
+                            ? typeof ref.description === "function"
+                                ? yield ref.description()
+                                : ref.description
                             : ""
                 });
             }
