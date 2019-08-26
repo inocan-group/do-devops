@@ -10,7 +10,10 @@ export async function getAccountInfoFromServerlessYaml() {
   try {
     const config = await getServerlessYaml();
     return {
-      name: config.service,
+      name:
+        typeof config.service === "string"
+          ? config.service
+          : config.service.name,
       accountId: config.custom.accountId,
       region: config.provider.region,
       profile: config.provider.profile

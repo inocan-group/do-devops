@@ -14,6 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const getMicroserviceConfig_1 = require("./getMicroserviceConfig");
 const _1 = require(".");
 const chalk_1 = __importDefault(require("chalk"));
+const ui_1 = require("../ui");
 /**
  * Builds a `serverless.yml` file from the configuration
  * available in the `/serverless-config` directory.
@@ -58,6 +59,11 @@ function buildServerlessMicroserviceProject() {
             yield _1.saveFunctionsTypeDefinition(configComplete);
             console.log(chalk_1.default `- The function enumeration at {bold src/@types/build.ts} has been updated`);
             stage = "type-definitions-written";
+            const fns = Object.keys(configComplete.functions);
+            const plugins = configComplete.plugins || [];
+            console.log(chalk_1.default `- The serverless config consists of\n  - {yellow ${String(fns.length)}} functions [ {dim ${ui_1.truncate(fns, 5)}} ]\n  - {yellow ${String(configComplete.stepFunctions
+                ? configComplete.stepFunctions.stateMachines.length
+                : 0)}} step functions\n  - {yellow ${String(plugins.length)}} plugins [ {dim ${ui_1.truncate(plugins, 5)}} ]`);
             yield _1.saveToServerlessYaml(configComplete);
             console.log(chalk_1.default `- The {green {bold serverless.yml}} file has been updated! ${"\uD83D\uDE80" /* rocket */}\n`);
             return configComplete;

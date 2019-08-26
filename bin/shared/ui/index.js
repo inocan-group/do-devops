@@ -7,3 +7,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./helpContent"));
 __export(require("./emoji"));
 __export(require("./styles"));
+__export(require("./truncate"));
