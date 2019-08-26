@@ -1,6 +1,6 @@
 {
   "name": "do-devops",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Devops commands for your nodejs projects",
   "main": "index.js",
   "typings": "./bin/index.map.ts",

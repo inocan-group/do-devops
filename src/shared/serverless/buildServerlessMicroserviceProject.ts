@@ -7,7 +7,7 @@ import {
 } from ".";
 import chalk from "chalk";
 import { IServerlessConfig } from "common-types";
-import { emoji } from "../ui";
+import { emoji, truncate } from "../ui";
 
 /**
  * Builds a `serverless.yml` file from the configuration
@@ -24,6 +24,7 @@ export async function buildServerlessMicroserviceProject() {
   let stage = "starting";
   const accountInfo =
     (await getAccountInfoFromServerlessYaml()) || (await askForAccountInfo());
+
   console.log(
     chalk`- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered; ready to build {green serverless.yml}`
   );
@@ -73,6 +74,20 @@ export async function buildServerlessMicroserviceProject() {
       chalk`- The function enumeration at {bold src/@types/build.ts} has been updated`
     );
     stage = "type-definitions-written";
+    const fns = Object.keys(configComplete.functions);
+    const plugins = configComplete.plugins || [];
+    console.log(
+      chalk`- The serverless config consists of\n  - {yellow ${String(
+        fns.length
+      )}} functions [ {dim ${truncate(fns, 5)}} ]\n  - {yellow ${String(
+        configComplete.stepFunctions
+          ? configComplete.stepFunctions.stateMachines.length
+          : 0
+      )}} step functions\n  - {yellow ${String(
+        plugins.length
+      )}} plugins [ {dim ${truncate(plugins, 5)}} ]`
+    );
+
     await saveToServerlessYaml(configComplete);
     console.log(
       chalk`- The {green {bold serverless.yml}} file has been updated! ${emoji.rocket}\n`
