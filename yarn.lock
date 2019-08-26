@@ -230,9 +230,9 @@ async-shelljs@^0.1.2:
     shelljs "^0.8.1"
 
 aws-sdk@*, aws-sdk@^2.512.0:
-  version "2.517.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.517.0.tgz#415e6732d46c478a4f1867920d25af57651063b1"
-  integrity sha512-CX0b+8StmzAGQOP5eoBYJExpjTdPeVPig3NC4crq71/0LkrIDGcc6ekVEl0Rx23WTyGDzExeDD1be1HvQNwHdA==
+  version "2.518.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.518.0.tgz#a0412cfcb41fd02e18d9e8b20c1dce356160fcc2"
+  integrity sha512-hwtKKf93TFyd3qugDW54ElpkUXhPe+ArPIHadre6IAFjCJiv08L8DaZKLRyclDnKfTavKe+f/PhdSEYo1QUHiA==
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -244,12 +244,12 @@ aws-sdk@*, aws-sdk@^2.512.0:
     uuid "3.3.2"
     xml2js "0.4.19"
 
-aws-ssm@^0.3.5:
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/aws-ssm/-/aws-ssm-0.3.5.tgz#020568255bef8b1c4692d2a39853414d542e3c98"
-  integrity sha512-l9Z/xRgp+DADdpiByW6TvE6cTJwG/xQ9kdgyuM5r1E7U4j5dhjm6BTG+7tdDoHxnO2hK9FC6iGZkwMJtXo7rdA==
+aws-ssm@^0.3.7:
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/aws-ssm/-/aws-ssm-0.3.7.tgz#833401cc46c353dc93d79679e1d04897f396833b"
+  integrity sha512-gb4I+45Yga0ycfyVtxAsaanTRGNJQQS27VjQQeKWRKHkpEuVYImrMUGQ9IBI74eN0wPPfqW+qrWScCYmeY20lw==
   dependencies:
-    common-types "^1.10.5"
+    common-types "^1.11.18"
 
 balanced-match@^1.0.0:
   version "1.0.0"
@@ -399,7 +399,7 @@ commander@^2.12.1:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
 
-common-types@^1.10.5, common-types@^1.11.16:
+common-types@^1.11.18:
   version "1.11.18"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.11.18.tgz#e9ee69441077dfffdd0efe403130c9d38b4ab06f"
   integrity sha512-j2RHUo1WCYhGWxjovV/FyrSL1MeSaSmf8rIrj9LZ+CJsdqmULiVSJ6VjDq2rCpMppMZrVfsXNsfEyH5NvT3CIQ==
@@ -410,11 +410,6 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
-
-console-badge@^1.1.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/console-badge/-/console-badge-1.3.0.tgz#16fc7506a12ea428806d269e22dcf6b35d1f40f1"
-  integrity sha512-Y9JMpBdLuZp8ANqBFvXxoi92RJU9cfp4XL7R3Izo6/4VJzGXiZ2/h+stwkNXGyrRuHWEPIHU+66cjAb9VfM4wQ==
 
 cross-spawn@^6.0.0:
   version "6.0.5"
