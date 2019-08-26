@@ -23,7 +23,6 @@ function serverlessDeploy(argv, opts) {
         const stage = yield shared_1.getStage(opts);
         const { deploy: config } = yield shared_1.getConfig();
         const meta = { stage, config: config, opts };
-        console.log(chalk_1.default `- {bold serverless} deployment starting for {italic ${stage}} stage ${"\uD83C\uDF89" /* party */}`);
         // argv values indicate function deployment
         if (argv.length > 0) {
             yield functionDeploy(argv, meta);
@@ -37,21 +36,41 @@ exports.default = serverlessDeploy;
 function functionDeploy(fns, meta) {
     return __awaiter(this, void 0, void 0, function* () {
         const { stage, opts, config } = meta;
+        console.log(chalk_1.default `- {bold serverless} {italic function} deployment for {italic ${stage}} stage ${"\uD83C\uDF89" /* party */}`);
         console.log(chalk_1.default `- deploying {bold ${String(fns.length)} functions} to "${stage}" stage`);
         const sandboxStage = stage === "dev" ? yield sandbox_1.sandbox(stage) : stage;
         if (sandboxStage !== stage) {
         }
         fns.forEach(fn => console.log(chalk_1.default.grey(`    - ${fn}`)));
         const promises = [];
-        fns.map(fn => {
-            promises.push(async_shelljs_1.asyncExec(`sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`));
-        });
-        yield Promise.all(promises);
+        try {
+            fns.map(fn => {
+                promises.push(async_shelljs_1.asyncExec(`sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`));
+            });
+            yield Promise.all(promises);
+            console.log(chalk_1.default `- The functions were all deployed! ${"\uD83D\uDE80" /* rocket */}`);
+        }
+        catch (e) {
+            console.log(chalk_1.default `- {red {bold problems deploying functions!}} ${"\uD83D\uDCA9" /* poop */}`);
+            console.log(`- ${e.message}`);
+            console.log(chalk_1.default `- {dim ${e.stack}}`);
+        }
     });
 }
 function fullDeploy(meta) {
     return __awaiter(this, void 0, void 0, function* () {
         const { stage, opts, config } = meta;
-        console.log(chalk_1.default `- deploying {bold all} functions to {bold ${stage}} stage`);
+        console.log(chalk_1.default `- {bold FULL serverless} deployment for {italic ${stage}} stage ${"\uD83C\uDF89" /* party */}`);
+        if (config.showUnderlyingCommands) {
+            console.log(chalk_1.default `{grey > {italic sls deploy --aws-s3-accelerate  --stage ${stage} --verbose}}\n`);
+            try {
+                yield async_shelljs_1.asyncExec(`sls deploy --aws-s3-accelerate  --stage ${stage} --verbose`);
+                console.log(chalk_1.default `\n- The full deploy was successful! ${"\uD83D\uDE80" /* rocket */}\n`);
+            }
+            catch (e) {
+                console.log(chalk_1.default `- {red Error running deploy!}`);
+                console.log(chalk_1.default `- NOTE: {dim if the error appears related to running out of heap memory then you can try {bold {yellow export NODE_OPTIONS=--max_old_space_size=4096}}}\n`);
+            }
+        }
     });
 }

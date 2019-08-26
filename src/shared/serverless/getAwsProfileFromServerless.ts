@@ -43,18 +43,6 @@ export async function getAwsProfileFromServerless() {
     }
 
     await buildServerlessMicroserviceProject();
-
-    // const stats = await buildServerlessMicroserviceProject();
-    // console.log(
-    //   chalk`- built the {italic microservice} configuration into the serverless.yml file ${
-    //     emoji.rocket
-    //   }`
-    // );
-    // console.log(
-    //   chalk`- {grey ${stats.functions} functions found, ${
-    //     stats.stepFunctions
-    //   } step functions}`
-    // );
   }
 
   try {

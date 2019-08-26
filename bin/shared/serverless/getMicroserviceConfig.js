@@ -14,6 +14,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 const errors_1 = require("../errors");
 const async_shelljs_1 = require("async-shelljs");
+const chalk_1 = __importDefault(require("chalk"));
 /**
  * Gets the typescript configuration file for serverless
  * projects which use the `typescript-microservice` yeoman
@@ -27,7 +28,8 @@ function getMicroserviceConfig(accountInfo) {
             return config;
         }
         catch (e) {
-            throw new errors_1.DevopsError(`Problem getting the microservice config file: ${e.message}`, "devops/missing-config");
+            console.log(chalk_1.default `{yellow - failed executing ${cliFile}}`);
+            throw new errors_1.DevopsError(`Problem getting the microservice config file [ ${cliFile} ]: ${e.message}`, "devops/missing-config");
         }
     });
 }

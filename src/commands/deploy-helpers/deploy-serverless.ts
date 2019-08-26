@@ -22,11 +22,7 @@ export default async function serverlessDeploy(
   const stage = await getStage(opts);
   const { deploy: config } = await getConfig();
   const meta = { stage, config: config as IDoDeployServerless, opts };
-  console.log(
-    chalk`- {bold serverless} deployment starting for {italic ${stage}} stage ${
-      emoji.party
-    }`
-  );
+
   // argv values indicate function deployment
   if (argv.length > 0) {
     await functionDeploy(argv, meta);
@@ -38,6 +34,11 @@ export default async function serverlessDeploy(
 async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   const { stage, opts, config } = meta;
   console.log(
+    chalk`- {bold serverless} {italic function} deployment for {italic ${stage}} stage ${
+      emoji.party
+    }`
+  );
+  console.log(
     chalk`- deploying {bold ${String(
       fns.length
     )} functions} to "${stage}" stage`
@@ -48,17 +49,46 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   fns.forEach(fn => console.log(chalk.grey(`    - ${fn}`)));
 
   const promises: any[] = [];
-  fns.map(fn => {
-    promises.push(
-      asyncExec(
-        `sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`
-      )
+  try {
+    fns.map(fn => {
+      promises.push(
+        asyncExec(
+          `sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`
+        )
+      );
+    });
+    await Promise.all(promises);
+    console.log(chalk`- The functions were all deployed! ${emoji.rocket}`);
+  } catch (e) {
+    console.log(
+      chalk`- {red {bold problems deploying functions!}} ${emoji.poop}`
     );
-  });
-  await Promise.all(promises);
+    console.log(`- ${e.message}`);
+    console.log(chalk`- {dim ${e.stack}}`);
+  }
 }
 
 async function fullDeploy(meta: IServerlessDeployMeta) {
   const { stage, opts, config } = meta;
-  console.log(chalk`- deploying {bold all} functions to {bold ${stage}} stage`);
+  console.log(
+    chalk`- {bold FULL serverless} deployment for {italic ${stage}} stage ${
+      emoji.party
+    }`
+  );
+  if (config.showUnderlyingCommands) {
+    console.log(
+      chalk`{grey > {italic sls deploy --aws-s3-accelerate  --stage ${stage} --verbose}}\n`
+    );
+    try {
+      await asyncExec(
+        `sls deploy --aws-s3-accelerate  --stage ${stage} --verbose`
+      );
+      console.log(chalk`\n- The full deploy was successful! ${emoji.rocket}\n`);
+    } catch (e) {
+      console.log(chalk`- {red Error running deploy!}`);
+      console.log(
+        chalk`- NOTE: {dim if the error appears related to running out of heap memory then you can try {bold {yellow export NODE_OPTIONS=--max_old_space_size=4096}}}\n`
+      );
+    }
+  }
 }

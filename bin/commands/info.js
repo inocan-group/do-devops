@@ -42,10 +42,12 @@ function handler(argv, opts) {
             // appears NOT to be a NPM package
         }
         const pkg = yield shared_1.getPackageJson();
-        const priorVersions = npm.versions
-            .filter(i => i !== npm.version)
-            .slice(0, 5)
-            .join(", ");
+        const priorVersions = npm
+            ? npm.versions
+                .filter(i => i !== npm.version)
+                .slice(0, 5)
+                .join(", ")
+            : "";
         const gitLastCommit = yield shared_1.getGitLastCommit();
         const branch = yield shared_1.getGitBranch();
         const localFilesChanged = (yield async_shelljs_1.asyncExec("git diff --name-only", {

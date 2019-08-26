@@ -1,13 +1,28 @@
-import { getServerlessYaml, isServerless, consoleDimensions } from "../shared";
+import {
+  getServerlessYaml,
+  isServerless,
+  consoleDimensions,
+  buildServerlessMicroserviceProject
+} from "../shared";
 import { IDictionary } from "common-types";
 import { table } from "table";
 import chalk from "chalk";
+import { OptionDefinition } from "command-line-usage";
 
 export function description() {
   return `Lists all serverless function handlers and basic meta about them`;
 }
 
-export async function handler(args: string[], opt: IDictionary) {
+export const options: OptionDefinition[] = [
+  {
+    name: "forceBuild",
+    alias: "f",
+    type: Boolean,
+    description: chalk`by default functions will be derived from {italic serverless.yml} but if you are in a {italic typescript-microservice} project you can force a rebuild prior to listing the functions`
+  }
+];
+
+export async function handler(args: string[], opts: IDictionary) {
   const filterBy =
     args.length > 0 ? (fn: string) => fn.includes(args[0]) : () => true;
   const status = await isServerless();
@@ -15,12 +30,18 @@ export async function handler(args: string[], opt: IDictionary) {
     console.log("- this project does not appear to be a Serverless project!\n");
     process.exit();
   } else if (status.isUsingTypescriptMicroserviceTemplate) {
-    console.log(
-      `- detected use of the ${chalk.blue(
-        "typescript-microservice"
-      )} template; rebuilding functions from config.`
-    );
-    // await rebuildTypescriptMicroserviceProject();
+    if (opts.forceBuild) {
+      console.log(
+        `- detected use of the ${chalk.blue(
+          "typescript-microservice"
+        )} template; rebuilding functions from config.`
+      );
+      await buildServerlessMicroserviceProject();
+    } else {
+      console.log(
+        chalk`- detected use of the {blue typescript-microservice} template; use {bold {blue --forceBuild}} to rebuild prior to listing functions.\n`
+      );
+    }
   }
 
   try {

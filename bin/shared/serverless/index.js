@@ -16,4 +16,6 @@ __export(require("./isTypescriptMicroserviceProject"));
 __export(require("./getAwsProfileFromServerless"));
 __export(require("./buildServerlessMicroserviceProject"));
 __export(require("./getAccountInfoFromServerlessYaml"));
+__export(require("./saveFunctionsTypeDefinition"));
 __export(require("./saveToServerlessYaml"));
+__export(require("./findAllHandlerFiles"));

@@ -15,6 +15,7 @@ __export(require("./runHooks"));
 __export(require("./getExportsFromFile"));
 __export(require("./consoleDimensions"));
 __export(require("./getCommandInterface"));
+__export(require("./ensureDirectory"));
 __export(require("./serverless/index"));
 __export(require("./aws/index"));
 __export(require("./git/index"));

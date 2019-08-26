@@ -38,10 +38,12 @@ export async function handler(argv: string[], opts: any) {
     // appears NOT to be a NPM package
   }
   const pkg = await getPackageJson();
-  const priorVersions = npm.versions
-    .filter(i => i !== npm.version)
-    .slice(0, 5)
-    .join(", ");
+  const priorVersions = npm
+    ? npm.versions
+        .filter(i => i !== npm.version)
+        .slice(0, 5)
+        .join(", ")
+    : "";
   const gitLastCommit = await getGitLastCommit();
   const branch = await getGitBranch();
   const localFilesChanged = (await asyncExec("git diff --name-only", {

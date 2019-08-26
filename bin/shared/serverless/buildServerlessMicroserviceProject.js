@@ -27,18 +27,45 @@ const chalk_1 = __importDefault(require("chalk"));
  */
 function buildServerlessMicroserviceProject() {
     return __awaiter(this, void 0, void 0, function* () {
+        let stage = "starting";
         const accountInfo = (yield _1.getAccountInfoFromServerlessYaml()) || (yield _1.askForAccountInfo());
-        console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} {bold ]} has been gathered; ready to build {green serverless.yml}`);
-        const config = (yield getMicroserviceConfig_1.getMicroserviceConfig(accountInfo)).replace(/^.*\}\'(.*)/, "$1");
+        console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered; ready to build {green serverless.yml}`);
         try {
-            const configComplete = JSON.parse(config);
+            const config = (yield getMicroserviceConfig_1.getMicroserviceConfig(accountInfo)).replace(/^.*\}\'(.*)/, "$1");
+            stage = "config-returned";
+            let configComplete;
+            try {
+                configComplete = JSON.parse(config);
+            }
+            catch (e) {
+                console.log(chalk_1.default `- {yellow Warning:} parsing the configuration caused an error ${"\uD83D\uDE32" /* shocked */}`);
+                console.log(chalk_1.default `{dim - will make second attempt with more aggressive regex}`);
+                try {
+                    const strippedOut = config.replace(/(.*)\{"service.*/, "$1");
+                    const newAttempt = config.replace(/.*(\{"service.*)/, "$1");
+                    configComplete = JSON.parse(newAttempt);
+                    console.log(chalk_1.default `- by removing some of the text at the beginning we {bold were} able to parse the config ${"\uD83D\uDC4D" /* thumbsUp */}`);
+                    console.log(chalk_1.default `- the text removed was:\n{dim ${strippedOut}}`);
+                }
+                catch (e) {
+                    console.log(chalk_1.default `{red - Failed {italic again} to parse the configuration file!}`);
+                    console.log(`- Error message was: ${e.message}`);
+                    console.log(chalk_1.default `- The config that is being parsed is:\n\n${config}\n`);
+                    process.exit();
+                }
+            }
+            stage = "config-parsed";
+            yield _1.saveFunctionsTypeDefinition(configComplete);
+            console.log(chalk_1.default `- The function enumeration at {bold src/@types/build.ts} has been updated`);
+            stage = "type-definitions-written";
             yield _1.saveToServerlessYaml(configComplete);
-            console.log(chalk_1.default `- The {green {bold serverless.yml}} file has been updated! ${"\uD83D\uDE80" /* rocket */}`);
+            console.log(chalk_1.default `- The {green {bold serverless.yml}} file has been updated! ${"\uD83D\uDE80" /* rocket */}\n`);
             return configComplete;
         }
         catch (e) {
-            console.log(chalk_1.default `- {red the attempt to parse the serverless config has failed!} ${"\uD83D\uDCA9" /* poop */}`);
-            console.log(e.message);
+            console.log(chalk_1.default `- {red the attempt to parse the serverless config has failed at stage "${stage}"!} ${"\uD83D\uDCA9" /* poop */}`);
+            console.log(`- The config sent in was:\n${JSON.stringify(accountInfo, null, 2)}`);
+            console.log("- " + e.message);
             console.log(chalk_1.default `{dim ${e.stack}}`);
             console.log();
             process.exit();

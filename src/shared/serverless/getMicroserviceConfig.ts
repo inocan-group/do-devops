@@ -3,6 +3,7 @@ import { IServerlessAccountInfo } from "../@types";
 import path from "path";
 import { DevopsError } from "../errors";
 import { asyncExec } from "async-shelljs";
+import chalk from "chalk";
 
 /**
  * Gets the typescript configuration file for serverless
@@ -18,10 +19,15 @@ export async function getMicroserviceConfig(
       `yarn ts-node ${cliFile} '${JSON.stringify(accountInfo)}'`,
       { silent: true }
     );
+
     return config;
   } catch (e) {
+    console.log(chalk`{yellow - failed executing ${cliFile}}`);
+
     throw new DevopsError(
-      `Problem getting the microservice config file: ${e.message}`,
+      `Problem getting the microservice config file [ ${cliFile} ]: ${
+        e.message
+      }`,
       "devops/missing-config"
     );
   }
