@@ -20,3 +20,5 @@ __export(require("./getAccountInfoFromServerlessYaml"));
 __export(require("./saveFunctionsTypeDefinition"));
 __export(require("./saveToServerlessYaml"));
 __export(require("./findAllHandlerFiles"));
+__export(require("./askAboutLogForwarding"));
+__export(require("./getLambdaFunctions"));

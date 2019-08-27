@@ -5,8 +5,7 @@ import fs from "fs";
 import { DevopsError } from "../errors";
 
 /**
- * Get the `serverless.yml` file in the root of the project; if
- * the file does not exist then return _false_
+ * Get the `serverless.yml` file in the root of the project
  */
 export async function getServerlessYaml(): Promise<IServerlessConfig> {
   try {

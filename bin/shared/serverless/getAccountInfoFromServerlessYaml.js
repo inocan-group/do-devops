@@ -21,7 +21,7 @@ function getAccountInfoFromServerlessYaml() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const config = yield getServerlessYaml_1.getServerlessYaml();
-            return {
+            const info = {
                 name: typeof config.service === "string"
                     ? config.service
                     : config.service.name,
@@ -29,10 +29,23 @@ function getAccountInfoFromServerlessYaml() {
                 region: config.provider.region,
                 profile: config.provider.profile
             };
+            if (config.custom.logForwarding) {
+                info.logForwarding = config.custom.logForwarding.destinationARN;
+            }
+            try {
+                const sls = yield getServerlessYaml_1.getServerlessYaml();
+                info.pluginsInstalled = sls.plugins;
+                if (!sls.plugins.includes("serverless-webpack")) {
+                    console.log(chalk_1.default `{red - it is {italic strongly} recommended that you install and use the {bold {blue serverless-webpack}} plugin!}`);
+                }
+            }
+            catch (e) {
+                info.pluginsInstalled = [];
+            }
+            return info;
         }
         catch (e) {
             console.log(chalk_1.default `- Problems getting account info from {green serverless.yml}.`);
-            //
         }
     });
 }

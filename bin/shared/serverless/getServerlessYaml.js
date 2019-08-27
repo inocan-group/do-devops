@@ -16,8 +16,7 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const errors_1 = require("../errors");
 /**
- * Get the `serverless.yml` file in the root of the project; if
- * the file does not exist then return _false_
+ * Get the `serverless.yml` file in the root of the project
  */
 function getServerlessYaml() {
     return __awaiter(this, void 0, void 0, function* () {

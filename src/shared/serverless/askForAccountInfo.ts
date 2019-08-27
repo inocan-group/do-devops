@@ -1,12 +1,16 @@
 import { getPackageJson } from "../npm";
-import { getAccountInfoFromServerlessYaml } from "../serverless";
+import {
+  getAccountInfoFromServerlessYaml,
+  getServerlessYaml
+} from "../serverless";
 import inquirer = require("inquirer");
 import { getAwsProfile, getAwsUserProfile, getAwsProfileList } from "../aws";
 import { IServerlessAccountInfo } from "../@types";
 
 export async function askForAccountInfo(): Promise<IServerlessAccountInfo> {
   const pkgJson = await getPackageJson();
-  const defaults = (await getAccountInfoFromServerlessYaml()) || {};
+  const defaults: Partial<IServerlessAccountInfo> =
+    (await getAccountInfoFromServerlessYaml()) || {};
   const profiles = await getAwsProfileList();
   const profileMessage = "choose a profile from your AWS credentials file";
   const baseProfileQuestion = {
@@ -37,7 +41,9 @@ export async function askForAccountInfo(): Promise<IServerlessAccountInfo> {
     profileQuestion
   ];
 
-  let answers = await inquirer.prompt(questions);
+  let answers: Partial<IServerlessAccountInfo> = await inquirer.prompt(
+    questions
+  );
   const awsProfile = await getAwsProfile(answers.profile as string);
   const userProfile =
     awsProfile && awsProfile.aws_secret_access_key
@@ -82,8 +88,18 @@ export async function askForAccountInfo(): Promise<IServerlessAccountInfo> {
       when: () => !defaults.region
     }
   ];
+  let plugins: { pluginsInstalled: string[] };
+  try {
+    const sls = await getServerlessYaml();
+    plugins = { pluginsInstalled: sls.plugins };
+  } catch (e) {
+    plugins = { pluginsInstalled: [] };
+  }
+  answers = {
+    ...plugins,
+    ...answers,
+    ...(await inquirer.prompt(questions))
+  };
 
-  answers = { ...answers, ...(await inquirer.prompt(questions)) };
-
-  return answers;
+  return answers as IServerlessAccountInfo;
 }

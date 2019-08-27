@@ -2,11 +2,20 @@ import { IDictionary, IServerlessFunction } from "common-types";
 export interface IDoHandler {
     handler(argv: string[], options?: IDictionary): void;
 }
+export declare type arn = string;
 export interface IServerlessAccountInfo {
     name?: string;
     accountId?: string;
     region?: string;
     profile?: string;
+    /**
+     * if you want to forward logs to another lambda you can state the **ARN** here
+     */
+    logForwarding?: arn;
+    /**
+     * a list of serverless plugins installed
+     */
+    pluginsInstalled: string[];
 }
 export declare type ISandboxStrategy = "dev" | "user" | "branch";
 export interface ICommandDescription {

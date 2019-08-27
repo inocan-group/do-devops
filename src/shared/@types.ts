@@ -4,11 +4,21 @@ export interface IDoHandler {
   handler(argv: string[], options?: IDictionary): void;
 }
 
+export type arn = string;
+
 export interface IServerlessAccountInfo {
   name?: string;
   accountId?: string;
   region?: string;
   profile?: string;
+  /**
+   * if you want to forward logs to another lambda you can state the **ARN** here
+   */
+  logForwarding?: arn;
+  /**
+   * a list of serverless plugins installed
+   */
+  pluginsInstalled: string[];
 }
 
 export type ISandboxStrategy = "dev" | "user" | "branch";

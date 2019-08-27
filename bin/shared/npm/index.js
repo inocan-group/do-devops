@@ -7,3 +7,4 @@ __export(require("./getPackageJson"));
 __export(require("./hasDevDependency"));
 __export(require("./getPackageInfo"));
 __export(require("./isNpmPackage"));
+__export(require("./writePackageJson"));
