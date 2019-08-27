@@ -61,9 +61,14 @@ function buildServerlessMicroserviceProject() {
             stage = "type-definitions-written";
             const fns = Object.keys(configComplete.functions);
             const plugins = configComplete.plugins || [];
-            console.log(chalk_1.default `- The serverless config consists of\n  - {yellow ${String(fns.length)}} functions [ {dim ${ui_1.truncate(fns, 5)}} ]\n  - {yellow ${String(configComplete.stepFunctions
+            console.log(chalk_1.default `- The serverless config consists of:\n  - {yellow ${String(fns.length)}} functions [ {dim ${ui_1.truncate(fns, 5)}} ]\n  - {yellow ${String(configComplete.stepFunctions
                 ? configComplete.stepFunctions.stateMachines.length
                 : 0)}} step functions\n  - {yellow ${String(plugins.length)}} plugins [ {dim ${ui_1.truncate(plugins, 5)}} ]`);
+            if (configComplete.layers) {
+                const layers = Object.keys(configComplete.layers);
+                console.log(chalk_1.default `  - {yellow ${String(layers.length)}} layers [ {dim ${ui_1.truncate(layers, 5)}} ]`);
+            }
+            configComplete = yield _1.askAboutLogForwarding(configComplete);
             yield _1.saveToServerlessYaml(configComplete);
             console.log(chalk_1.default `- The {green {bold serverless.yml}} file has been updated! ${"\uD83D\uDE80" /* rocket */}\n`);
             return configComplete;

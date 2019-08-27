@@ -15,3 +15,5 @@ export * from "./getAccountInfoFromServerlessYaml";
 export * from "./saveFunctionsTypeDefinition";
 export * from "./saveToServerlessYaml";
 export * from "./findAllHandlerFiles";
+export * from "./askAboutLogForwarding";
+export * from "./getLambdaFunctions";

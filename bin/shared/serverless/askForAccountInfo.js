@@ -82,7 +82,15 @@ function askForAccountInfo() {
                 when: () => !defaults.region
             }
         ];
-        answers = Object.assign({}, answers, (yield inquirer.prompt(questions)));
+        let plugins;
+        try {
+            const sls = yield serverless_1.getServerlessYaml();
+            plugins = { pluginsInstalled: sls.plugins };
+        }
+        catch (e) {
+            plugins = { pluginsInstalled: [] };
+        }
+        answers = Object.assign({}, plugins, answers, (yield inquirer.prompt(questions)));
         return answers;
     });
 }

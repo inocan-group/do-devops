@@ -3,7 +3,8 @@ import {
   getAccountInfoFromServerlessYaml,
   askForAccountInfo,
   saveToServerlessYaml,
-  saveFunctionsTypeDefinition
+  saveFunctionsTypeDefinition,
+  askAboutLogForwarding
 } from ".";
 import chalk from "chalk";
 import { IServerlessConfig } from "common-types";
@@ -77,7 +78,7 @@ export async function buildServerlessMicroserviceProject() {
     const fns = Object.keys(configComplete.functions);
     const plugins = configComplete.plugins || [];
     console.log(
-      chalk`- The serverless config consists of\n  - {yellow ${String(
+      chalk`- The serverless config consists of:\n  - {yellow ${String(
         fns.length
       )}} functions [ {dim ${truncate(fns, 5)}} ]\n  - {yellow ${String(
         configComplete.stepFunctions
@@ -87,6 +88,17 @@ export async function buildServerlessMicroserviceProject() {
         plugins.length
       )}} plugins [ {dim ${truncate(plugins, 5)}} ]`
     );
+    if (configComplete.layers) {
+      const layers = Object.keys(configComplete.layers);
+      console.log(
+        chalk`  - {yellow ${String(layers.length)}} layers [ {dim ${truncate(
+          layers,
+          5
+        )}} ]`
+      );
+    }
+
+    configComplete = await askAboutLogForwarding(configComplete);
 
     await saveToServerlessYaml(configComplete);
     console.log(
