@@ -10,5 +10,17 @@ export declare type IDoProjectType =
  | "library" | "vuejs-app";
 export interface IDoGlobalConfig {
     projectType: IDoProjectType;
+    /**
+     * optionally state a **AWS** _profile_ name to use
+     * if there is no additional information to work
+     * off of
+     */
+    defaultAwsProfile?: string;
+    /**
+     * optionally state an **AWS** _region_ to use
+     * if there is no additional information to work off
+     * of
+     */
+    defaultAwsRegion?: string;
 }
 export declare function root(): IDoGlobalConfig;

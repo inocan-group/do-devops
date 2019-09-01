@@ -3,7 +3,7 @@ export declare const inverted: import("chalk").Chalk & {
 };
 export * from "./commands";
 export * from "./options";
-export * from "./config";
+export * from "./do-config/getDefaultConfigForCommand";
 export * from "./runHooks";
 export * from "./getExportsFromFile";
 export * from "./consoleDimensions";
@@ -15,4 +15,5 @@ export * from "./git/index";
 export * from "./npm/index";
 export * from "./errors/index";
 export * from "./ui/index";
-export * from "./@types";
+export * from "./do-config/index";
+export * from "../../bin/@types/@types";

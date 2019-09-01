@@ -1,5 +1,5 @@
 import { getServerlessYaml } from "./getServerlessYaml";
-import { IServerlessAccountInfo } from "../@types";
+import { IServerlessAccountInfo } from "../../../bin/src/@types/general";
 import chalk from "chalk";
 
 /**

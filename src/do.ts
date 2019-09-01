@@ -8,7 +8,7 @@ import {
 } from "./shared";
 import commandLineArgs = require("command-line-args");
 import chalk from "chalk";
-import { commands } from "./shared";
+import { commands } from "./shared/commands";
 import { help } from "./commands/help";
 
 (async () => {

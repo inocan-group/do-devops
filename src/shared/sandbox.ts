@@ -1,4 +1,4 @@
-import { ISandboxStrategy } from "./@types";
+import { ISandboxStrategy } from "../../bin/src/@types/general";
 import { asyncExec } from "async-shelljs";
 import { getGitBranch } from "./git/index";
 

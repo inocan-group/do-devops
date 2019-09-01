@@ -3,6 +3,13 @@ import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
 import { detectTarget } from "./deploy-helpers";
 
+export const defaultConfig = {
+  preDeployHooks: ["clean"],
+  target: "serverless",
+  showUnderlyingCommands: true,
+  sandboxing: "user"
+};
+
 export async function description(opts: IDictionary) {
   const base = `Deployment services that for {bold Serverless} or {bold NPM} publishing.\n\n`;
   const { deploy: config } = await getConfig();

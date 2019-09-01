@@ -5,7 +5,7 @@ import {
 } from "../serverless";
 import inquirer = require("inquirer");
 import { getAwsProfile, getAwsUserProfile, getAwsProfileList } from "../aws";
-import { IServerlessAccountInfo } from "../@types";
+import { IServerlessAccountInfo } from "../../../bin/src/@types/general";
 
 export async function askForAccountInfo(): Promise<IServerlessAccountInfo> {
   const pkgJson = await getPackageJson();

@@ -9,6 +9,18 @@ export async function execute(options: CommandLineOptions) {
   const region = options.ssm.region;
   const filterBy = options._unknown ? options._unknown.shift() : undefined;
 
+  if (!profile || !region) {
+    console.log(chalk`{red - missing information!}`);
+    console.log(
+      chalk`To list SSM params the AWS {italic profile} and {italic region} must be stated. These could {bold not} be determined so exiting.`
+    );
+    console.log(
+      chalk`{dim note that the easiest way to get an explicit profile/region is to use the {bold --profile} and {bold --region} switches on the command line.}\n`
+    );
+
+    process.exit();
+  }
+
   console.log(
     `- Listing SSM parameters in profile "${chalk.bold(
       profile

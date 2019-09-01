@@ -1,10 +1,10 @@
-import { IDoDeployServerless, IDoConfig } from "../defaults";
 import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
 import { sandbox } from "../../shared/sandbox";
 import { emoji } from "../../shared/ui";
-import { IDictionary, IServerlessConfig } from "common-types";
-import { getConfig, getAwsProfileFromServerless, getStage } from "../../shared";
+import { IDictionary } from "common-types";
+import { getConfig, determineStage } from "../../shared";
+import { IDoDeployServerless } from "../../@types";
 
 export interface IServerlessDeployMeta {
   stage: string;
@@ -19,7 +19,7 @@ export default async function serverlessDeploy(
   argv: string[],
   opts: IDictionary
 ) {
-  const stage = await getStage(opts);
+  const stage = await determineStage(opts);
   const { deploy: config } = await getConfig();
   const meta = { stage, config: config as IDoDeployServerless, opts };
 
@@ -34,9 +34,7 @@ export default async function serverlessDeploy(
 async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   const { stage, opts, config } = meta;
   console.log(
-    chalk`- {bold serverless} {italic function} deployment for {italic ${stage}} stage ${
-      emoji.party
-    }`
+    chalk`- {bold serverless} {italic function} deployment for {italic ${stage}} stage ${emoji.party}`
   );
   console.log(
     chalk`- deploying {bold ${String(
@@ -71,9 +69,7 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
 async function fullDeploy(meta: IServerlessDeployMeta) {
   const { stage, opts, config } = meta;
   console.log(
-    chalk`- {bold FULL serverless} deployment for {italic ${stage}} stage ${
-      emoji.party
-    }`
+    chalk`- {bold FULL serverless} deployment for {italic ${stage}} stage ${emoji.party}`
   );
   if (config.showUnderlyingCommands) {
     console.log(

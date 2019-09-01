@@ -1,7 +1,6 @@
-import { ICommandDescription } from "../@types";
 import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
-export declare function getCommands(fn?: string): Promise<ICommandDescription[]>;
+export declare function getCommands(fn?: string): Promise<any[]>;
 /**
  * Gets the syntax for the help system for both "global help"
  * as well as on a per function basis. The syntax for a function

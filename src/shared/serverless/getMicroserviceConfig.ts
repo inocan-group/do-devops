@@ -1,5 +1,5 @@
 import { IServerlessConfig } from "common-types";
-import { IServerlessAccountInfo } from "../@types";
+import { IServerlessAccountInfo } from "../../../bin/src/@types/general";
 import path from "path";
 import { DevopsError } from "../errors";
 import { asyncExec } from "async-shelljs";
@@ -25,9 +25,7 @@ export async function getMicroserviceConfig(
     console.log(chalk`{yellow - failed executing ${cliFile}}`);
 
     throw new DevopsError(
-      `Problem getting the microservice config file [ ${cliFile} ]: ${
-        e.message
-      }`,
+      `Problem getting the microservice config file [ ${cliFile} ]: ${e.message}`,
       "devops/missing-config"
     );
   }

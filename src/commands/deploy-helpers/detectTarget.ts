@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
-import { IDoDeployConfig } from "../defaults";
 import { getConfig, isNpmPackage, isServerless } from "../../shared";
+import { IDoDeployConfig } from "../../@types";
 
 export type IDetectedTarget = {
   detected: IDoDeployConfig["target"] | "both";

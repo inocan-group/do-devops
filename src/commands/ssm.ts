@@ -1,11 +1,14 @@
-import { getConfig, checkIfAwsInstalled, getServerlessYaml } from "../shared";
-import { writeSection } from "../shared/writeDefaultConfig";
+import {
+  getConfig,
+  buildServerlessMicroserviceProject,
+  determineRegion,
+  determineProfile,
+  determineStage
+} from "../shared";
 import chalk from "chalk";
 import { isServerless } from "../shared/serverless/isServerless";
-import { IDoSsmConfig } from "./defaults";
 import commandLineArgs = require("command-line-args");
 import { DoSsmOptions } from "./options/ssm";
-import { IServerlessConfig } from "common-types";
 
 /**
  * Description of command for help text
@@ -22,13 +25,6 @@ export async function handler(argv: string[], opts: any) {
     partial: true
   });
 
-  // if no SSM config; write default value
-  if (config.ssm === undefined) {
-    const ssmConfig: IDoSsmConfig = {};
-    await writeSection("ssm", ssmConfig);
-    config.ssm = ssmConfig;
-  }
-
   const ssmCommands = ["list", "get", "set"];
   if (!ssmCommands.includes(subCommand)) {
     console.log(
@@ -41,24 +37,17 @@ export async function handler(argv: string[], opts: any) {
   }
 
   const serverless = await isServerless();
-  if (serverless && serverless.isUsingTypescriptMicroserviceTemplate) {
-    // TODO: build provider section from config
+  if (
+    serverless &&
+    serverless.isUsingTypescriptMicroserviceTemplate &&
+    !serverless.hasServerlessConfig
+  ) {
+    await buildServerlessMicroserviceProject();
   }
 
-  let slsConfig: IServerlessConfig;
-  if (serverless && serverless.hasServerlessConfig) {
-    try {
-      slsConfig = await getServerlessYaml();
-      ssmCmd.ssm.region = ssmCmd.ssm.region || slsConfig.provider.region;
-      ssmCmd.ssm.profile = ssmCmd.ssm.profile || slsConfig.provider.profile;
-      ssmCmd.ssm.stage = ssmCmd.ssm.stage || slsConfig.provider.stage;
-    } catch (e) {
-      console.log("- Problem loading the serverless.yml file!\n");
-      console.log(chalk.red("  " + e.message));
-
-      process.exit();
-    }
-  }
+  ssmCmd.ssm.profile = await determineProfile(opts);
+  ssmCmd.ssm.region = await determineRegion(opts);
+  ssmCmd.ssm.stage = await determineStage(opts);
 
   let importPath: string;
 

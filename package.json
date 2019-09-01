@@ -8,6 +8,7 @@
     "do": "./bin/do.js"
   },
   "scripts": {
+    "clean": "rimraf src/**/*.js && rimraf bin",
     "test": "mocha --require ts-node/register test/**/*-spec.ts",
     "build": "tsc",
     "do": "./bin/do.js"
@@ -56,6 +57,7 @@
     "async-shelljs": "^0.1.2",
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
+    "rimraf": "^3.0.0",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "typescript": "^3.5.3"

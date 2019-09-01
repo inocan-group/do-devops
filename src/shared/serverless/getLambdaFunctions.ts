@@ -1,11 +1,11 @@
 import { Lambda } from "aws-sdk";
-import { getRegion } from "./getRegion";
+import { determineRegion } from "./determineRegion";
 import { IDictionary } from "common-types";
-import { getDefaultAwsProfile, getAwsProfile } from "../aws";
+import { getAwsProfile } from "../aws";
 import { getAwsProfileFromServerless } from ".";
 
 export async function getLambdaFunctions(opts: IDictionary = {}) {
-  const region = await getRegion(opts);
+  const region = await determineRegion(opts);
   const profileName = await getAwsProfileFromServerless();
   const profile = await getAwsProfile(profileName);
   const lambda = new Lambda({

@@ -19,7 +19,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
-const writeDefaultConfig_1 = require("../shared/writeDefaultConfig");
 const chalk_1 = __importDefault(require("chalk"));
 const isServerless_1 = require("../shared/serverless/isServerless");
 const commandLineArgs = require("command-line-args");
@@ -42,7 +41,7 @@ function handler(argv, opts) {
         // if no SSM config; write default value
         if (config.ssm === undefined) {
             const ssmConfig = {};
-            yield writeDefaultConfig_1.writeSection("ssm", ssmConfig);
+            yield shared_1.writeSection("ssm", ssmConfig);
             config.ssm = ssmConfig;
         }
         const ssmCommands = ["list", "get", "set"];

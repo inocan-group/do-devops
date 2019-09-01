@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { commands } from "../commands";
-import { ICommandDescription } from "../@types";
+import { ICommandDescription } from "../../../bin/src/@types/general";
 import { globalOptions } from "../options";
 import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
