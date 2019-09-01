@@ -8,24 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const aws_sdk_1 = require("aws-sdk");
-const index_1 = require("./index");
+const inquirer = require("inquirer");
 /**
- * Gets all API Gatway _endpoints_ defined in a given
- * AWS profile/account.
+ * Asks the user to choose an AWS region
  */
-function getApiGatewayEndpoints(profileName, region) {
+function askForStage() {
     return __awaiter(this, void 0, void 0, function* () {
-        const profile = index_1.convertProfileToApiCredential(yield index_1.getAwsProfile(profileName));
-        // const gw = new ApiGatewayV2({
-        //   apiVersion: "2018-11-29",
-        //   ...profile
-        // });
-        // const result = await gw.getApis().promise();
-        const gw = new aws_sdk_1.APIGateway(Object.assign({}, profile));
-        const result = yield gw.getRestApis().promise();
-        console.log("result", result);
-        return result.items;
+        const question = {
+            type: "list",
+            name: "stage",
+            message: "What stage are you working with?",
+            default: "dev",
+            choices: ["dev", "test", "stage", "prod"]
+        };
+        const answer = yield inquirer.prompt(question);
+        return answer.stage;
     });
 }
-exports.getApiGatewayEndpoints = getApiGatewayEndpoints;
+exports.askForStage = askForStage;

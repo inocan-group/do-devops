@@ -1,5 +1,5 @@
 import { IAM } from "aws-sdk";
-import { IAwsProfile } from "./getAwsProfileList";
+import { IAwsProfile } from "../../@types";
 /**
  * Uses the AWS SDK to get the user's profile information.
  *

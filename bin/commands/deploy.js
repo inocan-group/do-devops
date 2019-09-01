@@ -78,7 +78,6 @@ exports.options = options;
  */
 function handler(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { deploy, global } = yield shared_1.getConfig();
         const detect = yield deploy_helpers_1.detectTarget();
         const target = detect.target;
         if (!target) {

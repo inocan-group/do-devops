@@ -6,3 +6,4 @@ export * from "./checkIfAwsInstalled";
 export * from "./getAwsUserProfile";
 export * from "./hasAwsCredentialsFile";
 export * from "./getAwsProfile";
+export * from "./convertProfileToApiCredential";

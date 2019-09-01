@@ -1,9 +1,7 @@
-import * as defaults from "../../commands/config";
+import * as config from "../../commands/config/index";
 import { DevopsError } from "../index";
 import { defaultConfigSections } from "../defaultConfigSections";
 import { IDoConfig } from "../../@types";
-
-export type IDoConfigSections = keyof typeof defaults;
 
 /**
  * **getDefaultConfig**
@@ -16,28 +14,29 @@ export type IDoConfigSections = keyof typeof defaults;
 export function getDefaultConfig(command?: keyof IDoConfig) {
   if (!command) {
     const sections = defaultConfigSections();
+
     let content: IDoConfig;
     sections.forEach((section: keyof IDoConfig) => {
-      const newContent = getDefaultConfig(section);
+      const newContent = { [section]: getDefaultConfig(section) };
       content = { ...content, ...newContent };
     });
 
     return content;
   }
-  if (!defaults[command as keyof typeof defaults]) {
+  if (!config[command as keyof typeof config]) {
     throw new DevopsError(
       `Attempt to get the defaults for the "${command}" command failed because there is no file defining it!`,
       "devops/not-ready"
     );
   }
 
-  if (typeof defaults[command as keyof typeof defaults] !== "function") {
+  if (typeof config[command as keyof typeof config] !== "function") {
     throw new DevopsError(
       `Attempt to get the defaults for the "${command}" command failed because while there IS a file defining it it does not have a default export which is a function!`,
       "devops/not-allowed"
     );
   }
-  return defaults[command as keyof typeof defaults]();
+  return config[command]();
 }
 
 export function getFullDefaultConfig() {

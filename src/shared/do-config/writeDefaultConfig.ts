@@ -1,9 +1,5 @@
 import { writeFileSync } from "fs";
-import {
-  IDoConfigSections,
-  getDefaultConfig,
-  getFullDefaultConfig
-} from "./getDefaultConfig";
+import { getDefaultConfig, getFullDefaultConfig } from "./getDefaultConfig";
 import { IDictionary } from "common-types";
 import { getConfigFilename, getConfig } from "./index";
 import { IDoConfig } from "../../@types";

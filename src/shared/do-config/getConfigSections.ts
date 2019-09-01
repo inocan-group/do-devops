@@ -1,5 +1,5 @@
 import * as defaults from "../../commands/config";
-import { IDoConfigSections } from "..";
+import { IDoConfig } from "../../@types";
 
 /**
  * **getConfigSections**
@@ -8,7 +8,7 @@ import { IDoConfigSections } from "..";
  * include the `global` section
  */
 export function getConfigSections(): string[] {
-  return Object.keys(defaults).filter((section: IDoConfigSections) => {
+  return Object.keys(defaults).filter((section: keyof IDoConfig) => {
     return typeof defaults[section] === "function";
   });
 }

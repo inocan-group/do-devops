@@ -10,4 +10,4 @@ import { IDetermineOptions } from "../../@types";
  * - look at the global default for the `user configuration`
  * - if "interactive", then ask user for profile name from available options
  */
-export declare function determineProfile(opts: IDetermineOptions): Promise<any>;
+export declare function determineProfile(opts: IDetermineOptions): Promise<string>;

@@ -6,6 +6,7 @@ import {
   DevopsError
 } from "../index";
 import { IDetermineOptions } from "../../@types";
+import { get } from "lodash";
 
 /** ensure that during one CLI operation we cache this value */
 let profile: string;
@@ -21,19 +22,21 @@ let profile: string;
  * - look at the global default for the `user configuration`
  * - if "interactive", then ask user for profile name from available options
  */
-export async function determineProfile(opts: IDetermineOptions) {
-  if (profile) {
-    return profile;
+export async function determineProfile(
+  opts: IDetermineOptions
+): Promise<string> {
+  if (get(opts, "cliOptions.profile")) {
+    return opts.cliOptions.profile;
   }
 
-  if (opts.cliOptions.profile) {
+  if (get(opts, "cliOptions.profile", undefined)) {
     return opts.cliOptions.profile;
   }
 
   let serverlessYaml: IServerlessConfig;
   try {
     serverlessYaml = await getServerlessYaml();
-    if (serverlessYaml.provider.profile) {
+    if (get(serverlessYaml, "provider.profile", undefined)) {
       profile = serverlessYaml.provider.profile;
       return profile;
     }

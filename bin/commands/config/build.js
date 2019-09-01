@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 function build() {
     return {
-        preBuildHooks: ["clean"],
         targetDirectory: "dist",
         buildTool: "tsc"
     };

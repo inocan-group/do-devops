@@ -7,13 +7,6 @@ export declare const DoSsmOptions: ({
     typeLabel: string;
 } | {
     name: string;
-    type: BooleanConstructor;
-    group: string;
-    description: string;
-    alias?: undefined;
-    typeLabel?: undefined;
-} | {
-    name: string;
     alias: string;
     type: BooleanConstructor;
     group: string;

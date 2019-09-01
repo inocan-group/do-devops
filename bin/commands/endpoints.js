@@ -7,16 +7,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const getApiGatewayEndpoints_1 = require("../shared/aws/getApiGatewayEndpoints");
+const chalk_1 = __importDefault(require("chalk"));
+const shared_1 = require("../shared");
 exports.description = "Lists out all the endpoints defined in a given AWS profile/account.";
+exports.options = [
+    {
+        name: "profile",
+        type: String,
+        typeLabel: "<profileName>",
+        group: "endpoints",
+        description: `set the AWS profile explicitly`
+    }
+];
 function handler(args, opts) {
     return __awaiter(this, void 0, void 0, function* () {
+        const profileName = yield shared_1.determineProfile({ cliOptions: opts });
         try {
-            const endpoints = yield getApiGatewayEndpoints_1.getApiGatewayEndpoints({
-                cliOptions: opts,
-                interactive: true
-            });
+            console.log(chalk_1.default `- getting API {italic endpoints} for the profile {bold ${profileName}}`);
+            // const endpoints = await getLambdaFunctions(opts);
+            const endpoints = yield getApiGatewayEndpoints_1.getApiGatewayEndpoints(profileName);
+            console.log(endpoints);
         }
         catch (e) { }
     });

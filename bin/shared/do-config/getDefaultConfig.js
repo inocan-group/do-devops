@@ -7,7 +7,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const defaults = __importStar(require("../../commands/config"));
+const config = __importStar(require("../../commands/config/index"));
 const index_1 = require("../index");
 const defaultConfigSections_1 = require("../defaultConfigSections");
 /**
@@ -23,18 +23,18 @@ function getDefaultConfig(command) {
         const sections = defaultConfigSections_1.defaultConfigSections();
         let content;
         sections.forEach((section) => {
-            const newContent = getDefaultConfig(section);
+            const newContent = { [section]: getDefaultConfig(section) };
             content = Object.assign({}, content, newContent);
         });
         return content;
     }
-    if (!defaults[command]) {
+    if (!config[command]) {
         throw new index_1.DevopsError(`Attempt to get the defaults for the "${command}" command failed because there is no file defining it!`, "devops/not-ready");
     }
-    if (typeof defaults[command] !== "function") {
+    if (typeof config[command] !== "function") {
         throw new index_1.DevopsError(`Attempt to get the defaults for the "${command}" command failed because while there IS a file defining it it does not have a default export which is a function!`, "devops/not-allowed");
     }
-    return defaults[command]();
+    return config[command]();
 }
 exports.getDefaultConfig = getDefaultConfig;
 function getFullDefaultConfig() {

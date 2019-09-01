@@ -65,7 +65,6 @@ export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
  * Over time we may add other targets for deployment.
  */
 export async function handler(argv: string[], opts: any) {
-  const { deploy, global } = await getConfig();
   const detect = await detectTarget();
   const target = detect.target;
 

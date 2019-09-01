@@ -1,2 +1,2 @@
 import { IDoGlobalConfig } from "../../@types";
-export declare function root(): IDoGlobalConfig;
+export declare function global(): IDoGlobalConfig;

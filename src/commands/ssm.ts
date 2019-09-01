@@ -1,5 +1,4 @@
 import {
-  getConfig,
   buildServerlessMicroserviceProject,
   determineRegion,
   determineProfile,
@@ -8,7 +7,9 @@ import {
 import chalk from "chalk";
 import { isServerless } from "../shared/serverless/isServerless";
 import commandLineArgs = require("command-line-args");
-import { DoSsmOptions } from "./options/ssm";
+import * as process from "process";
+import { OptionDefinition } from "command-line-usage";
+import { IDictionary } from "common-types";
 
 /**
  * Description of command for help text
@@ -17,13 +18,49 @@ export function description() {
   return "allows an easy CRUD-based interaction with AWS's SSM parameter system for managing secrets.";
 }
 
-export async function handler(argv: string[], opts: any) {
-  const config = await getConfig();
+export const options: OptionDefinition[] = [
+  {
+    name: "profile",
+    type: String,
+    typeLabel: "<profileName>",
+    group: "ssm",
+    description: `set the AWS profile explicitly`
+  },
+  {
+    name: "region",
+    type: String,
+    typeLabel: "<region>",
+    group: "ssm",
+    description: `set the AWS region explicitly`
+  },
+  {
+    name: "stage",
+    type: String,
+    typeLabel: "<stage>",
+    group: "ssm",
+    description: `set the stage explicitly`
+  },
+  {
+    name: "nonStandardPath",
+    type: Boolean,
+    group: "ssm",
+    description:
+      "allows the naming convention for SSM paths to be ignored for a given operation"
+  }
+];
+
+export async function handler(argv: string[], ssmOptions: IDictionary) {
   const subCommand = argv[0];
-  const ssmCmd = commandLineArgs(DoSsmOptions, {
+  const opts = commandLineArgs(options, {
     argv: argv.slice(1),
     partial: true
   });
+  const subCmdOptions = {
+    ...ssmOptions,
+    ...opts.all,
+    ...opts.ssm,
+    params: opts._unknown
+  };
 
   const ssmCommands = ["list", "get", "set"];
   if (!ssmCommands.includes(subCommand)) {
@@ -45,9 +82,15 @@ export async function handler(argv: string[], opts: any) {
     await buildServerlessMicroserviceProject();
   }
 
-  ssmCmd.ssm.profile = await determineProfile(opts);
-  ssmCmd.ssm.region = await determineRegion(opts);
-  ssmCmd.ssm.stage = await determineStage(opts);
+  const profile = await determineProfile({
+    cliOptions: subCmdOptions,
+    interactive: true
+  });
+  const region = await determineRegion({
+    cliOptions: subCmdOptions,
+    interactive: true
+  });
+  const stage = await determineStage({ cliOptions: subCmdOptions.ssm });
 
   let importPath: string;
 
@@ -68,14 +111,13 @@ export async function handler(argv: string[], opts: any) {
   };
 
   try {
-    await execute(ssmCmd);
+    await execute({ ...subCmdOptions, profile, region, stage });
   } catch (e) {
     console.log(
-      `- Ran into error when running "ssm ${subCommand}":\n  ${chalk.red(
-        e.message
-      )}\n`
+      chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${e.message}\n`
     );
+    console.log(chalk`{grey - ${e.stack}}`);
 
-    process.exit();
+    process.exit(0);
   }
 }

@@ -1,6 +1,6 @@
 import { IDoGlobalConfig } from "../../@types";
 
-export function root(): IDoGlobalConfig {
+export function global(): IDoGlobalConfig {
   return {
     projectType: "serverless-library"
   };

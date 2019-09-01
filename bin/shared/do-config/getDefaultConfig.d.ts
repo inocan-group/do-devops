@@ -1,6 +1,4 @@
-import * as defaults from "../../commands/config";
 import { IDoConfig } from "../../@types";
-export declare type IDoConfigSections = keyof typeof defaults;
 /**
  * **getDefaultConfig**
  *

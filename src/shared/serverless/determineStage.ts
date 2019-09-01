@@ -1,8 +1,10 @@
-import { getServerlessYaml } from "./index";
+import { getServerlessYaml, askForStage } from "./index";
 import { IDictionary } from "common-types";
 import chalk from "chalk";
 import { emoji } from "../ui";
-import { determineProfile } from "./determineProfile";
+import * as process from "process";
+import { get } from "lodash";
+import { IDetermineOptions } from "../../@types";
 
 /**
  * Uses various methods to determine which _stage_
@@ -13,19 +15,22 @@ import { determineProfile } from "./determineProfile";
  * @param opts the CLI options hash (which includes stage as
  * a possible parameter)
  */
-export async function determineStage(opts: IDictionary) {
+export async function determineStage(opts: IDetermineOptions) {
   try {
-    if (opts.stage) {
-      return opts.stage;
+    let stage =
+      get(opts, "cliOptions.stage") ||
+      process.env.NODE_ENV ||
+      process.env.AWS_STAGE;
+
+    if (!stage) {
+      try {
+        stage = get(await getServerlessYaml(), "provider.stage", undefined);
+      } catch (e) {}
     }
 
-    const profile = await determineProfile({ cliOptions: opts });
-
-    const stage =
-      opts.stage ||
-      process.env.NODE_ENV ||
-      process.env.AWS_STAGE ||
-      (await getServerlessYaml()).provider.stage;
+    if (opts.interactive) {
+      stage = await askForStage();
+    }
 
     return stage;
   } catch (e) {

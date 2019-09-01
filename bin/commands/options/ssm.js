@@ -19,20 +19,6 @@ exports.DoSsmOptions = [
         typeLabel: "<region>"
     },
     {
-        name: "output",
-        alias: "o",
-        type: String,
-        group: "ssm",
-        description: "sends output to the filename specified",
-        typeLabel: "<filename>"
-    },
-    {
-        name: "nonStandardPath",
-        type: Boolean,
-        group: "ssm",
-        description: "allows the naming convention for SSM paths to be ignored for a given operation"
-    },
-    {
         name: "help",
         alias: "h",
         type: Boolean,

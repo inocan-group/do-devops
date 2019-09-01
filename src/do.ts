@@ -10,6 +10,7 @@ import commandLineArgs = require("command-line-args");
 import chalk from "chalk";
 import { commands } from "./shared/commands";
 import { help } from "./commands/help";
+import * as process from "process";
 
 (async () => {
   const command: OptionDefinition[] = [
@@ -45,7 +46,15 @@ import { help } from "./commands/help";
       await help(subModuleOpts, cmd);
     }
 
-    await subModule.handler(subModuleArgv, subModuleOpts);
+    try {
+      await subModule.handler(subModuleArgv, subModuleOpts);
+    } catch (e) {
+      console.log(chalk`{red - unhandled {bold do} error!}`);
+      console.log(`- ${e.message}`);
+      console.log(chalk`{grey ${e.stack}}\n`);
+
+      process.exit();
+    }
   } else {
     console.log(
       `${chalk.bold.red("DO:")} "${cmd}" is an unknown command! \n\n` +

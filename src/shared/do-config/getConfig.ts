@@ -49,7 +49,8 @@ export async function getConfig(
   };
   const filename = getConfigFilename(options.projectOrUserConfig);
   let config: IDoConfig;
-  if (!existsSync(filename)) {
+
+  if (!existsSync(filename) && options.projectOrUserConfig === "project") {
     console.log(
       `- configuration file not found [ %s ]`,
       chalk.grey(process.env.PWD)

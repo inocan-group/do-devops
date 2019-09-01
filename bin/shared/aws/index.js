@@ -11,3 +11,4 @@ __export(require("./checkIfAwsInstalled"));
 __export(require("./getAwsUserProfile"));
 __export(require("./hasAwsCredentialsFile"));
 __export(require("./getAwsProfile"));
+__export(require("./convertProfileToApiCredential"));

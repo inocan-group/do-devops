@@ -54,7 +54,7 @@ function getConfig(callerOptions = {}) {
         }, callerOptions);
         const filename = index_1.getConfigFilename(options.projectOrUserConfig);
         let config;
-        if (!fs_1.existsSync(filename)) {
+        if (!fs_1.existsSync(filename) && options.projectOrUserConfig === "project") {
             console.log(`- configuration file not found [ %s ]`, chalk_1.default.grey(process.env.PWD));
             index_1.writeDefaultConfig();
             console.log(`- default configuration was written to "%s" in project root`, chalk_1.default.bold.italic("do.config.js"));

@@ -1,9 +1,5 @@
 import { IDictionary } from "common-types";
-export interface IAwsProfile {
-    aws_access_key_id: string;
-    aws_secret_access_key: string;
-    region?: string;
-}
+import { IAwsProfile } from "../../@types";
 /**
  * Interogates the `~/.aws/credentials` file to get a hash of
  * profiles (name/dictionary of values) the user has available.

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../index");
+const lodash_1 = require("lodash");
 /** ensure that during one CLI operation we cache this value */
 let profile;
 /**
@@ -24,16 +25,16 @@ let profile;
  */
 function determineProfile(opts) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (profile) {
-            return profile;
+        if (lodash_1.get(opts, "cliOptions.profile")) {
+            return opts.cliOptions.profile;
         }
-        if (opts.cliOptions.profile) {
+        if (lodash_1.get(opts, "cliOptions.profile", undefined)) {
             return opts.cliOptions.profile;
         }
         let serverlessYaml;
         try {
             serverlessYaml = yield index_1.getServerlessYaml();
-            if (serverlessYaml.provider.profile) {
+            if (lodash_1.get(serverlessYaml, "provider.profile", undefined)) {
                 profile = serverlessYaml.provider.profile;
                 return profile;
             }

@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rimraf src/**/*.js && rimraf bin",
     "test": "mocha --require ts-node/register test/**/*-spec.ts",
-    "build": "tsc",
+    "build": "tsc && chmod +x bin/do.js",
     "do": "./bin/do.js"
   },
   "repository": {
@@ -32,7 +32,7 @@
     "@types/command-line-args": "^5.0.0",
     "@types/command-line-usage": "^5.0.1",
     "aws-sdk": "^2.512.0",
-    "aws-ssm": "^0.3.7",
+    "aws-ssm": "^0.3.8",
     "chalk": "^2.4.2",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.0.2",
@@ -42,6 +42,7 @@
     "globby": "^10.0.1",
     "inquirer": "^6.5.1",
     "js-yaml": "^3.13.1",
+    "lodash.get": "^4.4.2",
     "table": "^5.4.6"
   },
   "devDependencies": {
@@ -51,6 +52,7 @@
     "@types/globby": "^9.1.0",
     "@types/inquirer": "^6.5.0",
     "@types/js-yaml": "^3.12.1",
+    "@types/lodash.get": "^4.4.6",
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.8.0",
     "@types/table": "^4.0.6",

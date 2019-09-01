@@ -1,12 +1,13 @@
 import { CommandLineOptions } from "command-line-args";
+import * as process from "process";
 import chalk from "chalk";
 import { table } from "table";
 import { format } from "date-fns";
 import { SSM } from "aws-ssm";
 
 export async function execute(options: CommandLineOptions) {
-  const profile = options.ssm.profile;
-  const region = options.ssm.region;
+  const profile = options.profile;
+  const region = options.region;
   const filterBy = options._unknown ? options._unknown.shift() : undefined;
 
   if (!profile || !region) {
@@ -23,7 +24,7 @@ export async function execute(options: CommandLineOptions) {
 
   console.log(
     `- Listing SSM parameters in profile "${chalk.bold(
-      profile
+      options.profile
     )}", region "${chalk.bold(region)}"${
       filterBy
         ? `; results reduced to those with "${chalk.bold(
@@ -34,7 +35,11 @@ export async function execute(options: CommandLineOptions) {
   );
   console.log();
 
-  const ssm = new SSM({ profile, region });
+  const ssm = new SSM({
+    profile: options.profile,
+    region
+  });
+
   const list = await ssm.describeParameters();
 
   let tableData = [

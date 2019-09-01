@@ -7,13 +7,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const subCommands = __importStar(require("../commands/index"));
+const config = __importStar(require("../commands/config/index"));
 /**
  * returns a list of commands (or global scope) which have
  * a "default configuration"
  */
 function defaultConfigSections() {
-    return Object.keys(subCommands).filter((i) => typeof subCommands[i] === "object" &&
-        subCommands[i].defaultConfig);
+    return Object.keys(config).filter((i) => typeof config[i] === "function");
 }
 exports.defaultConfigSections = defaultConfigSections;

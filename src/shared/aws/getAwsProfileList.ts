@@ -1,12 +1,7 @@
 import { hasAwsProfileCredentialsFile } from "../index";
 import { IDictionary } from "common-types";
 import { readFile } from "../readFile";
-
-export interface IAwsProfile {
-  aws_access_key_id: string;
-  aws_secret_access_key: string;
-  region?: string;
-}
+import { IAwsProfile } from "../../@types";
 
 /**
  * Interogates the `~/.aws/credentials` file to get a hash of

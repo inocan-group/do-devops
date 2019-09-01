@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function root() {
+function global() {
     return {
         projectType: "serverless-library"
     };
 }
-exports.root = root;
+exports.global = global;
