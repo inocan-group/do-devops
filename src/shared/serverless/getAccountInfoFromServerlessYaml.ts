@@ -1,6 +1,6 @@
 import { getServerlessYaml } from "./getServerlessYaml";
-import { IServerlessAccountInfo } from "../../../bin/src/@types/general";
 import chalk from "chalk";
+import { IServerlessAccountInfo } from "../../@types";
 
 /**
  * Gets the `accountInfo` from the `serverless.yml` file if

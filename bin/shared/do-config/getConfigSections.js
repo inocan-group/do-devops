@@ -7,7 +7,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const defaults = __importStar(require("../../commands/defaults"));
+const defaults = __importStar(require("../../commands/config"));
 /**
  * **getConfigSections**
  *

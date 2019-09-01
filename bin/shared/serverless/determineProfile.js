@@ -58,10 +58,10 @@ function determineProfile(opts) {
         }
         catch (e) { }
         if (projectConfig && projectConfig.global.defaultAwsProfile) {
-            profile = projectConfig.ssm.defaultProfile;
+            profile = projectConfig.global.defaultAwsProfile;
         }
         else if (userConfig && userConfig.global.defaultAwsProfile) {
-            profile = userConfig.ssm.defaultProfile;
+            profile = userConfig.global.defaultAwsProfile;
         }
         else if (opts.interactive) {
             try {

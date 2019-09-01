@@ -1,9 +1,8 @@
-import { IServerlessConfig } from "common-types";
-import { IServerlessAccountInfo } from "../../../bin/src/@types/general";
 import path from "path";
 import { DevopsError } from "../errors";
 import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
+import { IServerlessAccountInfo } from "../../@types";
 
 /**
  * Gets the typescript configuration file for serverless

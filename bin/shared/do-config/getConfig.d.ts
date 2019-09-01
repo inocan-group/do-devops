@@ -1,4 +1,4 @@
-import { IDoConfig } from "../../commands/defaults";
+import { IDoConfig } from "../../@types";
 export interface IGetConfigOptions {
     projectOrUserConfig: "user" | "project";
     exitIfNotFound: boolean;

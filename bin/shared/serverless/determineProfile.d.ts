@@ -1,4 +1,4 @@
-import { IDetermineOptions } from "../index";
+import { IDetermineOptions } from "../../@types";
 /**
  * Based on CLI, serverless info, and config files, determine which
  * AWS `profile` the serverless command should leverage for credentials

@@ -3,9 +3,9 @@ import {
   getServerlessYaml,
   getConfig,
   askForAwsProfile,
-  DevopsError,
-  IDetermineOptions
+  DevopsError
 } from "../index";
+import { IDetermineOptions } from "../../@types";
 
 /** ensure that during one CLI operation we cache this value */
 let profile: string;

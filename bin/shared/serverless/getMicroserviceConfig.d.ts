@@ -1,4 +1,4 @@
-import { IServerlessAccountInfo } from "../../../bin/@types/@types";
+import { IServerlessAccountInfo } from "../../@types";
 /**
  * Gets the typescript configuration file for serverless
  * projects which use the `typescript-microservice` yeoman

@@ -1,2 +1,2 @@
-import { IServerlessAccountInfo } from "../../../bin/@types/@types";
+import { IServerlessAccountInfo } from "../../@types";
 export declare function askForAccountInfo(): Promise<IServerlessAccountInfo>;

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
-const getDefaultConfigForCommand_1 = require("./getDefaultConfigForCommand");
+const getDefaultConfig_1 = require("./getDefaultConfig");
 const index_1 = require("./index");
 /**
  * **writeConfig**
@@ -37,7 +37,7 @@ exports.writeConfig = writeConfig;
 function writeSection(section, content, projectOrUserConfig) {
     return __awaiter(this, void 0, void 0, function* () {
         projectOrUserConfig = projectOrUserConfig ? projectOrUserConfig : "project";
-        const sectionMeta = content ? content : getDefaultConfigForCommand_1.getDefaultConfig(section);
+        const sectionMeta = content ? content : getDefaultConfig_1.getDefaultConfig(section);
         const currentConfig = yield index_1.getConfig({ projectOrUserConfig });
         writeConfig(Object.assign({}, currentConfig, { [section]: sectionMeta }));
     });
@@ -48,6 +48,6 @@ exports.writeSection = writeSection;
  * setup in this repo.
  */
 function writeDefaultConfig() {
-    writeConfig(getDefaultConfigForCommand_1.getDefaultConfig());
+    writeConfig(getDefaultConfig_1.getFullDefaultConfig());
 }
 exports.writeDefaultConfig = writeDefaultConfig;

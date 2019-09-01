@@ -38,12 +38,6 @@ function handler(argv, opts) {
             argv: argv.slice(1),
             partial: true
         });
-        // if no SSM config; write default value
-        if (config.ssm === undefined) {
-            const ssmConfig = {};
-            yield shared_1.writeSection("ssm", ssmConfig);
-            config.ssm = ssmConfig;
-        }
         const ssmCommands = ["list", "get", "set"];
         if (!ssmCommands.includes(subCommand)) {
             console.log(`- please choose a ${chalk_1.default.italic("valid")} ${chalk_1.default.bold.yellow("SSM")} sub-command: ${ssmCommands.join(", ")}`);
@@ -51,23 +45,14 @@ function handler(argv, opts) {
             process.exit();
         }
         const serverless = yield isServerless_1.isServerless();
-        if (serverless && serverless.isUsingTypescriptMicroserviceTemplate) {
-            // TODO: build provider section from config
+        if (serverless &&
+            serverless.isUsingTypescriptMicroserviceTemplate &&
+            !serverless.hasServerlessConfig) {
+            yield shared_1.buildServerlessMicroserviceProject();
         }
-        let slsConfig;
-        if (serverless && serverless.hasServerlessConfig) {
-            try {
-                slsConfig = yield shared_1.getServerlessYaml();
-                ssmCmd.ssm.region = ssmCmd.ssm.region || slsConfig.provider.region;
-                ssmCmd.ssm.profile = ssmCmd.ssm.profile || slsConfig.provider.profile;
-                ssmCmd.ssm.stage = ssmCmd.ssm.stage || slsConfig.provider.stage;
-            }
-            catch (e) {
-                console.log("- Problem loading the serverless.yml file!\n");
-                console.log(chalk_1.default.red("  " + e.message));
-                process.exit();
-            }
-        }
+        ssmCmd.ssm.profile = yield shared_1.determineProfile(opts);
+        ssmCmd.ssm.region = yield shared_1.determineRegion(opts);
+        ssmCmd.ssm.stage = yield shared_1.determineStage(opts);
         let importPath;
         switch (subCommand) {
             case "list":

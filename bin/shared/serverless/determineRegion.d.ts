@@ -1,4 +1,4 @@
-import { IDetermineOptions } from "../../../bin/@types/@types";
+import { IDetermineOptions } from "../../@types";
 /**
  * Determines the appropriate `region` to point at based on CLI switches/options,
  * the Serverless configuration, and the global `do` config defaults.

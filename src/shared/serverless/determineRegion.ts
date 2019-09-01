@@ -3,7 +3,7 @@ import { getServerlessYaml } from "./getServerlessYaml";
 import { getConfig } from "../index";
 import chalk from "chalk";
 import { emoji } from "../ui";
-import { IDetermineOptions } from "../../../bin/src/@types/general";
+import { IDetermineOptions } from "../../@types";
 
 /**
  * Determines the appropriate `region` to point at based on CLI switches/options,

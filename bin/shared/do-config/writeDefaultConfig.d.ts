@@ -1,6 +1,5 @@
-import { IDoConfig } from "../../commands/defaults";
-import { IDoConfigSections } from "./getDefaultConfigForCommand";
 import { IDictionary } from "common-types";
+import { IDoConfig } from "../../@types";
 /**
  * **writeConfig**
  *
@@ -16,7 +15,7 @@ export declare function writeConfig(c: IDoConfig, projectOrUserConfig?: "user" |
  * @param projectOrUserConfig States whether **user** or **project** config;
  * default is **project**
  */
-export declare function writeSection(section: IDoConfigSections, content?: IDictionary, projectOrUserConfig?: "project" | "user"): Promise<void>;
+export declare function writeSection(section: keyof IDoConfig, content?: IDictionary, projectOrUserConfig?: "project" | "user"): Promise<void>;
 /**
  * Writes a `do.config.js` file using the default properties
  * setup in this repo.

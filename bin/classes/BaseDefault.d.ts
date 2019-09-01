@@ -1,4 +1,4 @@
-import { IDoConfig } from "../commands/defaults";
+import { IDoConfig } from "../@types";
 /**
  * The base class for commands which have a configuration
  * component. This class defines the contract for creating

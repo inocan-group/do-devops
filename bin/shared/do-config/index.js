@@ -7,3 +7,4 @@ __export(require("./getConfigFilename"));
 __export(require("./getConfig"));
 __export(require("./writeDefaultConfig"));
 __export(require("./getConfigSections"));
+__export(require("./getDefaultConfig"));

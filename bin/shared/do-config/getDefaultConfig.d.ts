@@ -9,5 +9,5 @@ export declare type IDoConfigSections = keyof typeof defaults;
  * section then you can name it (where "global" is what it says on
  * the tin).
  */
-export declare function getDefaultConfig(command?: keyof IDoConfig): IDoConfig | import("../../@types").IDoBuildConfig | import("../../@types").IDoPkgConfig | import("../../@types").IDoGlobalConfig;
+export declare function getDefaultConfig(command?: keyof IDoConfig): IDoConfig | import("../../@types").IDoGlobalConfig | import("../../@types").IDoBuildConfig | import("../../@types").IDoPkgConfig;
 export declare function getFullDefaultConfig(): IDoConfig;
