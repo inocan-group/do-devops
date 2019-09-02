@@ -63,6 +63,8 @@ function handler(args, opts) {
                 const availableFns = Object.keys(yield getLocalServerlessFunctions_1.getLocalServerlessFunctions());
                 if (!availableFns.includes(fn)) {
                     console.log(chalk_1.default `{red - The function "{white ${fn}}" is not a valid function!}`);
+                    console.log(`- valid functions are:`);
+                    console.log(chalk_1.default `{dim - ${availableFns.join("\n- ")}}`);
                     process.exit();
                 }
             }
