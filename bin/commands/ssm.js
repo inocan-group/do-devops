@@ -19,11 +19,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
-const writeDefaultConfig_1 = require("../shared/writeDefaultConfig");
 const chalk_1 = __importDefault(require("chalk"));
 const isServerless_1 = require("../shared/serverless/isServerless");
 const commandLineArgs = require("command-line-args");
-const ssm_1 = require("./options/ssm");
+const process = __importStar(require("process"));
 /**
  * Description of command for help text
  */
@@ -31,20 +30,43 @@ function description() {
     return "allows an easy CRUD-based interaction with AWS's SSM parameter system for managing secrets.";
 }
 exports.description = description;
-function handler(argv, opts) {
+exports.options = [
+    {
+        name: "profile",
+        type: String,
+        typeLabel: "<profileName>",
+        group: "ssm",
+        description: `set the AWS profile explicitly`
+    },
+    {
+        name: "region",
+        type: String,
+        typeLabel: "<region>",
+        group: "ssm",
+        description: `set the AWS region explicitly`
+    },
+    {
+        name: "stage",
+        type: String,
+        typeLabel: "<stage>",
+        group: "ssm",
+        description: `set the stage explicitly`
+    },
+    {
+        name: "nonStandardPath",
+        type: Boolean,
+        group: "ssm",
+        description: "allows the naming convention for SSM paths to be ignored for a given operation"
+    }
+];
+function handler(argv, ssmOptions) {
     return __awaiter(this, void 0, void 0, function* () {
-        const config = yield shared_1.getConfig();
         const subCommand = argv[0];
-        const ssmCmd = commandLineArgs(ssm_1.DoSsmOptions, {
+        const opts = commandLineArgs(exports.options, {
             argv: argv.slice(1),
             partial: true
         });
-        // if no SSM config; write default value
-        if (config.ssm === undefined) {
-            const ssmConfig = {};
-            yield writeDefaultConfig_1.writeSection("ssm", ssmConfig);
-            config.ssm = ssmConfig;
-        }
+        const subCmdOptions = Object.assign({}, ssmOptions, opts.all, opts.ssm, { params: opts._unknown });
         const ssmCommands = ["list", "get", "set"];
         if (!ssmCommands.includes(subCommand)) {
             console.log(`- please choose a ${chalk_1.default.italic("valid")} ${chalk_1.default.bold.yellow("SSM")} sub-command: ${ssmCommands.join(", ")}`);
@@ -52,23 +74,20 @@ function handler(argv, opts) {
             process.exit();
         }
         const serverless = yield isServerless_1.isServerless();
-        if (serverless && serverless.isUsingTypescriptMicroserviceTemplate) {
-            // TODO: build provider section from config
+        if (serverless &&
+            serverless.isUsingTypescriptMicroserviceTemplate &&
+            !serverless.hasServerlessConfig) {
+            yield shared_1.buildServerlessMicroserviceProject();
         }
-        let slsConfig;
-        if (serverless && serverless.hasServerlessConfig) {
-            try {
-                slsConfig = yield shared_1.getServerlessYaml();
-                ssmCmd.ssm.region = ssmCmd.ssm.region || slsConfig.provider.region;
-                ssmCmd.ssm.profile = ssmCmd.ssm.profile || slsConfig.provider.profile;
-                ssmCmd.ssm.stage = ssmCmd.ssm.stage || slsConfig.provider.stage;
-            }
-            catch (e) {
-                console.log("- Problem loading the serverless.yml file!\n");
-                console.log(chalk_1.default.red("  " + e.message));
-                process.exit();
-            }
-        }
+        const profile = yield shared_1.determineProfile({
+            cliOptions: subCmdOptions,
+            interactive: true
+        });
+        const region = yield shared_1.determineRegion({
+            cliOptions: subCmdOptions,
+            interactive: true
+        });
+        const stage = yield shared_1.determineStage({ cliOptions: subCmdOptions.ssm });
         let importPath;
         switch (subCommand) {
             case "list":
@@ -83,11 +102,12 @@ function handler(argv, opts) {
         }
         const { execute } = (yield Promise.resolve().then(() => __importStar(require(importPath))));
         try {
-            yield execute(ssmCmd);
+            yield execute(Object.assign({}, subCmdOptions, { profile, region, stage }));
         }
         catch (e) {
-            console.log(`- Ran into error when running "ssm ${subCommand}":\n  ${chalk_1.default.red(e.message)}\n`);
-            process.exit();
+            console.log(chalk_1.default `{red - Ran into error when running "ssm ${subCommand}":}\n  - ${e.message}\n`);
+            console.log(chalk_1.default `{grey - ${e.stack}}`);
+            process.exit(0);
         }
     });
 }

@@ -1,4 +1,10 @@
-import { getConfig, runHooks, emoji, getStage, getRegion } from "../shared";
+import {
+  getConfig,
+  runHooks,
+  emoji,
+  determineStage,
+  determineRegion
+} from "../shared";
 import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
 import { detectTarget } from "./deploy-helpers";
@@ -38,8 +44,8 @@ export async function handler(argv: string[], opts: any) {
   const { pkg } = await getConfig();
   const detect = await detectTarget();
   const target = detect.target;
-  const stage = await getStage(opts);
-  const region = await getRegion(opts);
+  const stage = await determineStage(opts);
+  const region = await determineRegion(opts);
 
   if (!target) {
     console.log(

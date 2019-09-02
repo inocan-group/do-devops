@@ -2,7 +2,7 @@ import { IServerlessConfig, IDictionary } from "common-types";
 import { hasDevDependency, getPackageJson, writePackageJson } from "../npm";
 import chalk from "chalk";
 import inquirer = require("inquirer");
-import { getLambdaFunctions, getStage } from "./index";
+import { getLambdaFunctions, determineStage } from "./index";
 /**
  * Checks whether the existing configuration has `logForwarding`
  * turned on in the **custom** section. If it _does_ then it just
@@ -64,7 +64,7 @@ export async function askAboutLogForwarding(config: IServerlessConfig) {
 
   if (answers.action === Action.now) {
     const awsFunctions = await getLambdaFunctions();
-    const stage = (await getStage({})) || "dev";
+    const stage = (await determineStage({})) || "dev";
     const fns = awsFunctions.map(i => i.FunctionName).concat("CANCEL");
     const defaultFn = fns
       .filter(i => i.toLocaleLowerCase().includes("shipper"))

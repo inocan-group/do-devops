@@ -7,6 +7,19 @@ import * as autoindex from "./autoindex";
 import * as deploy from "./deploy";
 import * as pkg from "./pkg";
 import * as ssm from "./ssm";
+import * as endpoints from "./endpoints";
 import * as test from "./test";
 
-export { help, build, info, invoke, autoindex, deploy, ssm, fns, test, pkg };
+export {
+  help,
+  build,
+  info,
+  invoke,
+  autoindex,
+  deploy,
+  ssm,
+  fns,
+  test,
+  pkg,
+  endpoints
+};

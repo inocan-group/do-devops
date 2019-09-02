@@ -1,5 +1,5 @@
-import { IDoDeployServerless } from "../defaults";
 import { IDictionary } from "common-types";
+import { IDoDeployServerless } from "../../@types";
 export interface IServerlessDeployMeta {
     stage: string;
     config: IDoDeployServerless;

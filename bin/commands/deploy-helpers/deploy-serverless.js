@@ -20,7 +20,7 @@ const shared_1 = require("../../shared");
  */
 function serverlessDeploy(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
-        const stage = yield shared_1.getStage(opts);
+        const stage = yield shared_1.determineStage(opts);
         const { deploy: config } = yield shared_1.getConfig();
         const meta = { stage, config: config, opts };
         // argv values indicate function deployment

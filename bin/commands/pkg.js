@@ -49,8 +49,8 @@ function handler(argv, opts) {
         const { pkg } = yield shared_1.getConfig();
         const detect = yield deploy_helpers_1.detectTarget();
         const target = detect.target;
-        const stage = yield shared_1.getStage(opts);
-        const region = yield shared_1.getRegion(opts);
+        const stage = yield shared_1.determineStage(opts);
+        const region = yield shared_1.determineRegion(opts);
         if (!target) {
             console.log(`  - ${"\uD83D\uDCA9" /* poop */} You must state a valid "target" [ ${target ? target + "{italic not valid}" : "no target stated"} ]`);
         }

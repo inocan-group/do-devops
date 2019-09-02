@@ -26,10 +26,10 @@ const shared_1 = require("../../shared");
 function execute(options) {
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const profile = options.ssm.profile;
-        const region = options.ssm.region;
-        const secrets = options["_unknown"];
-        const nonStandardPath = options.ssm.nonStandardPath;
+        const profile = options.profile;
+        const region = options.region;
+        const secrets = options.params;
+        const nonStandardPath = options.nonStandardPath;
         const { width } = yield shared_1.consoleDimensions();
         if (!region) {
             throw new shared_1.DevopsError(`Getting SSM secrets requires an ${chalk_1.default.bold("AWS Region")} and none could be deduced. You can explicitly state this by adding "--region XYZ" to the command.`);

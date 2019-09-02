@@ -17,6 +17,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
 const deploy_helpers_1 = require("./deploy-helpers");
+exports.defaultConfig = {
+    preDeployHooks: ["clean"],
+    target: "serverless",
+    showUnderlyingCommands: true,
+    sandboxing: "user"
+};
 function description(opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const base = `Deployment services that for {bold Serverless} or {bold NPM} publishing.\n\n`;
@@ -72,7 +78,6 @@ exports.options = options;
  */
 function handler(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { deploy, global } = yield shared_1.getConfig();
         const detect = yield deploy_helpers_1.detectTarget();
         const target = detect.target;
         if (!target) {

@@ -1,9 +1,9 @@
 import chalk from "chalk";
 import { commands } from "../commands";
-import { ICommandDescription } from "../@types";
 import { globalOptions } from "../options";
 import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
+import { ICommandDescription } from "../../@types";
 
 export async function getCommands(fn?: string) {
   let meta: ICommandDescription[] = [];

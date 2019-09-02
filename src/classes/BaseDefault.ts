@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
 import { getConfig } from "../shared";
-import { IDoConfig } from "../commands/defaults";
+import { IDoConfig } from "../@types";
 
 /**
  * The base class for commands which have a configuration

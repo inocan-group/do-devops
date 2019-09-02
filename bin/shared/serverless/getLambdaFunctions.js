@@ -9,20 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const aws_sdk_1 = require("aws-sdk");
-const getRegion_1 = require("./getRegion");
+const determineRegion_1 = require("./determineRegion");
 const aws_1 = require("../aws");
-const _1 = require(".");
+const determineProfile_1 = require("./determineProfile");
+/**
+ * Uses the AWS Lambda API to retrieve a list of functions for given
+ * profile/region.
+ */
 function getLambdaFunctions(opts = {}) {
     return __awaiter(this, void 0, void 0, function* () {
-        const region = yield getRegion_1.getRegion(opts);
-        const profileName = yield _1.getAwsProfileFromServerless();
-        const profile = yield aws_1.getAwsProfile(profileName);
-        const lambda = new aws_sdk_1.Lambda({
-            apiVersion: "2015-03-31",
-            region,
-            secretAccessKey: profile.aws_secret_access_key,
-            accessKeyId: profile.aws_access_key_id
-        });
+        const region = yield determineRegion_1.determineRegion({ cliOptions: opts });
+        const profileName = yield determineProfile_1.determineProfile({ cliOptions: opts });
+        const profile = aws_1.convertProfileToApiCredential(yield aws_1.getAwsProfile(profileName));
+        const lambda = new aws_sdk_1.Lambda(Object.assign({ apiVersion: "2015-03-31", region }, profile));
         const fns = yield lambda.listFunctions().promise();
         return fns.Functions;
     });

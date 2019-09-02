@@ -1,5 +1,11 @@
 import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
+export declare const defaultConfig: {
+    preDeployHooks: string[];
+    target: string;
+    showUnderlyingCommands: boolean;
+    sandboxing: string;
+};
 export declare function description(opts: IDictionary): Promise<string>;
 export declare const syntax = "do deploy [fn1] [fn2] <options>\n\n{dim Note: {italic stating particular functions is {italic optional} and if excluded will result in a full deployment of all functions.}}";
 export declare function options(opts: IDictionary): Promise<OptionDefinition[]>;

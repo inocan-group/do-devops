@@ -6,4 +6,4 @@ import { IServerlessConfig } from "common-types";
  * interactive mode if the `serverless-log-forwarding` is installed
  * as a **devDep**.
  */
-export declare function askAboutLogForwarding(config: IServerlessConfig): Promise<IServerlessConfig<any>>;
+export declare function askAboutLogForwarding(config: IServerlessConfig): Promise<IServerlessConfig<import("common-types").IServerlessConfigCustom>>;
