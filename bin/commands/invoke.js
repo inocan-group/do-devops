@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -62,9 +63,9 @@ function handler(args, opts) {
                 fn = args[0];
                 const availableFns = Object.keys(yield getLocalServerlessFunctions_1.getLocalServerlessFunctions());
                 if (!availableFns.includes(fn)) {
-                    console.log(chalk_1.default `{red - The function "{white ${fn}}" is not a valid function!}`);
+                    console.log(chalk_1.default `{red - The function "{white ${fn}}" is not a valid function!} ${"\uD83D\uDE32" /* shocked */}`);
                     console.log(`- valid functions are:`);
-                    console.log(chalk_1.default `{dim - ${availableFns.join("\n- ")}}`);
+                    console.log(chalk_1.default `{dim   - ${availableFns.join("\n  - ")}}`);
                     process.exit();
                 }
             }

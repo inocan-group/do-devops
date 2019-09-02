@@ -68,10 +68,10 @@ export async function handler(args: string[], opts: IDictionary) {
       const availableFns = Object.keys(await getLocalServerlessFunctions());
       if (!availableFns.includes(fn)) {
         console.log(
-          chalk`{red - The function "{white ${fn}}" is not a valid function!}`
+          chalk`{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`
         );
         console.log(`- valid functions are:`);
-        console.log(chalk`{dim - ${availableFns.join("\n- ")}}`);
+        console.log(chalk`{dim   - ${availableFns.join("\n  - ")}}`);
 
         process.exit();
       }
