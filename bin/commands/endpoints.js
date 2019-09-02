@@ -27,11 +27,12 @@ exports.options = [
 function handler(args, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const profileName = yield shared_1.determineProfile({ cliOptions: opts });
+        const region = yield shared_1.determineRegion({ cliOptions: opts });
         try {
             console.log(chalk_1.default `- getting API {italic endpoints} for the profile {bold ${profileName}}`);
             // const endpoints = await getLambdaFunctions(opts);
-            const endpoints = yield getApiGatewayEndpoints_1.getApiGatewayEndpoints(profileName);
-            console.log(endpoints);
+            const endpoints = yield getApiGatewayEndpoints_1.getApiGatewayEndpoints(profileName, region);
+            console.log(JSON.stringify(endpoints, null, 2));
         }
         catch (e) { }
     });

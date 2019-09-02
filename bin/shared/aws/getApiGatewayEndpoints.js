@@ -17,31 +17,10 @@ const index_1 = require("./index");
 function getApiGatewayEndpoints(profileName, region) {
     return __awaiter(this, void 0, void 0, function* () {
         const profile = index_1.convertProfileToApiCredential(yield index_1.getAwsProfile(profileName));
-        // return new Promise((resolve, reject) => {
-        //   const gw = new APIGateway({
-        //     ...profile
-        //   });
-        //   console.log("calling");
-        //   gw.getRestApis((err, data) => {
-        //     if (data) {
-        //       reject(err);
-        //     } else {
-        //       resolve(data.items);
-        //     }
-        //   });
-        // });
-        // v2
-        // const gw = new ApiGatewayV2({
-        //   apiVersion: "2018-11-29",
-        //   ...profile
-        // });
-        // const routes = await gw.getRoutes().promise();
-        // return routes.Items;
-        // const result = await gw.getApis().promise();
-        // return result.Items;
-        const gw = new aws_sdk_1.APIGateway(Object.assign({}, profile));
+        const gw = new aws_sdk_1.APIGateway(Object.assign({}, profile, { region }));
         const apis = yield gw.getRestApis().promise();
-        return apis.items;
+        const detail = yield gw.getRestApi({ restApiId: apis.items[0].apiKeySource });
+        return detail;
     });
 }
 exports.getApiGatewayEndpoints = getApiGatewayEndpoints;
