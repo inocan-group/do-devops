@@ -2,6 +2,7 @@ export * from "./askForServerlessConfig";
 export * from "./askForAccountInfo";
 export * from "./askAboutLogForwarding";
 export * from "./askForStage";
+export * from "./askForFunction";
 export * from "./functions";
 export * from "./getMicroserviceConfig";
 export * from "./getServerlessYaml";

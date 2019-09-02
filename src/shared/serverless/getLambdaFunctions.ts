@@ -4,6 +4,10 @@ import { IDictionary } from "common-types";
 import { getAwsProfile, convertProfileToApiCredential } from "../aws";
 import { determineProfile } from "./determineProfile";
 
+/**
+ * Uses the AWS Lambda API to retrieve a list of functions for given
+ * profile/region.
+ */
 export async function getLambdaFunctions(opts: IDictionary = {}) {
   const region = await determineRegion({ cliOptions: opts });
   const profileName = await determineProfile({ cliOptions: opts });

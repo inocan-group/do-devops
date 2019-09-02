@@ -12,6 +12,10 @@ const aws_sdk_1 = require("aws-sdk");
 const determineRegion_1 = require("./determineRegion");
 const aws_1 = require("../aws");
 const determineProfile_1 = require("./determineProfile");
+/**
+ * Uses the AWS Lambda API to retrieve a list of functions for given
+ * profile/region.
+ */
 function getLambdaFunctions(opts = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         const region = yield determineRegion_1.determineRegion({ cliOptions: opts });

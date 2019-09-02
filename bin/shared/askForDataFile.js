@@ -8,15 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const inquirer = require("inquirer");
 const index_1 = require("./index");
 /**
- * Gets the list of functions defined in the `serverless.yml`
- * file.
+ * Asks the user to choose an AWS region
  */
-function getLocalServerlessFunctions() {
+function askForDataFile(listOfFiles) {
     return __awaiter(this, void 0, void 0, function* () {
-        const fns = (yield index_1.getServerlessYaml()).functions;
-        return fns;
+        const files = listOfFiles ? listOfFiles : yield index_1.getDataFiles();
+        const question = {
+            type: "list",
+            name: "file",
+            message: "What data file would you like?",
+            default: files[0],
+            choices: files
+        };
+        const answer = yield inquirer.prompt(question);
+        return answer.file;
     });
 }
-exports.getLocalServerlessFunctions = getLocalServerlessFunctions;
+exports.askForDataFile = askForDataFile;

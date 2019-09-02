@@ -8,15 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("./index");
+const inquirer = require("inquirer");
+const getLocalServerlessFunctions_1 = require("./getLocalServerlessFunctions");
 /**
- * Gets the list of functions defined in the `serverless.yml`
- * file.
+ * Asks the user to choose an AWS region
  */
-function getLocalServerlessFunctions() {
+function askForFunction() {
     return __awaiter(this, void 0, void 0, function* () {
-        const fns = (yield index_1.getServerlessYaml()).functions;
-        return fns;
+        const fns = Object.keys(yield getLocalServerlessFunctions_1.getLocalServerlessFunctions());
+        const question = {
+            type: "list",
+            name: "fn",
+            message: "Which function do you want to use?",
+            default: fns[0],
+            choices: fns
+        };
+        const answer = yield inquirer.prompt(question);
+        return answer.fn;
     });
 }
-exports.getLocalServerlessFunctions = getLocalServerlessFunctions;
+exports.askForFunction = askForFunction;

@@ -7,6 +7,7 @@ __export(require("./askForServerlessConfig"));
 __export(require("./askForAccountInfo"));
 __export(require("./askAboutLogForwarding"));
 __export(require("./askForStage"));
+__export(require("./askForFunction"));
 __export(require("./functions"));
 __export(require("./getMicroserviceConfig"));
 __export(require("./getServerlessYaml"));
