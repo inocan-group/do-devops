@@ -49,6 +49,7 @@ export async function handler(args: string[], opts: IDictionary) {
       console.log(
         chalk`{red - This project is not configured as a {bold Serverless} project!} ${emoji.angry}\n`
       );
+
       process.exit();
     }
     if (args.length > 1) {
@@ -69,6 +70,8 @@ export async function handler(args: string[], opts: IDictionary) {
         console.log(
           chalk`{red - The function "{white ${fn}}" is not a valid function!}`
         );
+        console.log(`- valid functions are:`);
+        console.log(chalk`{dim - ${availableFns.join("\n- ")}}`);
 
         process.exit();
       }
