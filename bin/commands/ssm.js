@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -66,7 +67,7 @@ function handler(argv, ssmOptions) {
             argv: argv.slice(1),
             partial: true
         });
-        const subCmdOptions = Object.assign({}, ssmOptions, opts.all, opts.ssm, { params: opts._unknown });
+        const subCmdOptions = Object.assign(Object.assign(Object.assign(Object.assign({}, ssmOptions), opts.all), opts.ssm), { params: opts._unknown });
         const ssmCommands = ["list", "get", "set"];
         if (!ssmCommands.includes(subCommand)) {
             console.log(`- please choose a ${chalk_1.default.italic("valid")} ${chalk_1.default.bold.yellow("SSM")} sub-command: ${ssmCommands.join(", ")}`);
@@ -102,7 +103,7 @@ function handler(argv, ssmOptions) {
         }
         const { execute } = (yield Promise.resolve().then(() => __importStar(require(importPath))));
         try {
-            yield execute(Object.assign({}, subCmdOptions, { profile, region, stage }));
+            yield execute(Object.assign(Object.assign({}, subCmdOptions), { profile, region, stage }));
         }
         catch (e) {
             console.log(chalk_1.default `{red - Ran into error when running "ssm ${subCommand}":}\n  - ${e.message}\n`);
