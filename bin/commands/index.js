@@ -25,5 +25,7 @@ const pkg = __importStar(require("./pkg"));
 exports.pkg = pkg;
 const ssm = __importStar(require("./ssm"));
 exports.ssm = ssm;
+const endpoints = __importStar(require("./endpoints"));
+exports.endpoints = endpoints;
 const test = __importStar(require("./test"));
 exports.test = test;

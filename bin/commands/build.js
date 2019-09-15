@@ -13,6 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
 const chalk_1 = __importDefault(require("chalk"));
+exports.defaultConfig = {
+    preBuildHooks: ["clean"],
+    targetDirectory: "dist",
+    buildTool: "tsc"
+};
 function description() {
     return `Efficient and clear build pipelines for serverless and/or NPM libraries`;
 }

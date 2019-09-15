@@ -6,10 +6,10 @@ import { table } from "table";
 import { DevopsError, consoleDimensions } from "../../shared";
 
 export async function execute(options: CommandLineOptions) {
-  const profile: string = options.ssm.profile;
-  const region: string = options.ssm.region;
-  const secrets: string[] = options["_unknown"];
-  const nonStandardPath: boolean = options.ssm.nonStandardPath;
+  const profile: string = options.profile;
+  const region: string = options.region;
+  const secrets: string[] = options.params;
+  const nonStandardPath: boolean = options.nonStandardPath;
   const { width } = await consoleDimensions();
 
   if (!region) {
@@ -41,6 +41,7 @@ export async function execute(options: CommandLineOptions) {
     }
   };
   const ssm = new SSM({ profile, region });
+
   for await (const secret of secrets) {
     let tableData = [
       [

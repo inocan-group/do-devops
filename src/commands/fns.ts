@@ -26,6 +26,7 @@ export async function handler(args: string[], opts: IDictionary) {
   const filterBy =
     args.length > 0 ? (fn: string) => fn.includes(args[0]) : () => true;
   const status = await isServerless();
+
   if (!status) {
     console.log("- this project does not appear to be a Serverless project!\n");
     process.exit();

@@ -1,18 +1,23 @@
 import { Lambda } from "aws-sdk";
-import { getRegion } from "./getRegion";
+import { determineRegion } from "./determineRegion";
 import { IDictionary } from "common-types";
-import { getDefaultAwsProfile, getAwsProfile } from "../aws";
-import { getAwsProfileFromServerless } from ".";
+import { getAwsProfile, convertProfileToApiCredential } from "../aws";
+import { determineProfile } from "./determineProfile";
 
+/**
+ * Uses the AWS Lambda API to retrieve a list of functions for given
+ * profile/region.
+ */
 export async function getLambdaFunctions(opts: IDictionary = {}) {
-  const region = await getRegion(opts);
-  const profileName = await getAwsProfileFromServerless();
-  const profile = await getAwsProfile(profileName);
+  const region = await determineRegion({ cliOptions: opts });
+  const profileName = await determineProfile({ cliOptions: opts });
+  const profile = convertProfileToApiCredential(
+    await getAwsProfile(profileName)
+  );
   const lambda = new Lambda({
     apiVersion: "2015-03-31",
     region,
-    secretAccessKey: profile.aws_secret_access_key,
-    accessKeyId: profile.aws_access_key_id
+    ...profile
   });
 
   const fns = await lambda.listFunctions().promise();

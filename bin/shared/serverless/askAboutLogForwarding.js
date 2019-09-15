@@ -60,7 +60,7 @@ function askAboutLogForwarding(config) {
         answers = (yield inquirer.prompt(questions));
         if (answers.action === Action.now) {
             const awsFunctions = yield index_1.getLambdaFunctions();
-            const stage = (yield index_1.getStage({})) || "dev";
+            const stage = (yield index_1.determineStage({})) || "dev";
             const fns = awsFunctions.map(i => i.FunctionName).concat("CANCEL");
             const defaultFn = fns
                 .filter(i => i.toLocaleLowerCase().includes("shipper"))

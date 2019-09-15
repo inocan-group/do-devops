@@ -1,5 +1,5 @@
 import { IDictionary } from "common-types";
-import { IDoDeployConfig } from "../defaults";
+import { IDoDeployConfig } from "../../@types";
 export declare type IDetectedTarget = {
     detected: IDoDeployConfig["target"] | "both";
     override: boolean;

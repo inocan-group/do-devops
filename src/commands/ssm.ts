@@ -1,11 +1,15 @@
-import { getConfig, checkIfAwsInstalled, getServerlessYaml } from "../shared";
-import { writeSection } from "../shared/writeDefaultConfig";
+import {
+  buildServerlessMicroserviceProject,
+  determineRegion,
+  determineProfile,
+  determineStage
+} from "../shared";
 import chalk from "chalk";
 import { isServerless } from "../shared/serverless/isServerless";
-import { IDoSsmConfig } from "./defaults";
 import commandLineArgs = require("command-line-args");
-import { DoSsmOptions } from "./options/ssm";
-import { IServerlessConfig } from "common-types";
+import * as process from "process";
+import { OptionDefinition } from "command-line-usage";
+import { IDictionary } from "common-types";
 
 /**
  * Description of command for help text
@@ -14,20 +18,49 @@ export function description() {
   return "allows an easy CRUD-based interaction with AWS's SSM parameter system for managing secrets.";
 }
 
-export async function handler(argv: string[], opts: any) {
-  const config = await getConfig();
+export const options: OptionDefinition[] = [
+  {
+    name: "profile",
+    type: String,
+    typeLabel: "<profileName>",
+    group: "ssm",
+    description: `set the AWS profile explicitly`
+  },
+  {
+    name: "region",
+    type: String,
+    typeLabel: "<region>",
+    group: "ssm",
+    description: `set the AWS region explicitly`
+  },
+  {
+    name: "stage",
+    type: String,
+    typeLabel: "<stage>",
+    group: "ssm",
+    description: `set the stage explicitly`
+  },
+  {
+    name: "nonStandardPath",
+    type: Boolean,
+    group: "ssm",
+    description:
+      "allows the naming convention for SSM paths to be ignored for a given operation"
+  }
+];
+
+export async function handler(argv: string[], ssmOptions: IDictionary) {
   const subCommand = argv[0];
-  const ssmCmd = commandLineArgs(DoSsmOptions, {
+  const opts = commandLineArgs(options, {
     argv: argv.slice(1),
     partial: true
   });
-
-  // if no SSM config; write default value
-  if (config.ssm === undefined) {
-    const ssmConfig: IDoSsmConfig = {};
-    await writeSection("ssm", ssmConfig);
-    config.ssm = ssmConfig;
-  }
+  const subCmdOptions = {
+    ...ssmOptions,
+    ...opts.all,
+    ...opts.ssm,
+    params: opts._unknown
+  };
 
   const ssmCommands = ["list", "get", "set"];
   if (!ssmCommands.includes(subCommand)) {
@@ -41,24 +74,23 @@ export async function handler(argv: string[], opts: any) {
   }
 
   const serverless = await isServerless();
-  if (serverless && serverless.isUsingTypescriptMicroserviceTemplate) {
-    // TODO: build provider section from config
+  if (
+    serverless &&
+    serverless.isUsingTypescriptMicroserviceTemplate &&
+    !serverless.hasServerlessConfig
+  ) {
+    await buildServerlessMicroserviceProject();
   }
 
-  let slsConfig: IServerlessConfig;
-  if (serverless && serverless.hasServerlessConfig) {
-    try {
-      slsConfig = await getServerlessYaml();
-      ssmCmd.ssm.region = ssmCmd.ssm.region || slsConfig.provider.region;
-      ssmCmd.ssm.profile = ssmCmd.ssm.profile || slsConfig.provider.profile;
-      ssmCmd.ssm.stage = ssmCmd.ssm.stage || slsConfig.provider.stage;
-    } catch (e) {
-      console.log("- Problem loading the serverless.yml file!\n");
-      console.log(chalk.red("  " + e.message));
-
-      process.exit();
-    }
-  }
+  const profile = await determineProfile({
+    cliOptions: subCmdOptions,
+    interactive: true
+  });
+  const region = await determineRegion({
+    cliOptions: subCmdOptions,
+    interactive: true
+  });
+  const stage = await determineStage({ cliOptions: subCmdOptions.ssm });
 
   let importPath: string;
 
@@ -79,14 +111,13 @@ export async function handler(argv: string[], opts: any) {
   };
 
   try {
-    await execute(ssmCmd);
+    await execute({ ...subCmdOptions, profile, region, stage });
   } catch (e) {
     console.log(
-      `- Ran into error when running "ssm ${subCommand}":\n  ${chalk.red(
-        e.message
-      )}\n`
+      chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${e.message}\n`
     );
+    console.log(chalk`{grey - ${e.stack}}`);
 
-    process.exit();
+    process.exit(0);
   }
 }
