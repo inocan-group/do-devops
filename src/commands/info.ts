@@ -1,6 +1,5 @@
 import chalk from "chalk";
 import {
-  getConfig,
   getPackageJson,
   getGitBranch,
   getGitLastCommit,

@@ -399,10 +399,17 @@ commander@^2.12.1:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
 
-common-types@^1.11.18, common-types@^1.11.20:
+common-types@^1.11.18:
   version "1.11.20"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.11.20.tgz#a556af518cf2ec307f41e99b672b7e8d28e41834"
   integrity sha512-OgOneyz+nzkZV2OidVBc3X7G1vAId65RgrK2RWP3mw+YFCHTCQHvyPdOxP6mjUrr1stWUcugLPFOE3WpSDX9UQ==
+  dependencies:
+    "@types/json-schema" "^7.0.3"
+
+common-types@^1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.12.1.tgz#1110e159838651ebddedefb7714e6ce849e90ee5"
+  integrity sha512-zTwEI/dGVvZlyJD4YTdUS0wYD+cf/8hgknhZ4/G1v1WSidUZdlXdBhPYQOm/Shqy9V0NhuOij86Eo4up0r5d8w==
   dependencies:
     "@types/json-schema" "^7.0.3"
 

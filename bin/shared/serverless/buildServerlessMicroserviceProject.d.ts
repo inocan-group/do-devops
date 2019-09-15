@@ -10,4 +10,4 @@ import { IServerlessConfig } from "common-types";
  * 1. look within the `serverless.yml` for info (if it exists)
  * 2. ask the user for the information (saving values as default for next time)
  */
-export declare function buildServerlessMicroserviceProject(): Promise<IServerlessConfig<any>>;
+export declare function buildServerlessMicroserviceProject(): Promise<IServerlessConfig<import("common-types").IServerlessConfigCustom>>;
