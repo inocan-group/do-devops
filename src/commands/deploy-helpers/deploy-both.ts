@@ -3,7 +3,7 @@ import inquirer = require("inquirer");
 
 export default async function deployBoth() {
   console.log(
-    chalk`- This repo has been configured as {italic both} a {bold Serverless} and an {bold NPM} project.`
+    chalk`- This repo appears to be {italic both} a {bold Serverless} and an {bold NPM} project.`
   );
   console.log(
     chalk`- In the future you can use the {blue --target [ {dim serverless,npm} ]} switch to be explicit.`
