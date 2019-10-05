@@ -79,8 +79,12 @@ exports.options = options;
  */
 function handler(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
-        const detect = yield deploy_helpers_1.detectTarget();
-        const target = detect.target;
+        // const { deploy, global } = await getConfig();
+        let { target } = yield deploy_helpers_1.detectTarget(opts);
+        if (target === "both") {
+            const ask = (yield Promise.resolve().then(() => __importStar(require(`./deploy-helpers/deploy-${target}`)))).default;
+            target = yield ask(opts);
+        }
         if (!target) {
             console.log(`  - ${"\uD83D\uDCA9" /* poop */} You must state a valid "target" [ ${target ? target + "{italic not valid}" : "no target stated"} ]`);
         }
