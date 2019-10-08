@@ -24,7 +24,7 @@ function getDefaultConfig(command) {
         let content;
         sections.forEach((section) => {
             const newContent = { [section]: getDefaultConfig(section) };
-            content = Object.assign(Object.assign({}, content), newContent);
+            content = Object.assign({}, content, newContent);
         });
         return content;
     }
