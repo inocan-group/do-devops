@@ -10,7 +10,7 @@ import {
 import { asyncExec } from "async-shelljs";
 import { IDictionary, INpmInfo } from "common-types";
 import { table } from "table";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 export const description = `Summarized information about the current repo`;
 export const options = [
@@ -57,10 +57,10 @@ export async function handler(argv: string[], opts: any) {
       true,
       npm
         ? chalk`This repo was first published on {green ${format(
-            npm.time.created,
+            parseISO(npm.time.created),
             dateFormat
           )}} and last modified on {green ${format(
-            npm.time.modified,
+            parseISO(npm.time.modified),
             dateFormat
           )}}.\n\n`
         : ""
@@ -71,7 +71,7 @@ export async function handler(argv: string[], opts: any) {
         ? chalk`The latest published version is ${chalk.bold.green(
             npm.version
           )} [ ${format(
-            npm.time[npm.version],
+            parseISO(npm.time[npm.version]),
             dateFormat
           )} ].\nLocally in package.json, version is ${chalk.bold.green(
             pkg.version

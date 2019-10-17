@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -61,13 +62,13 @@ function handler(argv, opts) {
             [
                 true,
                 npm
-                    ? chalk_1.default `This repo was first published on {green ${date_fns_1.format(npm.time.created, dateFormat)}} and last modified on {green ${date_fns_1.format(npm.time.modified, dateFormat)}}.\n\n`
+                    ? chalk_1.default `This repo was first published on {green ${date_fns_1.format(date_fns_1.parseISO(npm.time.created), dateFormat)}} and last modified on {green ${date_fns_1.format(date_fns_1.parseISO(npm.time.modified), dateFormat)}}.\n\n`
                     : ""
             ],
             [
                 false,
                 npm
-                    ? chalk_1.default `The latest published version is ${chalk_1.default.bold.green(npm.version)} [ ${date_fns_1.format(npm.time[npm.version], dateFormat)} ].\nLocally in package.json, version is ${chalk_1.default.bold.green(pkg.version)}.`
+                    ? chalk_1.default `The latest published version is ${chalk_1.default.bold.green(npm.version)} [ ${date_fns_1.format(date_fns_1.parseISO(npm.time[npm.version]), dateFormat)} ].\nLocally in package.json, version is ${chalk_1.default.bold.green(pkg.version)}.`
                     : `Locally in {italic package.json}, the version is ${chalk_1.default.bold.green(pkg.version)} but this is {italic not} an npm package.`
             ],
             [true, chalk_1.default `\n\nPrior versions include: {italic ${priorVersions}}`],

@@ -43,7 +43,7 @@ function getVariableDeclaration(declaration) {
         type: lodash_get_1.default(i, "value.type")
     }));
     const params = lodash_get_1.default(root, "init.params", []).map((i) => lodash_get_1.default(i, "name", ""));
-    return Object.assign({ name: lodash_get_1.default(root, "id.name"), interface: lodash_get_1.default(root, "id.typeAnnotation.typeAnnotation.typeName.name"), type }, (properties ? { properties } : {}), (params.length > 0 ? { params } : {}));
+    return Object.assign(Object.assign({ name: lodash_get_1.default(root, "id.name"), interface: lodash_get_1.default(root, "id.typeAnnotation.typeAnnotation.typeName.name"), type }, (properties ? { properties } : {})), (params.length > 0 ? { params } : {}));
 }
 function getInterfaceDeclaration(declaration) {
     return {
