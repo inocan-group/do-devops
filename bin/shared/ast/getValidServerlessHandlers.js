@@ -7,7 +7,7 @@ const path_1 = __importDefault(require("path"));
 const parseFile_1 = require("./parseFile");
 const fast_glob_1 = __importDefault(require("fast-glob"));
 /**
- * Get's all typescript files under the `src/handlers`
+ * Gets a list of all typescript files under the `src/handlers`
  * directory that have a `handlers` export.
  */
 function getValidServerlessHandlers() {

@@ -3,7 +3,7 @@ import { parseFile } from "./parseFile";
 import fg from "fast-glob";
 
 /**
- * Get's all typescript files under the `src/handlers`
+ * Gets a list of all typescript files under the `src/handlers`
  * directory that have a `handlers` export.
  */
 export function getValidServerlessHandlers() {

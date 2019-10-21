@@ -7,7 +7,7 @@ import {
 import chalk from "chalk";
 import { IDictionary } from "common-types";
 import { BuildTool } from "../@types";
-import { askBuildTool } from "./build-helpers/askBuildTool";
+import { saveToolToRepoConfig, askBuildTool } from "./build-helpers/index";
 
 export const defaultConfig = {
   preBuildHooks: ["clean"],
@@ -26,6 +26,8 @@ export async function handler(opts: IDictionary) {
     opts.buildTool ||
     config.buildTool ||
     (await askBuildTool(serverlessProject ? true : false));
+
+  await saveToolToRepoConfig(buildTool);
 
   if (serverlessProject) {
     await buildServerlessMicroserviceProject();

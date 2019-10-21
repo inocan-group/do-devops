@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
 const chalk_1 = __importDefault(require("chalk"));
-const askBuildTool_1 = require("./build-helpers/askBuildTool");
+const index_1 = require("./build-helpers/index");
 exports.defaultConfig = {
     preBuildHooks: ["clean"],
     targetDirectory: "dist",
@@ -30,7 +30,8 @@ function handler(opts) {
         const serverlessProject = yield shared_1.isServerless();
         const buildTool = opts.buildTool ||
             config.buildTool ||
-            (yield askBuildTool_1.askBuildTool(serverlessProject ? true : false));
+            (yield index_1.askBuildTool(serverlessProject ? true : false));
+        yield index_1.saveToolToRepoConfig(buildTool);
         if (serverlessProject) {
             yield shared_1.buildServerlessMicroserviceProject();
         }

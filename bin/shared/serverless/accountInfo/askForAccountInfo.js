@@ -13,15 +13,23 @@ const npm_1 = require("../../npm");
 const __1 = require("..");
 const inquirer = require("inquirer");
 const aws_1 = require("../../aws");
-function askForAccountInfo() {
+function askForAccountInfo(defaults = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         const pkgJson = yield npm_1.getPackageJson();
-        const defaults = (yield __1.getAccountInfoFromServerlessYaml()) || {};
         const profiles = yield aws_1.getAwsProfileList();
         const profileMessage = "choose a profile from your AWS credentials file";
+        if (defaults.profile &&
+            defaults.name &&
+            defaults.accountId &&
+            defaults.region &&
+            defaults.pluginsInstalled &&
+            (defaults.logForwarding ||
+                !Object.keys(pkgJson.devDependencies).includes("serverless-log-forwarding"))) {
+            return defaults;
+        }
         const baseProfileQuestion = {
             name: "profile",
-            message: "choose a profile from your AWS credentials file",
+            message: "Choose a profile from your AWS credentials file",
             default: defaults.profile,
             when: () => !defaults.profile
         };
@@ -34,7 +42,7 @@ function askForAccountInfo() {
             {
                 type: "input",
                 name: "name",
-                message: "what is the service name which your functions will be prefixed with",
+                message: "What is the service name which your functions will be prefixed with",
                 default: defaults.name || pkgJson.name,
                 when: () => !defaults.name
             },

@@ -11,19 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = require("..");
 const chalk_1 = __importDefault(require("chalk"));
-const path_1 = __importDefault(require("path"));
 const index_1 = require("../../ast/index");
-const fs_1 = require("fs");
 /**
  * Builds a `serverless.yml` file from the configuration
  * available in the `/serverless-config` directory.
@@ -38,7 +29,8 @@ const fs_1 = require("fs");
 function buildServerlessMicroserviceProject() {
     return __awaiter(this, void 0, void 0, function* () {
         let stage = "starting";
-        const accountInfo = (yield __1.getAccountInfoFromServerlessYaml()) || (yield __1.askForAccountInfo());
+        const knownAccountInfo = Object.assign({}, (yield __1.getAccountInfoFromServerlessYaml()));
+        const accountInfo = yield __1.askForAccountInfo(knownAccountInfo);
         console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered; ready to build {green serverless.yml}`);
         // try {
         //   // const config = (await getMicroserviceConfig(accountInfo)).replace(
@@ -48,13 +40,16 @@ function buildServerlessMicroserviceProject() {
         //   stage = "config-returned";
         //   let configComplete: IServerlessConfig;
         //   try {
-        console.log(index_1.getValidServerlessHandlers());
-        const configFile = path_1.default.join(process.env.PWD, "/serverless-config/config.ts");
-        console.log(configFile);
-        const exists = fs_1.existsSync(configFile);
-        console.log("exists", exists);
-        const config = (yield Promise.resolve().then(() => __importStar(require(configFile)))).default;
-        console.log(config);
+        const inlineFiles = index_1.getValidServerlessHandlers();
+        yield createInlineExports(inlineFiles);
+        yield createInlineEnumeration(inlineFiles);
+        yield callRepoServerlessBuild();
+        // const configFile = path.join(process.env.PWD, "/serverless-config/config.ts");
+        // console.log(configFile);
+        // const exists = existsSync(configFile);
+        // console.log("exists", exists);
+        // const config = (await import(configFile)).default;
+        // console.log(config);
         // const ast = parseFile(
         //   "/Volumes/Coding/universal/transport-services/serverless-config/config.ts"
         // );

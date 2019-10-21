@@ -17,8 +17,13 @@ import { existsSync } from "fs";
  */
 export async function buildServerlessMicroserviceProject() {
   let stage = "starting";
-  const accountInfo =
-    (await getAccountInfoFromServerlessYaml()) || (await askForAccountInfo());
+  const knownAccountInfo = {
+    // TODO: add file storage for the askForAccountInfo
+    ...{},
+    ...(await getAccountInfoFromServerlessYaml())
+  };
+
+  const accountInfo = await askForAccountInfo(knownAccountInfo);
 
   console.log(
     chalk`- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered; ready to build {green serverless.yml}`
@@ -34,13 +39,17 @@ export async function buildServerlessMicroserviceProject() {
   //   let configComplete: IServerlessConfig;
 
   //   try {
-  console.log(getValidServerlessHandlers());
-  const configFile = path.join(process.env.PWD, "/serverless-config/config.ts");
-  console.log(configFile);
-  const exists = existsSync(configFile);
-  console.log("exists", exists);
-  const config = (await import(configFile)).default;
-  console.log(config);
+  const inlineFiles = getValidServerlessHandlers();
+  await createInlineExports(inlineFiles);
+  await createInlineEnumeration(inlineFiles);
+  await callRepoServerlessBuild();
+
+  // const configFile = path.join(process.env.PWD, "/serverless-config/config.ts");
+  // console.log(configFile);
+  // const exists = existsSync(configFile);
+  // console.log("exists", exists);
+  // const config = (await import(configFile)).default;
+  // console.log(config);
 
   // const ast = parseFile(
   //   "/Volumes/Coding/universal/transport-services/serverless-config/config.ts"

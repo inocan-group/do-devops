@@ -1,4 +1,3 @@
-export * from "./askForServerlessConfig";
 export * from "./accountInfo/askForAccountInfo";
 export * from "./askAboutLogForwarding";
 export * from "./askForStage";

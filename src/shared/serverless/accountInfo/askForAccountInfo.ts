@@ -1,18 +1,34 @@
 import { getPackageJson } from "../../npm";
-import { getAccountInfoFromServerlessYaml, getServerlessYaml } from "..";
+import { getServerlessYaml } from "..";
 import inquirer = require("inquirer");
 import { getAwsProfile, getAwsUserProfile, getAwsProfileList } from "../../aws";
 import { IServerlessAccountInfo } from "../../../@types";
+import { IDictionary } from "common-types";
 
-export async function askForAccountInfo(): Promise<IServerlessAccountInfo> {
+export async function askForAccountInfo(
+  defaults: Partial<IServerlessAccountInfo> = {}
+): Promise<IServerlessAccountInfo> {
   const pkgJson = await getPackageJson();
-  const defaults: Partial<IServerlessAccountInfo> =
-    (await getAccountInfoFromServerlessYaml()) || {};
   const profiles = await getAwsProfileList();
   const profileMessage = "choose a profile from your AWS credentials file";
+
+  if (
+    defaults.profile &&
+    defaults.name &&
+    defaults.accountId &&
+    defaults.region &&
+    defaults.pluginsInstalled &&
+    (defaults.logForwarding ||
+      !Object.keys(pkgJson.devDependencies).includes(
+        "serverless-log-forwarding"
+      ))
+  ) {
+    return defaults as IServerlessAccountInfo;
+  }
+
   const baseProfileQuestion = {
     name: "profile",
-    message: "choose a profile from your AWS credentials file",
+    message: "Choose a profile from your AWS credentials file",
     default: defaults.profile,
     when: () => !defaults.profile
   };
@@ -31,7 +47,7 @@ export async function askForAccountInfo(): Promise<IServerlessAccountInfo> {
       type: "input",
       name: "name",
       message:
-        "what is the service name which your functions will be prefixed with",
+        "What is the service name which your functions will be prefixed with",
       default: defaults.name || pkgJson.name,
       when: () => !defaults.name
     },
