@@ -33,6 +33,7 @@
     "@types/command-line-args": "^5.0.0",
     "@types/command-line-usage": "^5.0.1",
     "ast-types": "^0.13.2",
+    "async-shelljs": "^0.1.2",
     "aws-sdk": "^2.512.0",
     "aws-ssm": "^0.3.8",
     "babylon": "^7.0.0-beta.47",
@@ -47,7 +48,6 @@
     "js-yaml": "^3.13.1",
     "lodash.get": "^4.4.2",
     "recast": "^0.18.3",
-    "async-shelljs": "^0.1.2",
     "table": "^5.4.6"
   },
   "devDependencies": {

@@ -1,11 +1,8 @@
-import { getPackageJson } from "../npm";
-import {
-  getAccountInfoFromServerlessYaml,
-  getServerlessYaml
-} from "../serverless";
+import { getPackageJson } from "../../npm";
+import { getAccountInfoFromServerlessYaml, getServerlessYaml } from "..";
 import inquirer = require("inquirer");
-import { getAwsProfile, getAwsUserProfile, getAwsProfileList } from "../aws";
-import { IServerlessAccountInfo } from "../../@types";
+import { getAwsProfile, getAwsUserProfile, getAwsProfileList } from "../../aws";
+import { IServerlessAccountInfo } from "../../../@types";
 
 export async function askForAccountInfo(): Promise<IServerlessAccountInfo> {
   const pkgJson = await getPackageJson();

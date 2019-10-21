@@ -4,7 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./askForServerlessConfig"));
-__export(require("./askForAccountInfo"));
+__export(require("./accountInfo/askForAccountInfo"));
 __export(require("./askAboutLogForwarding"));
 __export(require("./askForStage"));
 __export(require("./askForFunction"));

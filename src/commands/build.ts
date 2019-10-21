@@ -1,5 +1,13 @@
-import { buildServerlessMicroserviceProject, emoji } from "../shared";
+import {
+  buildServerlessMicroserviceProject,
+  emoji,
+  getConfig,
+  isServerless
+} from "../shared";
 import chalk from "chalk";
+import { IDictionary } from "common-types";
+import { BuildTool } from "../@types";
+import { askBuildTool } from "./build-helpers/askBuildTool";
 
 export const defaultConfig = {
   preBuildHooks: ["clean"],
@@ -11,7 +19,18 @@ export function description() {
   return `Efficient and clear build pipelines for serverless and/or NPM libraries`;
 }
 
-export async function handler() {
+export async function handler(opts: IDictionary) {
+  const { build: config } = await getConfig();
+  const serverlessProject = await isServerless();
+  const buildTool: BuildTool =
+    opts.buildTool ||
+    config.buildTool ||
+    (await askBuildTool(serverlessProject ? true : false));
+
+  if (serverlessProject) {
+    await buildServerlessMicroserviceProject();
+  }
+
   console.log(
     chalk`- building the {bold {green serverless.yml}} file ${emoji.party}`
   );

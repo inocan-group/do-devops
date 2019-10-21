@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
 const chalk_1 = __importDefault(require("chalk"));
+const askBuildTool_1 = require("./build-helpers/askBuildTool");
 exports.defaultConfig = {
     preBuildHooks: ["clean"],
     targetDirectory: "dist",
@@ -23,8 +24,16 @@ function description() {
     return `Efficient and clear build pipelines for serverless and/or NPM libraries`;
 }
 exports.description = description;
-function handler() {
+function handler(opts) {
     return __awaiter(this, void 0, void 0, function* () {
+        const { build: config } = yield shared_1.getConfig();
+        const serverlessProject = yield shared_1.isServerless();
+        const buildTool = opts.buildTool ||
+            config.buildTool ||
+            (yield askBuildTool_1.askBuildTool(serverlessProject ? true : false));
+        if (serverlessProject) {
+            yield shared_1.buildServerlessMicroserviceProject();
+        }
         console.log(chalk_1.default `- building the {bold {green serverless.yml}} file ${"\uD83C\uDF89" /* party */}`);
         yield shared_1.buildServerlessMicroserviceProject();
     });

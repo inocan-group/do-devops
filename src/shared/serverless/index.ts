@@ -1,5 +1,5 @@
 export * from "./askForServerlessConfig";
-export * from "./askForAccountInfo";
+export * from "./accountInfo/askForAccountInfo";
 export * from "./askAboutLogForwarding";
 export * from "./askForStage";
 export * from "./askForFunction";
