@@ -12,12 +12,12 @@ const builders = recast.types.builders;
  */
 export function findHandlerComments(filename: string) {
   const ast = parseFile(filename);
-  const fnComments = namedExports(ast)
-    .find(i => i.name === "fn")
-    .comments.filter(i => i.leading);
-  const handlerComments = namedExports(ast)
-    .find(i => i.name === "handler")
-    .comments.filter(i => i.leading);
+  const fn = namedExports(ast).find(i => i.name === "fn");
+  const fnComments = fn ? fn.comments.filter(i => i.leading) : [];
+  const handler = namedExports(ast).find(i => i.name === "handler");
+  const handlerComments = handler
+    ? handler.comments.filter(i => i.leading)
+    : [];
 
   return fnComments.length > 0
     ? fnComments

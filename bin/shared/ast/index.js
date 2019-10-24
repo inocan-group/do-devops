@@ -6,5 +6,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./parseFile"));
 __export(require("./getValidServerlessHandlers"));
 __export(require("./findHandlerComments"));
-__export(require("./findFileConfigBlock"));
+__export(require("./findHandlerConfig"));
 __export(require("./namedExports"));

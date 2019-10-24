@@ -2,6 +2,7 @@ import * as recast from "recast";
 import { parseFile } from "./parseFile";
 import get from "lodash.get";
 import { IDictionary } from "common-types";
+import { getFieldValue } from "ast-types";
 type VariableDeclaration = recast.types.namedTypes.VariableDeclaration;
 type TSInterfaceDeclaration = recast.types.namedTypes.TSInterfaceDeclaration;
 type CommentLine = recast.types.namedTypes.CommentLine;
@@ -84,16 +85,16 @@ function getVariableDeclaration(declaration: VariableDeclaration) {
   const type = get(root, "init.type");
   const properties = get(root, "init.properties", []).map((i: IDictionary) => ({
     name: get(i, "key.name"),
-    value:
-      get(i, "value.value") ||
-      get(i, "value.elements", []).map((i2: IDictionary) => {
-        name: get(i2, "properties", []).map((i3: IDictionary) =>
-          get(i3, "key.name")
-        );
-        value: get(i2, "properties", []).map((i3: IDictionary) =>
-          get(i3, "value.value")
-        );
-      }),
+    value: getValue(get(i, "value")),
+    // get(i, "value.value") ||
+    // get(i, "value.elements", []).map((i2: IDictionary) => {
+    //   name: get(i2, "properties", []).map((i3: IDictionary) =>
+    //     get(i3, "key.name")
+    //   );
+    //   value: get(i2, "properties", []).map((i3: IDictionary) =>
+    //     get(i3, "value.value")
+    //   );
+    // }),
     type: get(i, "value.type")
   }));
   const params = get(root, "init.params", []).map((i: any) =>
@@ -107,6 +108,31 @@ function getVariableDeclaration(declaration: VariableDeclaration) {
     ...(properties ? { properties } : {}),
     ...(params.length > 0 ? { params } : {})
   };
+}
+
+/**
+ * Given a property, gets the value based on the type
+ */
+function getValue(node: IDictionary) {
+  switch (node.type) {
+    case "Literal":
+    case "StringLiteral":
+    case "NumericLiteral":
+    case "BooleanLiteral":
+      return get(node, "value");
+    case "TemplateLiteral":
+      return get(node, "quasis.0.value.cooked");
+    case "ObjectExpression":
+      return get(node, "properties", []).reduce((agg: IDictionary, i: any) => {
+        agg[get(i, "key.name")] = getValue(get(i, "value"));
+        return agg;
+      }, {});
+    case "ArrayExpression":
+      return get(node, "elements", []).map((i: any) => getValue(i));
+
+    default:
+      console.log("unknown type:", node.type);
+  }
 }
 
 function getInterfaceDeclaration(declaration: TSInterfaceDeclaration) {

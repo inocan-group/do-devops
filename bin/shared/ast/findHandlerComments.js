@@ -19,12 +19,12 @@ const builders = recast.types.builders;
  */
 function findHandlerComments(filename) {
     const ast = index_1.parseFile(filename);
-    const fnComments = index_1.namedExports(ast)
-        .find(i => i.name === "fn")
-        .comments.filter(i => i.leading);
-    const handlerComments = index_1.namedExports(ast)
-        .find(i => i.name === "handler")
-        .comments.filter(i => i.leading);
+    const fn = index_1.namedExports(ast).find(i => i.name === "fn");
+    const fnComments = fn ? fn.comments.filter(i => i.leading) : [];
+    const handler = index_1.namedExports(ast).find(i => i.name === "handler");
+    const handlerComments = handler
+        ? handler.comments.filter(i => i.leading)
+        : [];
     return fnComments.length > 0
         ? fnComments
         : handlerComments.length > 0

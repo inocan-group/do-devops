@@ -11,10 +11,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const __1 = require("..");
+const index_1 = require("../index");
+const index_2 = require("./index");
 const chalk_1 = __importDefault(require("chalk"));
-const index_1 = require("../../ast/index");
+const index_3 = require("../../ast/index");
+const createFunctionEnum_1 = require("./createFunctionEnum");
+const async_shelljs_1 = require("async-shelljs");
+const file_1 = require("../../file");
+const os = __importStar(require("os"));
 /**
  * Builds a `serverless.yml` file from the configuration
  * available in the `/serverless-config` directory.
@@ -29,107 +41,22 @@ const index_1 = require("../../ast/index");
 function buildServerlessMicroserviceProject() {
     return __awaiter(this, void 0, void 0, function* () {
         let stage = "starting";
-        const knownAccountInfo = Object.assign({}, (yield __1.getAccountInfoFromServerlessYaml()));
-        const accountInfo = yield __1.askForAccountInfo(knownAccountInfo);
-        console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered; ready to build {green serverless.yml}`);
-        // try {
-        //   // const config = (await getMicroserviceConfig(accountInfo)).replace(
-        //   //   /^.*\}\'(.*)/,
-        //   //   "$1"
-        //   // );
-        //   stage = "config-returned";
-        //   let configComplete: IServerlessConfig;
-        //   try {
-        const inlineFiles = index_1.getValidServerlessHandlers();
-        yield createInlineExports(inlineFiles);
-        yield createInlineEnumeration(inlineFiles);
-        yield callRepoServerlessBuild();
-        // const configFile = path.join(process.env.PWD, "/serverless-config/config.ts");
-        // console.log(configFile);
-        // const exists = existsSync(configFile);
-        // console.log("exists", exists);
-        // const config = (await import(configFile)).default;
-        // console.log(config);
-        // const ast = parseFile(
-        //   "/Volumes/Coding/universal/transport-services/serverless-config/config.ts"
-        // );
-        //     console.log("made it");
-        //     // const config = (await import(configFile)).default(accountInfo);
-        //     process.exit();
-        //   } catch (e1) {
-        //     console.log(
-        //       chalk`- {yellow Warning:} parsing the configuration caused an error ${emoji.shocked}`
-        //     );
-        //     console.log(
-        //       chalk`{dim - will make second attempt with more aggressive regex}`
-        //     );
-        //     const strippedOut = config.replace(/(.*)\{"service.*/, "$1");
-        //     const newAttempt = config
-        //       .replace(/\n/g, "")
-        //       .replace(/.*(\{"service.*)/, "$1");
-        //     try {
-        //       configComplete = JSON.parse(newAttempt);
-        //       console.log(
-        //         chalk`- by removing some of the text at the beginning we {bold were} able to parse the config ${emoji.thumbsUp}`
-        //       );
-        //       console.log(chalk`- the text removed was:\n{dim ${strippedOut}}`);
-        //     } catch (e) {
-        //       console.log(
-        //         chalk`{red - Failed {italic again} to parse the configuration file!}`
-        //       );
-        //       console.log(`- Error message was: ${e.message}`);
-        //       console.log(
-        //         chalk`- The config that is being parsed is:\n\n${newAttempt}\n`
-        //       );
-        //       process.exit();
-        //     }
-        //   }
-        //   stage = "config-parsed";
-        //   await saveFunctionsTypeDefinition(configComplete);
-        //   console.log(
-        //     chalk`- The function enumeration at {bold src/@types/build.ts} has been updated`
-        //   );
-        //   stage = "type-definitions-written";
-        //   const fns = Object.keys(configComplete.functions);
-        //   const plugins = configComplete.plugins || [];
-        //   console.log(
-        //     chalk`- The serverless config consists of:\n  - {yellow ${String(
-        //       fns.length
-        //     )}} functions [ {dim ${truncate(fns, 5)}} ]\n  - {yellow ${String(
-        //       configComplete.stepFunctions
-        //         ? configComplete.stepFunctions.stateMachines.length
-        //         : 0
-        //     )}} step functions\n  - {yellow ${String(
-        //       plugins.length
-        //     )}} plugins [ {dim ${truncate(plugins, 5)}} ]`
-        //   );
-        //   if (configComplete.layers) {
-        //     const layers = Object.keys(configComplete.layers);
-        //     console.log(
-        //       chalk`  - {yellow ${String(layers.length)}} layers [ {dim ${truncate(
-        //         layers,
-        //         5
-        //       )}} ]`
-        //     );
-        //   }
-        //   configComplete = await askAboutLogForwarding(configComplete);
-        //   await saveToServerlessYaml(configComplete);
-        //   console.log(
-        //     chalk`- The {green {bold serverless.yml}} file has been updated! ${emoji.rocket}\n`
-        //   );
-        //   return configComplete;
-        // } catch (e) {
-        //   console.log(
-        //     chalk`- {red the attempt to parse the serverless config has failed at stage "${stage}"!} ${emoji.poop}`
-        //   );
-        //   console.log(
-        //     `- The config sent in was:\n${JSON.stringify(accountInfo, null, 2)}`
-        //   );
-        //   console.log("- " + e.message);
-        //   console.log(chalk`{dim ${e.stack}}`);
-        //   console.log();
-        //   process.exit();
-        // }
+        const knownAccountInfo = Object.assign({}, (yield index_1.getAccountInfoFromServerlessYaml()));
+        const accountInfo = yield index_1.askForAccountInfo(knownAccountInfo);
+        file_1.saveYamlFile("serverless-config/account-info.yml", accountInfo);
+        console.log(chalk_1.default `{bold {yellow - Starting SERVERLESS build process}}`);
+        console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`);
+        const inlineFiles = index_3.getValidServerlessHandlers();
+        console.log(chalk_1.default `{grey - handler functions [ {bold ${String(inlineFiles.length)}} ] have been identified}`);
+        yield index_2.createInlineExports(inlineFiles);
+        console.log(chalk_1.default `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`);
+        yield createFunctionEnum_1.createFunctionEnum(inlineFiles);
+        console.log(chalk_1.default `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`);
+        console.log(chalk_1.default `- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`);
+        yield async_shelljs_1.asyncExec(`yarn ts-node serverless-config/build.ts --color=always`, {
+            env: Object.assign(Object.assign(Object.assign({}, process.env), { TERM: "xterm-color" }), (os.platform().includes("win") ? {} : { shell: "/bin/bash" }))
+        });
+        console.log(chalk_1.default `{green - {bold serverless.yml} has been updated successfully ${"\uD83D\uDE80" /* rocket */}}`);
     });
 }
 exports.buildServerlessMicroserviceProject = buildServerlessMicroserviceProject;

@@ -15,44 +15,30 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const findHandlerConfig_1 = require("../../ast/findHandlerConfig");
-const fs_1 = require("fs");
+const js_yaml_1 = require("js-yaml");
 const path = __importStar(require("path"));
+const fs_1 = require("fs");
 const util_1 = require("util");
+const chalk_1 = __importDefault(require("chalk"));
 const write = util_1.promisify(fs_1.writeFile);
-/**
- * creates an enumeration with all of the _functions_ which have
- * been defined in the project
- */
-function createFunctionEnum(inlineFiles) {
+function saveYamlFile(filename, data) {
     return __awaiter(this, void 0, void 0, function* () {
-        const header = `export enum AvailableFunction {
-`;
-        const footer = `
-}
-  
-export type IAvailableFunction = keyof typeof AvailableFunction;
-`;
-        let body = [];
-        inlineFiles.forEach(file => {
-            const config = findHandlerConfig_1.findHandlerConfig(file);
-            const fn = file
-                .split("/")
-                .pop()
-                .replace(".ts", "");
-            const comment = config.config.description
-                ? config.config.description
-                : `${fn} handler`;
-            body.push(`
-  /**
-   * ${comment}
-   **/
-  ${fn} = "${fn}"`);
-        });
-        const fileText = `${header}${body.join(",")}${footer}`;
-        yield write(path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")), fileText, { encoding: "utf-8" });
-        return fileText;
+        try {
+            const yamlData = js_yaml_1.safeDump(data);
+            const fqFilename = path.join(process.cwd(), filename);
+            yield write(fqFilename, yamlData, { encoding: "utf-8" });
+            return;
+        }
+        catch (e) {
+            console.log(chalk_1.default `- {red writing the {bold {italic ${filename}} YAML file has failed!} ${"\uD83D\uDCA9" /* poop */}`);
+            console.log(e.message);
+            console.log(chalk_1.default `{dim ${e.stack}}`);
+            process.exit();
+        }
     });
 }
-exports.createFunctionEnum = createFunctionEnum;
+exports.saveYamlFile = saveYamlFile;

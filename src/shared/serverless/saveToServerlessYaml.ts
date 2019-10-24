@@ -14,9 +14,7 @@ export async function saveToServerlessYaml(data: IServerlessConfig) {
     await writeFile(filename, yamlData, { encoding: "utf-8" });
   } catch (e) {
     console.log(
-      chalk`- {red writing the {bold serverless.yml} file has failed!} ${
-        emoji.poop
-      }`
+      chalk`- {red writing the {bold serverless.yml} file has failed!} ${emoji.poop}`
     );
     console.log(e.message);
     console.log(chalk`{dim ${e.stack}}`);
