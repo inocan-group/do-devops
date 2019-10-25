@@ -8,6 +8,7 @@ import { saveToServerlessYaml } from "../saveToServerlessYaml";
 import { saveYamlFile } from "../../file";
 import { emoji } from "../../ui";
 import * as os from "os";
+import { createWebpackEntryDictionaries } from "./createWebpackEntryDictionaries";
 
 /**
  * Builds a `serverless.yml` file from the configuration
@@ -53,6 +54,8 @@ export async function buildServerlessMicroserviceProject() {
   console.log(
     chalk`{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`
   );
+
+  await createWebpackEntryDictionaries(inlineFiles);
 
   console.log(
     chalk`- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`

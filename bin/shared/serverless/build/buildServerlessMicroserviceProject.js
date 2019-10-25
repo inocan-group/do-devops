@@ -27,6 +27,7 @@ const createFunctionEnum_1 = require("./createFunctionEnum");
 const async_shelljs_1 = require("async-shelljs");
 const file_1 = require("../../file");
 const os = __importStar(require("os"));
+const createWebpackEntryDictionaries_1 = require("./createWebpackEntryDictionaries");
 /**
  * Builds a `serverless.yml` file from the configuration
  * available in the `/serverless-config` directory.
@@ -52,6 +53,7 @@ function buildServerlessMicroserviceProject() {
         console.log(chalk_1.default `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`);
         yield createFunctionEnum_1.createFunctionEnum(inlineFiles);
         console.log(chalk_1.default `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`);
+        yield createWebpackEntryDictionaries_1.createWebpackEntryDictionaries(inlineFiles);
         console.log(chalk_1.default `- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`);
         yield async_shelljs_1.asyncExec(`yarn ts-node serverless-config/build.ts --color=always`, {
             env: Object.assign(Object.assign(Object.assign({}, process.env), { TERM: "xterm-color" }), (os.platform().includes("win") ? {} : { shell: "/bin/bash" }))
