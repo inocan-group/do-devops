@@ -31,4 +31,11 @@ export interface IPropertyInfo {
  * @param ast a Typescript file based AST
  */
 export declare function namedExports(ast: recast.types.namedTypes.File): IExportedDeclaration[];
+export interface ISpreadElement {
+    type: "SpreadElement";
+    argument: {
+        type: "Identifier";
+        name: string;
+    };
+}
 export {};

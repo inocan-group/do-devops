@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const shared_1 = require("../../shared");
+const index_1 = require("../../shared/index");
 const _types_1 = require("../../@types");
 const inquirer = require("inquirer");
 const chalk_1 = __importDefault(require("chalk"));
+const index_2 = require("./index");
 /**
  * Asks for the primary build tool the user wants to use
  * for the repo. It will also return the value for further
@@ -23,7 +24,7 @@ const chalk_1 = __importDefault(require("chalk"));
  */
 function askBuildTool(isServerless) {
     return __awaiter(this, void 0, void 0, function* () {
-        const packages = Object.keys(shared_1.getPackageJson().devDependencies);
+        const packages = Object.keys(index_1.getPackageJson().devDependencies);
         const findLikely = (exclude = null) => packages.find(i => i === "bili" && i !== exclude)
             ? "bili"
             : packages.find(i => i === "rollup" && i !== exclude)
@@ -55,6 +56,7 @@ function askBuildTool(isServerless) {
             default: mostLikely || choices[0]
         };
         const answer = yield inquirer.prompt(baseProfileQuestion);
+        yield index_2.saveToolToRepoConfig(answer.buildTool);
         return answer.buildTool;
     });
 }

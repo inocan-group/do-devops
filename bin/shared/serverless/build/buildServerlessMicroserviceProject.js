@@ -28,6 +28,7 @@ const async_shelljs_1 = require("async-shelljs");
 const file_1 = require("../../file");
 const os = __importStar(require("os"));
 const createWebpackEntryDictionaries_1 = require("./createWebpackEntryDictionaries");
+const npm_1 = require("../../npm");
 /**
  * Builds a `serverless.yml` file from the configuration
  * available in the `/serverless-config` directory.
@@ -39,12 +40,13 @@ const createWebpackEntryDictionaries_1 = require("./createWebpackEntryDictionari
  * 1. look within the `serverless.yml` for info (if it exists)
  * 2. ask the user for the information (saving values as default for next time)
  */
-function buildServerlessMicroserviceProject() {
+function buildServerlessMicroserviceProject(opts = {}, config = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         let stage = "starting";
         const knownAccountInfo = Object.assign({}, (yield index_1.getAccountInfoFromServerlessYaml()));
         const accountInfo = yield index_1.askForAccountInfo(knownAccountInfo);
         file_1.saveYamlFile("serverless-config/account-info.yml", accountInfo);
+        const hasWebpackPlugin = Object.keys(npm_1.getPackageJson().devDependencies).includes("serverless-webpack");
         console.log(chalk_1.default `{bold {yellow - Starting SERVERLESS build process}}`);
         console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`);
         const inlineFiles = index_3.getValidServerlessHandlers();
@@ -53,12 +55,22 @@ function buildServerlessMicroserviceProject() {
         console.log(chalk_1.default `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`);
         yield createFunctionEnum_1.createFunctionEnum(inlineFiles);
         console.log(chalk_1.default `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`);
-        yield createWebpackEntryDictionaries_1.createWebpackEntryDictionaries(inlineFiles);
+        if (!hasWebpackPlugin) {
+            yield createWebpackEntryDictionaries_1.createWebpackEntryDictionaries(inlineFiles);
+            console.log(chalk_1.default `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`);
+        }
+        else {
+            const exist = yield file_1.filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
+            if (exist) {
+                async_shelljs_1.rm(...exist);
+                console.log(chalk_1.default `- ${"\uD83D\uDC40" /* eyeballs */} removed webpack entry point files so as not to confuse with what the {italic serverless-webpack} plugin is doing}`);
+            }
+        }
         console.log(chalk_1.default `- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`);
         yield async_shelljs_1.asyncExec(`yarn ts-node serverless-config/build.ts --color=always`, {
             env: Object.assign(Object.assign(Object.assign({}, process.env), { TERM: "xterm-color" }), (os.platform().includes("win") ? {} : { shell: "/bin/bash" }))
         });
-        console.log(chalk_1.default `{green - {bold serverless.yml} has been updated successfully ${"\uD83D\uDE80" /* rocket */}}`);
+        console.log(chalk_1.default `{green - {bold serverless.yml} has been updated successfully ${"\uD83D\uDE80" /* rocket */}}\n`);
     });
 }
 exports.buildServerlessMicroserviceProject = buildServerlessMicroserviceProject;

@@ -19,3 +19,5 @@ export * from "./build/saveFunctionsTypeDefinition";
 export * from "./saveToServerlessYaml";
 export * from "./findAllHandlerFiles";
 export * from "./getLambdaFunctions";
+export * from "./getLocalHandlerInfo";
+export * from "./getLocalServerlessFunctionsFromServerlessYaml";

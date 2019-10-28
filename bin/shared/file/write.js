@@ -13,6 +13,7 @@ const fs_1 = require("fs");
 const util_1 = require("util");
 const errors_1 = require("../errors");
 const path_1 = require("path");
+const filesExist_1 = require("./filesExist");
 const w = util_1.promisify(fs_1.writeFile);
 /**
  * **write**
@@ -23,19 +24,33 @@ const w = util_1.promisify(fs_1.writeFile);
  * @param filename the filename to be written; if filename doesn't start with either a '.' or '/' then it will be joined with the projects current working directory
  * @param data the data to be written
  */
-function write(filename, data, spacing = 2) {
+function write(filename, data, options = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (typeof data !== "string") {
                 data =
-                    spacing && spacing > 0
-                        ? JSON.stringify(data, null, spacing)
+                    options.spacing && options.spacing > 0
+                        ? JSON.stringify(data, null, options.spacing)
                         : JSON.stringify(data);
             }
             if (![".", "/"].includes(filename.slice(0, 1))) {
                 filename = path_1.join(process.cwd(), filename);
             }
-            yield w(filename, data, { encoding: "utf-8" });
+            let offset;
+            while (options.offsetIfExists && (yield filesExist_1.filesExist(filename))) {
+                const before = new RegExp(`-${offset}.(.*)$`);
+                filename = offset ? filename.replace(before, ".$1") : filename;
+                offset = !offset ? 1 : offset++;
+                const after = new RegExp(`-${offset}$`);
+                const parts = filename.split(".");
+                filename =
+                    parts.slice(0, parts.length - 1).join(".") +
+                        `-${offset}.` +
+                        parts.slice(-1);
+            }
+            yield w(filename, data, {
+                encoding: "utf-8"
+            });
             return { filename, data };
         }
         catch (e) {

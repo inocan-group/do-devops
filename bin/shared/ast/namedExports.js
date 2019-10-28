@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const lodash_get_1 = __importDefault(require("lodash.get"));
+const file_1 = require("../file");
 /**
  * Returns an array of _named_ exports from the file which are variables.
  *
@@ -69,12 +70,21 @@ function getValue(node) {
             }, {});
         case "ArrayExpression":
             return lodash_get_1.default(node, "elements", []).map((i) => getValue(i));
+        case "SpreadElement":
+            // TODO: this probably needs some more work
+            return getSpread(node);
         default:
             console.log("unknown type:", node.type);
+            file_1.write(`unhandled-node-${node.type}.json`, node, { offsetIfExists: true });
     }
 }
 function getInterfaceDeclaration(declaration) {
     return {
         name: lodash_get_1.default(declaration, "id.name")
     };
+}
+function getSpread(node) {
+    // TODO: rather than return the name; use the name to get the array
+    // which is defined as an array
+    return lodash_get_1.default(node, "argument.name");
 }

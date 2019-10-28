@@ -10,18 +10,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inquirer = require("inquirer");
-const getLocalServerlessFunctions_1 = require("./getLocalServerlessFunctions");
+const getLocalServerlessFunctionsFromServerlessYaml_1 = require("./getLocalServerlessFunctionsFromServerlessYaml");
 /**
- * Asks the user to choose an AWS region
+ * Asks the user to choose one or more handler functions
  */
-function askForFunction() {
+function askForFunctions(message = "Which functions do you want to use?", defaults = []) {
     return __awaiter(this, void 0, void 0, function* () {
-        const fns = Object.keys(yield getLocalServerlessFunctions_1.getLocalServerlessFunctions());
+        const fns = Object.keys(yield getLocalServerlessFunctionsFromServerlessYaml_1.getLocalServerlessFunctionsFromServerlessYaml());
+        const question = {
+            type: "checkbox",
+            message,
+            name: "fns",
+            choices: fns,
+            default: defaults
+        };
+        const answer = yield inquirer.prompt(question);
+        return answer.fns;
+    });
+}
+exports.askForFunctions = askForFunctions;
+/**
+ * Asks the user to choose one or more handler functions
+ */
+function askForFunction(message = "Which function do you want to use?") {
+    return __awaiter(this, void 0, void 0, function* () {
+        const fns = Object.keys(yield getLocalServerlessFunctionsFromServerlessYaml_1.getLocalServerlessFunctionsFromServerlessYaml());
         const question = {
             type: "list",
+            message,
             name: "fn",
-            message: "Which function do you want to use?",
-            default: fns[0],
             choices: fns
         };
         const answer = yield inquirer.prompt(question);

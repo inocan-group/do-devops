@@ -16,6 +16,7 @@ const async_shelljs_1 = require("async-shelljs");
 const chalk_1 = __importDefault(require("chalk"));
 const sandbox_1 = require("../../shared/sandbox");
 const shared_1 = require("../../shared");
+const index_1 = require("./index");
 /**
  * Manages the execution of a serverless deployment
  */
@@ -61,7 +62,12 @@ function functionDeploy(fns, meta) {
 function fullDeploy(meta) {
     return __awaiter(this, void 0, void 0, function* () {
         const { stage, opts, config } = meta;
-        console.log(chalk_1.default `- {bold FULL serverless} deployment for {italic ${stage}} stage ${"\uD83C\uDF89" /* party */}`);
+        console.log(chalk_1.default `- Starting {bold FULL serverless} deployment for {italic ${stage}} stage`);
+        if (!shared_1.hasDevDependency("serverless-webpack")) {
+            console.log(chalk_1.default `{grey - checking timestamps to determine what {bold webpack} transpilation is needed}`);
+            const transpile = index_1.isTranspileNeeded(meta);
+            process.exit();
+        }
         if (config.showUnderlyingCommands) {
             console.log(chalk_1.default `{grey > {italic sls deploy --aws-s3-accelerate  --stage ${stage} --verbose}}\n`);
             try {

@@ -24,3 +24,5 @@ __export(require("./build/saveFunctionsTypeDefinition"));
 __export(require("./saveToServerlessYaml"));
 __export(require("./findAllHandlerFiles"));
 __export(require("./getLambdaFunctions"));
+__export(require("./getLocalHandlerInfo"));
+__export(require("./getLocalServerlessFunctionsFromServerlessYaml"));

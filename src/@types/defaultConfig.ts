@@ -52,7 +52,7 @@ export interface IDoBuildConfig {
   /**
    * Which tool are you using for running your build pipeline?
    */
-  buildTool?: BuildTool;
+  buildTool?: IBuildTool;
   /**
    * If you are using a _bespoke_ build tool then you set it here
    */

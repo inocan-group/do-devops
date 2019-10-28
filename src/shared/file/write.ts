@@ -3,8 +3,17 @@ import { writeFile } from "fs";
 import { promisify } from "util";
 import { DevopsError } from "../errors";
 import { join } from "path";
+import { filesExist } from "./filesExist";
 
 const w = promisify(writeFile);
+
+export interface IWriteOptions {
+  spacing?: number;
+  /**
+   * if set to `true` it will add a numeric offset to the filename to avoid collisions
+   */
+  offsetIfExists?: boolean;
+}
 
 /**
  * **write**
@@ -18,19 +27,33 @@ const w = promisify(writeFile);
 export async function write(
   filename: string,
   data: string | IDictionary,
-  spacing: number = 2
+  options: IWriteOptions = {}
 ) {
   try {
     if (typeof data !== "string") {
       data =
-        spacing && spacing > 0
-          ? JSON.stringify(data, null, spacing)
+        options.spacing && options.spacing > 0
+          ? JSON.stringify(data, null, options.spacing)
           : JSON.stringify(data);
     }
     if (![".", "/"].includes(filename.slice(0, 1))) {
       filename = join(process.cwd(), filename);
     }
-    await w(filename, data, { encoding: "utf-8" });
+    let offset: number;
+    while (options.offsetIfExists && (await filesExist(filename))) {
+      const before = new RegExp(`-${offset}.(.*)$`);
+      filename = offset ? filename.replace(before, ".$1") : filename;
+      offset = !offset ? 1 : offset++;
+      const after = new RegExp(`-${offset}$`);
+      const parts = filename.split(".");
+      filename =
+        parts.slice(0, parts.length - 1).join(".") +
+        `-${offset}.` +
+        parts.slice(-1);
+    }
+    await w(filename, data, {
+      encoding: "utf-8"
+    });
 
     return { filename, data };
   } catch (e) {

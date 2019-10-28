@@ -1,4 +1,8 @@
 /**
- * Asks the user to choose an AWS region
+ * Asks the user to choose one or more handler functions
  */
-export declare function askForFunction(): Promise<string>;
+export declare function askForFunctions(message?: string, defaults?: string[]): Promise<string[]>;
+/**
+ * Asks the user to choose one or more handler functions
+ */
+export declare function askForFunction(message?: string): Promise<string>;

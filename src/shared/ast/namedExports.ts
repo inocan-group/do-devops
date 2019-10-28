@@ -3,6 +3,7 @@ import { parseFile } from "./parseFile";
 import get from "lodash.get";
 import { IDictionary } from "common-types";
 import { getFieldValue } from "ast-types";
+import { write } from "../file";
 type VariableDeclaration = recast.types.namedTypes.VariableDeclaration;
 type TSInterfaceDeclaration = recast.types.namedTypes.TSInterfaceDeclaration;
 type CommentLine = recast.types.namedTypes.CommentLine;
@@ -130,8 +131,13 @@ function getValue(node: IDictionary) {
     case "ArrayExpression":
       return get(node, "elements", []).map((i: any) => getValue(i));
 
+    case "SpreadElement":
+      // TODO: this probably needs some more work
+      return getSpread(node as ISpreadElement);
+
     default:
       console.log("unknown type:", node.type);
+      write(`unhandled-node-${node.type}.json`, node, { offsetIfExists: true });
   }
 }
 
@@ -139,4 +145,15 @@ function getInterfaceDeclaration(declaration: TSInterfaceDeclaration) {
   return {
     name: get(declaration, "id.name")
   };
+}
+
+export interface ISpreadElement {
+  type: "SpreadElement";
+  argument: { type: "Identifier"; name: string };
+}
+
+function getSpread(node: ISpreadElement) {
+  // TODO: rather than return the name; use the name to get the array
+  // which is defined as an array
+  return get(node, "argument.name");
 }

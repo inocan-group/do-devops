@@ -18,10 +18,10 @@ const index_1 = require("./index");
  * Writes the `do-devops` config file to either the **project**'s root
  * or User's **home directory**.
  */
-function writeConfig(c, projectOrUserConfig = "project") {
+function writeConfig(content, projectOrUserConfig = "project") {
     const filename = index_1.getConfigFilename(projectOrUserConfig);
     fs_1.writeFileSync(filename, "const config = " +
-        JSON.stringify(c, null, 2) +
+        JSON.stringify(content, null, 2) +
         ";\nmodule.exports = config;", {
         encoding: "utf-8"
     });
@@ -40,7 +40,10 @@ function writeSection(section, content, projectOrUserConfig) {
         projectOrUserConfig = projectOrUserConfig ? projectOrUserConfig : "project";
         const sectionMeta = content ? content : getDefaultConfig_1.getDefaultConfig(section);
         const currentConfig = yield index_1.getConfig({ projectOrUserConfig });
-        writeConfig(Object.assign(Object.assign({}, currentConfig), { [section]: sectionMeta }));
+        // TODO: this should not be needed
+        delete currentConfig.default;
+        const output = Object.assign(Object.assign({}, currentConfig), { [section]: sectionMeta });
+        writeConfig(output, projectOrUserConfig);
     });
 }
 exports.writeSection = writeSection;

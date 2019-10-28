@@ -3,16 +3,17 @@ import { asyncExec } from "async-shelljs";
 import { OptionDefinition } from "command-line-usage";
 import chalk from "chalk";
 import {
-  askForFunction,
+  askForFunctions,
   readDataFile,
   getDataFiles,
   askForDataFile,
   getFunctionNames,
   getLambdaFunctions,
   isServerless,
-  emoji
+  emoji,
+  askForFunction
 } from "../shared";
-import { getLocalServerlessFunctions } from "../shared/serverless/getLocalServerlessFunctions";
+import { getLocalServerlessFunctionsFromServerlessYaml } from "../shared/serverless/getLocalServerlessFunctionsFromServerlessYaml";
 
 export function description() {
   return `invoke serverless functions locally, leveraging test data where desired`;
@@ -65,7 +66,9 @@ export async function handler(args: string[], opts: IDictionary) {
       fn = await askForFunction();
     } else {
       fn = args[0];
-      const availableFns = Object.keys(await getLocalServerlessFunctions());
+      const availableFns = Object.keys(
+        await getLocalServerlessFunctionsFromServerlessYaml()
+      );
       if (!availableFns.includes(fn)) {
         console.log(
           chalk`{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`

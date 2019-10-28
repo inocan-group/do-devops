@@ -22,56 +22,50 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
 const chalk_1 = __importDefault(require("chalk"));
 const index_1 = require("./build-helpers/index");
+const ast_1 = require("../shared/ast");
 exports.defaultConfig = {
     preBuildHooks: ["clean"],
     targetDirectory: "dist",
     buildTool: "tsc"
 };
+exports.options = [
+    {
+        name: "force",
+        type: Boolean,
+        group: "build",
+        description: `forces the transpiling of code when building a serverless project`
+    },
+    {
+        name: "interactive",
+        alias: "i",
+        type: Boolean,
+        group: "build",
+        description: `allows choosing the functions interactively`
+    }
+];
 function description() {
     return `Efficient and clear build pipelines for serverless and/or NPM libraries`;
 }
 exports.description = description;
-function handler(opts) {
+function handler(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const { build: config } = yield shared_1.getConfig();
-        const serverlessProject = yield shared_1.isServerless();
+        const serverless = yield shared_1.isServerless();
         const buildTool = opts.buildTool ||
             config.buildTool ||
-            (yield index_1.askBuildTool(serverlessProject ? true : false));
-        const hasWebpackPlugin = Object.keys(shared_1.getPackageJson().devDependencies).includes("serverless-webpack");
-        yield index_1.saveToolToRepoConfig(buildTool);
-        if (serverlessProject) {
-            yield shared_1.buildServerlessMicroserviceProject();
-            if (config.buildTool === "webpack") {
-                if (opts.force) {
-                    const buildTool = yield Promise.resolve().then(() => __importStar(require(`./build-helpers/tools/${config.buildTool}`)));
-                }
-                else {
-                    if (hasWebpackPlugin) {
-                        console.log(chalk_1.default `{grey - {bold Note:} you're configured to use {bold Webpack} as your code build tool and have the {italic serverless-webpack} plugin so use of Webpack will happen at deploy time. }`);
-                    }
-                    else {
-                        console.log(chalk_1.default `{grey - {bold Note:} you're configured to use {bold Webpack} as your code build tool and do not appear to be
-  using the {italic serverless-webpack} plugin. This is entirely fine but code will not be
-  transpiled with the {italic build} command unless you include the {blue --force} switch.}`);
-                        console.log(chalk_1.default `\n{grey - {bold Note:} for most people using this config, {blue yarn do watch} will be the most efficient way
-  to ensure that you always have transpiled code when you {italic deploy}. If you do not then 
-  the {italic deploy} command will detect this and transpile at deploy-time.}`);
-                    }
-                }
-            }
+            (yield index_1.askBuildTool(serverless ? true : false));
+        const tooling = (yield Promise.resolve().then(() => __importStar(require(`./build-helpers/tools/${buildTool}`))))
+            .default;
+        if (opts.output && !opts.quiet) {
+            console.log(chalk_1.default `{red - the "--output" option is a general option but has no meaning for the {bold build} command} ${"\uD83D\uDE21" /* angry */}. The build will continue, ignoring this flag.`);
+        }
+        if (serverless) {
+            yield index_1.serverlessTranspilation({ argv, opts, config, tooling, serverless });
+            yield shared_1.buildServerlessMicroserviceProject(opts, config);
         }
         else {
-            if (config.buildTool) {
-                if (hasWebpackPlugin) {
-                    console.log(chalk_1.default `- You are configured to use the {bold ${config.buildTool}} but you {italic also} have the {italic serverless-webpack} plugin. This is probably a mistake! ${"\uD83D\uDE32" /* shocked */}`);
-                }
-                const buildTool = yield Promise.resolve().then(() => __importStar(require(`./build-helpers/tools/${config.buildTool}`)));
-                yield buildTool.build(config, opts);
-            }
-            else {
-                throw new Error("There was no build tool configured for this repo!");
-            }
+            const fns = argv.length > 0 ? argv : ast_1.getValidServerlessHandlers();
+            yield tooling({ fns, opts });
         }
         console.log(chalk_1.default `\n- {bold build} complete ${"\uD83C\uDF89" /* party */}\n`);
     });

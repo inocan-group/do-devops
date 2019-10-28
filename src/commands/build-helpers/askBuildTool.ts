@@ -1,7 +1,8 @@
-import { getPackageJson } from "../../shared";
+import { getPackageJson } from "../../shared/index";
 import { BuildTool, IBuildTool } from "../../@types";
 import inquirer = require("inquirer");
 import chalk from "chalk";
+import { saveToolToRepoConfig } from "./index";
 
 /**
  * Asks for the primary build tool the user wants to use
@@ -50,6 +51,8 @@ export async function askBuildTool(isServerless: boolean): Promise<IBuildTool> {
   };
 
   const answer = await inquirer.prompt(baseProfileQuestion);
+
+  await saveToolToRepoConfig(answer.buildTool);
 
   return answer.buildTool as IBuildTool;
 }

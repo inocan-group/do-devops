@@ -43,7 +43,9 @@ function createWebpackEntryDictionaries(handlerFns) {
                 .pop()
                 .replace(".ts", "");
             const tsPath = "./" + path.relative(process.cwd(), f);
-            const jsPath = tsPath.replace("src", ".webpack").replace(".ts", ".js");
+            const jsPath = tsPath
+                .replace("src/handlers", ".webpack")
+                .replace(".ts", ".js");
             return agg.concat({ fn, tsPath, jsPath });
         }, []);
         yield Promise.all([

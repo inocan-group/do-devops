@@ -8,3 +8,4 @@ __export(require("./getValidServerlessHandlers"));
 __export(require("./findHandlerComments"));
 __export(require("./findHandlerConfig"));
 __export(require("./namedExports"));
+__export(require("./validateWebpackConfig"));

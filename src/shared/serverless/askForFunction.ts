@@ -1,16 +1,40 @@
 import inquirer = require("inquirer");
-import { getLocalServerlessFunctions } from "./getLocalServerlessFunctions";
+import { getLocalServerlessFunctionsFromServerlessYaml } from "./getLocalServerlessFunctionsFromServerlessYaml";
 
 /**
- * Asks the user to choose an AWS region
+ * Asks the user to choose one or more handler functions
  */
-export async function askForFunction(): Promise<string> {
-  const fns = Object.keys(await getLocalServerlessFunctions());
+export async function askForFunctions(
+  message: string = "Which functions do you want to use?",
+  defaults: string[] = []
+): Promise<string[]> {
+  const fns = Object.keys(
+    await getLocalServerlessFunctionsFromServerlessYaml()
+  );
+  const question: inquirer.CheckboxQuestion = {
+    type: "checkbox",
+    message,
+    name: "fns",
+    choices: fns,
+    default: defaults
+  };
+  const answer = await inquirer.prompt(question);
+  return answer.fns;
+}
+
+/**
+ * Asks the user to choose one or more handler functions
+ */
+export async function askForFunction(
+  message: string = "Which function do you want to use?"
+): Promise<string> {
+  const fns = Object.keys(
+    await getLocalServerlessFunctionsFromServerlessYaml()
+  );
   const question: inquirer.ListQuestion = {
     type: "list",
+    message,
     name: "fn",
-    message: "Which function do you want to use?",
-    default: fns[0],
     choices: fns
   };
   const answer = await inquirer.prompt(question);

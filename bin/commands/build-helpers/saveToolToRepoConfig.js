@@ -17,8 +17,10 @@ const index_1 = require("../../shared/index");
 function saveToolToRepoConfig(tool) {
     return __awaiter(this, void 0, void 0, function* () {
         const { build } = yield index_1.getConfig();
-        build.buildTool = tool;
-        yield index_1.writeSection("build", build);
+        if (build.buildTool !== tool) {
+            build.buildTool = tool;
+            yield index_1.writeSection("build", build);
+        }
     });
 }
 exports.saveToolToRepoConfig = saveToolToRepoConfig;

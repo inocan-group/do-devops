@@ -6,7 +6,7 @@ import { IDoConfig } from "../../@types";
  * Writes the `do-devops` config file to either the **project**'s root
  * or User's **home directory**.
  */
-export declare function writeConfig(c: IDoConfig, projectOrUserConfig?: "user" | "project"): void;
+export declare function writeConfig(content: IDoConfig, projectOrUserConfig?: "user" | "project"): void;
 /**
  * Writes a sub-command's _section_ of the configuration.
  *

@@ -3,8 +3,10 @@ import chalk from "chalk";
 import { sandbox } from "../../shared/sandbox";
 import { emoji } from "../../shared/ui";
 import { IDictionary } from "common-types";
-import { getConfig, determineStage } from "../../shared";
+import { getConfig, determineStage, hasDevDependency } from "../../shared";
 import { IDoDeployServerless } from "../../@types";
+
+import { isTranspileNeeded } from "./index";
 
 export interface IServerlessDeployMeta {
   stage: string;
@@ -69,8 +71,18 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
 async function fullDeploy(meta: IServerlessDeployMeta) {
   const { stage, opts, config } = meta;
   console.log(
-    chalk`- {bold FULL serverless} deployment for {italic ${stage}} stage ${emoji.party}`
+    chalk`- Starting {bold FULL serverless} deployment for {italic ${stage}} stage`
   );
+
+  if (!hasDevDependency("serverless-webpack")) {
+    console.log(
+      chalk`{grey - checking timestamps to determine what {bold webpack} transpilation is needed}`
+    );
+    const transpile = isTranspileNeeded(meta);
+
+    process.exit();
+  }
+
   if (config.showUnderlyingCommands) {
     console.log(
       chalk`{grey > {italic sls deploy --aws-s3-accelerate  --stage ${stage} --verbose}}\n`
