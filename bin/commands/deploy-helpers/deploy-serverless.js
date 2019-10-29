@@ -46,7 +46,17 @@ exports.default = serverlessDeploy;
 function functionDeploy(fns, meta) {
     return __awaiter(this, void 0, void 0, function* () {
         const { stage, opts, config } = meta;
-        console.log(chalk_1.default `- {bold serverless} {italic function} deployment for {italic ${stage}} stage ${"\uD83C\uDF89" /* party */}`);
+        console.log(chalk_1.default `- {bold serverless} deployment for {bold ${String(fns.length)}} functions to {italic ${stage}} stage ${"\uD83C\uDF89" /* party */}`);
+        const transpile = index_1.isTranspileNeeded(meta);
+        if (transpile.length > 0) {
+            const build = (yield Promise.resolve().then(() => __importStar(require("../build-helpers/tools/webpack")))).default({
+                opts: { fns: transpile }
+            }).build;
+            yield build();
+        }
+        console.log(chalk_1.default `{grey - zipping up ${String(fns.length)} {bold Serverless} {italic handler} functions }`);
+        yield index_2.zipWebpackFiles(fns);
+        console.log(chalk_1.default `{grey - all handlers zipped; ready for deployment ${"\uD83D\uDC4D" /* thumbsUp */}}`);
         console.log(chalk_1.default `- deploying {bold ${String(fns.length)} functions} to "${stage}" stage`);
         const sandboxStage = stage === "dev" ? yield sandbox_1.sandbox(stage) : stage;
         if (sandboxStage !== stage) {
@@ -58,7 +68,7 @@ function functionDeploy(fns, meta) {
                 promises.push(async_shelljs_1.asyncExec(`sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`));
             });
             yield Promise.all(promises);
-            console.log(chalk_1.default `- The functions were all deployed! ${"\uD83D\uDE80" /* rocket */}`);
+            console.log(chalk_1.default `\n- all {bold ${String(fns.length)}} function(s) were deployed! ${"\uD83D\uDE80" /* rocket */}\n`);
         }
         catch (e) {
             console.log(chalk_1.default `- {red {bold problems deploying functions!}} ${"\uD83D\uDCA9" /* poop */}`);

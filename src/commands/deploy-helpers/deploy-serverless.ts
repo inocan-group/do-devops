@@ -42,8 +42,29 @@ export default async function serverlessDeploy(
 async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   const { stage, opts, config } = meta;
   console.log(
-    chalk`- {bold serverless} {italic function} deployment for {italic ${stage}} stage ${emoji.party}`
+    chalk`- {bold serverless} deployment for {bold ${String(
+      fns.length
+    )}} functions to {italic ${stage}} stage ${emoji.party}`
   );
+
+  const transpile = isTranspileNeeded(meta);
+  if (transpile.length > 0) {
+    const build = (await import("../build-helpers/tools/webpack")).default({
+      opts: { fns: transpile }
+    }).build;
+    await build();
+  }
+
+  console.log(
+    chalk`{grey - zipping up ${String(
+      fns.length
+    )} {bold Serverless} {italic handler} functions }`
+  );
+  await zipWebpackFiles(fns);
+  console.log(
+    chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`
+  );
+
   console.log(
     chalk`- deploying {bold ${String(
       fns.length
@@ -64,7 +85,11 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
       );
     });
     await Promise.all(promises);
-    console.log(chalk`- The functions were all deployed! ${emoji.rocket}`);
+    console.log(
+      chalk`\n- all {bold ${String(fns.length)}} function(s) were deployed! ${
+        emoji.rocket
+      }\n`
+    );
   } catch (e) {
     console.log(
       chalk`- {red {bold problems deploying functions!}} ${emoji.poop}`
