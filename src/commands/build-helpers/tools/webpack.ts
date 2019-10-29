@@ -5,6 +5,7 @@ import {
 import wp from "webpack";
 import { IDictionary } from "common-types";
 import { IBuildToolingOptions } from "./types";
+import { join } from "path";
 
 /**
  * Transpiles all or _some_ of the handler functions
@@ -21,13 +22,16 @@ export default function webpack(opts: IBuildToolingOptions = {}) {
 }
 
 function build(fns: string[], opts: IDictionary) {
-  return function webpackBuild() {
+  return async function webpackBuild() {
     console.log("webpack build:", fns);
   };
 }
 
 function watch(fns: string[], opts: IDictionary) {
-  return function webpackWatch() {
-    //
+  return async function webpackWatch() {
+    const wpConfig = await import(join(process.cwd(), "webpack.config.js"));
+    wp(wpConfig).watch({}, function() {
+      console.log("watcher");
+    });
   };
 }

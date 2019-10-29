@@ -3,10 +3,16 @@ import chalk from "chalk";
 import { sandbox } from "../../shared/sandbox";
 import { emoji } from "../../shared/ui";
 import { IDictionary } from "common-types";
-import { getConfig, determineStage, hasDevDependency } from "../../shared";
+import {
+  getConfig,
+  determineStage,
+  hasDevDependency,
+  getLocalHandlerInfo
+} from "../../shared";
 import { IDoDeployServerless } from "../../@types";
 
 import { isTranspileNeeded } from "./index";
+import { zipWebpackFiles } from "../../shared/serverless/build/index";
 
 export interface IServerlessDeployMeta {
   stage: string;
@@ -80,7 +86,23 @@ async function fullDeploy(meta: IServerlessDeployMeta) {
     );
     const transpile = isTranspileNeeded(meta);
 
-    process.exit();
+    if (transpile.length > 0) {
+      const build = (await import("../build-helpers/tools/webpack")).default({
+        opts: { fns: transpile }
+      }).build;
+      await build();
+    }
+
+    const fns = getLocalHandlerInfo().map(i => i.fn);
+
+    console.log(
+      chalk`{grey - zipping up all ${String(fns.length)} Serverless handlers}`
+    );
+
+    await zipWebpackFiles(fns);
+    console.log(
+      chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`
+    );
   }
 
   if (config.showUnderlyingCommands) {

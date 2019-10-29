@@ -4,6 +4,6 @@ import { IBuildToolingOptions } from "./types";
  * using **Webpack**
  */
 export default function webpack(opts?: IBuildToolingOptions): {
-    build: () => void;
-    watch: () => void;
+    build: () => Promise<void>;
+    watch: () => Promise<void>;
 };

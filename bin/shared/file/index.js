@@ -9,3 +9,5 @@ __export(require("./write"));
 __export(require("./directoryFiles"));
 __export(require("./filesInfo"));
 __export(require("./getAllFilesOfType"));
+__export(require("./relativePath"));
+__export(require("./stripFileExtension"));

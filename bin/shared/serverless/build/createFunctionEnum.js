@@ -25,7 +25,7 @@ const write = util_1.promisify(fs_1.writeFile);
  * creates an enumeration with all of the _functions_ which have
  * been defined in the project
  */
-function createFunctionEnum(inlineFiles) {
+function createFunctionEnum(handlers) {
     return __awaiter(this, void 0, void 0, function* () {
         const header = `export enum AvailableFunction {
 `;
@@ -35,12 +35,9 @@ function createFunctionEnum(inlineFiles) {
 export type IAvailableFunction = keyof typeof AvailableFunction;
 `;
         let body = [];
-        inlineFiles.forEach(file => {
-            const config = findHandlerConfig_1.findHandlerConfig(file);
-            const fn = file
-                .split("/")
-                .pop()
-                .replace(".ts", "");
+        handlers.forEach(handler => {
+            const config = findHandlerConfig_1.findHandlerConfig(handler.source);
+            const fn = handler.fn;
             const comment = config.config.description
                 ? config.config.description
                 : `${fn} handler`;

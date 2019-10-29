@@ -65,9 +65,13 @@ export async function handler(argv: string[], opts: IDictionary) {
   }
 
   if (serverless) {
+    console.log(chalk`{bold {yellow - Starting SERVERLESS build process}}\n`);
     await serverlessTranspilation({ argv, opts, config, tooling, serverless });
     await buildServerlessMicroserviceProject(opts, config);
   } else {
+    console.log(
+      chalk`{bold {yellow - Starting code build process; using ${buildTool}}}`
+    );
     const fns = argv.length > 0 ? argv : getValidServerlessHandlers();
     await tooling({ fns, opts });
   }

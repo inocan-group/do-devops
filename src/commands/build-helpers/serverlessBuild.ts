@@ -41,7 +41,7 @@ export async function serverlessTranspilation(c: IDictionary) {
       console.log(
         chalk`{grey - transpiling {bold ${String(
           fns.length
-        )}} handler functions prior to building {blue serverless.yml}}`
+        )}} handler functions {italic prior} to building {blue serverless.yml}}`
       );
     }
     fns = fns.length > 0 ? fns : getValidServerlessHandlers();
@@ -53,7 +53,7 @@ using the {italic serverless-webpack} plugin. This is entirely fine but code wil
 transpiled with the {italic build} command unless you include the {blue --force} switch.}`);
     console.log(chalk`\n{grey - {bold Note:} for most people using this config, {blue yarn do watch} will be the most efficient way
 to ensure that you always have transpiled code when you {italic deploy}. If you do not then 
-the {italic deploy} command will detect this and transpile at deploy-time.}`);
+the {italic deploy} command will detect this and transpile at deploy-time.}\n`);
   }
 }
 

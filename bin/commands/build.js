@@ -60,10 +60,12 @@ function handler(argv, opts) {
             console.log(chalk_1.default `{red - the "--output" option is a general option but has no meaning for the {bold build} command} ${"\uD83D\uDE21" /* angry */}. The build will continue, ignoring this flag.`);
         }
         if (serverless) {
+            console.log(chalk_1.default `{bold {yellow - Starting SERVERLESS build process}}\n`);
             yield index_1.serverlessTranspilation({ argv, opts, config, tooling, serverless });
             yield shared_1.buildServerlessMicroserviceProject(opts, config);
         }
         else {
+            console.log(chalk_1.default `{bold {yellow - Starting code build process; using ${buildTool}}}`);
             const fns = argv.length > 0 ? argv : ast_1.getValidServerlessHandlers();
             yield tooling({ fns, opts });
         }

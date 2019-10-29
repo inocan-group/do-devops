@@ -11,12 +11,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const async_shelljs_1 = require("async-shelljs");
 const chalk_1 = __importDefault(require("chalk"));
 const sandbox_1 = require("../../shared/sandbox");
 const shared_1 = require("../../shared");
 const index_1 = require("./index");
+const index_2 = require("../../shared/serverless/build/index");
 /**
  * Manages the execution of a serverless deployment
  */
@@ -66,7 +74,16 @@ function fullDeploy(meta) {
         if (!shared_1.hasDevDependency("serverless-webpack")) {
             console.log(chalk_1.default `{grey - checking timestamps to determine what {bold webpack} transpilation is needed}`);
             const transpile = index_1.isTranspileNeeded(meta);
-            process.exit();
+            if (transpile.length > 0) {
+                const build = (yield Promise.resolve().then(() => __importStar(require("../build-helpers/tools/webpack")))).default({
+                    opts: { fns: transpile }
+                }).build;
+                yield build();
+            }
+            const fns = shared_1.getLocalHandlerInfo().map(i => i.fn);
+            console.log(chalk_1.default `{grey - zipping up all ${String(fns.length)} Serverless handlers}`);
+            yield index_2.zipWebpackFiles(fns);
+            console.log(chalk_1.default `{grey - all handlers zipped; ready for deployment ${"\uD83D\uDC4D" /* thumbsUp */}}`);
         }
         if (config.showUnderlyingCommands) {
             console.log(chalk_1.default `{grey > {italic sls deploy --aws-s3-accelerate  --stage ${stage} --verbose}}\n`);

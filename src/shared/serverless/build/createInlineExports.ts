@@ -1,43 +1,50 @@
-import { findHandlerComments, findHandlerConfig } from "../../ast/index";
+import { findHandlerConfig } from "../../ast/index";
 import { IServerlessFunction, IDictionary } from "common-types";
 import chalk from "chalk";
 import { writeFileSync } from "fs";
 import * as path from "path";
+import { hasDevDependency } from "../../npm";
+import { getConfig } from "../../do-config";
+import { join } from "path";
+import { IHandlerInfo } from "../getLocalHandlerInfo";
+import { stripFileExtension } from "../../file";
+
+export interface IInlineExportConfig {
+  interface: string;
+  config: IServerlessFunction;
+}
 
 /**
  * Writes the serverless configuration file which contains
  * all the _inline_ function definitions found under `src/handlers`.
+ *
+ * **Note:** if the build tool is _webpack_ and the `serverless-webpack`
+ * plugin is _not_ installed then it the inline functions will instead
+ * be pointed to the transpiled location in the `.webpack` directory with
+ * an `package: { artifact: fn.zip }`
  */
-export async function createInlineExports(files: string[]) {
+export async function createInlineExports(handlers: IHandlerInfo[]) {
+  const bespokeWebpack =
+    (await getConfig()).build.buildTool === "webpack" &&
+    !hasDevDependency("serverless-webpack");
+
   const header = 'import { IServerlessFunction } from "common-types";\n';
   let body: string[] = [];
-  const config: Array<{ interface: string; config: IServerlessFunction }> = [];
-  files.forEach(handler => {
+  const config: IInlineExportConfig[] = [];
+  handlers.forEach(handler => {
     // const comments = findHandlerComments(handler);
-    config.push(findHandlerConfig(handler));
+    config.push(findHandlerConfig(handler.source, bespokeWebpack));
   });
   const exportSymbols: string[] = [];
 
-  const incorrectOrMissingTyping = config.filter(
-    i => i.interface !== "IWrapperFunction"
-  );
-  if (incorrectOrMissingTyping.length > 0) {
-    console.log(
-      chalk`- there were ${String(
-        incorrectOrMissingTyping.length
-      )} handler functions who defined a {italic config} but did not type it as {bold IWrapperFunction}`
-    );
-    console.log(
-      chalk`{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
-        .map(i => i.config.handler)
-        .join(", ")}}}`
-    );
-  }
+  warnAboutMissingTyping(config);
+
   config.forEach(handler => {
     const fnName = handler.config.handler
       .split("/")
       .pop()
-      .replace(".ts", "");
+      .replace(/\.[^.]+$/, "");
+
     exportSymbols.push(fnName);
     const symbol = `const ${fnName}: IServerlessFunction = { 
 ${objectPrint(handler.config)}
@@ -77,4 +84,32 @@ function objectPrint(obj: IDictionary) {
   });
 
   return contents;
+}
+
+function convertToWebpackResource(fn: string) {
+  return join(
+    ".webpack/",
+    fn
+      .split("/")
+      .pop()
+      .replace(".ts", ".js")
+  );
+}
+
+function warnAboutMissingTyping(config: IInlineExportConfig[]) {
+  const incorrectOrMissingTyping = config.filter(
+    i => i.interface !== "IWrapperFunction"
+  );
+  if (incorrectOrMissingTyping.length > 0) {
+    console.log(
+      chalk`- there were ${String(
+        incorrectOrMissingTyping.length
+      )} handler functions who defined a {italic config} but did not type it as {bold IWrapperFunction}`
+    );
+    console.log(
+      chalk`{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
+        .map(i => i.config.handler)
+        .join(", ")}}}`
+    );
+  }
 }

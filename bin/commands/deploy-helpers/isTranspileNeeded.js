@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../../shared/serverless/index");
 const chalk_1 = __importDefault(require("chalk"));
 const file_1 = require("../../shared/file");
+const date_fns_1 = require("date-fns");
 /**
  * Tests whether webpack transpilation is needed
  * based on the timestamps of the source and transpiled files
@@ -22,7 +23,7 @@ function isTranspileNeeded(meta, fns) {
             .join(", ")}}}`);
     }
     else {
-        console.log(chalk_1.default `{grey - transpiled handler functions newer than handler source {green ${"\uD83D\uDC4D" /* thumbsUp */}}}`);
+        console.log(chalk_1.default `{grey - transpiled handler functions are newer than handler source {green ${"\uD83D\uDC4D" /* thumbsUp */}}}`);
     }
     const handlerFns = handlerInfo.map(i => i.source);
     const sharedFnInfo = file_1.filesInfo(...file_1.getAllFilesOfType("ts").filter(i => !handlerFns.includes(i)));
@@ -33,7 +34,7 @@ function isTranspileNeeded(meta, fns) {
         ? { fn: i.fn, source: i.source }
         : false);
     if (fnsOlderThanShared.length > 0) {
-        console.log(chalk_1.default `{dim {yellow - there are {bold {red ${String(fnsOlderThanShared.length)}}} transpiled handler functions which are older than changes made to shared files ${"\uD83D\uDE21" /* angry */} }}`);
+        console.log(chalk_1.default `{dim {yellow - there are {bold {red ${String(fnsOlderThanShared.length)}}} transpiled handler functions which are {italic older} than shared files source ${"\uD83D\uDE21" /* angry */} }} [ {grey ${date_fns_1.format(mostRecentShared, "h:mm aaaa @ d MMM")}} ]`);
     }
     else {
         console.log(chalk_1.default `{grey - transpiled handler functions newer than shared functions {green ${"\uD83D\uDC4D" /* thumbsUp */}}}`);

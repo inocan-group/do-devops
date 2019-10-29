@@ -22,13 +22,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../index");
 const index_2 = require("./index");
 const chalk_1 = __importDefault(require("chalk"));
-const index_3 = require("../../ast/index");
 const createFunctionEnum_1 = require("./createFunctionEnum");
 const async_shelljs_1 = require("async-shelljs");
 const file_1 = require("../../file");
 const os = __importStar(require("os"));
 const createWebpackEntryDictionaries_1 = require("./createWebpackEntryDictionaries");
 const npm_1 = require("../../npm");
+const getLocalHandlerInfo_1 = require("../getLocalHandlerInfo");
 /**
  * Builds a `serverless.yml` file from the configuration
  * available in the `/serverless-config` directory.
@@ -47,16 +47,15 @@ function buildServerlessMicroserviceProject(opts = {}, config = {}) {
         const accountInfo = yield index_1.askForAccountInfo(knownAccountInfo);
         file_1.saveYamlFile("serverless-config/account-info.yml", accountInfo);
         const hasWebpackPlugin = Object.keys(npm_1.getPackageJson().devDependencies).includes("serverless-webpack");
-        console.log(chalk_1.default `{bold {yellow - Starting SERVERLESS build process}}`);
         console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`);
-        const inlineFiles = index_3.getValidServerlessHandlers();
-        console.log(chalk_1.default `{grey - handler functions [ {bold ${String(inlineFiles.length)}} ] have been identified}`);
-        yield index_2.createInlineExports(inlineFiles);
+        const handlerInfo = getLocalHandlerInfo_1.getLocalHandlerInfo();
+        console.log(chalk_1.default `{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`);
+        yield index_2.createInlineExports(handlerInfo);
         console.log(chalk_1.default `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`);
-        yield createFunctionEnum_1.createFunctionEnum(inlineFiles);
+        yield createFunctionEnum_1.createFunctionEnum(handlerInfo);
         console.log(chalk_1.default `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`);
         if (!hasWebpackPlugin) {
-            yield createWebpackEntryDictionaries_1.createWebpackEntryDictionaries(inlineFiles);
+            yield createWebpackEntryDictionaries_1.createWebpackEntryDictionaries(handlerInfo.map(i => i.source));
             console.log(chalk_1.default `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`);
         }
         else {

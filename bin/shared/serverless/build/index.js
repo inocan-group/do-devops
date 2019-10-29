@@ -6,3 +6,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./clearOldFiles"));
 __export(require("./createInlineExports"));
 __export(require("./createWebpackEntryDictionaries"));
+__export(require("./zipWebpackFiles"));

@@ -12,6 +12,7 @@ import { createWebpackEntryDictionaries } from "./createWebpackEntryDictionaries
 import { getPackageJson } from "../../npm";
 import { IDoBuildConfig } from "../../../@types";
 import { IDictionary } from "common-types";
+import { getLocalHandlerInfo } from "../getLocalHandlerInfo";
 
 /**
  * Builds a `serverless.yml` file from the configuration
@@ -41,31 +42,29 @@ export async function buildServerlessMicroserviceProject(
     getPackageJson().devDependencies
   ).includes("serverless-webpack");
 
-  console.log(chalk`{bold {yellow - Starting SERVERLESS build process}}`);
-
   console.log(
     chalk`- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`
   );
 
-  const inlineFiles = getValidServerlessHandlers();
+  const handlerInfo = getLocalHandlerInfo();
   console.log(
     chalk`{grey - handler functions [ {bold ${String(
-      inlineFiles.length
+      handlerInfo.length
     )}} ] have been identified}`
   );
 
-  await createInlineExports(inlineFiles);
+  await createInlineExports(handlerInfo);
   console.log(
     chalk`{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`
   );
 
-  await createFunctionEnum(inlineFiles);
+  await createFunctionEnum(handlerInfo);
   console.log(
     chalk`{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`
   );
 
   if (!hasWebpackPlugin) {
-    await createWebpackEntryDictionaries(inlineFiles);
+    await createWebpackEntryDictionaries(handlerInfo.map(i => i.source));
     console.log(
       chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
     );

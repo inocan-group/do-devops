@@ -3,6 +3,7 @@ import chalk from "chalk";
 import { filesInfo, getAllFilesOfType } from "../../shared/file";
 import { emoji } from "../../shared/ui";
 import { IServerlessDeployMeta } from "./deploy-serverless";
+import { format } from "date-fns";
 
 /**
  * Tests whether webpack transpilation is needed
@@ -13,6 +14,7 @@ import { IServerlessDeployMeta } from "./deploy-serverless";
  */
 export function isTranspileNeeded(meta: IServerlessDeployMeta, fns?: string[]) {
   const handlerInfo = getLocalHandlerInfo();
+
   const fnsNotTranspiled = handlerInfo.filter(
     i => i.sourceModified > i.webpackModified
   );
@@ -27,7 +29,7 @@ export function isTranspileNeeded(meta: IServerlessDeployMeta, fns?: string[]) {
     );
   } else {
     console.log(
-      chalk`{grey - transpiled handler functions newer than handler source {green ${emoji.thumbsUp}}}`
+      chalk`{grey - transpiled handler functions are newer than handler source {green ${emoji.thumbsUp}}}`
     );
   }
 
@@ -49,9 +51,9 @@ export function isTranspileNeeded(meta: IServerlessDeployMeta, fns?: string[]) {
     console.log(
       chalk`{dim {yellow - there are {bold {red ${String(
         fnsOlderThanShared.length
-      )}}} transpiled handler functions which are older than changes made to shared files ${
+      )}}} transpiled handler functions which are {italic older} than shared files source ${
         emoji.angry
-      } }}`
+      } }} [ {grey ${format(mostRecentShared, "h:mm aaaa @ d MMM")}} ]`
     );
   } else {
     console.log(
