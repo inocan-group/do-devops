@@ -45,9 +45,11 @@ export async function handler(argv: string[], opts: any) {
     : "";
   const gitLastCommit = await getGitLastCommit();
   const branch = await getGitBranch();
-  const localFilesChanged = (await asyncExec("git diff --name-only", {
-    silent: true
-  })).split("\n").length;
+  const localFilesChanged = (
+    await asyncExec("git diff --name-only", {
+      silent: true
+    })
+  ).split("\n").length;
   const dateFormat = "ddd DD MMM YYYY";
   /**
    * NPM Info based on verbose flag
@@ -57,10 +59,10 @@ export async function handler(argv: string[], opts: any) {
       true,
       npm
         ? chalk`This repo was first published on {green ${format(
-            npm.time.created,
+            new Date(npm.time.created),
             dateFormat
           )}} and last modified on {green ${format(
-            npm.time.modified,
+            new Date(npm.time.modified),
             dateFormat
           )}}.\n\n`
         : ""
@@ -71,7 +73,7 @@ export async function handler(argv: string[], opts: any) {
         ? chalk`The latest published version is ${chalk.bold.green(
             npm.version
           )} [ ${format(
-            npm.time[npm.version],
+            new Date(npm.time[npm.version]),
             dateFormat
           )} ].\nLocally in package.json, version is ${chalk.bold.green(
             pkg.version
