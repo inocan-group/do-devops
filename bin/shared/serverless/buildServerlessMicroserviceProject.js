@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -39,12 +38,14 @@ function buildServerlessMicroserviceProject() {
             try {
                 configComplete = JSON.parse(config);
             }
-            catch (e) {
+            catch (e1) {
                 console.log(chalk_1.default `- {yellow Warning:} parsing the configuration caused an error ${"\uD83D\uDE32" /* shocked */}`);
                 console.log(chalk_1.default `{dim - will make second attempt with more aggressive regex}`);
+                const strippedOut = config.replace(/(.*)\{"service.*/, "$1");
+                const newAttempt = config
+                    .replace(/\n/g, "")
+                    .replace(/.*(\{"service.*)/, "$1");
                 try {
-                    const strippedOut = config.replace(/(.*)\{"service.*/, "$1");
-                    const newAttempt = config.replace(/.*(\{"service.*)/, "$1");
                     configComplete = JSON.parse(newAttempt);
                     console.log(chalk_1.default `- by removing some of the text at the beginning we {bold were} able to parse the config ${"\uD83D\uDC4D" /* thumbsUp */}`);
                     console.log(chalk_1.default `- the text removed was:\n{dim ${strippedOut}}`);
@@ -52,7 +53,7 @@ function buildServerlessMicroserviceProject() {
                 catch (e) {
                     console.log(chalk_1.default `{red - Failed {italic again} to parse the configuration file!}`);
                     console.log(`- Error message was: ${e.message}`);
-                    console.log(chalk_1.default `- The config that is being parsed is:\n\n${config}\n`);
+                    console.log(chalk_1.default `- The config that is being parsed is:\n\n${newAttempt}\n`);
                     process.exit();
                 }
             }

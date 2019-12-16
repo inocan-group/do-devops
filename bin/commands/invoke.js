@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const async_shelljs_1 = require("async-shelljs");
 const chalk_1 = __importDefault(require("chalk"));
 const shared_1 = require("../shared");
-const getLocalServerlessFunctions_1 = require("../shared/serverless/getLocalServerlessFunctions");
+const getLocalServerlessFunctionsFromServerlessYaml_1 = require("../shared/serverless/getLocalServerlessFunctionsFromServerlessYaml");
 function description() {
     return `invoke serverless functions locally, leveraging test data where desired`;
 }
@@ -61,7 +61,7 @@ function handler(args, opts) {
             }
             else {
                 fn = args[0];
-                const availableFns = Object.keys(yield getLocalServerlessFunctions_1.getLocalServerlessFunctions());
+                const availableFns = Object.keys(yield getLocalServerlessFunctionsFromServerlessYaml_1.getLocalServerlessFunctionsFromServerlessYaml());
                 if (!availableFns.includes(fn)) {
                     console.log(chalk_1.default `{red - The function "{white ${fn}}" is not a valid function!} ${"\uD83D\uDE32" /* shocked */}`);
                     console.log(`- valid functions are:`);

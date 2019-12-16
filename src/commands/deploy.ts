@@ -47,6 +47,22 @@ export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
       type: String,
       group: "deploy",
       description: "manually override the project target (serverless, npm)"
+    },
+    {
+      name: "stage",
+      alias: "s",
+      typeLabel: "<stage>",
+      type: String,
+      group: "serverlessDeploy",
+      description: "manually override the stage you're deploying to"
+    },
+    {
+      name: "region",
+      alias: "r",
+      typeLabel: "<region>",
+      type: String,
+      group: "serverlessDeploy",
+      description: "explicitly state the region you're deploying to"
     }
   ];
 }

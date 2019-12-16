@@ -10,7 +10,8 @@
     "outDir": "./bin",
     "removeComments": false,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": ["@types/bestzip", "node_modules/@types"]
   },
   "include": ["src/**/*.ts"],
   "filesGlob": ["**/*.ts", "../serverless-config/**/*.ts"]

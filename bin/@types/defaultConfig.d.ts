@@ -43,19 +43,37 @@ export interface IDoGlobalConfig extends IDictionary {
 export interface IDoBuildConfig {
     preBuildHooks?: string[];
     /**
-     * the directory your build tooling will put the target
-     * distribution
-     */
-    targetDirectory: string;
-    /**
      * Which tool are you using for running your build pipeline?
      */
-    buildTool: "tsc" | "webpack" | "rollup" | "bili" | "bespoke";
+    buildTool?: IBuildTool;
     /**
      * If you are using a _bespoke_ build tool then you set it here
      */
     bespokeCommand?: string;
 }
+export declare enum BuildTool {
+    typescript = "typescript",
+    webpack = "webpack",
+    rollup = "rollup",
+    bili = "bili",
+    /** just runs `yarn run build` */
+    yarn = "typescript",
+    /** just runs `npm run build` */
+    npm = "webpack",
+    /**
+     * some other build process that is not understood; this will throw an error
+     * if a build is run.
+     */
+    other = "rollup",
+    /**
+     * There is **no** build step for this repo.
+     *
+     * Note: this is quite common with Serverless projects which just use the
+     * build process to rebuild the `serverless.yml` file.
+     */
+    none = "bili"
+}
+export declare type IBuildTool = keyof typeof BuildTool;
 export declare type IDoDeployConfig = IDoDeployServerless | IDoDeployNpm | IDoDeployBespoke | IDoDeployUnknown;
 export interface IDoDeployConfigBase {
     preDeployHooks?: string[];

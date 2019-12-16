@@ -57,7 +57,7 @@ export async function execute(options: CommandLineOptions) {
       i.Name,
       String(i.Version),
       i.Type,
-      format(i.LastModifiedDate, "DD MMM, YYYY"),
+      format(i.LastModifiedDate, "dd MMM, yyyy"),
       i.LastModifiedUser.replace(/.*user\//, "")
     ]);
   });

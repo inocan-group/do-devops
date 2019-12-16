@@ -21,11 +21,15 @@ const errors_1 = require("../errors");
  */
 function getServerlessYaml() {
     return __awaiter(this, void 0, void 0, function* () {
+        const baseStructure = {
+            functions: {},
+            stepFunctions: { stateMachines: {} }
+        };
         try {
             const config = js_yaml_1.safeLoad(fs_1.default.readFileSync(path_1.default.join(process.cwd(), "serverless.yml"), {
                 encoding: "utf-8"
             }));
-            return config;
+            return Object.assign(Object.assign({}, baseStructure), config);
         }
         catch (e) {
             throw new errors_1.DevopsError(`Failure getting serverless.yml: ${e.message}`, e.name);

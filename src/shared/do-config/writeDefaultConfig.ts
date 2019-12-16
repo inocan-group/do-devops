@@ -11,14 +11,14 @@ import { IDoConfig } from "../../@types";
  * or User's **home directory**.
  */
 export function writeConfig(
-  c: IDoConfig,
+  content: IDoConfig,
   projectOrUserConfig: "user" | "project" = "project"
 ) {
   const filename = getConfigFilename(projectOrUserConfig);
   writeFileSync(
     filename,
     "const config = " +
-      JSON.stringify(c, null, 2) +
+      JSON.stringify(content, null, 2) +
       ";\nmodule.exports = config;",
     {
       encoding: "utf-8"
@@ -42,7 +42,11 @@ export async function writeSection(
   projectOrUserConfig = projectOrUserConfig ? projectOrUserConfig : "project";
   const sectionMeta = content ? content : getDefaultConfig(section);
   const currentConfig = await getConfig({ projectOrUserConfig });
-  writeConfig({ ...currentConfig, [section]: sectionMeta });
+  // TODO: this should not be needed
+  delete (currentConfig as any).default;
+
+  const output = { ...currentConfig, [section]: sectionMeta };
+  writeConfig(output, projectOrUserConfig);
 }
 
 /**
