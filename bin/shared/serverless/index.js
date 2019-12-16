@@ -3,8 +3,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./askForServerlessConfig"));
-__export(require("./askForAccountInfo"));
+__export(require("./accountInfo/askForAccountInfo"));
 __export(require("./askAboutLogForwarding"));
 __export(require("./askForStage"));
 __export(require("./askForFunction"));
@@ -19,9 +18,11 @@ __export(require("./findConfigFunctionDefnFiles"));
 __export(require("./isServerless"));
 __export(require("./isTypescriptMicroserviceProject"));
 __export(require("./getAwsProfileFromServerless"));
-__export(require("./buildServerlessMicroserviceProject"));
+__export(require("./build/buildServerlessMicroserviceProject"));
 __export(require("./getAccountInfoFromServerlessYaml"));
-__export(require("./saveFunctionsTypeDefinition"));
+__export(require("./build/saveFunctionsTypeDefinition"));
 __export(require("./saveToServerlessYaml"));
 __export(require("./findAllHandlerFiles"));
 __export(require("./getLambdaFunctions"));
+__export(require("./getLocalHandlerInfo"));
+__export(require("./getLocalServerlessFunctionsFromServerlessYaml"));

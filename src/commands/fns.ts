@@ -48,6 +48,7 @@ export async function handler(args: string[], opts: IDictionary) {
   try {
     const { width } = await consoleDimensions();
     const fns = (await getServerlessYaml()).functions;
+
     let tableData = [
       [
         chalk.bold.yellow("function"),
@@ -74,7 +75,7 @@ export async function handler(args: string[], opts: IDictionary) {
         0: { width: 30, alignment: "left" },
         1: { width: 16, alignment: "left" },
         2: { width: 7, alignment: "center" },
-        3: { width: 8, alignment: "center" },
+        3: { width: 10, alignment: "center" },
         4: { width: 46, alignment: "left" }
       }
     };

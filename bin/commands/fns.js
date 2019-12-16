@@ -73,7 +73,7 @@ function handler(args, opts) {
                     0: { width: 30, alignment: "left" },
                     1: { width: 16, alignment: "left" },
                     2: { width: 7, alignment: "center" },
-                    3: { width: 8, alignment: "center" },
+                    3: { width: 10, alignment: "center" },
                     4: { width: 46, alignment: "left" }
                 }
             };

@@ -56,7 +56,7 @@ export async function execute(options: CommandLineOptions) {
       data.path,
       data.arn,
       String(data.version),
-      format(data.lastUpdated, "DD MMM, YYYY")
+      format(data.lastUpdated, "dd MMM, yyyy")
     ]);
     console.log(table(tableData, tableConfig as any));
     console.log(chalk.yellow.bold("VALUE:\n"));

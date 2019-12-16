@@ -37,7 +37,11 @@ function getAccountInfoFromServerlessYaml() {
                 const sls = yield getServerlessYaml_1.getServerlessYaml();
                 info.pluginsInstalled = sls.plugins;
                 if (!sls.plugins.includes("serverless-webpack")) {
-                    console.log(chalk_1.default `{red - it is {italic strongly} recommended that you install and use the {bold {blue serverless-webpack}} plugin!}`);
+                    console.log(chalk_1.default `{yellow {bold 
+            - it is recommended that you use {blue webpack} in some form. }}
+            - The most common means of doing this requires you install the {bold {blue serverless-webpack}} plugin}}
+            - However, just installing {bold blue webpack}} will allow {italic {bold do-devops}} to build/tree-shake with webpack
+          `);
                 }
             }
             catch (e) {
