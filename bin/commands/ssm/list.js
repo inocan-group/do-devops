@@ -58,7 +58,7 @@ function execute(options) {
                 i.Name,
                 String(i.Version),
                 i.Type,
-                date_fns_1.format(i.LastModifiedDate, "DD MMM, YYYY"),
+                date_fns_1.format(i.LastModifiedDate, "dd MMM, yyyy"),
                 i.LastModifiedUser.replace(/.*user\//, "")
             ]);
         });

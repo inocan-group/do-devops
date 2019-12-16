@@ -54,7 +54,7 @@ function handler(argv, opts) {
         const localFilesChanged = (yield async_shelljs_1.asyncExec("git diff --name-only", {
             silent: true
         })).split("\n").length;
-        const dateFormat = "ddd DD MMM YYYY";
+        const dateFormat = "ddd dd MMM yyyy";
         /**
          * NPM Info based on verbose flag
          */

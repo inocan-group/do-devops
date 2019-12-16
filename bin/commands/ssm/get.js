@@ -64,7 +64,7 @@ function execute(options) {
                     data.path,
                     data.arn,
                     String(data.version),
-                    date_fns_1.format(data.lastUpdated, "DD MMM, YYYY")
+                    date_fns_1.format(data.lastUpdated, "dd MMM, yyyy")
                 ]);
                 console.log(table_1.table(tableData, tableConfig));
                 console.log(chalk_1.default.yellow.bold("VALUE:\n"));
