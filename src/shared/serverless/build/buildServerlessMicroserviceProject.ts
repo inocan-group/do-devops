@@ -69,7 +69,7 @@ export async function buildServerlessMicroserviceProject(
       chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
     );
   } else {
-    const exist = await filesExist(
+    const exist = filesExist(
       "webpack.js-entry-points.json",
       "webpack.js-entry-points.json"
     );

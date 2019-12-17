@@ -59,7 +59,7 @@ function buildServerlessMicroserviceProject(opts = {}, config = {}) {
             console.log(chalk_1.default `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`);
         }
         else {
-            const exist = yield file_1.filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
+            const exist = file_1.filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
             if (exist) {
                 async_shelljs_1.rm(...exist);
                 console.log(chalk_1.default `- ${"\uD83D\uDC40" /* eyeballs */} removed webpack entry point files so as not to confuse with what the {italic serverless-webpack} plugin is doing}`);
