@@ -28,7 +28,9 @@ function getLocalHandlerInfo(breakCache = false) {
         .replace(".ts", ".js"));
     const webpackPaths = sourcePaths.map(i => convertToWebpackPath(i));
     const sourceInfo = file_1.filesInfo(...sourcePaths);
-    const webpackInfo = file_1.filesInfo(...webpackPaths);
+    // some handlers may not have been transpiled yet
+    const webpackFilesExist = file_1.filesExist(...webpackPaths);
+    const webpackInfo = webpackFilesExist ? file_1.filesInfo(...webpackFilesExist) : [];
     return sourceInfo.reduce((agg, source) => {
         return agg.concat({
             fn: source.fileName,

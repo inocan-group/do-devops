@@ -5,4 +5,4 @@
  *
  * @param files the files to be checked for existance
  */
-export declare function filesExist(...files: string[]): Promise<false | string[]>;
+export declare function filesExist(...files: string[]): false | string[];

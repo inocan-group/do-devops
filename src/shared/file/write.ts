@@ -40,7 +40,7 @@ export async function write(
       filename = join(process.cwd(), filename);
     }
     let offset: number;
-    while (options.offsetIfExists && (await filesExist(filename))) {
+    while (options.offsetIfExists && filesExist(filename)) {
       const before = new RegExp(`-${offset}.(.*)$`);
       filename = offset ? filename.replace(before, ".$1") : filename;
       offset = !offset ? 1 : offset++;

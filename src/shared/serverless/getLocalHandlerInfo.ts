@@ -1,5 +1,5 @@
 import { getValidServerlessHandlers } from "../ast/index";
-import { filesInfo } from "../file";
+import { filesInfo, filesExist } from "../file";
 import { join } from "path";
 import get = require("lodash.get");
 
@@ -58,7 +58,9 @@ export function getLocalHandlerInfo(
     );
   const webpackPaths = sourcePaths.map(i => convertToWebpackPath(i));
   const sourceInfo = filesInfo(...sourcePaths);
-  const webpackInfo = filesInfo(...webpackPaths);
+  // some handlers may not have been transpiled yet
+  const webpackFilesExist = filesExist(...webpackPaths);
+  const webpackInfo = webpackFilesExist ? filesInfo(...webpackFilesExist) : [];
 
   return sourceInfo.reduce((agg: IHandlerInfo[], source) => {
     return agg.concat({

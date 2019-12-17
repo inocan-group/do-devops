@@ -37,7 +37,7 @@ function write(filename, data, options = {}) {
                 filename = path_1.join(process.cwd(), filename);
             }
             let offset;
-            while (options.offsetIfExists && (yield filesExist_1.filesExist(filename))) {
+            while (options.offsetIfExists && filesExist_1.filesExist(filename)) {
                 const before = new RegExp(`-${offset}.(.*)$`);
                 filename = offset ? filename.replace(before, ".$1") : filename;
                 offset = !offset ? 1 : offset++;
