@@ -22,3 +22,5 @@ export * from "./npm/index";
 export * from "./errors/index";
 export * from "./ui/index";
 export * from "./do-config/index";
+
+export * from "./npm";

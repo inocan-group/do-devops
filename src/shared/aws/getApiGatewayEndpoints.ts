@@ -19,6 +19,8 @@ export async function getApiGatewayEndpoints(
   });
 
   const apis = await gw.getRestApis().promise();
+  console.log(JSON.stringify(apis, null, 2));
+  
   const detail = await gw.getRestApi({ restApiId: apis.items[0].apiKeySource });
   return detail;
 }

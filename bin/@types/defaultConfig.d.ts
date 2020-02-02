@@ -1,9 +1,11 @@
 import { ISandboxStrategy } from "./general";
 import { IDictionary } from "common-types";
+import { IDoTestConfig } from "./test";
 export interface IDoConfig {
     global: IDoGlobalConfig;
     deploy: IDoDeployConfig;
     build: IDoBuildConfig;
+    test: IDoTestConfig;
     pkg: IDoPkgConfig;
 }
 export interface IDoPkgConfig {

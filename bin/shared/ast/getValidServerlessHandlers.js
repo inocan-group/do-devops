@@ -16,20 +16,29 @@ function getValidServerlessHandlers() {
     const allFiles = fast_glob_1.default.sync(path_1.default.join(process.env.PWD, "/src/handlers/**/*.ts"));
     return allFiles.reduce((agg, curr) => {
         let ast;
+        let status = "starting";
         try {
             ast = parseFile_1.parseFile(curr);
+            status = "file-parsed";
             if (!ast.program.body[0].source) {
                 console.log(chalk_1.default `{grey - the file {blue ${file_1.relativePath(curr)}} has no source content; will be ignored}`);
                 return agg;
             }
             const loc = ast.program.body[0].source.loc;
-            if (loc.tokens.find((i) => i.value === "handler")) {
+            status = "loc-identified";
+            const handler = loc.tokens.find((i) => i.value === "handler");
+            status = handler ? "handler-found" : "handler-missing";
+            if (handler) {
+                if (!Array.isArray(agg)) {
+                    throw new Error(`Found a handler but somehow the file aggregation is not an array! ${handler}`);
+                }
                 agg.push(curr);
             }
             return agg;
         }
         catch (e) {
-            console.log(chalk_1.default `- Error processing the file {red ${file_1.relativePath(curr)}}: ${e.message}`);
+            console.log(chalk_1.default `- Error processing  {red ${file_1.relativePath(curr)}} [s: ${status}]: {grey ${e.message}}`);
+            return agg;
         }
     }, []);
 }

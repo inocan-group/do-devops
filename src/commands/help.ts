@@ -23,7 +23,7 @@ export async function help(opts: IDictionary, fn?: string) {
 
   if (commands && commands.length > 0) {
     sections.push({
-      header: "Commands",
+      header: fn ? `${fn.toUpperCase()} Sub-Commands` : "Commands",
       content: commands
     });
   }

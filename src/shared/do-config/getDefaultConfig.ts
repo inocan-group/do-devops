@@ -16,7 +16,7 @@ export function getDefaultConfig(command?: keyof IDoConfig) {
     const sections = defaultConfigSections();
 
     let content: IDoConfig;
-    sections.forEach((section: keyof IDoConfig) => {
+    sections.forEach((section: keyof IDoConfig & keyof typeof sections) => {
       const newContent = { [section]: getDefaultConfig(section) };
       content = { ...content, ...newContent };
     });
@@ -36,7 +36,7 @@ export function getDefaultConfig(command?: keyof IDoConfig) {
       "devops/not-allowed"
     );
   }
-  return config[command]();
+  return config[command as keyof typeof config]();
 }
 
 export function getFullDefaultConfig() {

@@ -2,7 +2,8 @@ import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
 export declare function description(opts: IDictionary): Promise<string>;
 export declare const options: OptionDefinition[];
-export declare const syntax = "do package <options>";
+export declare const syntax = "do pkg <options>";
+export declare const aliases: string[];
 /**
  * **Package Handler**
  *

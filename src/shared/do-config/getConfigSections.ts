@@ -8,7 +8,9 @@ import { IDoConfig } from "../../@types";
  * include the `global` section
  */
 export function getConfigSections(): string[] {
-  return Object.keys(defaults).filter((section: keyof IDoConfig) => {
-    return typeof defaults[section] === "function";
-  });
+  return Object.keys(defaults).filter(
+    (section: keyof IDoConfig & keyof typeof defaults) => {
+      return typeof defaults[section] === "function";
+    }
+  );
 }

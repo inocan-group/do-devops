@@ -38,7 +38,8 @@ exports.options = [
         description: chalk_1.default `after the package is completed the {bold cloudformation} template can be validated`
     }
 ];
-exports.syntax = "do package <options>";
+exports.syntax = "do pkg <options>";
+exports.aliases = ["package"];
 /**
  * **Package Handler**
  *

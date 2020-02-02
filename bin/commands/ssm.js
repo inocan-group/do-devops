@@ -27,10 +27,25 @@ const process = __importStar(require("process"));
 /**
  * Description of command for help text
  */
-function description() {
-    return "allows an easy CRUD-based interaction with AWS's SSM parameter system for managing secrets.";
+function description(...opts) {
+    console.log("options", opts);
+    return "allows an easy interaction with AWS's SSM parameter system for managing secrets.";
 }
 exports.description = description;
+exports.syntax = "do ssm <sub-command> <options>";
+exports.commands = [
+    {
+        name: "list",
+        summary: "lists the SSM secrets for a given profile and region"
+    },
+    { name: "get", summary: "get details on a specific secret" },
+    { name: "set", summary: "set the value for a given secret" }
+];
+exports.examples = [
+    "do ssm list",
+    "do ssm list --profile myproject",
+    "do ssm add DEV/TRELLO/SID abcdefg1234"
+];
 exports.options = [
     {
         name: "profile",
