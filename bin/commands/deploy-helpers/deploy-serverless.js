@@ -32,7 +32,6 @@ function serverlessDeploy(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const stage = yield shared_1.determineStage(opts);
         const { deploy: config } = yield shared_1.getConfig();
-        console.log(argv, opts, stage);
         const meta = { stage, config: config, opts };
         // argv values indicate function deployment
         if (argv.length > 0) {

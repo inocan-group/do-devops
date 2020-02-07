@@ -16,8 +16,6 @@ import { IDetermineOptions } from "../../@types";
  * a possible parameter)
  */
 export async function determineStage(opts: IDetermineOptions) {
-  console.log("opts:", opts, process.env.NODE_ENV, process.env.AWS_STAGE);
-
   try {
     let stage =
       get(opts, "stage") || process.env.NODE_ENV || process.env.AWS_STAGE;
