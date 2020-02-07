@@ -29,6 +29,7 @@ export default async function serverlessDeploy(
 ) {
   const stage = await determineStage(opts);
   const { deploy: config } = await getConfig();
+  console.log(argv, opts, stage);
   const meta = { stage, config: config as IDoDeployServerless, opts };
 
   // argv values indicate function deployment

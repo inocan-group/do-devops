@@ -34,10 +34,9 @@ const lodash_1 = require("lodash");
  */
 function determineStage(opts) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("opts:", opts, process.env.NODE_ENV, process.env.AWS_STAGE);
         try {
-            let stage = lodash_1.get(opts, "cliOptions.stage") ||
-                process.env.NODE_ENV ||
-                process.env.AWS_STAGE;
+            let stage = lodash_1.get(opts, "stage") || process.env.NODE_ENV || process.env.AWS_STAGE;
             if (!stage) {
                 try {
                     stage = lodash_1.get(yield index_1.getServerlessYaml(), "provider.stage", undefined);

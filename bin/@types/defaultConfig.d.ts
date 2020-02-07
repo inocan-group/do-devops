@@ -94,6 +94,7 @@ export interface IDoDeployUnknown extends IDoDeployConfigBase {
     target: "unknown";
 }
 export interface IDoDeployServerless extends IDoDeployConfigBase {
+    stage?: "dev" | "test" | "stage" | "prod" | string;
     target: "serverless";
     /**
      * The sandboxing strategy for development deployments.
