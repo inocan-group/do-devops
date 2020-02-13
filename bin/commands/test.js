@@ -30,6 +30,7 @@ function examples() {
 }
 exports.examples = examples;
 function handler(args, opt) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         let test;
         try {
@@ -38,10 +39,10 @@ function handler(args, opt) {
                 const unitTestFramework = yield askForUnitTestFramework_1.askForUnitTestFramework();
                 yield shared_1.writeSection("test", Object.assign(Object.assign({}, config.test), unitTestFramework), "project");
             }
-            if (config.test.unitTestFramework === "mocha") {
+            if (((_a = config) === null || _a === void 0 ? void 0 : _a.test.unitTestFramework) === "mocha") {
                 test = (yield Promise.resolve().then(() => __importStar(require("./test-helpers/mocha")))).default;
             }
-            else if (config.test.unitTestFramework === "jest") {
+            else if (((_b = config) === null || _b === void 0 ? void 0 : _b.test.unitTestFramework) === "jest") {
                 test = (yield Promise.resolve().then(() => __importStar(require("./test-helpers/jest")))).default;
             }
             else {

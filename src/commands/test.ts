@@ -29,9 +29,9 @@ export async function handler(args: string[], opt: IDictionary) {
       );
     }
 
-    if (config.test.unitTestFramework === "mocha") {
+    if (config?.test.unitTestFramework === "mocha") {
       test = (await import("./test-helpers/mocha")).default;
-    } else if (config.test.unitTestFramework === "jest") {
+    } else if (config?.test.unitTestFramework === "jest") {
       test = (await import("./test-helpers/jest")).default;
     } else {
       test = (await import("./test-helpers/other")).default;
