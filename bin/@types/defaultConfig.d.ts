@@ -1,9 +1,11 @@
 import { ISandboxStrategy } from "./general";
 import { IDictionary } from "common-types";
+import { IDoTestConfig } from "./test";
 export interface IDoConfig {
     global: IDoGlobalConfig;
     deploy: IDoDeployConfig;
     build: IDoBuildConfig;
+    test: IDoTestConfig;
     pkg: IDoPkgConfig;
 }
 export interface IDoPkgConfig {
@@ -92,6 +94,7 @@ export interface IDoDeployUnknown extends IDoDeployConfigBase {
     target: "unknown";
 }
 export interface IDoDeployServerless extends IDoDeployConfigBase {
+    stage?: "dev" | "test" | "stage" | "prod" | string;
     target: "serverless";
     /**
      * The sandboxing strategy for development deployments.

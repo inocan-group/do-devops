@@ -29,6 +29,7 @@ const os = __importStar(require("os"));
 const createWebpackEntryDictionaries_1 = require("./createWebpackEntryDictionaries");
 const npm_1 = require("../../npm");
 const getLocalHandlerInfo_1 = require("../getLocalHandlerInfo");
+const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 /**
  * Builds a `serverless.yml` file from the configuration
  * available in the `/serverless-config` directory.
@@ -43,10 +44,11 @@ const getLocalHandlerInfo_1 = require("../getLocalHandlerInfo");
 function buildServerlessMicroserviceProject(opts = {}, config = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         let stage = "starting";
-        const knownAccountInfo = Object.assign({}, (yield index_1.getAccountInfoFromServerlessYaml()));
+        const devDependencies = Object.keys(npm_1.getPackageJson().devDependencies);
+        const knownAccountInfo = Object.assign(Object.assign({}, (yield index_1.getAccountInfoFromServerlessYaml())), { devDependencies });
         const accountInfo = yield index_1.askForAccountInfo(knownAccountInfo);
-        file_1.saveYamlFile("serverless-config/account-info.yml", accountInfo);
-        const hasWebpackPlugin = Object.keys(npm_1.getPackageJson().devDependencies).includes("serverless-webpack");
+        file_1.saveYamlFile(ACCOUNT_INFO_YAML, accountInfo);
+        const hasWebpackPlugin = devDependencies.includes("serverless-webpack");
         console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`);
         const handlerInfo = getLocalHandlerInfo_1.getLocalHandlerInfo();
         console.log(chalk_1.default `{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`);
@@ -69,6 +71,8 @@ function buildServerlessMicroserviceProject(opts = {}, config = {}) {
         yield async_shelljs_1.asyncExec(`yarn ts-node serverless-config/build.ts --color=always`, {
             env: Object.assign(Object.assign(Object.assign({}, process.env), { TERM: "xterm-color" }), (os.platform().includes("win") ? {} : { shell: "/bin/bash" }))
         });
+        async_shelljs_1.rm(ACCOUNT_INFO_YAML);
+        console.log(chalk_1.default `{grey - removed the temporary {blue account-info.yml} file from the repo}`);
         console.log(chalk_1.default `{green - {bold serverless.yml} has been updated successfully ${"\uD83D\uDE80" /* rocket */}}\n`);
     });
 }

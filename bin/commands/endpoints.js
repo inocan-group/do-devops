@@ -30,7 +30,7 @@ function handler(args, opts) {
         const profileName = yield shared_1.determineProfile({ cliOptions: opts });
         const region = yield shared_1.determineRegion({ cliOptions: opts });
         try {
-            console.log(chalk_1.default `- getting API {italic endpoints} for the profile {bold ${profileName}}`);
+            console.log(chalk_1.default `- getting API {italic endpoints} for the profile {bold ${profileName}} [ ${region} ]`);
             // const endpoints = await getLambdaFunctions(opts);
             const endpoints = yield getApiGatewayEndpoints_1.getApiGatewayEndpoints(profileName, region);
             console.log(JSON.stringify(endpoints, null, 2));

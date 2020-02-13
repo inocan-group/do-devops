@@ -10,7 +10,7 @@ export async function getCommands(fn?: string) {
   let bold = false;
   if (fn) {
     const defn = await import(`../../commands/${fn}`);
-    meta = defn.commands ? defn.commmands : [];
+    meta = defn.commands ? defn.commands : [];
   } else {
     for (const cmd of commands()) {
       const ref = await import(`../../commands/${cmd}`);
@@ -38,9 +38,12 @@ export async function getCommands(fn?: string) {
  */
 function formatCommands(cmds: ICommandDescription[]) {
   let dim = false;
+
   return cmds.map(cmd => {
     cmd.name = dim ? `{dim ${cmd.name}}` : cmd.name;
-    const summary = cmd.summary.split("\n")[0];
+    const summary = Array.isArray(cmd.summary)
+      ? cmd.summary.split("\n")[0]
+      : cmd.summary;
     console.log(summary, cmd.summary);
 
     cmd.summary = dim ? `{dim ${summary}}` : summary;
@@ -90,6 +93,35 @@ export async function getDescription(opts: IDictionary, fn?: string) {
     : `Help content for the {bold do}'s ${chalk.bold.green.italic(
         fn
       )} command.`;
+}
+
+/**
+ *
+ * @param opts
+ * @param fn
+ */
+export async function getExamples(opts: IDictionary, fn?: string) {
+  // nothing to do if no function is chosen
+  if (fn) {
+    const defn = await import(`../../commands/${fn}`);
+    const hasExamples = defn.examples ? true : false;
+    const defnIsFunction = typeof defn.examples === "function";
+
+    if (hasExamples) {
+      if (!defnIsFunction && !Array.isArray(defn.examples)) {
+        throw new Error(
+          `Getting help on "${fn}" has failed because the examples section -- while configured -- is of the wrong format! Should be a function returning an array or an array of .`
+        );
+      }
+      const examples = defnIsFunction ? defn.examples(opts) : defn.examples;
+    }
+
+    return hasExamples
+      ? defnIsFunction
+        ? await defn.description(opts)
+        : defn.description
+      : ``;
+  }
 }
 
 export async function getOptions(opts: IDictionary, fn?: string) {

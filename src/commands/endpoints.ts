@@ -26,10 +26,11 @@ export async function handler(args: string[], opts: IDictionary) {
   const region = await determineRegion({ cliOptions: opts });
   try {
     console.log(
-      chalk`- getting API {italic endpoints} for the profile {bold ${profileName}}`
+      chalk`- getting API {italic endpoints} for the profile {bold ${profileName}} [ ${region} ]`
     );
     // const endpoints = await getLambdaFunctions(opts);
     const endpoints = await getApiGatewayEndpoints(profileName, region);
     console.log(JSON.stringify(endpoints, null, 2));
+    
   } catch (e) {}
 }

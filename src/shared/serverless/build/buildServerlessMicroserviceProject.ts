@@ -13,6 +13,9 @@ import { getPackageJson } from "../../npm";
 import { IDoBuildConfig } from "../../../@types";
 import { IDictionary } from "common-types";
 import { getLocalHandlerInfo } from "../getLocalHandlerInfo";
+import { rmdirSync } from "fs";
+
+const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 
 /**
  * Builds a `serverless.yml` file from the configuration
@@ -30,17 +33,17 @@ export async function buildServerlessMicroserviceProject(
   config: IDoBuildConfig = {}
 ) {
   let stage = "starting";
+  const devDependencies = Object.keys(getPackageJson().devDependencies);
   const knownAccountInfo = {
     // TODO: add file storage for the askForAccountInfo
     ...{},
-    ...(await getAccountInfoFromServerlessYaml())
+    ...(await getAccountInfoFromServerlessYaml()),
+    devDependencies
   };
 
   const accountInfo = await askForAccountInfo(knownAccountInfo);
-  saveYamlFile("serverless-config/account-info.yml", accountInfo);
-  const hasWebpackPlugin = Object.keys(
-    getPackageJson().devDependencies
-  ).includes("serverless-webpack");
+  saveYamlFile(ACCOUNT_INFO_YAML, accountInfo);
+  const hasWebpackPlugin = devDependencies.includes("serverless-webpack");
 
   console.log(
     chalk`- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`
@@ -92,6 +95,11 @@ export async function buildServerlessMicroserviceProject(
       ...(os.platform().includes("win") ? {} : { shell: "/bin/bash" })
     }
   });
+
+  rm(ACCOUNT_INFO_YAML);
+  console.log(
+    chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`
+  );
 
   console.log(
     chalk`{green - {bold serverless.yml} has been updated successfully ${emoji.rocket}}\n`

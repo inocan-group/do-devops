@@ -32,7 +32,8 @@ export const options: OptionDefinition[] = [
   }
 ];
 
-export const syntax = "do package <options>";
+export const syntax = "do pkg <options>";
+export const aliases = ["package"];
 
 /**
  * **Package Handler**

@@ -18,9 +18,7 @@ import { IDetermineOptions } from "../../@types";
 export async function determineStage(opts: IDetermineOptions) {
   try {
     let stage =
-      get(opts, "cliOptions.stage") ||
-      process.env.NODE_ENV ||
-      process.env.AWS_STAGE;
+      get(opts, "stage") || process.env.NODE_ENV || process.env.AWS_STAGE;
 
     if (!stage) {
       try {

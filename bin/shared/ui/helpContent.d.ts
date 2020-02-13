@@ -13,4 +13,10 @@ export declare function getSyntax(fn?: string): Promise<string>;
  * Gets the "description" content for the help area
  */
 export declare function getDescription(opts: IDictionary, fn?: string): Promise<any>;
+/**
+ *
+ * @param opts
+ * @param fn
+ */
+export declare function getExamples(opts: IDictionary, fn?: string): Promise<any>;
 export declare function getOptions(opts: IDictionary, fn?: string): Promise<OptionDefinition[]>;

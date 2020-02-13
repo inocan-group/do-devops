@@ -28,7 +28,7 @@ function getCommands(fn) {
         let bold = false;
         if (fn) {
             const defn = yield Promise.resolve().then(() => __importStar(require(`../../commands/${fn}`)));
-            meta = defn.commands ? defn.commmands : [];
+            meta = defn.commands ? defn.commands : [];
         }
         else {
             for (const cmd of commands_1.commands()) {
@@ -59,7 +59,9 @@ function formatCommands(cmds) {
     let dim = false;
     return cmds.map(cmd => {
         cmd.name = dim ? `{dim ${cmd.name}}` : cmd.name;
-        const summary = cmd.summary.split("\n")[0];
+        const summary = Array.isArray(cmd.summary)
+            ? cmd.summary.split("\n")[0]
+            : cmd.summary;
         console.log(summary, cmd.summary);
         cmd.summary = dim ? `{dim ${summary}}` : summary;
         dim = !dim;
@@ -104,6 +106,33 @@ function getDescription(opts, fn) {
     });
 }
 exports.getDescription = getDescription;
+/**
+ *
+ * @param opts
+ * @param fn
+ */
+function getExamples(opts, fn) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // nothing to do if no function is chosen
+        if (fn) {
+            const defn = yield Promise.resolve().then(() => __importStar(require(`../../commands/${fn}`)));
+            const hasExamples = defn.examples ? true : false;
+            const defnIsFunction = typeof defn.examples === "function";
+            if (hasExamples) {
+                if (!defnIsFunction && !Array.isArray(defn.examples)) {
+                    throw new Error(`Getting help on "${fn}" has failed because the examples section -- while configured -- is of the wrong format! Should be a function returning an array or an array of .`);
+                }
+                const examples = defnIsFunction ? defn.examples(opts) : defn.examples;
+            }
+            return hasExamples
+                ? defnIsFunction
+                    ? yield defn.description(opts)
+                    : defn.description
+                : ``;
+        }
+    });
+}
+exports.getExamples = getExamples;
 function getOptions(opts, fn) {
     return __awaiter(this, void 0, void 0, function* () {
         let options = [];

@@ -28,3 +28,4 @@ __export(require("./npm/index"));
 __export(require("./errors/index"));
 __export(require("./ui/index"));
 __export(require("./do-config/index"));
+__export(require("./npm"));

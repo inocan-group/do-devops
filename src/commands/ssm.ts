@@ -10,13 +10,31 @@ import commandLineArgs = require("command-line-args");
 import * as process from "process";
 import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
+import { ICommandDescription } from "../@types/index";
 
 /**
  * Description of command for help text
  */
-export function description() {
-  return "allows an easy CRUD-based interaction with AWS's SSM parameter system for managing secrets.";
+export function description(...opts: any[]) {
+  console.log("options", opts);
+
+  return "allows an easy interaction with AWS's SSM parameter system for managing secrets.";
 }
+
+export const syntax = "do ssm <sub-command> <options>";
+export const commands: ICommandDescription[] = [
+  {
+    name: "list",
+    summary: "lists the SSM secrets for a given profile and region"
+  },
+  { name: "get", summary: "get details on a specific secret" },
+  { name: "set", summary: "set the value for a given secret" }
+];
+export const examples = [
+  "do ssm list",
+  "do ssm list --profile myproject",
+  "do ssm add DEV/TRELLO/SID abcdefg1234"
+];
 
 export const options: OptionDefinition[] = [
   {

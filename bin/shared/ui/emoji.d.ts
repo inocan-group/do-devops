@@ -22,5 +22,7 @@ export declare const enum emoji {
     /** ○ */
     circleEmpty = "\u25CB",
     /** ◉  */
-    circleFilled = "\u25CB"
+    circleFilled = "\u25CB",
+    /** 🏃‍♂️ */
+    run = "\uD83C\uDFC3"
 }

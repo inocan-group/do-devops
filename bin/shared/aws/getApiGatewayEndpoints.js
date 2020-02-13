@@ -20,6 +20,7 @@ function getApiGatewayEndpoints(profileName, region) {
         const profile = index_1.convertProfileToApiCredential(yield index_1.getAwsProfile(profileName));
         const gw = new aws_sdk_1.APIGateway(Object.assign(Object.assign({}, profile), { region }));
         const apis = yield gw.getRestApis().promise();
+        console.log(JSON.stringify(apis, null, 2));
         const detail = yield gw.getRestApi({ restApiId: apis.items[0].apiKeySource });
         return detail;
     });
