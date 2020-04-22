@@ -23,29 +23,15 @@ function getAccountInfoFromServerlessYaml() {
         try {
             const config = yield getServerlessYaml_1.getServerlessYaml();
             const info = {
-                name: typeof config.service === "string"
-                    ? config.service
-                    : config.service.name,
+                name: typeof config.service === "string" ? config.service : config.service.name,
                 accountId: config.custom.accountId,
                 region: config.provider.region,
-                profile: config.provider.profile
+                profile: config.provider.profile,
+                pluginsInstalled: config.plugins || []
+                // tracing: (config as any).tracing
             };
             if (config.custom.logForwarding) {
                 info.logForwarding = config.custom.logForwarding.destinationARN;
-            }
-            try {
-                const sls = yield getServerlessYaml_1.getServerlessYaml();
-                info.pluginsInstalled = sls.plugins;
-                if (!sls.plugins.includes("serverless-webpack")) {
-                    console.log(chalk_1.default `{yellow {bold 
-            - it is recommended that you use {blue webpack} in some form. }}
-            - The most common means of doing this requires you install the {bold {blue serverless-webpack}} plugin}}
-            - However, just installing {bold blue webpack}} will allow {italic {bold do-devops}} to build/tree-shake with webpack
-          `);
-                }
-            }
-            catch (e) {
-                info.pluginsInstalled = [];
             }
             return info;
         }

@@ -7,7 +7,8 @@ import { hasDevDependency } from "../../npm";
 import { getConfig } from "../../do-config";
 import { join } from "path";
 import { IHandlerInfo } from "../getLocalHandlerInfo";
-import { stripFileExtension } from "../../file";
+import { stripFileExtension, relativePath } from "../../file";
+import { emoji } from "../../ui";
 
 export interface IInlineExportConfig {
   interface: string;
@@ -24,16 +25,23 @@ export interface IInlineExportConfig {
  * an `package: { artifact: fn.zip }`
  */
 export async function createInlineExports(handlers: IHandlerInfo[]) {
-  const bespokeWebpack =
-    (await getConfig()).build.buildTool === "webpack" &&
-    !hasDevDependency("serverless-webpack");
+  const bespokeWebpack = (await getConfig()).build.buildTool === "webpack" && !hasDevDependency("serverless-webpack");
 
   const header = 'import { IServerlessFunction } from "common-types";\n';
   let body: string[] = [];
   const config: IInlineExportConfig[] = [];
   handlers.forEach(handler => {
     // const comments = findHandlerComments(handler);
-    config.push(findHandlerConfig(handler.source, bespokeWebpack));
+    const handlerConfig = findHandlerConfig(handler.source, bespokeWebpack);
+    if (handlerConfig) {
+      config.push(handlerConfig);
+    } else {
+      console.log(
+        chalk`- ${emoji.poop} the {red ${relativePath(
+          handler.source
+        )}} file will be ignored as a handler as it has no CONFIG section defined. This is probably a mistake!`
+      );
+    }
   });
   const exportSymbols: string[] = [];
 
@@ -60,13 +68,9 @@ export default {
   ${exportSymbols.join(",\n\t")}
 }`;
 
-  writeFileSync(
-    path.join(process.env.PWD, "serverless-config/functions/inline.ts"),
-    file,
-    {
-      encoding: "utf-8"
-    }
-  );
+  writeFileSync(path.join(process.env.PWD, "serverless-config/functions/inline.ts"), file, {
+    encoding: "utf-8"
+  });
 }
 
 function objectPrint(obj: IDictionary) {
@@ -97,9 +101,7 @@ function convertToWebpackResource(fn: string) {
 }
 
 function warnAboutMissingTyping(config: IInlineExportConfig[]) {
-  const incorrectOrMissingTyping = config.filter(
-    i => i.interface !== "IWrapperFunction"
-  );
+  const incorrectOrMissingTyping = config.filter(i => i.interface !== "IWrapperFunction");
   if (incorrectOrMissingTyping.length > 0) {
     console.log(
       chalk`- there were ${String(

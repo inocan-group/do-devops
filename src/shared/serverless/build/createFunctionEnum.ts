@@ -3,6 +3,8 @@ import { writeFile } from "fs";
 import * as path from "path";
 import { promisify } from "util";
 import { IHandlerInfo } from "../getLocalHandlerInfo";
+import chalk from "chalk";
+import { emoji } from "../../ui";
 const write = promisify(writeFile);
 
 /**
@@ -20,23 +22,26 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
   let body: string[] = [];
   handlers.forEach(handler => {
     const config = findHandlerConfig(handler.source);
-    const fn = handler.fn;
-    const comment = config.config.description
-      ? config.config.description
-      : `${fn} handler`;
-    body.push(
-      `
+    if (!config) {
+      console.log(
+        chalk`- ${emoji.angry} also excluding the {italic ${handler.source
+          .split("/")
+          .pop()}} in the generated enumeration of handlers`
+      );
+    } else {
+      const fn = handler.fn;
+      const comment = config.config.description ? config.config.description : `${fn} handler`;
+      body.push(
+        `
   /**
    * ${comment}
    **/
   ${fn} = "${fn}"`
-    );
+      );
+    }
   });
+
   const fileText = `${header}${body.join(",")}${footer}`;
-  await write(
-    path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")),
-    fileText,
-    { encoding: "utf-8" }
-  );
+  await write(path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")), fileText, { encoding: "utf-8" });
   return fileText;
 }

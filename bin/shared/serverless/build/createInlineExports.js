@@ -26,6 +26,7 @@ const path = __importStar(require("path"));
 const npm_1 = require("../../npm");
 const do_config_1 = require("../../do-config");
 const path_1 = require("path");
+const file_1 = require("../../file");
 /**
  * Writes the serverless configuration file which contains
  * all the _inline_ function definitions found under `src/handlers`.
@@ -37,14 +38,19 @@ const path_1 = require("path");
  */
 function createInlineExports(handlers) {
     return __awaiter(this, void 0, void 0, function* () {
-        const bespokeWebpack = (yield do_config_1.getConfig()).build.buildTool === "webpack" &&
-            !npm_1.hasDevDependency("serverless-webpack");
+        const bespokeWebpack = (yield do_config_1.getConfig()).build.buildTool === "webpack" && !npm_1.hasDevDependency("serverless-webpack");
         const header = 'import { IServerlessFunction } from "common-types";\n';
         let body = [];
         const config = [];
         handlers.forEach(handler => {
             // const comments = findHandlerComments(handler);
-            config.push(index_1.findHandlerConfig(handler.source, bespokeWebpack));
+            const handlerConfig = index_1.findHandlerConfig(handler.source, bespokeWebpack);
+            if (handlerConfig) {
+                config.push(handlerConfig);
+            }
+            else {
+                console.log(chalk_1.default `- ${"\uD83D\uDCA9" /* poop */} the {red ${file_1.relativePath(handler.source)}} file will be ignored as a handler as it has no CONFIG section defined. This is probably a mistake!`);
+            }
         });
         const exportSymbols = [];
         warnAboutMissingTyping(config);

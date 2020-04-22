@@ -2,6 +2,7 @@ import { parseFile, namedExports } from "./index";
 import { IDictionary, IServerlessFunction } from "common-types";
 import chalk from "chalk";
 import { relativePath, stripFileExtension } from "../file";
+import { emoji } from "../ui";
 
 /**
  * Given a handler file, this will return the object key/value
@@ -17,30 +18,32 @@ export function findHandlerConfig(
   const ast = parseFile(filename);
   const hash: IDictionary = {};
   const config = namedExports(ast).find(i => i.name === "config");
-  const fn = filename
-    .split("/")
-    .pop()
-    .replace(".ts", "");
+  if (!config) {
+    return;
+  } else {
+    const fn = filename
+      .split("/")
+      .pop()
+      .replace(".ts", "");
 
-  config.properties.forEach(i => {
-    hash[i.name] = i.value;
-  });
+    config.properties.forEach(i => {
+      hash[i.name] = i.value;
+    });
 
-  hash.handler = isWebpackZip
-    ? `.webpack/${fn}.handler`
-    : filename.replace(".ts", ".handler");
+    hash.handler = isWebpackZip ? `.webpack/${fn}.handler` : filename.replace(".ts", ".handler");
 
-  if (isWebpackZip) {
-    if (hash.package) {
-      console.log(
-        chalk`{grey - the handler function "${fn}" had a defined package config but it will be replaced by a {italic artifact} reference}`
-      );
+    if (isWebpackZip) {
+      if (hash.package) {
+        console.log(
+          chalk`{grey - the handler function "${fn}" had a defined package config but it will be replaced by a {italic artifact} reference}`
+        );
+      }
+      hash.package = { artifact: `.webpack/${fn}.zip` };
     }
-    hash.package = { artifact: `.webpack/${fn}.zip` };
-  }
 
-  return {
-    interface: config.interface,
-    config: hash as IServerlessFunction
-  };
+    return {
+      interface: config.interface,
+      config: hash as IServerlessFunction
+    };
+  }
 }

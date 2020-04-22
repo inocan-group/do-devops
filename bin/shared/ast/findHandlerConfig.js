@@ -17,25 +17,28 @@ isWebpackZip = false) {
     const ast = index_1.parseFile(filename);
     const hash = {};
     const config = index_1.namedExports(ast).find(i => i.name === "config");
-    const fn = filename
-        .split("/")
-        .pop()
-        .replace(".ts", "");
-    config.properties.forEach(i => {
-        hash[i.name] = i.value;
-    });
-    hash.handler = isWebpackZip
-        ? `.webpack/${fn}.handler`
-        : filename.replace(".ts", ".handler");
-    if (isWebpackZip) {
-        if (hash.package) {
-            console.log(chalk_1.default `{grey - the handler function "${fn}" had a defined package config but it will be replaced by a {italic artifact} reference}`);
-        }
-        hash.package = { artifact: `.webpack/${fn}.zip` };
+    if (!config) {
+        return;
     }
-    return {
-        interface: config.interface,
-        config: hash
-    };
+    else {
+        const fn = filename
+            .split("/")
+            .pop()
+            .replace(".ts", "");
+        config.properties.forEach(i => {
+            hash[i.name] = i.value;
+        });
+        hash.handler = isWebpackZip ? `.webpack/${fn}.handler` : filename.replace(".ts", ".handler");
+        if (isWebpackZip) {
+            if (hash.package) {
+                console.log(chalk_1.default `{grey - the handler function "${fn}" had a defined package config but it will be replaced by a {italic artifact} reference}`);
+            }
+            hash.package = { artifact: `.webpack/${fn}.zip` };
+        }
+        return {
+            interface: config.interface,
+            config: hash
+        };
+    }
 }
 exports.findHandlerConfig = findHandlerConfig;

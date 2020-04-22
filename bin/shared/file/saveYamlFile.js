@@ -28,13 +28,14 @@ const write = util_1.promisify(fs_1.writeFile);
 function saveYamlFile(filename, data) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            console.log(data);
             const yamlData = js_yaml_1.safeDump(data);
             const fqFilename = path.join(process.cwd(), filename);
             yield write(fqFilename, yamlData, { encoding: "utf-8" });
             return;
         }
         catch (e) {
-            console.log(chalk_1.default `- {red writing the {bold {italic ${filename}} YAML file has failed!} ${"\uD83D\uDCA9" /* poop */}`);
+            console.log(chalk_1.default `- {red writing the {bold {italic ${filename}} YAML file has failed!} ${"\uD83D\uDCA9" /* poop */}}`);
             console.log(e.message);
             console.log(chalk_1.default `{dim ${e.stack}}`);
             process.exit();
