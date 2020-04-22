@@ -37,9 +37,7 @@ function writeInlineFunctions(handlers, functionRoot = "src", fileName = "inline
         let contents = 'import { IServerlessFunction } from "common-types";\n\n';
         const fnNames = [];
         for (const handler of handlers) {
-            const localPath = handler.file
-                .replace(/.*src\//, `${functionRoot}/`)
-                .replace(".ts", "");
+            const localPath = handler.file.replace(/.*src\//, `${functionRoot}/`).replace(".ts", "");
             const functionName = handler.file
                 .split("/")
                 .pop()
@@ -65,7 +63,9 @@ function writeInlineFunctions(handlers, functionRoot = "src", fileName = "inline
             contents += "}\n\n";
         }
         contents += `export default {\n  ${fnNames.join(",\n  ")}\n}`;
-        yield writeFile(path_1.default.join(process.cwd(), `serverless-config/functions/${fileName}.ts`), contents, { encoding: "utf-8" });
+        yield writeFile(path_1.default.join(process.cwd(), `serverless-config/functions/${fileName}.ts`), contents, {
+            encoding: "utf-8"
+        });
     });
 }
 exports.writeInlineFunctions = writeInlineFunctions;

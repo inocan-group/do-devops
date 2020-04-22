@@ -8,6 +8,8 @@ import { IDictionary } from "common-types";
 export async function askForAccountInfo(
   defaults: Partial<IServerlessAccountInfo> = {}
 ): Promise<IServerlessAccountInfo> {
+  console.log("asking", defaults);
+
   const pkgJson = await getPackageJson();
   const profiles = await getAwsProfileList();
   const profileMessage = "choose a profile from your AWS credentials file";
@@ -18,10 +20,7 @@ export async function askForAccountInfo(
     defaults.accountId &&
     defaults.region &&
     defaults.pluginsInstalled &&
-    (defaults.logForwarding ||
-      !Object.keys(pkgJson.devDependencies).includes(
-        "serverless-log-forwarding"
-      ))
+    (defaults.logForwarding || !Object.keys(pkgJson.devDependencies).includes("serverless-log-forwarding"))
   ) {
     return defaults as IServerlessAccountInfo;
   }
@@ -46,25 +45,17 @@ export async function askForAccountInfo(
     {
       type: "input",
       name: "name",
-      message:
-        "What is the service name which your functions will be prefixed with",
+      message: "What is the service name which your functions will be prefixed with",
       default: defaults.name || pkgJson.name,
       when: () => !defaults.name
     },
     profileQuestion
   ];
 
-  let answers: Partial<IServerlessAccountInfo> = await inquirer.prompt(
-    questions
-  );
+  let answers: Partial<IServerlessAccountInfo> = await inquirer.prompt(questions);
   const awsProfile = await getAwsProfile(answers.profile as string);
-  const userProfile =
-    awsProfile && awsProfile.aws_secret_access_key
-      ? await getAwsUserProfile(awsProfile)
-      : undefined;
-  const accountId = userProfile
-    ? userProfile.User.Arn.replace(/arn:aws:iam::([0-9]+):.*/, "$1")
-    : undefined;
+  const userProfile = awsProfile && awsProfile.aws_secret_access_key ? await getAwsUserProfile(awsProfile) : undefined;
+  const accountId = userProfile ? userProfile.User.Arn.replace(/arn:aws:iam::([0-9]+):.*/, "$1") : undefined;
 
   questions = [
     {

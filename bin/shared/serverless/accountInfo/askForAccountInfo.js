@@ -15,6 +15,7 @@ const inquirer = require("inquirer");
 const aws_1 = require("../../aws");
 function askForAccountInfo(defaults = {}) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("asking", defaults);
         const pkgJson = yield npm_1.getPackageJson();
         const profiles = yield aws_1.getAwsProfileList();
         const profileMessage = "choose a profile from your AWS credentials file";
@@ -23,8 +24,7 @@ function askForAccountInfo(defaults = {}) {
             defaults.accountId &&
             defaults.region &&
             defaults.pluginsInstalled &&
-            (defaults.logForwarding ||
-                !Object.keys(pkgJson.devDependencies).includes("serverless-log-forwarding"))) {
+            (defaults.logForwarding || !Object.keys(pkgJson.devDependencies).includes("serverless-log-forwarding"))) {
             return defaults;
         }
         const baseProfileQuestion = {
@@ -50,12 +50,8 @@ function askForAccountInfo(defaults = {}) {
         ];
         let answers = yield inquirer.prompt(questions);
         const awsProfile = yield aws_1.getAwsProfile(answers.profile);
-        const userProfile = awsProfile && awsProfile.aws_secret_access_key
-            ? yield aws_1.getAwsUserProfile(awsProfile)
-            : undefined;
-        const accountId = userProfile
-            ? userProfile.User.Arn.replace(/arn:aws:iam::([0-9]+):.*/, "$1")
-            : undefined;
+        const userProfile = awsProfile && awsProfile.aws_secret_access_key ? yield aws_1.getAwsUserProfile(awsProfile) : undefined;
+        const accountId = userProfile ? userProfile.User.Arn.replace(/arn:aws:iam::([0-9]+):.*/, "$1") : undefined;
         questions = [
             {
                 type: "input",

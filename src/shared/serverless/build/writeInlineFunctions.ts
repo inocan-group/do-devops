@@ -14,17 +14,11 @@ const writeFile = promisify(fs.writeFile);
  * file unless the function exports a `config` property to express
  * other configuration properties.
  */
-export async function writeInlineFunctions(
-  handlers: IHandlerReference[],
-  functionRoot = "src",
-  fileName = "inline"
-) {
+export async function writeInlineFunctions(handlers: IHandlerReference[], functionRoot = "src", fileName = "inline") {
   let contents = 'import { IServerlessFunction } from "common-types";\n\n';
   const fnNames = [];
   for (const handler of handlers) {
-    const localPath = handler.file
-      .replace(/.*src\//, `${functionRoot}/`)
-      .replace(".ts", "");
+    const localPath = handler.file.replace(/.*src\//, `${functionRoot}/`).replace(".ts", "");
     const functionName = handler.file
       .split("/")
       .pop()
@@ -52,9 +46,7 @@ export async function writeInlineFunctions(
   }
   contents += `export default {\n  ${fnNames.join(",\n  ")}\n}`;
 
-  await writeFile(
-    path.join(process.cwd(), `serverless-config/functions/${fileName}.ts`),
-    contents,
-    { encoding: "utf-8" }
-  );
+  await writeFile(path.join(process.cwd(), `serverless-config/functions/${fileName}.ts`), contents, {
+    encoding: "utf-8"
+  });
 }

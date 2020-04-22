@@ -1,6 +1,5 @@
-export declare const inverted: import("chalk").Chalk & {
-    supportsColor: import("chalk").ColorSupport;
-};
+import chalk from "chalk";
+export declare const inverted: chalk.Chalk;
 export * from "./askForDataFile";
 export * from "./commands";
 export * from "./options";
