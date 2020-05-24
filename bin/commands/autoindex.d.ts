@@ -8,4 +8,3 @@ export declare const options: OptionDefinition[];
  * the file's current directory
  */
 export declare function handler(argv: string[], opts: IDictionary): Promise<void>;
-export declare function communicateApi(paths: string[]): void;

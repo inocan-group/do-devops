@@ -1,12 +1,13 @@
 import { basename, dirname, join } from "path";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
+import { getMonoRepoPackages, relativePath } from "../shared/file";
 
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
+import { askHowToHandleMonoRepoIndexing } from "./autoindex/index";
 import chalk from "chalk";
 import { format } from "date-fns";
 import globby from "globby";
-import { relativePath } from "../shared/file";
 
 const START_REGION = "//#region autoindexed files";
 const END_REGION = "//#endregion";
@@ -41,21 +42,43 @@ export const options: OptionDefinition[] = [
  * signature. If found then it _auto_-builds this file based on files in
  * the file's current directory
  */
-export async function handler(argv: string[], opts: IDictionary) {
-  const dir = opts.dir || join(process.env.PWD, "src");
+export async function handler(argv: string[], opts: IDictionary): Promise<void> {
+  const dir = opts.dir || process.env.PWD;
   const globInclude = opts.glob;
+  const monoRepoPackages: false | string[] = getMonoRepoPackages(dir);
+
+  if (monoRepoPackages) {
+    const response: string = await askHowToHandleMonoRepoIndexing(monoRepoPackages);
+    if (response === "ALL") {
+      for await (const pkg of monoRepoPackages) {
+        if (!opts.quiet) {
+          console.log(chalk`Running {bold autoindex} for the {green ${pkg}}:`);
+        }
+        await handler(argv, { ...opts, dir: join(opts.dir || process.env.PWD, "packages", pkg), withinMonorepo: true });
+      }
+      return;
+    } else {
+      return handler(argv, {
+        ...opts,
+        dir: join(opts.dir || process.env.PWD, "packages", response),
+        withinMonorepo: true,
+      });
+    }
+  }
+
+  const srcDir = join(dir, "src");
 
   const paths = await globby([
-    `${dir}/**/index.ts`,
-    `${dir}/**/index.js`,
-    `${dir}/**/private.ts`,
-    `${dir}/**/private.js`,
+    `${srcDir}/**/index.ts`,
+    `${srcDir}/**/index.js`,
+    `${srcDir}/**/private.ts`,
+    `${srcDir}/**/private.js`,
     "!node_modules",
   ]);
 
-  const results = await processFiles(paths);
+  const results = await processFiles(paths, opts);
   if (!opts.quiet) {
-    console.log(results);
+    console.log();
   }
 }
 
@@ -67,17 +90,22 @@ function timestamp() {
  * Reach into each file and look to see if it is a "autoindex" file; if it is
  * then create the autoindex.
  */
-async function processFiles(paths: string[]) {
+async function processFiles(paths: string[], opts: IDictionary) {
   const results: IDictionary<string> = {};
 
-  for (const path of paths) {
+  for await (const path of paths) {
     const fileString = readFileSync(path, { encoding: "utf-8" });
     if (fileString.includes("// #autoindex") || fileString.includes("//#autoindex")) {
       results[path] = fileString;
     }
   }
   if (Object.keys(results).length === 0) {
-    communicateApi(paths);
+    if (opts.withinMonorepo) {
+      console.log(chalk`- No {italic autoindex} files found`);
+      return;
+    } else {
+      communicateApi(paths);
+    }
   } else {
     // iterate over each autoindex file
     for (const filePath of Object.keys(results)) {
@@ -227,7 +255,7 @@ function removeExtension(file: string, force: boolean = false) {
   return ext === "vue" && !force ? file : fn;
 }
 
-export function communicateApi(paths: string[]) {
+function communicateApi(paths: string[]) {
   console.log(
     `- Scanned through ${chalk.bold(String(paths.length))} ${chalk.italic(
       "index"

@@ -8,16 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
 const fs_1 = require("fs");
+const file_1 = require("../shared/file");
+const index_1 = require("./autoindex/index");
 const chalk_1 = __importDefault(require("chalk"));
 const date_fns_1 = require("date-fns");
 const globby_1 = __importDefault(require("globby"));
-const file_1 = require("../shared/file");
 const START_REGION = "//#region autoindexed files";
 const END_REGION = "//#endregion";
 function description() {
@@ -50,19 +58,47 @@ exports.options = [
  * the file's current directory
  */
 function handler(argv, opts) {
+    var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const dir = opts.dir || path_1.join(process.env.PWD, "src");
+        const dir = opts.dir || process.env.PWD;
         const globInclude = opts.glob;
+        const monoRepoPackages = file_1.getMonoRepoPackages(dir);
+        if (monoRepoPackages) {
+            const response = yield index_1.askHowToHandleMonoRepoIndexing(monoRepoPackages);
+            if (response === "ALL") {
+                try {
+                    for (var monoRepoPackages_1 = __asyncValues(monoRepoPackages), monoRepoPackages_1_1; monoRepoPackages_1_1 = yield monoRepoPackages_1.next(), !monoRepoPackages_1_1.done;) {
+                        const pkg = monoRepoPackages_1_1.value;
+                        if (!opts.quiet) {
+                            console.log(chalk_1.default `Running {bold autoindex} for the {green ${pkg}}:`);
+                        }
+                        yield handler(argv, Object.assign(Object.assign({}, opts), { dir: path_1.join(opts.dir || process.env.PWD, "packages", pkg), withinMonorepo: true }));
+                    }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (monoRepoPackages_1_1 && !monoRepoPackages_1_1.done && (_a = monoRepoPackages_1.return)) yield _a.call(monoRepoPackages_1);
+                    }
+                    finally { if (e_1) throw e_1.error; }
+                }
+                return;
+            }
+            else {
+                return handler(argv, Object.assign(Object.assign({}, opts), { dir: path_1.join(opts.dir || process.env.PWD, "packages", response), withinMonorepo: true }));
+            }
+        }
+        const srcDir = path_1.join(dir, "src");
         const paths = yield globby_1.default([
-            `${dir}/**/index.ts`,
-            `${dir}/**/index.js`,
-            `${dir}/**/private.ts`,
-            `${dir}/**/private.js`,
+            `${srcDir}/**/index.ts`,
+            `${srcDir}/**/index.js`,
+            `${srcDir}/**/private.ts`,
+            `${srcDir}/**/private.js`,
             "!node_modules",
         ]);
-        const results = yield processFiles(paths);
+        const results = yield processFiles(paths, opts);
         if (!opts.quiet) {
-            console.log(results);
+            console.log();
         }
     });
 }
@@ -74,17 +110,35 @@ function timestamp() {
  * Reach into each file and look to see if it is a "autoindex" file; if it is
  * then create the autoindex.
  */
-function processFiles(paths) {
+function processFiles(paths, opts) {
+    var paths_1, paths_1_1;
+    var e_2, _a;
     return __awaiter(this, void 0, void 0, function* () {
         const results = {};
-        for (const path of paths) {
-            const fileString = fs_1.readFileSync(path, { encoding: "utf-8" });
-            if (fileString.includes("// #autoindex") || fileString.includes("//#autoindex")) {
-                results[path] = fileString;
+        try {
+            for (paths_1 = __asyncValues(paths); paths_1_1 = yield paths_1.next(), !paths_1_1.done;) {
+                const path = paths_1_1.value;
+                const fileString = fs_1.readFileSync(path, { encoding: "utf-8" });
+                if (fileString.includes("// #autoindex") || fileString.includes("//#autoindex")) {
+                    results[path] = fileString;
+                }
             }
         }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (paths_1_1 && !paths_1_1.done && (_a = paths_1.return)) yield _a.call(paths_1);
+            }
+            finally { if (e_2) throw e_2.error; }
+        }
         if (Object.keys(results).length === 0) {
-            communicateApi(paths);
+            if (opts.withinMonorepo) {
+                console.log(chalk_1.default `- No {italic autoindex} files found`);
+                return;
+            }
+            else {
+                communicateApi(paths);
+            }
         }
         else {
             // iterate over each autoindex file
@@ -219,4 +273,3 @@ function communicateApi(paths) {
     console.log(chalk_1.default.dim.italic("  where the valid commands are (aka, CMD from above): ") + chalk_1.default.italic("named,defaults"));
     console.log(chalk_1.default `  {white {bold Note:}}\n    {dim {italic you can also add the "--add" flag to look for other regex files patterns}}`);
 }
-exports.communicateApi = communicateApi;
