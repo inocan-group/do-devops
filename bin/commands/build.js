@@ -26,22 +26,22 @@ const ast_1 = require("../shared/ast");
 exports.defaultConfig = {
     preBuildHooks: ["clean"],
     targetDirectory: "dist",
-    buildTool: "tsc"
+    buildTool: "tsc",
 };
 exports.options = [
     {
         name: "force",
         type: Boolean,
         group: "build",
-        description: `forces the transpiling of code when building a serverless project`
+        description: `forces the transpiling of code when building a serverless project`,
     },
     {
         name: "interactive",
         alias: "i",
         type: Boolean,
         group: "build",
-        description: `allows choosing the functions interactively`
-    }
+        description: `allows choosing the functions interactively`,
+    },
 ];
 function description() {
     return `Efficient and clear build pipelines for serverless and/or NPM libraries`;
@@ -51,9 +51,7 @@ function handler(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const { build: config } = yield shared_1.getConfig();
         const serverless = yield shared_1.isServerless();
-        const buildTool = opts.buildTool ||
-            config.buildTool ||
-            (yield index_1.askBuildTool(serverless ? true : false));
+        const buildTool = opts.buildTool || config.buildTool || (yield index_1.askBuildTool(serverless ? true : false));
         const tooling = (yield Promise.resolve().then(() => __importStar(require(`./build-helpers/tools/${buildTool}`))))
             .default;
         if (opts.output && !opts.quiet) {

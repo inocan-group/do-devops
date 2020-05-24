@@ -1,6 +1,6 @@
 {
   "name": "do-devops",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Devops commands for your nodejs projects",
   "main": "index.js",
   "typings": "./bin/index.map.ts",
@@ -42,7 +42,7 @@
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.0.2",
     "common-types": "^1.14.2",
-    "date-fns": "^2.8.1",
+    "date-fns": "^2.14.0",
     "fast-glob": "^3.2.2",
     "globby": "^11.0.0",
     "inquirer": "^6.5.1",
