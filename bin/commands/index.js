@@ -1,4 +1,7 @@
 "use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -7,25 +10,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const help = __importStar(require("./help"));
-exports.help = help;
-const build = __importStar(require("./build"));
-exports.build = build;
-const info = __importStar(require("./info"));
-exports.info = info;
-const invoke = __importStar(require("./invoke"));
-exports.invoke = invoke;
-const fns = __importStar(require("./fns"));
-exports.fns = fns;
-const autoindex = __importStar(require("./autoindex"));
-exports.autoindex = autoindex;
-const deploy = __importStar(require("./deploy"));
-exports.deploy = deploy;
-const pkg = __importStar(require("./pkg"));
-exports.pkg = pkg;
-const ssm = __importStar(require("./ssm"));
-exports.ssm = ssm;
-const endpoints = __importStar(require("./endpoints"));
-exports.endpoints = endpoints;
-const test = __importStar(require("./test"));
-exports.test = test;
+//#region autoindexed files
+// indexed at: 5th May, 2020, 01:23 PM ( GMT-7 )
+exports.autoindex = __importStar(require("./autoindex"));
+exports.build = __importStar(require("./build"));
+exports.deploy = __importStar(require("./deploy"));
+exports.endpoints = __importStar(require("./endpoints"));
+exports.fns = __importStar(require("./fns"));
+exports.global = __importStar(require("./global"));
+exports.help = __importStar(require("./help"));
+exports.info = __importStar(require("./info"));
+exports.invoke = __importStar(require("./invoke"));
+exports.pkg = __importStar(require("./pkg"));
+exports.ssm = __importStar(require("./ssm"));
+exports.test = __importStar(require("./test"));
+__export(require("./autoindex/index"));
+__export(require("./build-helpers/index"));
+__export(require("./config/index"));
+__export(require("./deploy-helpers/index"));
+//#endregion
