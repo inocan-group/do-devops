@@ -1,8 +1,6 @@
 import { parseFile, namedExports } from "./index";
 import { IDictionary, IServerlessFunction } from "common-types";
 import chalk from "chalk";
-import { relativePath, stripFileExtension } from "../file";
-import { emoji } from "../ui";
 
 /**
  * Given a handler file, this will return the object key/value
@@ -17,16 +15,13 @@ export function findHandlerConfig(
 ) {
   const ast = parseFile(filename);
   const hash: IDictionary = {};
-  const config = namedExports(ast).find(i => i.name === "config");
+  const config = namedExports(ast).find((i) => i.name === "config");
   if (!config) {
     return;
   } else {
-    const fn = filename
-      .split("/")
-      .pop()
-      .replace(".ts", "");
+    const fn = filename.split("/").pop().replace(".ts", "");
 
-    config.properties.forEach(i => {
+    config.properties.forEach((i) => {
       hash[i.name] = i.value;
     });
 
@@ -43,7 +38,7 @@ export function findHandlerConfig(
 
     return {
       interface: config.interface,
-      config: hash as IServerlessFunction
+      config: hash as IServerlessFunction,
     };
   }
 }

@@ -16,16 +16,13 @@ function findHandlerConfig(filename,
 isWebpackZip = false) {
     const ast = index_1.parseFile(filename);
     const hash = {};
-    const config = index_1.namedExports(ast).find(i => i.name === "config");
+    const config = index_1.namedExports(ast).find((i) => i.name === "config");
     if (!config) {
         return;
     }
     else {
-        const fn = filename
-            .split("/")
-            .pop()
-            .replace(".ts", "");
-        config.properties.forEach(i => {
+        const fn = filename.split("/").pop().replace(".ts", "");
+        config.properties.forEach((i) => {
             hash[i.name] = i.value;
         });
         hash.handler = isWebpackZip ? `.webpack/${fn}.handler` : filename.replace(".ts", ".handler");
@@ -37,7 +34,7 @@ isWebpackZip = false) {
         }
         return {
             interface: config.interface,
-            config: hash
+            config: hash,
         };
     }
 }
