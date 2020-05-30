@@ -1,7 +1,8 @@
-import path from "path";
+import * as chalk from "chalk";
+import * as fg from "fast-glob";
+import * as path from "path";
+
 import { parseFile } from "./parseFile";
-import fg from "fast-glob";
-import chalk from "chalk";
 import { relativePath } from "../file";
 
 /**
@@ -17,11 +18,7 @@ export function getValidServerlessHandlers() {
       ast = parseFile(curr);
       status = "file-parsed";
       if (!ast.program.body[0].source) {
-        console.log(
-          chalk`{grey - the file {blue ${relativePath(
-            curr
-          )}} has no source content; will be ignored}`
-        );
+        console.log(chalk`{grey - the file {blue ${relativePath(curr)}} has no source content; will be ignored}`);
 
         return agg;
       }
@@ -31,20 +28,14 @@ export function getValidServerlessHandlers() {
       status = handler ? "handler-found" : "handler-missing";
       if (handler) {
         if (!Array.isArray(agg)) {
-          throw new Error(
-            `Found a handler but somehow the file aggregation is not an array! ${handler}`
-          );
+          throw new Error(`Found a handler but somehow the file aggregation is not an array! ${handler}`);
         }
         agg.push(curr);
       }
 
       return agg;
     } catch (e) {
-      console.log(
-        chalk`- Error processing  {red ${relativePath(
-          curr
-        )}} [s: ${status}]: {grey ${e.message}}`
-      );
+      console.log(chalk`- Error processing  {red ${relativePath(curr)}} [s: ${status}]: {grey ${e.message}}`);
       return agg;
     }
   }, []);

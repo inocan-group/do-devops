@@ -3,9 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("./index");
 let _devDeps;
 function hasDevDependency(dep, pathOveride) {
-    const devDeps = _devDeps
-        ? _devDeps
-        : (index_1.getPackageJson(pathOveride) || {}).devDependencies;
+    const devDeps = _devDeps ? _devDeps : (index_1.getPackageJson(pathOveride) || {}).devDependencies;
     _devDeps = devDeps;
     return _devDeps && Object.keys(devDeps).includes(dep);
 }

@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const globby = require("globby");
 const path_1 = require("path");
-const globby_1 = __importDefault(require("globby"));
 /**
  * Returns a list of files of a particular type/extention. This list of files will
  * originate off of the `src` directory or whatever directory you state as the `dir`.
@@ -14,6 +11,6 @@ const globby_1 = __importDefault(require("globby"));
  */
 function getAllFilesOfType(type, dir = "src") {
     const directory = dir.slice(0, 1) === "/" ? dir : path_1.join(process.cwd(), dir);
-    return globby_1.default.sync([`${directory}/**/*.${type}`]);
+    return globby.sync([`${directory}/**/*.${type}`]);
 }
 exports.getAllFilesOfType = getAllFilesOfType;

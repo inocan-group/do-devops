@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import * as chalk from "chalk";
 
 const jest = async (args: any) => {
   console.log(

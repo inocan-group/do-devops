@@ -1,9 +1,10 @@
 import * as recast from "recast";
-import { parseFile } from "./parseFile";
-import get from "lodash.get";
+
 import { IDictionary } from "common-types";
-import { getFieldValue } from "ast-types";
 import { write } from "../file";
+
+import get = require("lodash.get");
+
 type VariableDeclaration = recast.types.namedTypes.VariableDeclaration;
 type TSInterfaceDeclaration = recast.types.namedTypes.TSInterfaceDeclaration;
 type CommentLine = recast.types.namedTypes.CommentLine;
@@ -17,11 +18,7 @@ export interface IExportedDeclaration {
    * The JS _kind_ of variable of the export
    */
   kind: "const" | "let" | string;
-  type:
-    | "ObjectExpression"
-    | "ArrowFunctionExpression"
-    | "TSInterfaceDeclaration"
-    | string;
+  type: "ObjectExpression" | "ArrowFunctionExpression" | "TSInterfaceDeclaration" | string;
   /**
    * if available, determine the TS interface used for this export
    */
@@ -44,16 +41,12 @@ export interface IPropertyInfo {
  *
  * @param ast a Typescript file based AST
  */
-export function namedExports(
-  ast: recast.types.namedTypes.File
-): IExportedDeclaration[] {
-  const namedExports = ast.program.body.filter(
-    i => i.type === "ExportNamedDeclaration"
-  );
+export function namedExports(ast: recast.types.namedTypes.File): IExportedDeclaration[] {
+  const namedExports = ast.program.body.filter((i) => i.type === "ExportNamedDeclaration");
 
   const output: IExportedDeclaration[] = [];
 
-  namedExports.forEach(i => {
+  namedExports.forEach((i) => {
     const type = get(i, "declaration.type");
     const declarations = get(i, "declaration.declarations.0");
     output.push({
@@ -65,17 +58,13 @@ export function namedExports(
           : type === "TSInterfaceDeclaration"
           ? "interface"
           : "",
-      interface: get(
-        i,
-        "declaration.declarations.0.id.typeAnnotation.typeAnnotation.typeName.name",
-        null
-      ),
+      interface: get(i, "declaration.declarations.0.id.typeAnnotation.typeAnnotation.typeName.name", null),
       comments: get(i, "comments", []) as CommentLine[],
       ...(type === "VariableDeclaration"
         ? getVariableDeclaration(get(i, "declaration"))
         : type === "TSInterfaceDeclaration"
         ? getInterfaceDeclaration(get(i, "declaration"))
-        : { name: "" })
+        : { name: "" }),
     });
   });
   return output;
@@ -96,18 +85,16 @@ function getVariableDeclaration(declaration: VariableDeclaration) {
     //     get(i3, "value.value")
     //   );
     // }),
-    type: get(i, "value.type")
+    type: get(i, "value.type"),
   }));
-  const params = get(root, "init.params", []).map((i: any) =>
-    get(i, "name", "")
-  );
+  const params = get(root, "init.params", []).map((i: any) => get(i, "name", ""));
 
   return {
     name: get(root, "id.name"),
     interface: get(root, "id.typeAnnotation.typeAnnotation.typeName.name"),
     type,
     ...(properties ? { properties } : {}),
-    ...(params.length > 0 ? { params } : {})
+    ...(params.length > 0 ? { params } : {}),
   };
 }
 
@@ -143,7 +130,7 @@ function getValue(node: IDictionary) {
 
 function getInterfaceDeclaration(declaration: TSInterfaceDeclaration) {
   return {
-    name: get(declaration, "id.name")
+    name: get(declaration, "id.name"),
   };
 }
 

@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
+const fs = require("fs");
+const path = require("path");
 const npm_1 = require("../npm");
 const getServerlessYaml_1 = require("./getServerlessYaml");
 /**
@@ -22,7 +19,7 @@ const getServerlessYaml_1 = require("./getServerlessYaml");
  */
 function isServerless() {
     return __awaiter(this, void 0, void 0, function* () {
-        const hasServerlessConfig = fs_1.default.existsSync(path_1.default.join(process.cwd(), "serverless.yml"));
+        const hasServerlessConfig = fs.existsSync(path.join(process.cwd(), "serverless.yml"));
         let slsConfig;
         try {
             slsConfig = yield getServerlessYaml_1.getServerlessYaml();
@@ -31,21 +28,17 @@ function isServerless() {
             //
         }
         const pkgJson = npm_1.getPackageJson();
-        const hasAsDevDep = pkgJson
-            ? Object.keys(pkgJson.devDependencies).includes("serverless")
-            : false;
-        const isUsingTypescriptMicroserviceTemplate = fs_1.default.existsSync(path_1.default.join(process.cwd(), "serverless-config/config.ts"));
+        const hasAsDevDep = pkgJson ? Object.keys(pkgJson.devDependencies).includes("serverless") : false;
+        const isUsingTypescriptMicroserviceTemplate = fs.existsSync(path.join(process.cwd(), "serverless-config/config.ts"));
         const hasProviderSection = slsConfig && slsConfig.provider ? true : false;
         const configIsParsable = hasServerlessConfig && slsConfig ? true : false;
-        return hasServerlessConfig ||
-            hasAsDevDep ||
-            isUsingTypescriptMicroserviceTemplate
+        return hasServerlessConfig || hasAsDevDep || isUsingTypescriptMicroserviceTemplate
             ? {
                 hasServerlessConfig,
                 hasAsDevDep,
                 isUsingTypescriptMicroserviceTemplate,
                 hasProviderSection,
-                configIsParsable
+                configIsParsable,
             }
             : false;
     });

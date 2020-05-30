@@ -1,5 +1,5 @@
-import path from "path";
-import fg from "fast-glob";
+import * as fg from "fast-glob";
+import * as path from "path";
 
 /**
  * **findInlineFunctionDefnFiles**
@@ -10,9 +10,7 @@ import fg from "fast-glob";
  * instead of the default of `${PWD}/src`
  */
 export function findInlineFunctionDefnFiles(basePath?: string) {
-  const glob = basePath
-    ? path.join(basePath, "/**/*.defn.ts")
-    : path.join(process.env.PWD, "/src/**/*.defn.ts");
+  const glob = basePath ? path.join(basePath, "/**/*.defn.ts") : path.join(process.env.PWD, "/src/**/*.defn.ts");
 
   return fg.sync([glob]) as string[];
 }

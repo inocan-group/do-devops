@@ -8,16 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const getServerlessYaml_1 = require("./getServerlessYaml");
-const index_1 = require("../index");
-const chalk_1 = __importDefault(require("chalk"));
-const lodash_1 = require("lodash");
+const chalk = require("chalk");
 const determineProfile_1 = require("./determineProfile");
+const lodash_1 = require("lodash");
 const aws_1 = require("../aws");
+const index_1 = require("../index");
+const getServerlessYaml_1 = require("./getServerlessYaml");
 /**
  * Determines the appropriate `region` to point at based on CLI switches/options,
  * the Serverless configuration, and the global `do` config defaults.
@@ -50,11 +47,11 @@ function determineRegion(opts) {
         if (!outcome) {
             const userConfig = yield index_1.getConfig({
                 projectOrUserConfig: "user",
-                exitIfNotFound: false
+                exitIfNotFound: false,
             });
             if (userConfig && userConfig.global.defaultAwsRegion) {
                 if (opts.cliOptions && !opts.cliOptions.quiet) {
-                    console.log(chalk_1.default `{bold - AWS region has been resolved using the User's config ${"\uD83D\uDC40" /* eyeballs */}}. This is the source of "last resort" but may be intended.`);
+                    console.log(chalk `{bold - AWS region has been resolved using the User's config ${"\uD83D\uDC40" /* eyeballs */}}. This is the source of "last resort" but may be intended.`);
                 }
                 outcome = userConfig.global.defaultAwsRegion;
             }

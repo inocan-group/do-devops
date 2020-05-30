@@ -1,10 +1,9 @@
-import {
-  getValidServerlessHandlers,
-  validateWebpackConfig
-} from "../../../shared/ast/index";
-import wp from "webpack";
-import { IDictionary } from "common-types";
+import * as wp from "webpack";
+
+import { getValidServerlessHandlers, validateWebpackConfig } from "../../../shared/ast/index";
+
 import { IBuildToolingOptions } from "./types";
+import { IDictionary } from "common-types";
 import { join } from "path";
 
 /**
@@ -17,7 +16,7 @@ export default function webpack(opts: IBuildToolingOptions = {}) {
 
   return {
     build: build(fns, opts),
-    watch: watch(fns, opts)
+    watch: watch(fns, opts),
   };
 }
 
@@ -30,7 +29,7 @@ function build(fns: string[], opts: IDictionary) {
 function watch(fns: string[], opts: IDictionary) {
   return async function webpackWatch() {
     const wpConfig = await import(join(process.cwd(), "webpack.config.js"));
-    wp(wpConfig).watch({}, function() {
+    wp(wpConfig).watch({}, function () {
       console.log("watcher");
     });
   };

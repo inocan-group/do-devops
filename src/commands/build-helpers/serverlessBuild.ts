@@ -1,13 +1,12 @@
-import { getValidServerlessHandlers } from "../../shared/ast/index";
+import * as chalk from "chalk";
+
+import { DevopsError, askForFunctions, hasDevDependency } from "../../shared/index";
+
 import { IDictionary } from "common-types";
-import {
-  hasDevDependency,
-  DevopsError,
-  askForFunctions
-} from "../../shared/index";
 import { getLocalServerlessFunctionsFromServerlessYaml } from "../../shared/serverless/index";
-import chalk from "chalk";
-import matcher from "matcher";
+import { getValidServerlessHandlers } from "../../shared/ast/index";
+
+import matcher = require("matcher");
 
 /**
  * Handles any needed transpilation for a **Serverless** project
@@ -58,9 +57,7 @@ the {italic deploy} command will detect this and transpile at deploy-time.}\n`);
 }
 
 async function filterOutInvalidFunction(fns: string[]) {
-  const validFns = Object.keys(
-    await getLocalServerlessFunctionsFromServerlessYaml()
-  );
+  const validFns = Object.keys(await getLocalServerlessFunctionsFromServerlessYaml());
   const results: {
     valid: string[];
     invalid: string[];
@@ -71,10 +68,10 @@ async function filterOutInvalidFunction(fns: string[]) {
     invalid: [],
     /** shows fn names which were NOT a direct match but are a soft match */
     explicit: [],
-    implicit: []
+    implicit: [],
   };
 
-  fns.forEach(f => {
+  fns.forEach((f) => {
     if (f.includes("*") || f.includes("!")) {
       // explicit soft match
       results.explicit = results.explicit.concat(...matcher(validFns, [f]));
@@ -82,9 +79,7 @@ async function filterOutInvalidFunction(fns: string[]) {
       results.valid.push(f);
     } else {
       // implicit soft match
-      results.implicit = results.implicit.concat(
-        ...matcher(validFns, [f, `${f}*`])
-      );
+      results.implicit = results.implicit.concat(...matcher(validFns, [f, `${f}*`]));
       results.invalid.push(f);
     }
   });

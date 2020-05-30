@@ -9,8 +9,6 @@
     "noImplicitAny": true,
     "outDir": "./bin",
     "removeComments": false,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "typeRoots": ["@types/bestzip", "node_modules/@types"]
   },
   "include": ["src/**/*.ts"],

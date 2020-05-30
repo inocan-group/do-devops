@@ -8,5 +8,5 @@ export interface IDoTestConfig {
 export enum UnitTestFramework {
   jest = "jest",
   mocha = "mocha",
-  other = "other"
+  other = "other",
 }

@@ -1,6 +1,6 @@
-import { OptionDefinition } from "command-line-usage";
-import { IDictionary } from "common-types";
 import { ICommandDescription } from "../@types/index";
+import { IDictionary } from "common-types";
+import { OptionDefinition } from "command-line-usage";
 /**
  * Description of command for help text
  */

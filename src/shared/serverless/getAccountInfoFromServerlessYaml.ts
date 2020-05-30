@@ -1,6 +1,7 @@
-import { getServerlessYaml } from "./getServerlessYaml";
-import chalk from "chalk";
+import * as chalk from "chalk";
+
 import { IServerlessAccountInfo } from "../../@types";
+import { getServerlessYaml } from "./getServerlessYaml";
 
 /**
  * Gets the `accountInfo` from the `serverless.yml` file if
@@ -14,7 +15,7 @@ export async function getAccountInfoFromServerlessYaml() {
       accountId: config.custom.accountId,
       region: config.provider.region,
       profile: config.provider.profile,
-      pluginsInstalled: config.plugins || []
+      pluginsInstalled: config.plugins || [],
       // tracing: (config as any).tracing
     } as IServerlessAccountInfo;
 

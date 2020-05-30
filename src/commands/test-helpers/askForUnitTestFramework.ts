@@ -1,7 +1,9 @@
 import inquirer = require("inquirer");
-import chalk from "chalk";
-import { getPackageJson } from "../../shared";
+
+import * as chalk from "chalk";
+
 import { IDictionary } from "common-types";
+import { getPackageJson } from "../../shared";
 
 /**
  * Asks the user to choose an AWS profile
@@ -10,11 +12,7 @@ export async function askForUnitTestFramework(): Promise<IDictionary<string>> {
   const devDeps = Object.keys(getPackageJson().devDependencies);
   const testFrameworks = ["mocha", "jest", "other"];
 
-  const defaultFramework = devDeps.includes("mocha")
-    ? "mocha"
-    : devDeps.includes("jest")
-    ? "jest"
-    : "other";
+  const defaultFramework = devDeps.includes("mocha") ? "mocha" : devDeps.includes("jest") ? "jest" : "other";
 
   const framework: inquirer.ListQuestion = {
     name: "unitTestFramework",
@@ -22,7 +20,7 @@ export async function askForUnitTestFramework(): Promise<IDictionary<string>> {
     choices: testFrameworks,
     message: "choose the unit testing framework you are using",
     default: defaultFramework,
-    when: () => true
+    when: () => true,
   };
 
   const testLocations = ["test", "tests", "other"];
@@ -33,7 +31,7 @@ export async function askForUnitTestFramework(): Promise<IDictionary<string>> {
     choices: testLocations,
     message: "choose the unit testing framework you are using",
     default: "test",
-    when: () => true
+    when: () => true,
   };
 
   const testPatterns = [
@@ -44,17 +42,16 @@ export async function askForUnitTestFramework(): Promise<IDictionary<string>> {
     "**/*-spec.js",
     "**/*.spec.js",
     "**/*-test.js",
-    "**/*.test.js"
+    "**/*.test.js",
   ];
 
   const testPattern: inquirer.ListQuestion = {
     name: "testPattern",
     type: "list",
     choices: testPatterns,
-    message:
-      "what pattern should identify a test file versus just a normal file",
+    message: "what pattern should identify a test file versus just a normal file",
     default: "**/*-spec.ts",
-    when: () => true
+    when: () => true,
   };
 
   let answer = await inquirer.prompt([framework, testLocation, testPattern]);
@@ -63,7 +60,7 @@ export async function askForUnitTestFramework(): Promise<IDictionary<string>> {
     const freeformLocation: inquirer.InputQuestion = {
       name: "testDirectory",
       type: "input",
-      message: "What is the path to your tests?"
+      message: "What is the path to your tests?",
     };
 
     answer = { ...answer, ...(await inquirer.prompt(freeformLocation)) };

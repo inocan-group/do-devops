@@ -8,19 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const wp = require("webpack");
 const index_1 = require("../../../shared/ast/index");
-const webpack_1 = __importDefault(require("webpack"));
 const path_1 = require("path");
 /**
  * Transpiles all or _some_ of the handler functions
@@ -31,7 +21,7 @@ function webpack(opts = {}) {
     delete opts.fns;
     return {
         build: build(fns, opts),
-        watch: watch(fns, opts)
+        watch: watch(fns, opts),
     };
 }
 exports.default = webpack;
@@ -45,8 +35,8 @@ function build(fns, opts) {
 function watch(fns, opts) {
     return function webpackWatch() {
         return __awaiter(this, void 0, void 0, function* () {
-            const wpConfig = yield Promise.resolve().then(() => __importStar(require(path_1.join(process.cwd(), "webpack.config.js"))));
-            webpack_1.default(wpConfig).watch({}, function () {
+            const wpConfig = yield Promise.resolve().then(() => require(path_1.join(process.cwd(), "webpack.config.js")));
+            wp(wpConfig).watch({}, function () {
                 console.log("watcher");
             });
         });

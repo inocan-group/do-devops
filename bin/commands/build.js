@@ -8,20 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const shared_1 = require("../shared");
-const chalk_1 = __importDefault(require("chalk"));
+const chalk = require("chalk");
 const index_1 = require("./build-helpers/index");
+const shared_1 = require("../shared");
 const ast_1 = require("../shared/ast");
 exports.defaultConfig = {
     preBuildHooks: ["clean"],
@@ -52,22 +42,22 @@ function handler(argv, opts) {
         const { build: config } = yield shared_1.getConfig();
         const serverless = yield shared_1.isServerless();
         const buildTool = opts.buildTool || config.buildTool || (yield index_1.askBuildTool(serverless ? true : false));
-        const tooling = (yield Promise.resolve().then(() => __importStar(require(`./build-helpers/tools/${buildTool}`))))
+        const tooling = (yield Promise.resolve().then(() => require(`./build-helpers/tools/${buildTool}`)))
             .default;
         if (opts.output && !opts.quiet) {
-            console.log(chalk_1.default `{red - the "--output" option is a general option but has no meaning for the {bold build} command} ${"\uD83D\uDE21" /* angry */}. The build will continue, ignoring this flag.`);
+            console.log(chalk `{red - the "--output" option is a general option but has no meaning for the {bold build} command} ${"\uD83D\uDE21" /* angry */}. The build will continue, ignoring this flag.`);
         }
         if (serverless) {
-            console.log(chalk_1.default `{bold {yellow - Starting SERVERLESS build process}}\n`);
+            console.log(chalk `{bold {yellow - Starting SERVERLESS build process}}\n`);
             yield index_1.serverlessTranspilation({ argv, opts, config, tooling, serverless });
             yield shared_1.buildServerlessMicroserviceProject(opts, config);
         }
         else {
-            console.log(chalk_1.default `{bold {yellow - Starting code build process; using ${buildTool}}}`);
+            console.log(chalk `{bold {yellow - Starting code build process; using ${buildTool}}}`);
             const fns = argv.length > 0 ? argv : ast_1.getValidServerlessHandlers();
             yield tooling({ fns, opts });
         }
-        console.log(chalk_1.default `\n- {bold build} complete ${"\uD83C\uDF89" /* party */}\n`);
+        console.log(chalk `\n- {bold build} complete ${"\uD83C\uDF89" /* party */}\n`);
     });
 }
 exports.handler = handler;

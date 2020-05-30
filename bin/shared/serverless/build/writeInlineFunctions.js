@@ -8,19 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = __importStar(require("fs"));
-const path_1 = __importDefault(require("path"));
+const fs = require("fs");
+const path = require("path");
 const util_1 = require("util");
 const writeFile = util_1.promisify(fs.writeFile);
 /**
@@ -38,19 +28,16 @@ function writeInlineFunctions(handlers, functionRoot = "src", fileName = "inline
         const fnNames = [];
         for (const handler of handlers) {
             const localPath = handler.file.replace(/.*src\//, `${functionRoot}/`).replace(".ts", "");
-            const functionName = handler.file
-                .split("/")
-                .pop()
-                .replace(".ts", "");
+            const functionName = handler.file.split("/").pop().replace(".ts", "");
             fnNames.push(functionName);
             let config = {
-                handler: `${localPath}.handler`
+                handler: `${localPath}.handler`,
             };
             if (handler.ref.config) {
                 config = Object.assign(Object.assign({}, config), handler.ref.config);
             }
             contents += `const ${functionName}: IServerlessFunction = {\n`;
-            Object.keys(config).forEach(key => {
+            Object.keys(config).forEach((key) => {
                 let value = config[key];
                 if (typeof value === "string") {
                     value = `"${value.replace(/"/g, '\\"')}"`;
@@ -63,8 +50,8 @@ function writeInlineFunctions(handlers, functionRoot = "src", fileName = "inline
             contents += "}\n\n";
         }
         contents += `export default {\n  ${fnNames.join(",\n  ")}\n}`;
-        yield writeFile(path_1.default.join(process.cwd(), `serverless-config/functions/${fileName}.ts`), contents, {
-            encoding: "utf-8"
+        yield writeFile(path.join(process.cwd(), `serverless-config/functions/${fileName}.ts`), contents, {
+            encoding: "utf-8",
         });
     });
 }

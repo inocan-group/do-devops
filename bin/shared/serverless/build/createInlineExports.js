@@ -8,25 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("../../ast/index");
-const chalk_1 = __importDefault(require("chalk"));
-const fs_1 = require("fs");
-const path = __importStar(require("path"));
-const npm_1 = require("../../npm");
-const do_config_1 = require("../../do-config");
-const path_1 = require("path");
+const chalk = require("chalk");
+const path = require("path");
 const file_1 = require("../../file");
+const index_1 = require("../../ast/index");
+const do_config_1 = require("../../do-config");
+const npm_1 = require("../../npm");
+const path_1 = require("path");
+const fs_1 = require("fs");
 /**
  * Writes the serverless configuration file which contains
  * all the _inline_ function definitions found under `src/handlers`.
@@ -42,19 +32,19 @@ function createInlineExports(handlers) {
         const header = 'import { IServerlessFunction } from "common-types";\n';
         let body = [];
         const config = [];
-        handlers.forEach(handler => {
+        handlers.forEach((handler) => {
             // const comments = findHandlerComments(handler);
             const handlerConfig = index_1.findHandlerConfig(handler.source, bespokeWebpack);
             if (handlerConfig) {
                 config.push(handlerConfig);
             }
             else {
-                console.log(chalk_1.default `- ${"\uD83D\uDCA9" /* poop */} the {red ${file_1.relativePath(handler.source)}} file will be ignored as a handler as it has no CONFIG section defined. This is probably a mistake!`);
+                console.log(chalk `- ${"\uD83D\uDCA9" /* poop */} the {red ${file_1.relativePath(handler.source)}} file will be ignored as a handler as it has no CONFIG section defined. This is probably a mistake!`);
             }
         });
         const exportSymbols = [];
         warnAboutMissingTyping(config);
-        config.forEach(handler => {
+        config.forEach((handler) => {
             const fnName = handler.config.handler
                 .split("/")
                 .pop()
@@ -74,14 +64,14 @@ export default {
   ${exportSymbols.join(",\n\t")}
 }`;
         fs_1.writeFileSync(path.join(process.env.PWD, "serverless-config/functions/inline.ts"), file, {
-            encoding: "utf-8"
+            encoding: "utf-8",
         });
     });
 }
 exports.createInlineExports = createInlineExports;
 function objectPrint(obj) {
     let contents = [];
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
         let value = obj[key];
         if (typeof value === "string") {
             value = `"${value.replace(/"/g, '\\"')}"`;
@@ -95,17 +85,14 @@ function objectPrint(obj) {
     return contents;
 }
 function convertToWebpackResource(fn) {
-    return path_1.join(".webpack/", fn
-        .split("/")
-        .pop()
-        .replace(".ts", ".js"));
+    return path_1.join(".webpack/", fn.split("/").pop().replace(".ts", ".js"));
 }
 function warnAboutMissingTyping(config) {
-    const incorrectOrMissingTyping = config.filter(i => i.interface !== "IWrapperFunction");
+    const incorrectOrMissingTyping = config.filter((i) => i.interface !== "IWrapperFunction");
     if (incorrectOrMissingTyping.length > 0) {
-        console.log(chalk_1.default `- there were ${String(incorrectOrMissingTyping.length)} handler functions who defined a {italic config} but did not type it as {bold IWrapperFunction}`);
-        console.log(chalk_1.default `{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
-            .map(i => i.config.handler)
+        console.log(chalk `- there were ${String(incorrectOrMissingTyping.length)} handler functions who defined a {italic config} but did not type it as {bold IWrapperFunction}`);
+        console.log(chalk `{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
+            .map((i) => i.config.handler)
             .join(", ")}}}`);
     }
 }

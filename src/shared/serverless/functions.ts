@@ -1,8 +1,9 @@
-import path from "path";
+import * as path from "path";
+
 import { IDictionary } from "common-types";
 import { emoji } from "../ui/emoji";
-import { writeFileSync } from "fs";
 import { findInlineFunctionDefnFiles } from ".";
+import { writeFileSync } from "fs";
 
 export interface IFunctionDictionary {
   /** full path to the handler files */
@@ -23,12 +24,10 @@ export interface IFunctionDictionary {
 
 export async function createFunctionDictionary(rootPath?: string) {
   const root = rootPath || process.env.PWD;
-  const fns = findInlineFunctionDefnFiles(
-    rootPath || path.join(process.env.PWD, "/src")
-  );
+  const fns = findInlineFunctionDefnFiles(rootPath || path.join(process.env.PWD, "/src"));
   const serverlessNameLookup = getNamespacedLookup(fns, root);
   const { valid, invalid } = await validateExports(fns);
-  return fns.map(filePath => {
+  return fns.map((filePath) => {
     return {
       filePath,
       fileDir: getFilePath(filePath),
@@ -36,7 +35,7 @@ export async function createFunctionDictionary(rootPath?: string) {
       validHandlerDefinition: valid.includes(filePath),
       configFilename: getFilenameWithoutExtension(filePath) + ".def.ts",
       fnFilename: getFilenameWithoutExtension(filePath) + ".ts",
-      serverlessFn: serverlessNameLookup[filePath]
+      serverlessFn: serverlessNameLookup[filePath],
     } as IFunctionDictionary;
   });
 }
@@ -55,16 +54,10 @@ export async function createFunctionDictionary(rootPath?: string) {
  * @param output rather than exporting to the file `serverless-config/functions.ts` you
  * may state an alternative
  */
-export async function writeServerlessFunctionExports(
-  basePath: string = undefined,
-  output: string = undefined
-) {
+export async function writeServerlessFunctionExports(basePath: string = undefined, output: string = undefined) {
   const root = basePath || process.env.PWD;
-  const outputFilename =
-    output || path.join(process.env.PWD, "/serverless-config/functions.ts");
-  const functionDefns = findInlineFunctionDefnFiles(basePath).map(p =>
-    reduceToRelativePath(root, p)
-  );
+  const outputFilename = output || path.join(process.env.PWD, "/serverless-config/functions.ts");
+  const functionDefns = findInlineFunctionDefnFiles(basePath).map((p) => reduceToRelativePath(root, p));
   const dict = await createFunctionDictionary(basePath);
   let template = `##imports##\n\n##exports##\n\n##interface##`;
 
@@ -72,16 +65,11 @@ export async function writeServerlessFunctionExports(
     "##imports##",
     dict
       .map(
-        i =>
+        (i) =>
           `${
             i.validHandlerDefinition
-              ? `import ${i.serverlessFn} from '.${i.relativePath.replace(
-                  ".ts",
-                  ""
-                )}';`
-              : `// invalid handler definition for "${
-                  i.serverlessFn
-                }"; please check handler definition and then rebuild `
+              ? `import ${i.serverlessFn} from '.${i.relativePath.replace(".ts", "")}';`
+              : `// invalid handler definition for "${i.serverlessFn}"; please check handler definition and then rebuild `
           }`
       )
       .join("\n")
@@ -90,8 +78,8 @@ export async function writeServerlessFunctionExports(
   template = template.replace(
     "##exports##",
     dict
-      .filter(i => i.validHandlerDefinition)
-      .map(i => `export { ${i.serverlessFn} };`)
+      .filter((i) => i.validHandlerDefinition)
+      .map((i) => `export { ${i.serverlessFn} };`)
       .join("\n")
   );
 
@@ -99,15 +87,14 @@ export async function writeServerlessFunctionExports(
     "##interface##",
     `export type IDefinedServerlessFunction = ` +
       dict
-        .filter(i => i.validHandlerDefinition)
-        .map(i => `'${i.serverlessFn}'`)
+        .filter((i) => i.validHandlerDefinition)
+        .map((i) => `'${i.serverlessFn}'`)
         .join(" | ")
   );
 
   writeFileSync(
     outputFilename,
-    "/**\n * DO NOT CHANGE THIS FILE\n * (this file is automatically created)\n **/\n\n" +
-      template
+    "/**\n * DO NOT CHANGE THIS FILE\n * (this file is automatically created)\n **/\n\n" + template
   );
 }
 
@@ -138,10 +125,7 @@ export function getFilePath(filePath: string) {
  * this function will return just the filename component.
  */
 export function getFilenameWithoutExtension(filePath: string) {
-  return filePath
-    .split("/")
-    .pop()
-    .split(".")[0];
+  return filePath.split("/").pop().split(".")[0];
 }
 
 /**
@@ -183,23 +167,16 @@ export async function validateExports(fnDefns: string[]) {
  * the passed in
  */
 export function getNamespacedLookup(fns: string[], basePath?: string) {
-  const root = basePath
-    ? path.resolve(basePath)
-    : path.join(process.env.PWD, "/src");
-  return fns.reduce(
-    (acc, fn) => {
-      const parts = fn
-        .replace(root, "")
-        .split("/")
-        .filter(i => i);
-      parts[parts.length - 1] = parts[parts.length - 1].replace(".defn.ts", "");
-      acc[fn] = parts
-        .map((p, i) => (i === 0 ? p : p.slice(0, 1).toUpperCase() + p.slice(1)))
-        .join("");
-      return acc;
-    },
-    {} as IDictionary
-  );
+  const root = basePath ? path.resolve(basePath) : path.join(process.env.PWD, "/src");
+  return fns.reduce((acc, fn) => {
+    const parts = fn
+      .replace(root, "")
+      .split("/")
+      .filter((i) => i);
+    parts[parts.length - 1] = parts[parts.length - 1].replace(".defn.ts", "");
+    acc[fn] = parts.map((p, i) => (i === 0 ? p : p.slice(0, 1).toUpperCase() + p.slice(1))).join("");
+    return acc;
+  }, {} as IDictionary);
 }
 
 /**
@@ -209,46 +186,33 @@ export function getNamespacedLookup(fns: string[], basePath?: string) {
  * lookup hash which provides the "function name" as the output
  */
 export function getFunctionNames(paths: string[]) {
-  return paths.reduce(
-    (acc, current) => {
-      const filename = current
-        .split("/")
-        .pop()
-        .replace(".defn.ts", "");
+  return paths.reduce((acc, current) => {
+    const filename = current.split("/").pop().replace(".defn.ts", "");
 
-      acc[current] = filename;
-      return acc;
-    },
-    {} as IDictionary<string>
-  );
+    acc[current] = filename;
+    return acc;
+  }, {} as IDictionary<string>);
 }
 
-export function detectDuplicateFunctionDefinitions(
-  lookup: IDictionary<string>
-) {
+export function detectDuplicateFunctionDefinitions(lookup: IDictionary<string>) {
   const vals = Object.values(lookup);
   const found = [];
   const dups: Array<{ fn: string; message: string; locations: string[] }> = [];
-  vals.forEach(fn => {
-    if (!dups.map(i => i.fn).includes(fn)) {
-      const locations = Object.keys(lookup).reduce(
-        (acc, curr) => {
-          if (lookup[curr] === fn) {
-            acc.push(curr);
-          }
-          return acc;
-        },
-        [] as string[]
-      );
+  vals.forEach((fn) => {
+    if (!dups.map((i) => i.fn).includes(fn)) {
+      const locations = Object.keys(lookup).reduce((acc, curr) => {
+        if (lookup[curr] === fn) {
+          acc.push(curr);
+        }
+        return acc;
+      }, [] as string[]);
       if (locations.length > 1) {
         dups.push({
           fn,
-          message: `- ${
-            emoji.angry
-          }  the function "${fn}" is defined more than once [ ${
+          message: `- ${emoji.angry}  the function "${fn}" is defined more than once [ ${
             locations.length
           } ]: ${locations.join(", ")}`,
-          locations
+          locations,
         });
       }
     }

@@ -8,27 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const chalk = require("chalk");
+const os = require("os");
 const index_1 = require("../index");
-const index_2 = require("./index");
-const chalk_1 = __importDefault(require("chalk"));
-const createFunctionEnum_1 = require("./createFunctionEnum");
 const async_shelljs_1 = require("async-shelljs");
 const file_1 = require("../../file");
-const os = __importStar(require("os"));
+const createFunctionEnum_1 = require("./createFunctionEnum");
+const index_2 = require("./index");
 const createWebpackEntryDictionaries_1 = require("./createWebpackEntryDictionaries");
-const npm_1 = require("../../npm");
 const getLocalHandlerInfo_1 = require("../getLocalHandlerInfo");
+const npm_1 = require("../../npm");
 const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 /**
  * Builds a `serverless.yml` file from the configuration
@@ -49,31 +39,31 @@ function buildServerlessMicroserviceProject(opts = {}, config = {}) {
         const accountInfo = yield index_1.askForAccountInfo(knownAccountInfo);
         file_1.saveYamlFile(ACCOUNT_INFO_YAML, accountInfo);
         const hasWebpackPlugin = devDependencies.includes("serverless-webpack");
-        console.log(chalk_1.default `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`);
+        console.log(chalk `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`);
         const handlerInfo = getLocalHandlerInfo_1.getLocalHandlerInfo();
-        console.log(chalk_1.default `{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`);
+        console.log(chalk `{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`);
         yield index_2.createInlineExports(handlerInfo);
-        console.log(chalk_1.default `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`);
+        console.log(chalk `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`);
         yield createFunctionEnum_1.createFunctionEnum(handlerInfo);
-        console.log(chalk_1.default `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`);
+        console.log(chalk `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`);
         if (!hasWebpackPlugin) {
-            yield createWebpackEntryDictionaries_1.createWebpackEntryDictionaries(handlerInfo.map(i => i.source));
-            console.log(chalk_1.default `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`);
+            yield createWebpackEntryDictionaries_1.createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
+            console.log(chalk `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`);
         }
         else {
             const exist = file_1.filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
             if (exist) {
                 async_shelljs_1.rm(...exist);
-                console.log(chalk_1.default `- ${"\uD83D\uDC40" /* eyeballs */} removed webpack entry point files so as not to confuse with what the {italic serverless-webpack} plugin is doing}`);
+                console.log(chalk `- ${"\uD83D\uDC40" /* eyeballs */} removed webpack entry point files so as not to confuse with what the {italic serverless-webpack} plugin is doing}`);
             }
         }
-        console.log(chalk_1.default `- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`);
+        console.log(chalk `- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`);
         yield async_shelljs_1.asyncExec(`yarn ts-node serverless-config/build.ts --color=always`, {
-            env: Object.assign(Object.assign(Object.assign({}, process.env), { TERM: "xterm-color" }), (os.platform().includes("win") ? {} : { shell: "/bin/bash" }))
+            env: Object.assign(Object.assign(Object.assign({}, process.env), { TERM: "xterm-color" }), (os.platform().includes("win") ? {} : { shell: "/bin/bash" })),
         });
         async_shelljs_1.rm(ACCOUNT_INFO_YAML);
-        console.log(chalk_1.default `{grey - removed the temporary {blue account-info.yml} file from the repo}`);
-        console.log(chalk_1.default `{green - {bold serverless.yml} has been updated successfully ${"\uD83D\uDE80" /* rocket */}}\n`);
+        console.log(chalk `{grey - removed the temporary {blue account-info.yml} file from the repo}`);
+        console.log(chalk `{green - {bold serverless.yml} has been updated successfully ${"\uD83D\uDE80" /* rocket */}}\n`);
     });
 }
 exports.buildServerlessMicroserviceProject = buildServerlessMicroserviceProject;

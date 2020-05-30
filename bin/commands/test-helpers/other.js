@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = __importDefault(require("chalk"));
+const chalk = require("chalk");
 const otherFramework = (args) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(chalk_1.default `- Your default framework for unit testing is set to {bold other} which do-devops doesn't know how to work with.`);
+    console.log(chalk `- Your default framework for unit testing is set to {bold other} which do-devops doesn't know how to work with.`);
 });
 exports.default = otherFramework;

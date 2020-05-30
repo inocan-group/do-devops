@@ -1,7 +1,11 @@
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
+
 import { IPackageJson } from "common-types";
-import { getLocalPackageJson } from "./state-mgmt";
+import { getLocalPackageJson } from "./cache/packageJsonCache";
+
+let _cache: IPackageJson;
+
 /**
  * returns `package.json` of the local repo as a typed object
  */
@@ -11,7 +15,5 @@ export function getPackageJson(pathOverride?: string) {
   }
 
   const filename = path.join(pathOverride || process.cwd(), "package.json");
-  return JSON.parse(
-    fs.readFileSync(filename, { encoding: "utf-8" })
-  ) as IPackageJson;
+  return JSON.parse(fs.readFileSync(filename, { encoding: "utf-8" })) as IPackageJson;
 }

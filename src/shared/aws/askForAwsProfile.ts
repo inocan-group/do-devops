@@ -1,7 +1,8 @@
+import * as chalk from "chalk";
+
+import { DevopsError } from "../errors/index";
 import { getAwsProfileList } from "./index";
 import inquirer = require("inquirer");
-import { DevopsError } from "../errors/index";
-import chalk from "chalk";
 
 export interface IAskForProfileOptions {
   /**
@@ -19,9 +20,7 @@ export interface IAskForProfileOptions {
 /**
  * Asks the user to choose an AWS profile
  */
-export async function askForAwsProfile(
-  opts?: IAskForProfileOptions
-): Promise<string> {
+export async function askForAwsProfile(opts?: IAskForProfileOptions): Promise<string> {
   opts = opts ? { exitOnError: false, ...opts } : { exitOnError: false };
   const profiles = await getAwsProfileList();
   const profileNames = Object.keys(profiles);
@@ -47,7 +46,7 @@ export async function askForAwsProfile(
     choices: Object.keys(profiles),
     message: "choose a profile from your AWS credentials file",
     default: defaultProfile,
-    when: () => true
+    when: () => true,
   };
 
   const answer = await inquirer.prompt(question);

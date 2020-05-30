@@ -1,7 +1,9 @@
+import * as globby from "globby";
+
 import { existsSync, readdirSync } from "fs";
 
-import globby from "globby";
 import { join } from "path";
+
 /**
  * Gives back a list of packages in the monorepo. If the
  * "packages" directory does not exist then it will return

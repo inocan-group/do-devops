@@ -1,9 +1,10 @@
-import chalk from "chalk";
+import * as chalk from "chalk";
+
+import { ICommandDescription } from "../../@types";
+import { IDictionary } from "common-types";
+import { OptionDefinition } from "command-line-usage";
 import { commands } from "../commands";
 import { globalOptions } from "../options";
-import { OptionDefinition } from "command-line-usage";
-import { IDictionary } from "common-types";
-import { ICommandDescription } from "../../@types";
 
 export async function getCommands(fn?: string) {
   let meta: ICommandDescription[] = [];
@@ -22,7 +23,7 @@ export async function getCommands(fn?: string) {
           ? typeof ref.description === "function"
             ? await ref.description()
             : ref.description
-          : ""
+          : "",
       });
     }
   }
@@ -39,11 +40,9 @@ export async function getCommands(fn?: string) {
 function formatCommands(cmds: ICommandDescription[]) {
   let dim = false;
 
-  return cmds.map(cmd => {
+  return cmds.map((cmd) => {
     cmd.name = dim ? `{dim ${cmd.name}}` : cmd.name;
-    const summary = Array.isArray(cmd.summary)
-      ? cmd.summary.split("\n")[0]
-      : cmd.summary;
+    const summary = Array.isArray(cmd.summary) ? cmd.summary.split("\n")[0] : cmd.summary;
     console.log(summary, cmd.summary);
 
     cmd.summary = dim ? `{dim ${summary}}` : summary;
@@ -67,9 +66,7 @@ export async function getSyntax(fn?: string): Promise<string> {
   const defn = await import(`../../commands/${fn}`);
   const hasSubCommands = defn.subCommands ? true : false;
 
-  return defn.syntax
-    ? defn.syntax
-    : `do ${fn} ${hasSubCommands ? "[command] " : ""}<options>`;
+  return defn.syntax ? defn.syntax : `do ${fn} ${hasSubCommands ? "[command] " : ""}<options>`;
 }
 
 /**
@@ -90,9 +87,7 @@ export async function getDescription(opts: IDictionary, fn?: string) {
     ? defnIsFunction
       ? await defn.description(opts)
       : defn.description
-    : `Help content for the {bold do}'s ${chalk.bold.green.italic(
-        fn
-      )} command.`;
+    : `Help content for the {bold do}'s ${chalk.bold.green.italic(fn)} command.`;
 }
 
 /**
@@ -116,11 +111,7 @@ export async function getExamples(opts: IDictionary, fn?: string) {
       const examples = defnIsFunction ? defn.examples(opts) : defn.examples;
     }
 
-    return hasExamples
-      ? defnIsFunction
-        ? await defn.description(opts)
-        : defn.description
-      : ``;
+    return hasExamples ? (defnIsFunction ? await defn.description(opts) : defn.description) : ``;
   }
 }
 
@@ -129,11 +120,7 @@ export async function getOptions(opts: IDictionary, fn?: string) {
   if (fn) {
     const defn = await import(`../../commands/${fn}`);
     if (defn.options) {
-      options = options.concat(
-        typeof defn.options === "function"
-          ? await defn.options(opts)
-          : defn.options
-      );
+      options = options.concat(typeof defn.options === "function" ? await defn.options(opts) : defn.options);
     }
   }
   options = options.concat(globalOptions);

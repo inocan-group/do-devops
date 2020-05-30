@@ -8,27 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = __importDefault(require("path"));
-const fs_1 = require("fs");
+const path = require("path");
 const _1 = require(".");
+const fs_1 = require("fs");
 function createFunctionDictionary(rootPath) {
     return __awaiter(this, void 0, void 0, function* () {
         const root = rootPath || process.env.PWD;
-        const fns = _1.findInlineFunctionDefnFiles(rootPath || path_1.default.join(process.env.PWD, "/src"));
+        const fns = _1.findInlineFunctionDefnFiles(rootPath || path.join(process.env.PWD, "/src"));
         const serverlessNameLookup = getNamespacedLookup(fns, root);
         const { valid, invalid } = yield validateExports(fns);
-        return fns.map(filePath => {
+        return fns.map((filePath) => {
             return {
                 filePath,
                 fileDir: getFilePath(filePath),
@@ -36,7 +26,7 @@ function createFunctionDictionary(rootPath) {
                 validHandlerDefinition: valid.includes(filePath),
                 configFilename: getFilenameWithoutExtension(filePath) + ".def.ts",
                 fnFilename: getFilenameWithoutExtension(filePath) + ".ts",
-                serverlessFn: serverlessNameLookup[filePath]
+                serverlessFn: serverlessNameLookup[filePath],
             };
         });
     });
@@ -59,26 +49,25 @@ exports.createFunctionDictionary = createFunctionDictionary;
 function writeServerlessFunctionExports(basePath = undefined, output = undefined) {
     return __awaiter(this, void 0, void 0, function* () {
         const root = basePath || process.env.PWD;
-        const outputFilename = output || path_1.default.join(process.env.PWD, "/serverless-config/functions.ts");
-        const functionDefns = _1.findInlineFunctionDefnFiles(basePath).map(p => reduceToRelativePath(root, p));
+        const outputFilename = output || path.join(process.env.PWD, "/serverless-config/functions.ts");
+        const functionDefns = _1.findInlineFunctionDefnFiles(basePath).map((p) => reduceToRelativePath(root, p));
         const dict = yield createFunctionDictionary(basePath);
         let template = `##imports##\n\n##exports##\n\n##interface##`;
         template = template.replace("##imports##", dict
-            .map(i => `${i.validHandlerDefinition
+            .map((i) => `${i.validHandlerDefinition
             ? `import ${i.serverlessFn} from '.${i.relativePath.replace(".ts", "")}';`
             : `// invalid handler definition for "${i.serverlessFn}"; please check handler definition and then rebuild `}`)
             .join("\n"));
         template = template.replace("##exports##", dict
-            .filter(i => i.validHandlerDefinition)
-            .map(i => `export { ${i.serverlessFn} };`)
+            .filter((i) => i.validHandlerDefinition)
+            .map((i) => `export { ${i.serverlessFn} };`)
             .join("\n"));
         template = template.replace("##interface##", `export type IDefinedServerlessFunction = ` +
             dict
-                .filter(i => i.validHandlerDefinition)
-                .map(i => `'${i.serverlessFn}'`)
+                .filter((i) => i.validHandlerDefinition)
+                .map((i) => `'${i.serverlessFn}'`)
                 .join(" | "));
-        fs_1.writeFileSync(outputFilename, "/**\n * DO NOT CHANGE THIS FILE\n * (this file is automatically created)\n **/\n\n" +
-            template);
+        fs_1.writeFileSync(outputFilename, "/**\n * DO NOT CHANGE THIS FILE\n * (this file is automatically created)\n **/\n\n" + template);
     });
 }
 exports.writeServerlessFunctionExports = writeServerlessFunctionExports;
@@ -109,10 +98,7 @@ exports.getFilePath = getFilePath;
  * this function will return just the filename component.
  */
 function getFilenameWithoutExtension(filePath) {
-    return filePath
-        .split("/")
-        .pop()
-        .split(".")[0];
+    return filePath.split("/").pop().split(".")[0];
 }
 exports.getFilenameWithoutExtension = getFilenameWithoutExtension;
 /**
@@ -128,7 +114,7 @@ function validateExports(fnDefns) {
         const invalid = [];
         for (const fn of fnDefns) {
             try {
-                const imp = yield Promise.resolve().then(() => __importStar(require(fn)));
+                const imp = yield Promise.resolve().then(() => require(fn));
                 if (imp.default && Object.keys(imp.default).includes("handler")) {
                     valid.push(fn);
                 }
@@ -156,18 +142,14 @@ exports.validateExports = validateExports;
  * the passed in
  */
 function getNamespacedLookup(fns, basePath) {
-    const root = basePath
-        ? path_1.default.resolve(basePath)
-        : path_1.default.join(process.env.PWD, "/src");
+    const root = basePath ? path.resolve(basePath) : path.join(process.env.PWD, "/src");
     return fns.reduce((acc, fn) => {
         const parts = fn
             .replace(root, "")
             .split("/")
-            .filter(i => i);
+            .filter((i) => i);
         parts[parts.length - 1] = parts[parts.length - 1].replace(".defn.ts", "");
-        acc[fn] = parts
-            .map((p, i) => (i === 0 ? p : p.slice(0, 1).toUpperCase() + p.slice(1)))
-            .join("");
+        acc[fn] = parts.map((p, i) => (i === 0 ? p : p.slice(0, 1).toUpperCase() + p.slice(1))).join("");
         return acc;
     }, {});
 }
@@ -180,10 +162,7 @@ exports.getNamespacedLookup = getNamespacedLookup;
  */
 function getFunctionNames(paths) {
     return paths.reduce((acc, current) => {
-        const filename = current
-            .split("/")
-            .pop()
-            .replace(".defn.ts", "");
+        const filename = current.split("/").pop().replace(".defn.ts", "");
         acc[current] = filename;
         return acc;
     }, {});
@@ -193,8 +172,8 @@ function detectDuplicateFunctionDefinitions(lookup) {
     const vals = Object.values(lookup);
     const found = [];
     const dups = [];
-    vals.forEach(fn => {
-        if (!dups.map(i => i.fn).includes(fn)) {
+    vals.forEach((fn) => {
+        if (!dups.map((i) => i.fn).includes(fn)) {
             const locations = Object.keys(lookup).reduce((acc, curr) => {
                 if (lookup[curr] === fn) {
                     acc.push(curr);
@@ -205,7 +184,7 @@ function detectDuplicateFunctionDefinitions(lookup) {
                 dups.push({
                     fn,
                     message: `- ${"\uD83D\uDE21" /* angry */}  the function "${fn}" is defined more than once [ ${locations.length} ]: ${locations.join(", ")}`,
-                    locations
+                    locations,
                 });
             }
         }

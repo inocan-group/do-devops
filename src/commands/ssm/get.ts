@@ -1,9 +1,11 @@
+import * as chalk from "chalk";
+
+import { DevopsError, consoleDimensions } from "../../shared";
+
 import { CommandLineOptions } from "command-line-args";
 import { SSM } from "aws-ssm";
-import chalk from "chalk";
 import { format } from "date-fns";
 import { table } from "table";
-import { DevopsError, consoleDimensions } from "../../shared";
 
 export async function execute(options: CommandLineOptions) {
   const profile: string = options.profile;
@@ -28,17 +30,15 @@ export async function execute(options: CommandLineOptions) {
     );
   }
 
-  console.log(
-    `- Getting SSM details for: ${chalk.italic.grey.bold(secrets.join(", "))}\n`
-  );
+  console.log(`- Getting SSM details for: ${chalk.italic.grey.bold(secrets.join(", "))}\n`);
 
   const tableConfig = {
     columns: {
       0: { width: 30, alignment: "left" },
       1: { width: width > 125 ? 60 : width > 100 ? 40 : 35 },
       2: { width: 8, alignment: "center" },
-      3: { width: 16, alignment: "center" }
-    }
+      3: { width: 16, alignment: "center" },
+    },
   };
   const ssm = new SSM({ profile, region });
 
@@ -48,16 +48,11 @@ export async function execute(options: CommandLineOptions) {
         chalk.yellow.bold("Path"),
         chalk.yellow.bold("ARN"),
         chalk.yellow.bold("Version"),
-        chalk.yellow.bold("LastUpdated")
-      ]
+        chalk.yellow.bold("LastUpdated"),
+      ],
     ];
     const data = await ssm.get(secret, { decrypt: true, nonStandardPath });
-    tableData.push([
-      data.path,
-      data.arn,
-      String(data.version),
-      format(data.lastUpdated, "dd MMM, yyyy")
-    ]);
+    tableData.push([data.path, data.arn, String(data.version), format(data.lastUpdated, "dd MMM, yyyy")]);
     console.log(table(tableData, tableConfig as any));
     console.log(chalk.yellow.bold("VALUE:\n"));
     console.log(String(data.value));

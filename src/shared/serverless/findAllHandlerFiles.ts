@@ -1,5 +1,6 @@
-import path from "path";
-import fg from "fast-glob";
+import * as fg from "fast-glob";
+import * as path from "path";
+
 import { getExportsFromFile } from "../index";
 
 /**
@@ -20,5 +21,5 @@ export async function findAllHandlerFiles() {
       handlers.push({ file, ref });
     }
   }
-  console.log(handlers.map(i => i.file));
+  console.log(handlers.map((i) => i.file));
 }

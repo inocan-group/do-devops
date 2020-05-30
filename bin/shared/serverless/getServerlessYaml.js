@@ -8,14 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const js_yaml_1 = require("js-yaml");
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
+const fs = require("fs");
+const path = require("path");
 const errors_1 = require("../errors");
+const js_yaml_1 = require("js-yaml");
 /**
  * Get the `serverless.yml` file in the root of the project
  */
@@ -23,11 +20,11 @@ function getServerlessYaml() {
     return __awaiter(this, void 0, void 0, function* () {
         const baseStructure = {
             functions: {},
-            stepFunctions: { stateMachines: {} }
+            stepFunctions: { stateMachines: {} },
         };
         try {
-            const config = js_yaml_1.safeLoad(fs_1.default.readFileSync(path_1.default.join(process.cwd(), "serverless.yml"), {
-                encoding: "utf-8"
+            const config = js_yaml_1.safeLoad(fs.readFileSync(path.join(process.cwd(), "serverless.yml"), {
+                encoding: "utf-8",
             }));
             return Object.assign(Object.assign({}, baseStructure), config);
         }

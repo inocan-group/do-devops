@@ -1,9 +1,7 @@
-import chalk from "chalk";
+import * as chalk from "chalk";
 
 export function green(...thingy: Array<string | number>) {
-  const stringThingy: string = thingy
-    .map(i => (typeof i === "number" ? (formatNumber(i) as string) : i))
-    .join("");
+  const stringThingy: string = thingy.map((i) => (typeof i === "number" ? (formatNumber(i) as string) : i)).join("");
 
   return chalk`{bold {green ${stringThingy}}}`;
 }

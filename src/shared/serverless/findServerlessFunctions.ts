@@ -1,6 +1,7 @@
-import globby from "globby";
-import fs from "fs";
-import chalk from "chalk";
+import * as chalk from "chalk";
+import * as fs from "fs";
+import * as globby from "globby";
+
 import { IDictionary } from "common-types";
 
 export interface IServerlessFunctionDefinitions {

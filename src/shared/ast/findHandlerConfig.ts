@@ -1,6 +1,7 @@
-import { parseFile, namedExports } from "./index";
+import * as chalk from "chalk";
+
 import { IDictionary, IServerlessFunction } from "common-types";
-import chalk from "chalk";
+import { namedExports, parseFile } from "./index";
 
 /**
  * Given a handler file, this will return the object key/value

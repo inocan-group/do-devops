@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import * as chalk from "chalk";
 export declare const inverted: chalk.Chalk;
 export * from "./askForDataFile";
 export * from "./commands";

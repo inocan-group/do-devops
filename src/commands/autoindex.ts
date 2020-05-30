@@ -1,3 +1,6 @@
+import * as chalk from "chalk";
+import * as globby from "globby";
+
 import { basename, dirname, join } from "path";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import { getMonoRepoPackages, relativePath } from "../shared/file";
@@ -5,9 +8,8 @@ import { getMonoRepoPackages, relativePath } from "../shared/file";
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
 import { askHowToHandleMonoRepoIndexing } from "./autoindex/index";
-import chalk from "chalk";
+import { exportsAsEsm } from "../shared";
 import { format } from "date-fns";
-import globby from "globby";
 
 const START_REGION = "//#region autoindexed files";
 const END_REGION = "//#endregion";
@@ -200,10 +202,10 @@ function exportsHaveChanged(fileContent: string, regionContent: string) {
 function namedExports(exportable: IExportableFiles) {
   const contentLines: string[] = [];
   exportable.files.forEach((file) => {
-    contentLines.push(`export * from "./${removeExtension(file)}";`);
+    contentLines.push(`export * from "./${exportsAsEsm() ? removeExtension(file) + ".js" : removeExtension(file)}";`);
   });
   exportable.dirs.forEach((dir) => {
-    contentLines.push(`export * from "./${dir}/index";`);
+    contentLines.push(`export * from "./${dir}/index${exportsAsEsm() ? ".js" : ""}";`);
   });
 
   return contentLines.join("\n");
