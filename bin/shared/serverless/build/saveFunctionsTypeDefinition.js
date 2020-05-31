@@ -8,22 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = __importDefault(require("path"));
-const fs = __importStar(require("fs"));
-const util_1 = require("util");
-const chalk_1 = __importDefault(require("chalk"));
+const chalk = require("chalk");
+const fs = require("fs");
+const path = require("path");
 const __1 = require("../..");
+const util_1 = require("util");
 const writeFile = util_1.promisify(fs.writeFile);
 /**
  * Once a build is complete, this function will review the
@@ -48,9 +38,7 @@ function saveFunctionsTypeDefinition(config) {
             if (functions) {
                 contents += "export enum AvailableFunctions {";
                 functions.forEach((f, i) => {
-                    const description = config.functions[f].description
-                        ? config.functions[f].description
-                        : false;
+                    const description = config.functions[f].description ? config.functions[f].description : false;
                     contents += description ? `\n  /**\n   * ${description}\n   **/` : "";
                     const comma = i === functions.length - 1 ? "" : ",";
                     contents += `\n  ${f} = "${f}"${comma}`;
@@ -60,14 +48,14 @@ function saveFunctionsTypeDefinition(config) {
             if (stepFunctions) {
                 // TODO: implement
             }
-            const dir = path_1.default.join(process.cwd(), "src/@types");
-            const filename = path_1.default.join(dir, "build.ts");
+            const dir = path.join(process.cwd(), "src/@types");
+            const filename = path.join(dir, "build.ts");
             yield __1.ensureDirectory(dir);
             yield writeFile(filename, contents, { encoding: "utf-8" });
         }
         catch (e) {
-            console.log(chalk_1.default `- Attempt to save {italic type definitions} for {bold functions} and {bold stepFunctions} failed; this will be ignored for now so build can continue.`);
-            console.log(chalk_1.default `- The actual error received was: {dim ${e.message}}`);
+            console.log(chalk `- Attempt to save {italic type definitions} for {bold functions} and {bold stepFunctions} failed; this will be ignored for now so build can continue.`);
+            console.log(chalk `- The actual error received was: {dim ${e.message}}`);
         }
     });
 }

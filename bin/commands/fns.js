@@ -8,13 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const chalk = require("chalk");
 const shared_1 = require("../shared");
 const table_1 = require("table");
-const chalk_1 = __importDefault(require("chalk"));
 function description() {
     return `Lists all serverless function handlers and basic meta about them`;
 }
@@ -24,8 +21,8 @@ exports.options = [
         name: "forceBuild",
         alias: "f",
         type: Boolean,
-        description: chalk_1.default `by default functions will be derived from {italic serverless.yml} but if you are in a {italic typescript-microservice} project you can force a rebuild prior to listing the functions`
-    }
+        description: chalk `by default functions will be derived from {italic serverless.yml} but if you are in a {italic typescript-microservice} project you can force a rebuild prior to listing the functions`,
+    },
 ];
 function handler(args, opts) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -37,11 +34,11 @@ function handler(args, opts) {
         }
         else if (status.isUsingTypescriptMicroserviceTemplate) {
             if (opts.forceBuild) {
-                console.log(`- detected use of the ${chalk_1.default.blue("typescript-microservice")} template; rebuilding functions from config.`);
+                console.log(`- detected use of the ${chalk.blue("typescript-microservice")} template; rebuilding functions from config.`);
                 yield shared_1.buildServerlessMicroserviceProject();
             }
             else {
-                console.log(chalk_1.default `- detected use of the {blue typescript-microservice} template; use {bold {blue --forceBuild}} to rebuild prior to listing functions.\n`);
+                console.log(chalk `- detected use of the {blue typescript-microservice} template; use {bold {blue --forceBuild}} to rebuild prior to listing functions.\n`);
             }
         }
         try {
@@ -49,23 +46,23 @@ function handler(args, opts) {
             const fns = (yield shared_1.getServerlessYaml()).functions;
             let tableData = [
                 [
-                    chalk_1.default.bold.yellow("function"),
-                    chalk_1.default.bold.yellow("events"),
-                    chalk_1.default.bold.yellow("memory"),
-                    chalk_1.default.bold.yellow("timeout"),
-                    chalk_1.default.bold.yellow("description")
-                ]
+                    chalk.bold.yellow("function"),
+                    chalk.bold.yellow("events"),
+                    chalk.bold.yellow("memory"),
+                    chalk.bold.yellow("timeout"),
+                    chalk.bold.yellow("description"),
+                ],
             ];
             Object.keys(fns)
                 .filter(filterBy)
-                .forEach(key => {
+                .forEach((key) => {
                 const events = fns[key].events || [];
                 tableData.push([
                     key,
-                    events.map(i => Object.keys(i)).join(", "),
-                    String(fns[key].memorySize || chalk_1.default.grey("1024")),
-                    String(fns[key].timeout || chalk_1.default.grey("3")),
-                    fns[key].description
+                    events.map((i) => Object.keys(i)).join(", "),
+                    String(fns[key].memorySize || chalk.grey("1024")),
+                    String(fns[key].timeout || chalk.grey("3")),
+                    fns[key].description,
                 ]);
             });
             const tableConfig = {
@@ -74,24 +71,24 @@ function handler(args, opts) {
                     1: { width: 16, alignment: "left" },
                     2: { width: 7, alignment: "center" },
                     3: { width: 10, alignment: "center" },
-                    4: { width: 46, alignment: "left" }
-                }
+                    4: { width: 46, alignment: "left" },
+                },
             };
             let output = table_1.table(tableData, tableConfig);
             if (width < 70) {
                 delete tableConfig.columns["2"];
                 delete tableConfig.columns["3"];
                 delete tableConfig.columns["4"];
-                output = table_1.table(tableData.map(i => i.slice(0, 2), tableConfig));
+                output = table_1.table(tableData.map((i) => i.slice(0, 2), tableConfig));
             }
             else if (width < 80) {
                 delete tableConfig.columns["3"];
                 delete tableConfig.columns["4"];
-                output = table_1.table(tableData.map(i => i.slice(0, 3), tableConfig));
+                output = table_1.table(tableData.map((i) => i.slice(0, 3), tableConfig));
             }
             else if (width < 125) {
                 delete tableConfig.columns["4"];
-                output = table_1.table(tableData.map(i => i.slice(0, 4), tableConfig));
+                output = table_1.table(tableData.map((i) => i.slice(0, 4), tableConfig));
             }
             console.log(output);
         }

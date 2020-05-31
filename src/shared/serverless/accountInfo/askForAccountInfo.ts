@@ -1,15 +1,15 @@
+import { getAwsProfile, getAwsProfileList, getAwsUserProfile } from "../../aws";
+
+import { IDictionary } from "common-types";
+import { IServerlessAccountInfo } from "../../../@types";
 import { getPackageJson } from "../../npm";
 import { getServerlessYaml } from "..";
+
 import inquirer = require("inquirer");
-import { getAwsProfile, getAwsUserProfile, getAwsProfileList } from "../../aws";
-import { IServerlessAccountInfo } from "../../../@types";
-import { IDictionary } from "common-types";
 
 export async function askForAccountInfo(
   defaults: Partial<IServerlessAccountInfo> = {}
 ): Promise<IServerlessAccountInfo> {
-  console.log("asking", defaults);
-
   const pkgJson = await getPackageJson();
   const profiles = await getAwsProfileList();
   const profileMessage = "choose a profile from your AWS credentials file";
@@ -29,15 +29,15 @@ export async function askForAccountInfo(
     name: "profile",
     message: "Choose a profile from your AWS credentials file",
     default: defaults.profile,
-    when: () => !defaults.profile
+    when: () => !defaults.profile,
   };
   const profileQuestion: inquirer.Question | inquirer.ListQuestion = profiles
     ? {
         ...baseProfileQuestion,
         ...{
           type: "list",
-          choices: Object.keys(profiles)
-        }
+          choices: Object.keys(profiles),
+        },
       }
     : { ...baseProfileQuestion, ...{ type: "input" } };
 
@@ -47,9 +47,9 @@ export async function askForAccountInfo(
       name: "name",
       message: "What is the service name which your functions will be prefixed with",
       default: defaults.name || pkgJson.name,
-      when: () => !defaults.name
+      when: () => !defaults.name,
     },
-    profileQuestion
+    profileQuestion,
   ];
 
   let answers: Partial<IServerlessAccountInfo> = await inquirer.prompt(questions);
@@ -63,7 +63,7 @@ export async function askForAccountInfo(
       name: "accountId",
       message: "what is the Amazon Account ID which you are deploying to?",
       default: accountId,
-      when: () => !defaults.accountId
+      when: () => !defaults.accountId,
     },
     {
       type: "list",
@@ -86,11 +86,11 @@ export async function askForAccountInfo(
         "ap-northeast-2",
         "ap-northeast-3",
         "ap-southeast-1",
-        "ap-southeast-2"
+        "ap-southeast-2",
       ],
       default: defaults.region || awsProfile.region || "us-east-1",
-      when: () => !defaults.region
-    }
+      when: () => !defaults.region,
+    },
   ];
   let plugins: { pluginsInstalled: string[] };
   try {
@@ -102,7 +102,7 @@ export async function askForAccountInfo(
   answers = {
     ...plugins,
     ...answers,
-    ...(await inquirer.prompt(questions))
+    ...(await inquirer.prompt(questions)),
   };
 
   return answers as IServerlessAccountInfo;

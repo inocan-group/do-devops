@@ -1,10 +1,12 @@
-import { getServerlessYaml, askForStage } from "./index";
-import { IDictionary } from "common-types";
-import chalk from "chalk";
-import { emoji } from "../ui";
+import * as chalk from "chalk";
 import * as process from "process";
-import { get } from "lodash";
+
+import { askForStage, getServerlessYaml } from "./index";
+
 import { IDetermineOptions } from "../../@types";
+import { IDictionary } from "common-types";
+import { emoji } from "../ui";
+import { get } from "lodash";
 
 /**
  * Uses various methods to determine which _stage_
@@ -17,8 +19,7 @@ import { IDetermineOptions } from "../../@types";
  */
 export async function determineStage(opts: IDetermineOptions) {
   try {
-    let stage =
-      get(opts, "stage") || process.env.NODE_ENV || process.env.AWS_STAGE;
+    let stage = get(opts, "stage") || process.env.NODE_ENV || process.env.AWS_STAGE;
 
     if (!stage) {
       try {
@@ -32,9 +33,7 @@ export async function determineStage(opts: IDetermineOptions) {
 
     return stage;
   } catch (e) {
-    console.log(
-      chalk`- attempts to get the desired "stage" have failed! ${emoji.poop}`
-    );
+    console.log(chalk`- attempts to get the desired "stage" have failed! ${emoji.poop}`);
     console.log(chalk`- {red ${e.message}}`);
     console.log(chalk`{dim ${e.stack}}`);
     console.log();

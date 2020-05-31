@@ -1,7 +1,9 @@
-import chalk from "chalk";
-import { existsSync } from "fs";
+import * as chalk from "chalk";
+
 import { getConfigFilename, writeDefaultConfig } from "./index";
+
 import { IDoConfig } from "../../@types";
+import { existsSync } from "fs";
 
 export interface IGetConfigOptions {
   projectOrUserConfig: "user" | "project";
@@ -13,7 +15,7 @@ const cache: {
   project: IDoConfig;
 } = {
   user: undefined,
-  project: undefined
+  project: undefined,
 };
 
 /**
@@ -37,29 +39,21 @@ const { global, myCommand } = await getConfig();
  * If you decide _not_ to exit then it return the configuration if found
  * but otherwise return `undefined`.
  */
-export async function getConfig(
-  callerOptions: Partial<IGetConfigOptions> = {}
-): Promise<IDoConfig> {
+export async function getConfig(callerOptions: Partial<IGetConfigOptions> = {}): Promise<IDoConfig> {
   const options: IGetConfigOptions = {
     ...{
       projectOrUserConfig: "project",
-      exitIfNotFound: true
+      exitIfNotFound: true,
     },
-    ...callerOptions
+    ...callerOptions,
   };
   const filename = getConfigFilename(options.projectOrUserConfig);
   let config: IDoConfig;
 
   if (!existsSync(filename) && options.projectOrUserConfig === "project") {
-    console.log(
-      `- configuration file not found [ %s ]`,
-      chalk.grey(process.env.PWD)
-    );
+    console.log(`- configuration file not found [ %s ]`, chalk.grey(process.env.PWD));
     writeDefaultConfig();
-    console.log(
-      `- default configuration was written to "%s" in project root`,
-      chalk.bold.italic("do.config.js")
-    );
+    console.log(`- default configuration was written to "%s" in project root`, chalk.bold.italic("do.config.js"));
   }
 
   try {
@@ -67,11 +61,7 @@ export async function getConfig(
     return config;
   } catch (e) {
     if (options.exitIfNotFound) {
-      console.log(
-        "- \ud83d\udca9  Problem importing the config file [ %s ]: %s",
-        filename,
-        chalk.grey(e.message)
-      );
+      console.log("- \ud83d\udca9  Problem importing the config file [ %s ]: %s", filename, chalk.grey(e.message));
       console.log(
         "- Either edit the file to the correct %s or delete the config and it will be recreated with the default values\n",
         chalk.italic("typing")

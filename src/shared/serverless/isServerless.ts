@@ -1,7 +1,8 @@
-import fs from "fs";
-import path from "path";
-import { getPackageJson } from "../npm";
+import * as fs from "fs";
+import * as path from "path";
+
 import { IServerlessConfig } from "common-types";
+import { getPackageJson } from "../npm";
 import { getServerlessYaml } from "./getServerlessYaml";
 
 export interface IIsServerless {
@@ -32,9 +33,7 @@ export interface IIsServerless {
  * is being used in this repo
  */
 export async function isServerless(): Promise<IIsServerless | false> {
-  const hasServerlessConfig = fs.existsSync(
-    path.join(process.cwd(), "serverless.yml")
-  );
+  const hasServerlessConfig = fs.existsSync(path.join(process.cwd(), "serverless.yml"));
   let slsConfig: IServerlessConfig;
   try {
     slsConfig = await getServerlessYaml();
@@ -42,24 +41,18 @@ export async function isServerless(): Promise<IIsServerless | false> {
     //
   }
   const pkgJson = getPackageJson();
-  const hasAsDevDep = pkgJson
-    ? Object.keys(pkgJson.devDependencies).includes("serverless")
-    : false;
-  const isUsingTypescriptMicroserviceTemplate = fs.existsSync(
-    path.join(process.cwd(), "serverless-config/config.ts")
-  );
+  const hasAsDevDep = pkgJson ? Object.keys(pkgJson.devDependencies).includes("serverless") : false;
+  const isUsingTypescriptMicroserviceTemplate = fs.existsSync(path.join(process.cwd(), "serverless-config/config.ts"));
   const hasProviderSection = slsConfig && slsConfig.provider ? true : false;
   const configIsParsable = hasServerlessConfig && slsConfig ? true : false;
 
-  return hasServerlessConfig ||
-    hasAsDevDep ||
-    isUsingTypescriptMicroserviceTemplate
+  return hasServerlessConfig || hasAsDevDep || isUsingTypescriptMicroserviceTemplate
     ? {
         hasServerlessConfig,
         hasAsDevDep,
         isUsingTypescriptMicroserviceTemplate,
         hasProviderSection,
-        configIsParsable
+        configIsParsable,
       }
     : false;
 }

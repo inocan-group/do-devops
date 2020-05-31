@@ -1,10 +1,11 @@
-import { findHandlerConfig } from "../../ast/findHandlerConfig";
-import { writeFile } from "fs";
+import * as chalk from "chalk";
 import * as path from "path";
-import { promisify } from "util";
+
 import { IHandlerInfo } from "../getLocalHandlerInfo";
-import chalk from "chalk";
 import { emoji } from "../../ui";
+import { findHandlerConfig } from "../../ast/findHandlerConfig";
+import { promisify } from "util";
+import { writeFile } from "fs";
 const write = promisify(writeFile);
 
 /**
@@ -20,7 +21,7 @@ export async function createFunctionEnum(handlers: IHandlerInfo[]) {
 export type IAvailableFunction = keyof typeof AvailableFunction;
 `;
   let body: string[] = [];
-  handlers.forEach(handler => {
+  handlers.forEach((handler) => {
     const config = findHandlerConfig(handler.source);
     if (!config) {
       console.log(

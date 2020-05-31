@@ -8,13 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const bestzip_1 = __importDefault(require("bestzip"));
+const chalk = require("chalk");
 const path_1 = require("path");
-const chalk_1 = __importDefault(require("chalk"));
+const bestzip_1 = require("bestzip");
 /**
  * Zips up a number of
  *
@@ -25,18 +22,18 @@ function zipWebpackFiles(fns) {
         const promises = [];
         try {
             const fnWithPath = (f) => path_1.join(".webpack", f);
-            fns.forEach(fn => promises.push(bestzip_1.default({
+            fns.forEach((fn) => promises.push(bestzip_1.default({
                 source: `./${fnWithPath(fn)}.js`,
-                destination: `./${fnWithPath(fn)}.zip`
+                destination: `./${fnWithPath(fn)}.zip`,
             }).catch((e) => {
                 throw e;
             })));
             return Promise.all(promises);
         }
         catch (e) {
-            console.log(chalk_1.default `{red - Problem zipping webpack files! ${"\uD83D\uDE21" /* angry */}}`);
+            console.log(chalk `{red - Problem zipping webpack files! ${"\uD83D\uDE21" /* angry */}}`);
             console.log(`- ${e.message}`);
-            console.log(chalk_1.default `{grey \n${e.stack}}\n`);
+            console.log(chalk `{grey \n${e.stack}}\n`);
             process.exit();
         }
     });

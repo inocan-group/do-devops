@@ -1,16 +1,13 @@
-import {
-  buildServerlessMicroserviceProject,
-  determineRegion,
-  determineProfile,
-  determineStage
-} from "../shared";
-import chalk from "chalk";
+import * as chalk from "chalk";
+import * as process from "process";
+
+import { buildServerlessMicroserviceProject, determineProfile, determineRegion, determineStage } from "../shared";
+
+import { ICommandDescription } from "../@types/index";
+import { IDictionary } from "common-types";
+import { OptionDefinition } from "command-line-usage";
 import { isServerless } from "../shared/serverless/isServerless";
 import commandLineArgs = require("command-line-args");
-import * as process from "process";
-import { OptionDefinition } from "command-line-usage";
-import { IDictionary } from "common-types";
-import { ICommandDescription } from "../@types/index";
 
 /**
  * Description of command for help text
@@ -25,16 +22,12 @@ export const syntax = "do ssm <sub-command> <options>";
 export const commands: ICommandDescription[] = [
   {
     name: "list",
-    summary: "lists the SSM secrets for a given profile and region"
+    summary: "lists the SSM secrets for a given profile and region",
   },
   { name: "get", summary: "get details on a specific secret" },
-  { name: "set", summary: "set the value for a given secret" }
+  { name: "set", summary: "set the value for a given secret" },
 ];
-export const examples = [
-  "do ssm list",
-  "do ssm list --profile myproject",
-  "do ssm add DEV/TRELLO/SID abcdefg1234"
-];
+export const examples = ["do ssm list", "do ssm list --profile myproject", "do ssm add DEV/TRELLO/SID abcdefg1234"];
 
 export const options: OptionDefinition[] = [
   {
@@ -42,71 +35,64 @@ export const options: OptionDefinition[] = [
     type: String,
     typeLabel: "<profileName>",
     group: "ssm",
-    description: `set the AWS profile explicitly`
+    description: `set the AWS profile explicitly`,
   },
   {
     name: "region",
     type: String,
     typeLabel: "<region>",
     group: "ssm",
-    description: `set the AWS region explicitly`
+    description: `set the AWS region explicitly`,
   },
   {
     name: "stage",
     type: String,
     typeLabel: "<stage>",
     group: "ssm",
-    description: `set the stage explicitly`
+    description: `set the stage explicitly`,
   },
   {
     name: "nonStandardPath",
     type: Boolean,
     group: "ssm",
-    description:
-      "allows the naming convention for SSM paths to be ignored for a given operation"
-  }
+    description: "allows the naming convention for SSM paths to be ignored for a given operation",
+  },
 ];
 
 export async function handler(argv: string[], ssmOptions: IDictionary) {
   const subCommand = argv[0];
   const opts = commandLineArgs(options, {
     argv: argv.slice(1),
-    partial: true
+    partial: true,
   });
   const subCmdOptions = {
     ...ssmOptions,
     ...opts.all,
     ...opts.ssm,
-    params: opts._unknown
+    params: opts._unknown,
   };
 
   const ssmCommands = ["list", "get", "set"];
   if (!ssmCommands.includes(subCommand)) {
     console.log(
-      `- please choose a ${chalk.italic("valid")} ${chalk.bold.yellow(
-        "SSM"
-      )} sub-command: ${ssmCommands.join(", ")}`
+      `- please choose a ${chalk.italic("valid")} ${chalk.bold.yellow("SSM")} sub-command: ${ssmCommands.join(", ")}`
     );
     console.log();
     process.exit();
   }
 
   const serverless = await isServerless();
-  if (
-    serverless &&
-    serverless.isUsingTypescriptMicroserviceTemplate &&
-    !serverless.hasServerlessConfig
-  ) {
+  if (serverless && serverless.isUsingTypescriptMicroserviceTemplate && !serverless.hasServerlessConfig) {
     await buildServerlessMicroserviceProject();
   }
 
   const profile = await determineProfile({
     cliOptions: subCmdOptions,
-    interactive: true
+    interactive: true,
   });
   const region = await determineRegion({
     cliOptions: subCmdOptions,
-    interactive: true
+    interactive: true,
   });
   const stage = await determineStage({ cliOptions: subCmdOptions.ssm });
 
@@ -131,9 +117,7 @@ export async function handler(argv: string[], ssmOptions: IDictionary) {
   try {
     await execute({ ...subCmdOptions, profile, region, stage });
   } catch (e) {
-    console.log(
-      chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${e.message}\n`
-    );
+    console.log(chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${e.message}\n`);
     console.log(chalk`{grey - ${e.stack}}`);
 
     process.exit(0);

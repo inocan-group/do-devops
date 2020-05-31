@@ -1,13 +1,10 @@
-import {
-  getServerlessYaml,
-  isServerless,
-  consoleDimensions,
-  buildServerlessMicroserviceProject
-} from "../shared";
+import * as chalk from "chalk";
+
+import { buildServerlessMicroserviceProject, consoleDimensions, getServerlessYaml, isServerless } from "../shared";
+
 import { IDictionary } from "common-types";
-import { table } from "table";
-import chalk from "chalk";
 import { OptionDefinition } from "command-line-usage";
+import { table } from "table";
 
 export function description() {
   return `Lists all serverless function handlers and basic meta about them`;
@@ -18,13 +15,12 @@ export const options: OptionDefinition[] = [
     name: "forceBuild",
     alias: "f",
     type: Boolean,
-    description: chalk`by default functions will be derived from {italic serverless.yml} but if you are in a {italic typescript-microservice} project you can force a rebuild prior to listing the functions`
-  }
+    description: chalk`by default functions will be derived from {italic serverless.yml} but if you are in a {italic typescript-microservice} project you can force a rebuild prior to listing the functions`,
+  },
 ];
 
 export async function handler(args: string[], opts: IDictionary) {
-  const filterBy =
-    args.length > 0 ? (fn: string) => fn.includes(args[0]) : () => true;
+  const filterBy = args.length > 0 ? (fn: string) => fn.includes(args[0]) : () => true;
   const status = await isServerless();
 
   if (!status) {
@@ -33,9 +29,7 @@ export async function handler(args: string[], opts: IDictionary) {
   } else if (status.isUsingTypescriptMicroserviceTemplate) {
     if (opts.forceBuild) {
       console.log(
-        `- detected use of the ${chalk.blue(
-          "typescript-microservice"
-        )} template; rebuilding functions from config.`
+        `- detected use of the ${chalk.blue("typescript-microservice")} template; rebuilding functions from config.`
       );
       await buildServerlessMicroserviceProject();
     } else {
@@ -55,19 +49,19 @@ export async function handler(args: string[], opts: IDictionary) {
         chalk.bold.yellow("events"),
         chalk.bold.yellow("memory"),
         chalk.bold.yellow("timeout"),
-        chalk.bold.yellow("description")
-      ]
+        chalk.bold.yellow("description"),
+      ],
     ];
     Object.keys(fns)
       .filter(filterBy)
-      .forEach(key => {
+      .forEach((key) => {
         const events = fns[key].events || [];
         tableData.push([
           key,
-          events.map(i => Object.keys(i)).join(", "),
+          events.map((i) => Object.keys(i)).join(", "),
           String(fns[key].memorySize || chalk.grey("1024")),
           String(fns[key].timeout || chalk.grey("3")),
-          fns[key].description
+          fns[key].description,
         ]);
       });
     const tableConfig = {
@@ -76,8 +70,8 @@ export async function handler(args: string[], opts: IDictionary) {
         1: { width: 16, alignment: "left" },
         2: { width: 7, alignment: "center" },
         3: { width: 10, alignment: "center" },
-        4: { width: 46, alignment: "left" }
-      }
+        4: { width: 46, alignment: "left" },
+      },
     };
     let output = table(tableData, tableConfig as any);
 
@@ -85,14 +79,14 @@ export async function handler(args: string[], opts: IDictionary) {
       delete tableConfig.columns["2"];
       delete tableConfig.columns["3"];
       delete tableConfig.columns["4"];
-      output = table(tableData.map(i => i.slice(0, 2), tableConfig));
+      output = table(tableData.map((i) => i.slice(0, 2), tableConfig));
     } else if (width < 80) {
       delete tableConfig.columns["3"];
       delete tableConfig.columns["4"];
-      output = table(tableData.map(i => i.slice(0, 3), tableConfig));
+      output = table(tableData.map((i) => i.slice(0, 3), tableConfig));
     } else if (width < 125) {
       delete tableConfig.columns["4"];
-      output = table(tableData.map(i => i.slice(0, 4), tableConfig));
+      output = table(tableData.map((i) => i.slice(0, 4), tableConfig));
     }
 
     console.log(output);

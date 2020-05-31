@@ -1,10 +1,12 @@
-import { buildServerlessMicroserviceProject, emoji, getConfig, isServerless } from "../shared";
-import chalk from "chalk";
-import { IDictionary } from "common-types";
-import { IBuildTool } from "../@types";
+import * as chalk from "chalk";
+
 import { askBuildTool, serverlessTranspilation } from "./build-helpers/index";
-import { OptionDefinition } from "command-line-usage";
+import { buildServerlessMicroserviceProject, emoji, getConfig, isServerless } from "../shared";
+
+import { IBuildTool } from "../@types";
 import { IBuildToolingOptions } from "./build-helpers/tools/types";
+import { IDictionary } from "common-types";
+import { OptionDefinition } from "command-line-usage";
 import { getValidServerlessHandlers } from "../shared/ast";
 
 export const defaultConfig = {

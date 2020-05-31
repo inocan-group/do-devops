@@ -1,6 +1,7 @@
-import { getServerlessYaml } from "./getServerlessYaml";
-import chalk from "chalk";
+import * as chalk from "chalk";
+
 import { IServerlessAccountInfo } from "../../@types";
+import { getServerlessYaml } from "./getServerlessYaml";
 
 /**
  * Gets the `accountInfo` from the `serverless.yml` file if
@@ -14,7 +15,7 @@ export async function getAccountInfoFromServerlessYaml() {
       accountId: config.custom.accountId,
       region: config.provider.region,
       profile: config.provider.profile,
-      pluginsInstalled: config.plugins || []
+      pluginsInstalled: config.plugins || [],
       // tracing: (config as any).tracing
     } as IServerlessAccountInfo;
 
@@ -24,6 +25,9 @@ export async function getAccountInfoFromServerlessYaml() {
 
     return info;
   } catch (e) {
-    console.log(chalk`- Problems getting account info from {green serverless.yml}.`);
+    console.log(chalk`- Problems getting account info from {green serverless.yml}. `);
+    console.log(
+      chalk`- Don't panic, be happy. This can happen for a variety of reasons ({italic {grey including this being your first build}})\n  and we will just build another serverless.yml file.`
+    );
   }
 }

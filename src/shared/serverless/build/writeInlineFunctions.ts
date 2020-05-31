@@ -1,8 +1,9 @@
-import { IServerlessFunction } from "common-types";
 import * as fs from "fs";
-import path from "path";
-import { promisify } from "util";
+import * as path from "path";
+
 import { IHandlerReference } from "../../../@types/index";
+import { IServerlessFunction } from "common-types";
+import { promisify } from "util";
 const writeFile = promisify(fs.writeFile);
 
 /**
@@ -19,20 +20,17 @@ export async function writeInlineFunctions(handlers: IHandlerReference[], functi
   const fnNames = [];
   for (const handler of handlers) {
     const localPath = handler.file.replace(/.*src\//, `${functionRoot}/`).replace(".ts", "");
-    const functionName = handler.file
-      .split("/")
-      .pop()
-      .replace(".ts", "");
+    const functionName = handler.file.split("/").pop().replace(".ts", "");
     fnNames.push(functionName);
     let config: IServerlessFunction = {
-      handler: `${localPath}.handler`
+      handler: `${localPath}.handler`,
     };
     if (handler.ref.config) {
       config = { ...config, ...handler.ref.config };
     }
 
     contents += `const ${functionName}: IServerlessFunction = {\n`;
-    Object.keys(config).forEach(key => {
+    Object.keys(config).forEach((key) => {
       let value = config[key as keyof typeof config];
       if (typeof value === "string") {
         value = `"${value.replace(/"/g, '\\"')}"`;
@@ -47,6 +45,6 @@ export async function writeInlineFunctions(handlers: IHandlerReference[], functi
   contents += `export default {\n  ${fnNames.join(",\n  ")}\n}`;
 
   await writeFile(path.join(process.cwd(), `serverless-config/functions/${fileName}.ts`), contents, {
-    encoding: "utf-8"
+    encoding: "utf-8",
   });
 }

@@ -8,14 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const npm_1 = require("../npm");
-const chalk_1 = __importDefault(require("chalk"));
-const inquirer = require("inquirer");
+const chalk = require("chalk");
 const index_1 = require("./index");
+const npm_1 = require("../npm");
+const inquirer = require("inquirer");
 /**
  * Checks whether the existing configuration has `logForwarding`
  * turned on in the **custom** section. If it _does_ then it just
@@ -29,18 +26,18 @@ function askAboutLogForwarding(config) {
         const hasConfigInfoForForwarding = config.custom.logForwarding ? true : false;
         if (!hasServerlessLogForwarding) {
             if (hasConfigInfoForForwarding) {
-                console.log(chalk_1.default `{red - detected a {bold {blue logForwarding}} section in your serverless configuration but you do {italic not} have the {italic {blue serverless-log-forwarding}} plugin installed as a {bold devDep}.}`);
+                console.log(chalk `{red - detected a {bold {blue logForwarding}} section in your serverless configuration but you do {italic not} have the {italic {blue serverless-log-forwarding}} plugin installed as a {bold devDep}.}`);
             }
             else {
-                console.log(chalk_1.default `{dim - you are {italic not} using the {blue serverless-log-forwarding} plugin so skipping config for log forwarding}`);
+                console.log(chalk `{dim - you are {italic not} using the {blue serverless-log-forwarding} plugin so skipping config for log forwarding}`);
             }
             return config;
         }
         if (hasConfigInfoForForwarding) {
-            console.log(chalk_1.default `{grey - the {blue serverless-log-forwarding} is configured [ ${config.custom.logForwarding.destinationARN} ]}`);
+            console.log(chalk `{grey - the {blue serverless-log-forwarding} is configured [ ${config.custom.logForwarding.destinationARN} ]}`);
             return config;
         }
-        console.log(chalk_1.default `- you have installed the {blue {italic serverless-log-forwarding}} plugin but have not configured it.`);
+        console.log(chalk `- you have installed the {blue {italic serverless-log-forwarding}} plugin but have not configured it.`);
         let Action;
         (function (Action) {
             Action["now"] = "configure now";
@@ -52,20 +49,18 @@ function askAboutLogForwarding(config) {
             {
                 type: "list",
                 name: "action",
-                message: chalk_1.default `{bold choose from one of the {italic actions} below:}`,
+                message: chalk `{bold choose from one of the {italic actions} below:}`,
                 choices: [Action.now, Action.remove, Action.later],
                 default: Action.now,
-                when: () => true
-            }
+                when: () => true,
+            },
         ];
         answers = (yield inquirer.prompt(questions));
         if (answers.action === Action.now) {
             const awsFunctions = yield index_1.getLambdaFunctions();
             const stage = (yield index_1.determineStage({})) || "dev";
-            const fns = awsFunctions.map(i => i.FunctionName).concat("CANCEL");
-            const defaultFn = fns
-                .filter(i => i.toLocaleLowerCase().includes("shipper"))
-                .find(i => i.includes(stage));
+            const fns = awsFunctions.map((i) => i.FunctionName).concat("CANCEL");
+            const defaultFn = fns.filter((i) => i.toLocaleLowerCase().includes("shipper")).find((i) => i.includes(stage));
             questions = [
                 {
                     type: "list",
@@ -73,17 +68,16 @@ function askAboutLogForwarding(config) {
                     message: 'Which function will serve as your "shipper function"?',
                     choices: fns,
                     default: defaultFn || fns[0],
-                    when: () => true
-                }
+                    when: () => true,
+                },
             ];
             answers = Object.assign(Object.assign({}, answers), (yield inquirer.prompt(questions)));
             if (answers.shipper !== "CANCEL") {
-                const arn = awsFunctions.find(i => i.FunctionName === answers.shipper)
-                    .FunctionArn;
+                const arn = awsFunctions.find((i) => i.FunctionName === answers.shipper).FunctionArn;
                 config.custom.logForwarding = { destinationARN: arn };
             }
             else {
-                console.log(chalk_1.default `{grey - ok, cancelling the config of a shipping function for now}`);
+                console.log(chalk `{grey - ok, cancelling the config of a shipping function for now}`);
             }
         }
         else if (answers.action === Action.remove) {

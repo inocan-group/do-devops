@@ -1,12 +1,13 @@
-import { IDictionary } from "common-types";
-import { getServerlessYaml } from "./getServerlessYaml";
-import { getConfig } from "../index";
-import chalk from "chalk";
-import { emoji } from "../ui";
+import * as chalk from "chalk";
+
 import { IDetermineOptions } from "../../@types";
-import { get } from "lodash";
+import { IDictionary } from "common-types";
 import { determineProfile } from "./determineProfile";
+import { emoji } from "../ui";
+import { get } from "lodash";
 import { getAwsProfile } from "../aws";
+import { getConfig } from "../index";
+import { getServerlessYaml } from "./getServerlessYaml";
 
 /**
  * Determines the appropriate `region` to point at based on CLI switches/options,
@@ -40,7 +41,7 @@ export async function determineRegion(opts?: IDetermineOptions) {
   if (!outcome) {
     const userConfig = await getConfig({
       projectOrUserConfig: "user",
-      exitIfNotFound: false
+      exitIfNotFound: false,
     });
     if (userConfig && userConfig.global.defaultAwsRegion) {
       if (opts.cliOptions && !opts.cliOptions.quiet) {

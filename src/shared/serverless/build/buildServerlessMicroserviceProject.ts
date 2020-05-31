@@ -1,19 +1,21 @@
-import { getAccountInfoFromServerlessYaml, askForAccountInfo } from "../index";
-import { createInlineExports } from "./index";
-import chalk from "chalk";
-import { getValidServerlessHandlers } from "../../ast/index";
-import { createFunctionEnum } from "./createFunctionEnum";
-import { asyncExec, rm } from "async-shelljs";
-import { saveToServerlessYaml } from "../saveToServerlessYaml";
-import { saveYamlFile, filesExist } from "../../file";
-import { emoji } from "../../ui";
+import * as chalk from "chalk";
 import * as os from "os";
-import { createWebpackEntryDictionaries } from "./createWebpackEntryDictionaries";
-import { getPackageJson } from "../../npm";
-import { IDoBuildConfig } from "../../../@types";
+
+import { askForAccountInfo, getAccountInfoFromServerlessYaml } from "../index";
+import { asyncExec, rm } from "async-shelljs";
+import { filesExist, saveYamlFile } from "../../file";
+
 import { IDictionary } from "common-types";
+import { IDoBuildConfig } from "../../../@types";
+import { createFunctionEnum } from "./createFunctionEnum";
+import { createInlineExports } from "./index";
+import { createWebpackEntryDictionaries } from "./createWebpackEntryDictionaries";
+import { emoji } from "../../ui";
 import { getLocalHandlerInfo } from "../getLocalHandlerInfo";
+import { getPackageJson } from "../../npm";
+import { getValidServerlessHandlers } from "../../ast/index";
 import { rmdirSync } from "fs";
+import { saveToServerlessYaml } from "../saveToServerlessYaml";
 
 const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 
@@ -28,17 +30,14 @@ const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
  * 1. look within the `serverless.yml` for info (if it exists)
  * 2. ask the user for the information (saving values as default for next time)
  */
-export async function buildServerlessMicroserviceProject(
-  opts: IDictionary = {},
-  config: IDoBuildConfig = {}
-) {
+export async function buildServerlessMicroserviceProject(opts: IDictionary = {}, config: IDoBuildConfig = {}) {
   let stage = "starting";
   const devDependencies = Object.keys(getPackageJson().devDependencies);
   const knownAccountInfo = {
     // TODO: add file storage for the askForAccountInfo
     ...{},
     ...(await getAccountInfoFromServerlessYaml()),
-    devDependencies
+    devDependencies,
   };
 
   const accountInfo = await askForAccountInfo(knownAccountInfo);
@@ -50,11 +49,7 @@ export async function buildServerlessMicroserviceProject(
   );
 
   const handlerInfo = getLocalHandlerInfo();
-  console.log(
-    chalk`{grey - handler functions [ {bold ${String(
-      handlerInfo.length
-    )}} ] have been identified}`
-  );
+  console.log(chalk`{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`);
 
   await createInlineExports(handlerInfo);
   console.log(
@@ -67,15 +62,10 @@ export async function buildServerlessMicroserviceProject(
   );
 
   if (!hasWebpackPlugin) {
-    await createWebpackEntryDictionaries(handlerInfo.map(i => i.source));
-    console.log(
-      chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
-    );
+    await createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
+    console.log(chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`);
   } else {
-    const exist = filesExist(
-      "webpack.js-entry-points.json",
-      "webpack.js-entry-points.json"
-    );
+    const exist = filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
     if (exist) {
       rm(...exist);
       console.log(
@@ -84,24 +74,18 @@ export async function buildServerlessMicroserviceProject(
     }
   }
 
-  console.log(
-    chalk`- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`
-  );
+  console.log(chalk`- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`);
 
   await asyncExec(`yarn ts-node serverless-config/build.ts --color=always`, {
     env: {
       ...process.env,
       TERM: "xterm-color",
-      ...(os.platform().includes("win") ? {} : { shell: "/bin/bash" })
-    }
+      ...(os.platform().includes("win") ? {} : { shell: "/bin/bash" }),
+    },
   });
 
   rm(ACCOUNT_INFO_YAML);
-  console.log(
-    chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`
-  );
+  console.log(chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`);
 
-  console.log(
-    chalk`{green - {bold serverless.yml} has been updated successfully ${emoji.rocket}}\n`
-  );
+  console.log(chalk`{green - {bold serverless.yml} has been updated successfully ${emoji.rocket}}\n`);
 }

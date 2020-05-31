@@ -1,18 +1,20 @@
-import { IDictionary } from "common-types";
-import { asyncExec } from "async-shelljs";
-import { OptionDefinition } from "command-line-usage";
-import chalk from "chalk";
+import * as chalk from "chalk";
+
 import {
-  askForFunctions,
-  readDataFile,
-  getDataFiles,
   askForDataFile,
+  askForFunction,
+  askForFunctions,
+  emoji,
+  getDataFiles,
   getFunctionNames,
   getLambdaFunctions,
   isServerless,
-  emoji,
-  askForFunction
+  readDataFile,
 } from "../shared";
+
+import { IDictionary } from "common-types";
+import { OptionDefinition } from "command-line-usage";
+import { asyncExec } from "async-shelljs";
 import { getLocalServerlessFunctionsFromServerlessYaml } from "../shared/serverless/getLocalServerlessFunctionsFromServerlessYaml";
 
 export function description() {
@@ -25,54 +27,44 @@ export const options: OptionDefinition[] = [
     type: String,
     typeLabel: "<stage>",
     group: "invoke",
-    description: `state the "stage" you want to emulate with invokation`
+    description: `state the "stage" you want to emulate with invokation`,
   },
   {
     name: "data",
     type: String,
     typeLabel: "<dataFile>",
     group: "invoke",
-    description: `use a known data input`
+    description: `use a known data input`,
   },
   {
     name: "interactive",
     alias: "i",
     type: Boolean,
     group: "invoke",
-    description: "bring up an interactive dialog to choose the data file"
-  }
+    description: "bring up an interactive dialog to choose the data file",
+  },
 ];
 
 export async function handler(args: string[], opts: IDictionary) {
   try {
     const sls = await isServerless();
     if (!sls) {
-      console.log(
-        chalk`{red - This project is not configured as a {bold Serverless} project!} ${emoji.angry}\n`
-      );
+      console.log(chalk`{red - This project is not configured as a {bold Serverless} project!} ${emoji.angry}\n`);
 
       process.exit();
     }
     if (args.length > 1) {
-      console.log(
-        chalk`{dim - you have stated more than one function to {italic invoke}.}`
-      );
-      console.log(
-        chalk`{dim - this command only executes one at a time; the rest are ignored.}`
-      );
+      console.log(chalk`{dim - you have stated more than one function to {italic invoke}.}`);
+      console.log(chalk`{dim - this command only executes one at a time; the rest are ignored.}`);
     }
     let fn: string;
     if (args.length === 0) {
       fn = await askForFunction();
     } else {
       fn = args[0];
-      const availableFns = Object.keys(
-        await getLocalServerlessFunctionsFromServerlessYaml()
-      );
+      const availableFns = Object.keys(await getLocalServerlessFunctionsFromServerlessYaml());
       if (!availableFns.includes(fn)) {
-        console.log(
-          chalk`{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`
-        );
+        console.log(chalk`{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`);
         console.log(`- valid functions are:`);
         console.log(chalk`{dim   - ${availableFns.join("\n  - ")}}`);
 
@@ -85,7 +77,7 @@ export async function handler(args: string[], opts: IDictionary) {
         data = await readDataFile(opts.data, "json");
       } catch (e) {
         const possible = await getDataFiles({
-          filterBy: opts.data
+          filterBy: opts.data,
         });
 
         if (possible.length > 1) {
@@ -103,9 +95,7 @@ export async function handler(args: string[], opts: IDictionary) {
     }
 
     if (!opts.quiet) {
-      console.log(
-        chalk`{grey > sls invoke local --function {dim {white ${fn}}} --data '{dim {white ${data}}}'}`
-      );
+      console.log(chalk`{grey > sls invoke local --function {dim {white ${fn}}} --data '{dim {white ${data}}}'}`);
     }
     await asyncExec(`sls invoke local --function ${fn} --data '${data}'`);
   } catch (e) {

@@ -1,14 +1,16 @@
-import { findHandlerConfig } from "../../ast/index";
-import { IServerlessFunction, IDictionary } from "common-types";
-import chalk from "chalk";
-import { writeFileSync } from "fs";
+import * as chalk from "chalk";
 import * as path from "path";
-import { hasDevDependency } from "../../npm";
-import { getConfig } from "../../do-config";
-import { join } from "path";
+
+import { IDictionary, IServerlessFunction } from "common-types";
+import { relativePath, stripFileExtension } from "../../file";
+
 import { IHandlerInfo } from "../getLocalHandlerInfo";
-import { stripFileExtension, relativePath } from "../../file";
 import { emoji } from "../../ui";
+import { findHandlerConfig } from "../../ast/index";
+import { getConfig } from "../../do-config";
+import { hasDevDependency } from "../../npm";
+import { join } from "path";
+import { writeFileSync } from "fs";
 
 export interface IInlineExportConfig {
   interface: string;
@@ -30,7 +32,7 @@ export async function createInlineExports(handlers: IHandlerInfo[]) {
   const header = 'import { IServerlessFunction } from "common-types";\n';
   let body: string[] = [];
   const config: IInlineExportConfig[] = [];
-  handlers.forEach(handler => {
+  handlers.forEach((handler) => {
     // const comments = findHandlerComments(handler);
     const handlerConfig = findHandlerConfig(handler.source, bespokeWebpack);
     if (handlerConfig) {
@@ -47,7 +49,7 @@ export async function createInlineExports(handlers: IHandlerInfo[]) {
 
   warnAboutMissingTyping(config);
 
-  config.forEach(handler => {
+  config.forEach((handler) => {
     const fnName = handler.config.handler
       .split("/")
       .pop()
@@ -69,13 +71,13 @@ export default {
 }`;
 
   writeFileSync(path.join(process.env.PWD, "serverless-config/functions/inline.ts"), file, {
-    encoding: "utf-8"
+    encoding: "utf-8",
   });
 }
 
 function objectPrint(obj: IDictionary) {
   let contents: string[] = [];
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key) => {
     let value = obj[key as keyof typeof obj];
     if (typeof value === "string") {
       value = `"${value.replace(/"/g, '\\"')}"`;
@@ -91,17 +93,11 @@ function objectPrint(obj: IDictionary) {
 }
 
 function convertToWebpackResource(fn: string) {
-  return join(
-    ".webpack/",
-    fn
-      .split("/")
-      .pop()
-      .replace(".ts", ".js")
-  );
+  return join(".webpack/", fn.split("/").pop().replace(".ts", ".js"));
 }
 
 function warnAboutMissingTyping(config: IInlineExportConfig[]) {
-  const incorrectOrMissingTyping = config.filter(i => i.interface !== "IWrapperFunction");
+  const incorrectOrMissingTyping = config.filter((i) => i.interface !== "IWrapperFunction");
   if (incorrectOrMissingTyping.length > 0) {
     console.log(
       chalk`- there were ${String(
@@ -110,7 +106,7 @@ function warnAboutMissingTyping(config: IInlineExportConfig[]) {
     );
     console.log(
       chalk`{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
-        .map(i => i.config.handler)
+        .map((i) => i.config.handler)
         .join(", ")}}}`
     );
   }

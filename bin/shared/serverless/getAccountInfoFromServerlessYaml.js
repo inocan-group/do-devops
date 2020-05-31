@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const chalk = require("chalk");
 const getServerlessYaml_1 = require("./getServerlessYaml");
-const chalk_1 = __importDefault(require("chalk"));
 /**
  * Gets the `accountInfo` from the `serverless.yml` file if
  * possible. If not it returns nothing.
@@ -27,8 +24,7 @@ function getAccountInfoFromServerlessYaml() {
                 accountId: config.custom.accountId,
                 region: config.provider.region,
                 profile: config.provider.profile,
-                pluginsInstalled: config.plugins || []
-                // tracing: (config as any).tracing
+                pluginsInstalled: config.plugins || [],
             };
             if (config.custom.logForwarding) {
                 info.logForwarding = config.custom.logForwarding.destinationARN;
@@ -36,7 +32,8 @@ function getAccountInfoFromServerlessYaml() {
             return info;
         }
         catch (e) {
-            console.log(chalk_1.default `- Problems getting account info from {green serverless.yml}.`);
+            console.log(chalk `- Problems getting account info from {green serverless.yml}. `);
+            console.log(chalk `- Don't panic, be happy. This can happen for a variety of reasons ({italic {grey including this being your first build}})\n  and we will just build another serverless.yml file.`);
         }
     });
 }

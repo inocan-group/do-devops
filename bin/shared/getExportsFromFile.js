@@ -8,19 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = __importDefault(require("chalk"));
-const path_1 = __importDefault(require("path"));
+const chalk = require("chalk");
+const path = require("path");
 /**
  * Returns an array of _exports_ that a given file provides
  *
@@ -30,19 +20,19 @@ const path_1 = __importDefault(require("path"));
  */
 function getExportsFromFile(file, filter = () => true) {
     return __awaiter(this, void 0, void 0, function* () {
-        const srcDir = path_1.default.join(process.env.PWD, "src");
-        const exports = yield Promise.resolve().then(() => __importStar(require(path_1.default.join("..", file.replace(srcDir, "").replace(".ts", "")))));
+        const srcDir = path.join(process.env.PWD, "src");
+        const exports = yield Promise.resolve().then(() => require(path.join("..", file.replace(srcDir, "").replace(".ts", ""))));
         return Object.keys(exports).reduce((agg, key) => {
             const value = exports[key];
             if (filter(value)) {
                 agg[key] = {
                     symbol: key,
                     type: typeof value,
-                    props: typeof value === "object" ? Object.keys(value) : undefined
+                    props: typeof value === "object" ? Object.keys(value) : undefined,
                 };
             }
             else {
-                console.log(chalk_1.default.grey(`- ignoring the export "${key}" due to the filter condition`));
+                console.log(chalk.grey(`- ignoring the export "${key}" due to the filter condition`));
             }
             return agg;
         }, {});

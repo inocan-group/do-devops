@@ -1,48 +1,43 @@
-import commandLineUsage, { Section } from "command-line-usage";
-import chalk from "chalk";
-import { getCommands, getSyntax, getDescription, emoji } from "../shared/ui";
-import { getOptions } from "../shared";
+import * as chalk from "chalk";
+import * as commandLineUsage from "command-line-usage";
+
+import { emoji, getCommands, getDescription, getSyntax } from "../shared/ui";
+
 import { IDictionary } from "common-types";
+import { getOptions } from "../shared";
 
 export async function help(opts: IDictionary, fn?: string) {
-  const { commands, description, syntax, options } = await getHelpMeta(
-    opts,
-    fn
-  );
+  const { commands, description, syntax, options } = await getHelpMeta(opts, fn);
 
   const sections: commandLineUsage.Section[] = [
     {
       header: "Description",
-      content: description
+      content: description,
     },
     {
       header: "Syntax",
-      content: syntax
-    }
+      content: syntax,
+    },
   ];
 
   if (commands && commands.length > 0) {
     sections.push({
       header: fn ? `${fn.toUpperCase()} Sub-Commands` : "Commands",
-      content: commands
+      content: commands,
     });
   }
 
   if (fn) {
     sections.push({
       header: "Options",
-      optionList: options
+      optionList: options,
     });
   }
 
   try {
     console.log(commandLineUsage(sections));
   } catch (e) {
-    console.log(
-      `  - ${emoji.poop}  ${chalk.red("Problem displaying help:")} ${
-        e.message
-      }\n`
-    );
+    console.log(`  - ${emoji.poop}  ${chalk.red("Problem displaying help:")} ${e.message}\n`);
     console.log(chalk.grey(e.stack));
   }
   console.log();
@@ -58,11 +53,7 @@ async function getHelpMeta(opts: IDictionary, fn?: string) {
 
     return { commands, options, syntax, description };
   } catch (e) {
-    console.log(
-      `  - ${emoji.poop}  ${chalk.red.bold("Problem getting help meta:")} ${
-        e.messsage
-      }\n`
-    );
+    console.log(`  - ${emoji.poop}  ${chalk.red.bold("Problem getting help meta:")} ${e.messsage}\n`);
     console.log(chalk.grey(e.stack));
     process.exit();
   }

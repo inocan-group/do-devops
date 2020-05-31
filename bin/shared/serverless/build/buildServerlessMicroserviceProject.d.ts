@@ -1,5 +1,5 @@
-import { IDoBuildConfig } from "../../../@types";
 import { IDictionary } from "common-types";
+import { IDoBuildConfig } from "../../../@types";
 /**
  * Builds a `serverless.yml` file from the configuration
  * available in the `/serverless-config` directory.

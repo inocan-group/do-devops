@@ -15,19 +15,9 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = __importDefault(require("path"));
-const fast_glob_1 = __importDefault(require("fast-glob"));
+const fg = require("fast-glob");
+const path = require("path");
 /**
  * Finds all typescript files in the `src/handlers`
  * directory which have a **handler** export.
@@ -35,15 +25,15 @@ const fast_glob_1 = __importDefault(require("fast-glob"));
 function findAllHandlerFiles() {
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const glob = path_1.default.join(process.env.PWD, "/src/handlers/**/*.ts");
-        const files = fast_glob_1.default.sync(glob);
+        const glob = path.join(process.env.PWD, "/src/handlers/**/*.ts");
+        const files = fg.sync(glob);
         const handlers = [];
         console.log(files);
         try {
             for (var files_1 = __asyncValues(files), files_1_1; files_1_1 = yield files_1.next(), !files_1_1.done;) {
                 const file = files_1_1.value;
                 console.log(file);
-                const ref = yield Promise.resolve().then(() => __importStar(require(file)));
+                const ref = yield Promise.resolve().then(() => require(file));
                 if (ref.handler) {
                     handlers.push({ file, ref });
                 }
@@ -56,7 +46,7 @@ function findAllHandlerFiles() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        console.log(handlers.map(i => i.file));
+        console.log(handlers.map((i) => i.file));
     });
 }
 exports.findAllHandlerFiles = findAllHandlerFiles;

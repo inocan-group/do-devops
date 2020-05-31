@@ -8,13 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
 const askForUnitTestFramework_1 = require("./test-helpers/askForUnitTestFramework");
@@ -25,7 +18,7 @@ exports.description = description;
 function examples() {
     return [
         'Typing "do test" by itself will search in the testing directory for all test files and run them all',
-        'Typing "do test foo bar baz" will look for all test files which contain foo, bar, or baz in their name and execute them'
+        'Typing "do test foo bar baz" will look for all test files which contain foo, bar, or baz in their name and execute them',
     ];
 }
 exports.examples = examples;
@@ -39,13 +32,13 @@ function handler(args, opt) {
                 yield shared_1.writeSection("test", Object.assign(Object.assign({}, config.test), unitTestFramework), "project");
             }
             if ((config === null || config === void 0 ? void 0 : config.test.unitTestFramework) === "mocha") {
-                test = (yield Promise.resolve().then(() => __importStar(require("./test-helpers/mocha")))).default;
+                test = (yield Promise.resolve().then(() => require("./test-helpers/mocha"))).default;
             }
             else if ((config === null || config === void 0 ? void 0 : config.test.unitTestFramework) === "jest") {
-                test = (yield Promise.resolve().then(() => __importStar(require("./test-helpers/jest")))).default;
+                test = (yield Promise.resolve().then(() => require("./test-helpers/jest"))).default;
             }
             else {
-                test = (yield Promise.resolve().then(() => __importStar(require("./test-helpers/other")))).default;
+                test = (yield Promise.resolve().then(() => require("./test-helpers/other"))).default;
             }
             yield test(args);
         }

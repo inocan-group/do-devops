@@ -8,13 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../shared");
 const deploy_helpers_1 = require("./deploy-helpers");
@@ -98,14 +91,14 @@ function handler(argv, opts) {
         // const { deploy, global } = await getConfig();
         let { target } = yield deploy_helpers_1.detectTarget(opts);
         if (target === "both") {
-            const ask = (yield Promise.resolve().then(() => __importStar(require(`./deploy-helpers/deploy-${target}`)))).default;
+            const ask = (yield Promise.resolve().then(() => require(`./deploy-helpers/deploy-${target}`))).default;
             target = yield ask(opts);
         }
         if (!target) {
             console.log(`  - ${"\uD83D\uDCA9" /* poop */} You must state a valid "target" [ ${target ? target + "{italic not valid}" : "no target stated"} ]`);
         }
         // await runHooks(deploy.preDeployHooks);
-        const helper = (yield Promise.resolve().then(() => __importStar(require(`./deploy-helpers/deploy-${target}`)))).default;
+        const helper = (yield Promise.resolve().then(() => require(`./deploy-helpers/deploy-${target}`))).default;
         yield helper(argv, opts);
     });
 }

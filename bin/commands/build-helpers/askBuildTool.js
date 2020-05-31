@@ -8,15 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("../../shared/index");
+const chalk = require("chalk");
 const _types_1 = require("../../@types");
-const inquirer = require("inquirer");
-const chalk_1 = __importDefault(require("chalk"));
+const index_1 = require("../../shared/index");
 const index_2 = require("./index");
+const inquirer = require("inquirer");
 /**
  * Asks for the primary build tool the user wants to use
  * for the repo. It will also return the value for further
@@ -25,18 +22,18 @@ const index_2 = require("./index");
 function askBuildTool(isServerless) {
     return __awaiter(this, void 0, void 0, function* () {
         const packages = Object.keys(index_1.getPackageJson().devDependencies);
-        const findLikely = (exclude = null) => packages.find(i => i === "bili" && i !== exclude)
+        const findLikely = (exclude = null) => packages.find((i) => i === "bili" && i !== exclude)
             ? "bili"
-            : packages.find(i => i === "rollup" && i !== exclude)
+            : packages.find((i) => i === "rollup" && i !== exclude)
                 ? "rollup"
-                : packages.find(i => i === "webpack" && i !== exclude)
+                : packages.find((i) => i === "webpack" && i !== exclude)
                     ? "webpack"
-                    : packages.find(i => i === "typescript" && i !== exclude)
+                    : packages.find((i) => i === "typescript" && i !== exclude)
                         ? "typescript"
                         : undefined;
         const mostLikely = findLikely();
         const alternative = findLikely(mostLikely);
-        const ifTypescriptMessage = chalk_1.default `{reset
+        const ifTypescriptMessage = chalk `{reset
     
   {bold {white Note:}} since this is a {bold {blue Serverless}} project you may consider 
   using "none" to only build the {italic serverless.yml} file at build time. Alternatively,
@@ -44,16 +41,14 @@ function askBuildTool(isServerless) {
   --force} parameter.
 
   }`;
-        const message = chalk_1.default `Choose a build tool for this repo [ {grey {italic suggestion: }${mostLikely
-            ? [mostLikely, alternative].filter(i => i).join(", ")
-            : "[ {grey no suggestions"}} ]${isServerless ? ifTypescriptMessage : ""}`;
+        const message = chalk `Choose a build tool for this repo [ {grey {italic suggestion: }${mostLikely ? [mostLikely, alternative].filter((i) => i).join(", ") : "[ {grey no suggestions"}} ]${isServerless ? ifTypescriptMessage : ""}`;
         const choices = Object.keys(_types_1.BuildTool);
         const baseProfileQuestion = {
             type: "list",
             name: "buildTool",
             message,
             choices,
-            default: mostLikely || choices[0]
+            default: mostLikely || choices[0],
         };
         const answer = yield inquirer.prompt(baseProfileQuestion);
         yield index_2.saveToolToRepoConfig(answer.buildTool);

@@ -1,10 +1,11 @@
-import { isServerless } from "./isServerless";
+import * as chalk from "chalk";
+
 import { DevopsError } from "../errors";
-import chalk from "chalk";
-import { emoji } from "../ui";
 import { IServerlessConfig } from "common-types";
-import { getServerlessYaml } from "./getServerlessYaml";
 import { buildServerlessMicroserviceProject } from "./index";
+import { emoji } from "../ui";
+import { getServerlessYaml } from "./getServerlessYaml";
+import { isServerless } from "./isServerless";
 
 /**
  * Returns the **AWS Profile** which is used as part
@@ -24,21 +25,14 @@ export async function getAwsProfileFromServerless() {
     );
   }
 
-  if (
-    (!sls.hasServerlessConfig || !sls.hasProviderSection) &&
-    sls.isUsingTypescriptMicroserviceTemplate
-  ) {
+  if ((!sls.hasServerlessConfig || !sls.hasProviderSection) && sls.isUsingTypescriptMicroserviceTemplate) {
     if (!sls.hasServerlessConfig) {
       console.log(
-        chalk`- it appears that the {green serverless.yml} {italic does not} exist; will build from {italic serverless-microservice} config ${
-          emoji.robot
-        }`
+        chalk`- it appears that the {green serverless.yml} {italic does not} exist; will build from {italic serverless-microservice} config ${emoji.robot}`
       );
     } else {
       console.log(
-        chalk`- it appears that the {green serverless.yml} does not have the {bold provider} section; will build from {italic serverless-microservice} config ${
-          emoji.robot
-        }`
+        chalk`- it appears that the {green serverless.yml} does not have the {bold provider} section; will build from {italic serverless-microservice} config ${emoji.robot}`
       );
     }
 
@@ -48,11 +42,7 @@ export async function getAwsProfileFromServerless() {
   try {
     config = await getServerlessYaml();
     if (!config.provider) {
-      console.log(
-        chalk`- the {red serverless.yaml} file doesn't have a {bold provider} section! ${
-          emoji.poop
-        }`
-      );
+      console.log(chalk`- the {red serverless.yaml} file doesn't have a {bold provider} section! ${emoji.poop}`);
       console.log("- this section must exist before you can deploy\n");
       process.exit();
     }

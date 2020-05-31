@@ -1,4 +1,4 @@
-import inquirer from "inquirer";
+import inquirer = require("inquirer");
 
 export async function askHowToHandleMonoRepoIndexing(pkgs: string[]) {
   const choices = pkgs.concat("ALL");

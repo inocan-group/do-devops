@@ -1,19 +1,16 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = __importDefault(require("path"));
+const chalk = require("chalk");
+const fg = require("fast-glob");
+const path = require("path");
 const parseFile_1 = require("./parseFile");
-const fast_glob_1 = __importDefault(require("fast-glob"));
-const chalk_1 = __importDefault(require("chalk"));
 const file_1 = require("../file");
 /**
  * Gets a list of all typescript files under the `src/handlers`
  * directory that have a `handlers` export.
  */
 function getValidServerlessHandlers() {
-    const allFiles = fast_glob_1.default.sync(path_1.default.join(process.env.PWD, "/src/handlers/**/*.ts"));
+    const allFiles = fg.sync(path.join(process.env.PWD, "/src/handlers/**/*.ts"));
     return allFiles.reduce((agg, curr) => {
         let ast;
         let status = "starting";
@@ -21,7 +18,7 @@ function getValidServerlessHandlers() {
             ast = parseFile_1.parseFile(curr);
             status = "file-parsed";
             if (!ast.program.body[0].source) {
-                console.log(chalk_1.default `{grey - the file {blue ${file_1.relativePath(curr)}} has no source content; will be ignored}`);
+                console.log(chalk `{grey - the file {blue ${file_1.relativePath(curr)}} has no source content; will be ignored}`);
                 return agg;
             }
             const loc = ast.program.body[0].source.loc;
@@ -37,7 +34,7 @@ function getValidServerlessHandlers() {
             return agg;
         }
         catch (e) {
-            console.log(chalk_1.default `- Error processing  {red ${file_1.relativePath(curr)}} [s: ${status}]: {grey ${e.message}}`);
+            console.log(chalk `- Error processing  {red ${file_1.relativePath(curr)}} [s: ${status}]: {grey ${e.message}}`);
             return agg;
         }
     }, []);

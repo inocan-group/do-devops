@@ -1,7 +1,8 @@
-import zip from "bestzip";
-import { join } from "path";
-import chalk from "chalk";
+import * as chalk from "chalk";
+
 import { emoji } from "../../ui";
+import { join } from "path";
+import zip from "bestzip";
 /**
  * Zips up a number of
  *
@@ -11,11 +12,11 @@ export async function zipWebpackFiles(fns: string[]) {
   const promises: any[] = [];
   try {
     const fnWithPath = (f: string) => join(".webpack", f);
-    fns.forEach(fn =>
+    fns.forEach((fn) =>
       promises.push(
         zip({
           source: `./${fnWithPath(fn)}.js`,
-          destination: `./${fnWithPath(fn)}.zip`
+          destination: `./${fnWithPath(fn)}.zip`,
         }).catch((e: Error) => {
           throw e;
         })

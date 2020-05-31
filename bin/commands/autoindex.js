@@ -15,17 +15,15 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const chalk = require("chalk");
+const globby = require("globby");
 const path_1 = require("path");
 const fs_1 = require("fs");
 const file_1 = require("../shared/file");
 const index_1 = require("./autoindex/index");
-const chalk_1 = __importDefault(require("chalk"));
+const shared_1 = require("../shared");
 const date_fns_1 = require("date-fns");
-const globby_1 = __importDefault(require("globby"));
 const START_REGION = "//#region autoindexed files";
 const END_REGION = "//#endregion";
 function description() {
@@ -70,7 +68,7 @@ function handler(argv, opts) {
                     for (var monoRepoPackages_1 = __asyncValues(monoRepoPackages), monoRepoPackages_1_1; monoRepoPackages_1_1 = yield monoRepoPackages_1.next(), !monoRepoPackages_1_1.done;) {
                         const pkg = monoRepoPackages_1_1.value;
                         if (!opts.quiet) {
-                            console.log(chalk_1.default `Running {bold autoindex} for the {green ${pkg}}:`);
+                            console.log(chalk `Running {bold autoindex} for the {green ${pkg}}:`);
                         }
                         yield handler(argv, Object.assign(Object.assign({}, opts), { dir: path_1.join(opts.dir || process.env.PWD, "packages", pkg), withinMonorepo: true }));
                     }
@@ -89,7 +87,7 @@ function handler(argv, opts) {
             }
         }
         const srcDir = path_1.join(dir, "src");
-        const paths = yield globby_1.default([
+        const paths = yield globby([
             `${srcDir}/**/index.ts`,
             `${srcDir}/**/index.js`,
             `${srcDir}/**/private.ts`,
@@ -133,7 +131,7 @@ function processFiles(paths, opts) {
         }
         if (Object.keys(results).length === 0) {
             if (opts.withinMonorepo) {
-                console.log(chalk_1.default `- No {italic autoindex} files found`);
+                console.log(chalk `- No {italic autoindex} files found`);
                 return;
             }
             else {
@@ -145,6 +143,7 @@ function processFiles(paths, opts) {
             for (const filePath of Object.keys(results)) {
                 let fileContent = results[filePath];
                 const excluded = exclusions(fileContent);
+                // console.log({ excluded });
                 const exportableFiles = yield exportable(filePath, excluded);
                 const autoIndexContent = fileContent.includes(":default")
                     ? defaultExports(exportableFiles)
@@ -152,11 +151,11 @@ function processFiles(paths, opts) {
                 if (alreadyHasIndex(fileContent)) {
                     fileContent = replaceRegion(fileContent, autoIndexContent);
                     const warnings = unexpectedContent(fileContent);
-                    console.log(chalk_1.default `- updated index {blue ./${file_1.relativePath(filePath)}}${warnings ? chalk_1.default ` {red has unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}` : ""}`);
+                    console.log(chalk `- updated index {blue ./${file_1.relativePath(filePath)}}${warnings ? chalk ` {red has unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}` : ""}`);
                 }
                 else {
                     fileContent = `${fileContent}\n${START_REGION}\n${timestamp()}${autoIndexContent}\n${END_REGION}`;
-                    console.log(chalk_1.default `- added index to {blue ./${file_1.relativePath(filePath)}}`);
+                    console.log(chalk `- added index to {blue ./${file_1.relativePath(filePath)}}`);
                 }
                 fs_1.writeFileSync(filePath, fileContent);
             }
@@ -175,7 +174,7 @@ function exportable(filePath, excluded) {
         const dir = path_1.dirname(filePath);
         const thisFile = path_1.basename(filePath);
         const exclusions = excluded.concat(thisFile).concat(["index.js", "index.ts"]);
-        const files = (yield globby_1.default([`${dir}/*.ts`, `${dir}/*.js`]))
+        const files = (yield globby([`${dir}/*.ts`, `${dir}/*.js`]))
             .filter((file) => !exclusions.includes(path_1.basename(file)))
             .map((i) => path_1.basename(i));
         const dirs = [];
@@ -198,7 +197,7 @@ function alreadyHasIndex(fileContent) {
 }
 /** replace an existing region block with a new one */
 function replaceRegion(fileContent, regionContent) {
-    const re = new RegExp(`${START_REGION}.*${END_REGION}`, "gs");
+    const re = new RegExp(`${START_REGION}.*${END_REGION}\n`, "gs");
     const replacementContent = `${START_REGION}\n${timestamp()}${regionContent}\n${END_REGION}\n`;
     return fileContent.replace(re, replacementContent);
 }
@@ -219,10 +218,10 @@ function exportsHaveChanged(fileContent, regionContent) {
 function namedExports(exportable) {
     const contentLines = [];
     exportable.files.forEach((file) => {
-        contentLines.push(`export * from "./${removeExtension(file)}";`);
+        contentLines.push(`export * from "./${shared_1.exportsAsEsm() ? removeExtension(file) + ".js" : removeExtension(file)}";`);
     });
     exportable.dirs.forEach((dir) => {
-        contentLines.push(`export * from "./${dir}/index";`);
+        contentLines.push(`export * from "./${dir}/index${shared_1.exportsAsEsm() ? ".js" : ""}";`);
     });
     return contentLines.join("\n");
 }
@@ -266,10 +265,10 @@ function removeExtension(file, force = false) {
     return ext === "vue" && !force ? file : fn;
 }
 function communicateApi(paths) {
-    console.log(`- Scanned through ${chalk_1.default.bold(String(paths.length))} ${chalk_1.default.italic("index")} files but none of them were "autoindex" files.\n`);
-    console.log(`${chalk_1.default.bold("  Note: ")}${chalk_1.default.dim.italic('to make an "index.ts" or "index.js" file an "autoindex file"')}`);
-    console.log(chalk_1.default.dim.italic("  you must add in the following to your index file (ideally on the first line):\n"));
-    console.log("  " + chalk_1.default.whiteBright.bgBlue("//#autoindex:[CMD] \n"));
-    console.log(chalk_1.default.dim.italic("  where the valid commands are (aka, CMD from above): ") + chalk_1.default.italic("named,defaults"));
-    console.log(chalk_1.default `  {white {bold Note:}}\n    {dim {italic you can also add the "--add" flag to look for other regex files patterns}}`);
+    console.log(`- Scanned through ${chalk.bold(String(paths.length))} ${chalk.italic("index")} files but none of them were "autoindex" files.\n`);
+    console.log(`${chalk.bold("  Note: ")}${chalk.dim.italic('to make an "index.ts" or "index.js" file an "autoindex file"')}`);
+    console.log(chalk.dim.italic("  you must add in the following to your index file (ideally on the first line):\n"));
+    console.log("  " + chalk.whiteBright.bgBlue("//#autoindex:[CMD] \n"));
+    console.log(chalk.dim.italic("  where the valid commands are (aka, CMD from above): ") + chalk.italic("named,defaults"));
+    console.log(chalk `  {white {bold Note:}}\n    {dim {italic you can also add the "--add" flag to look for other regex files patterns}}`);
 }

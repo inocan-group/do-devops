@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const command_line_usage_1 = __importDefault(require("command-line-usage"));
-const chalk_1 = __importDefault(require("chalk"));
+const chalk = require("chalk");
+const commandLineUsage = require("command-line-usage");
 const ui_1 = require("../shared/ui");
 const shared_1 = require("../shared");
 function help(opts, fn) {
@@ -22,31 +19,31 @@ function help(opts, fn) {
         const sections = [
             {
                 header: "Description",
-                content: description
+                content: description,
             },
             {
                 header: "Syntax",
-                content: syntax
-            }
+                content: syntax,
+            },
         ];
         if (commands && commands.length > 0) {
             sections.push({
                 header: fn ? `${fn.toUpperCase()} Sub-Commands` : "Commands",
-                content: commands
+                content: commands,
             });
         }
         if (fn) {
             sections.push({
                 header: "Options",
-                optionList: options
+                optionList: options,
             });
         }
         try {
-            console.log(command_line_usage_1.default(sections));
+            console.log(commandLineUsage(sections));
         }
         catch (e) {
-            console.log(`  - ${"\uD83D\uDCA9" /* poop */}  ${chalk_1.default.red("Problem displaying help:")} ${e.message}\n`);
-            console.log(chalk_1.default.grey(e.stack));
+            console.log(`  - ${"\uD83D\uDCA9" /* poop */}  ${chalk.red("Problem displaying help:")} ${e.message}\n`);
+            console.log(chalk.grey(e.stack));
         }
         console.log();
         process.exit();
@@ -63,8 +60,8 @@ function getHelpMeta(opts, fn) {
             return { commands, options, syntax, description };
         }
         catch (e) {
-            console.log(`  - ${"\uD83D\uDCA9" /* poop */}  ${chalk_1.default.red.bold("Problem getting help meta:")} ${e.messsage}\n`);
-            console.log(chalk_1.default.grey(e.stack));
+            console.log(`  - ${"\uD83D\uDCA9" /* poop */}  ${chalk.red.bold("Problem getting help meta:")} ${e.messsage}\n`);
+            console.log(chalk.grey(e.stack));
             process.exit();
         }
     });

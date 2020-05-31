@@ -1,5 +1,6 @@
+import * as globby from "globby";
+
 import { join } from "path";
-import globby from "globby";
 
 /**
  * Returns a list of files of a particular type/extention. This list of files will

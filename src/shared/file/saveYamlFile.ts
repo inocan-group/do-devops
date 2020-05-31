@@ -1,10 +1,11 @@
-import { IDictionary } from "common-types";
-import { safeDump } from "js-yaml";
+import * as chalk from "chalk";
 import * as path from "path";
-import { writeFile } from "fs";
-import { promisify } from "util";
-import chalk from "chalk";
+
+import { IDictionary } from "common-types";
 import { emoji } from "../ui";
+import { promisify } from "util";
+import { safeDump } from "js-yaml";
+import { writeFile } from "fs";
 const write = promisify(writeFile);
 
 export async function saveYamlFile(filename: string, data: IDictionary) {

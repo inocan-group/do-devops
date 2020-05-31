@@ -1,17 +1,13 @@
-import { asyncExec } from "async-shelljs";
-import chalk from "chalk";
-import { sandbox } from "../../shared/sandbox";
-import { emoji } from "../../shared/ui";
-import { IDictionary } from "common-types";
-import {
-  getConfig,
-  determineStage,
-  hasDevDependency,
-  getLocalHandlerInfo
-} from "../../shared";
-import { IDoDeployServerless } from "../../@types";
+import * as chalk from "chalk";
 
+import { determineStage, getConfig, getLocalHandlerInfo, hasDevDependency } from "../../shared";
+
+import { IDictionary } from "common-types";
+import { IDoDeployServerless } from "../../@types";
+import { asyncExec } from "async-shelljs";
+import { emoji } from "../../shared/ui";
 import { isTranspileNeeded } from "./index";
+import { sandbox } from "../../shared/sandbox";
 import { zipWebpackFiles } from "../../shared/serverless/build/index";
 
 export interface IServerlessDeployMeta {
@@ -23,10 +19,7 @@ export interface IServerlessDeployMeta {
 /**
  * Manages the execution of a serverless deployment
  */
-export default async function serverlessDeploy(
-  argv: string[],
-  opts: IDictionary
-) {
+export default async function serverlessDeploy(argv: string[], opts: IDictionary) {
   const stage = await determineStage(opts);
   const { deploy: config } = await getConfig();
   const meta = { stage, config: config as IDoDeployServerless, opts };
@@ -42,58 +35,38 @@ export default async function serverlessDeploy(
 async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   const { stage, opts, config } = meta;
   console.log(
-    chalk`- {bold serverless} deployment for {bold ${String(
-      fns.length
-    )}} functions to {italic ${stage}} stage ${emoji.party}`
+    chalk`- {bold serverless} deployment for {bold ${String(fns.length)}} functions to {italic ${stage}} stage ${
+      emoji.party
+    }`
   );
 
   const transpile = isTranspileNeeded(meta);
   if (transpile.length > 0) {
     const build = (await import("../build-helpers/tools/webpack")).default({
-      opts: { fns: transpile }
+      opts: { fns: transpile },
     }).build;
     await build();
   }
 
-  console.log(
-    chalk`{grey - zipping up ${String(
-      fns.length
-    )} {bold Serverless} {italic handler} functions }`
-  );
+  console.log(chalk`{grey - zipping up ${String(fns.length)} {bold Serverless} {italic handler} functions }`);
   await zipWebpackFiles(fns);
-  console.log(
-    chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`
-  );
+  console.log(chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`);
 
-  console.log(
-    chalk`- deploying {bold ${String(
-      fns.length
-    )} functions} to "${stage}" stage`
-  );
+  console.log(chalk`- deploying {bold ${String(fns.length)} functions} to "${stage}" stage`);
   const sandboxStage = stage === "dev" ? await sandbox(stage) : stage;
   if (sandboxStage !== stage) {
   }
-  fns.forEach(fn => console.log(chalk.grey(`    - ${fn}`)));
+  fns.forEach((fn) => console.log(chalk.grey(`    - ${fn}`)));
 
   const promises: any[] = [];
   try {
-    fns.map(fn => {
-      promises.push(
-        asyncExec(
-          `sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`
-        )
-      );
+    fns.map((fn) => {
+      promises.push(asyncExec(`sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`));
     });
     await Promise.all(promises);
-    console.log(
-      chalk`\n- all {bold ${String(fns.length)}} function(s) were deployed! ${
-        emoji.rocket
-      }\n`
-    );
+    console.log(chalk`\n- all {bold ${String(fns.length)}} function(s) were deployed! ${emoji.rocket}\n`);
   } catch (e) {
-    console.log(
-      chalk`- {red {bold problems deploying functions!}} ${emoji.poop}`
-    );
+    console.log(chalk`- {red {bold problems deploying functions!}} ${emoji.poop}`);
     console.log(`- ${e.message}`);
     console.log(chalk`- {dim ${e.stack}}`);
   }
@@ -101,43 +74,31 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
 
 async function fullDeploy(meta: IServerlessDeployMeta) {
   const { stage, opts, config } = meta;
-  console.log(
-    chalk`- Starting {bold FULL serverless} deployment for {italic ${stage}} stage`
-  );
+  console.log(chalk`- Starting {bold FULL serverless} deployment for {italic ${stage}} stage`);
 
   if (!hasDevDependency("serverless-webpack")) {
-    console.log(
-      chalk`{grey - checking timestamps to determine what {bold webpack} transpilation is needed}`
-    );
+    console.log(chalk`{grey - checking timestamps to determine what {bold webpack} transpilation is needed}`);
     const transpile = isTranspileNeeded(meta);
 
     if (transpile.length > 0) {
       const build = (await import("../build-helpers/tools/webpack")).default({
-        opts: { fns: transpile }
+        opts: { fns: transpile },
       }).build;
       await build();
     }
 
-    const fns = getLocalHandlerInfo().map(i => i.fn);
+    const fns = getLocalHandlerInfo().map((i) => i.fn);
 
-    console.log(
-      chalk`{grey - zipping up all ${String(fns.length)} Serverless handlers}`
-    );
+    console.log(chalk`{grey - zipping up all ${String(fns.length)} Serverless handlers}`);
 
     await zipWebpackFiles(fns);
-    console.log(
-      chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`
-    );
+    console.log(chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`);
   }
 
   if (config.showUnderlyingCommands) {
-    console.log(
-      chalk`{grey > {italic sls deploy --aws-s3-accelerate  --stage ${stage} --verbose}}\n`
-    );
+    console.log(chalk`{grey > {italic sls deploy --aws-s3-accelerate  --stage ${stage} --verbose}}\n`);
     try {
-      await asyncExec(
-        `sls deploy --aws-s3-accelerate  --stage ${stage} --verbose`
-      );
+      await asyncExec(`sls deploy --aws-s3-accelerate  --stage ${stage} --verbose`);
       console.log(chalk`\n- The full deploy was successful! ${emoji.rocket}\n`);
     } catch (e) {
       console.log(chalk`- {red Error running deploy!}`);

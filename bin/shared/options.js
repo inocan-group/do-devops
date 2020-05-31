@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const chalk = require("chalk");
 const getCommandInterface_1 = require("./getCommandInterface");
-const chalk_1 = __importDefault(require("chalk"));
 /**
  * A list of all options from all commands (including global options)
  */
@@ -22,9 +19,7 @@ function globalAndLocalOptions(optsSet, fn) {
         let options = exports.globalOptions;
         const cmdDefn = getCommandInterface_1.getCommandInterface(fn);
         if (cmdDefn.options) {
-            const localOptions = typeof cmdDefn.options === "object"
-                ? cmdDefn.options
-                : yield cmdDefn.options(optsSet);
+            const localOptions = typeof cmdDefn.options === "object" ? cmdDefn.options : yield cmdDefn.options(optsSet);
             options = options.concat(localOptions);
         }
         return options;
@@ -38,27 +33,27 @@ exports.globalOptions = [
         type: String,
         group: "global",
         description: "sends output to the filename specified (in JSON format)",
-        typeLabel: "<filename>"
+        typeLabel: "<filename>",
     },
     {
         name: "quiet",
         alias: "q",
         type: Boolean,
         group: "global",
-        description: chalk_1.default `stops all output to {italic stdout}`
+        description: chalk `stops all output to {italic stdout}`,
     },
     {
         name: "verbose",
         alias: "v",
         type: Boolean,
         group: "global",
-        description: "makes the output more verbose"
+        description: "makes the output more verbose",
     },
     {
         name: "help",
         alias: "h",
         type: Boolean,
         group: "global",
-        description: "shows help for given command"
-    }
+        description: "shows help for given command",
+    },
 ];

@@ -1,26 +1,30 @@
-import chalk from "chalk";
-export const inverted = chalk.black.bgHex("A9A9A9");
+// #autoindex:named
 
+//#region autoindexed files
+// indexed at: 5th May, 2020, 10:11 PM ( GMT-7 )
 export * from "./askForDataFile";
 export * from "./commands";
-export * from "./options";
-export * from "./do-config/getDefaultConfig";
-export * from "./runHooks";
-export * from "./getExportsFromFile";
 export * from "./consoleDimensions";
-export * from "./getCommandInterface";
-export * from "./ensureDirectory";
 export * from "./defaultConfigSections";
-export * from "./readFile";
-export * from "./readDataFile";
+export * from "./ensureDirectory";
+export * from "./getCommandInterface";
 export * from "./getDataFiles";
-
-export * from "./serverless/index";
+export * from "./getExportsFromFile";
+export * from "./inverted";
+export * from "./options";
+export * from "./readDataFile";
+export * from "./readFile";
+export * from "./runHooks";
+export * from "./sandbox";
+export * from "./ast/index";
 export * from "./aws/index";
-export * from "./git/index";
-export * from "./npm/index";
-export * from "./errors/index";
-export * from "./ui/index";
 export * from "./do-config/index";
-
-export * from "./npm";
+export * from "./errors/index";
+export * from "./file/index";
+export * from "./git/index";
+export * from "./interactive/index";
+export * from "./npm/index";
+export * from "./serverless/index";
+export * from "./sound/index";
+export * from "./ui/index";
+//#endregion

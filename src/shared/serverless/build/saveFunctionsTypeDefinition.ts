@@ -1,9 +1,11 @@
-import { IServerlessConfig } from "common-types";
-import path from "path";
+import * as chalk from "chalk";
 import * as fs from "fs";
-import { promisify } from "util";
-import chalk from "chalk";
+import * as path from "path";
+
+import { IServerlessConfig } from "common-types";
 import { ensureDirectory } from "../..";
+import { promisify } from "util";
+
 const writeFile = promisify(fs.writeFile);
 
 /**
@@ -30,9 +32,7 @@ export async function saveFunctionsTypeDefinition(config: IServerlessConfig) {
     if (functions) {
       contents += "export enum AvailableFunctions {";
       functions.forEach((f, i) => {
-        const description = config.functions[f].description
-          ? config.functions[f].description
-          : false;
+        const description = config.functions[f].description ? config.functions[f].description : false;
         contents += description ? `\n  /**\n   * ${description}\n   **/` : "";
         const comma = i === functions.length - 1 ? "" : ",";
         contents += `\n  ${f} = "${f}"${comma}`;

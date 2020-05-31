@@ -16,8 +16,7 @@ const index_1 = require("./index");
  */
 function getLocalServerlessFunctionsFromServerlessYaml() {
     return __awaiter(this, void 0, void 0, function* () {
-        const fns = (yield index_1.getServerlessYaml()).functions;
-        return fns;
+        return index_1.serverlessYamlExists() ? (yield index_1.getServerlessYaml()).functions : {};
     });
 }
 exports.getLocalServerlessFunctionsFromServerlessYaml = getLocalServerlessFunctionsFromServerlessYaml;

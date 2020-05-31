@@ -1,5 +1,5 @@
-import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
+import { OptionDefinition } from "command-line-usage";
 export declare function description(opts: IDictionary): Promise<string>;
 export declare const options: OptionDefinition[];
 export declare const syntax = "do pkg <options>";
