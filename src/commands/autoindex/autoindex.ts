@@ -3,12 +3,11 @@ import * as globby from "globby";
 
 import { basename, dirname, join } from "path";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
-import { getMonoRepoPackages, relativePath } from "../shared/file";
+import { exportsAsEsm, getMonoRepoPackages, relativePath } from "../../shared";
 
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
-import { askHowToHandleMonoRepoIndexing } from "./autoindex/index";
-import { exportsAsEsm } from "../shared";
+import { askHowToHandleMonoRepoIndexing } from "./local";
 import { format } from "date-fns";
 
 const START_REGION = "//#region autoindexed files";
@@ -47,6 +46,8 @@ export const options: OptionDefinition[] = [
 export async function handler(argv: string[], opts: IDictionary): Promise<void> {
   const dir = opts.dir || process.env.PWD;
   const globInclude = opts.glob;
+  console.log({ getMonoRepoPackages, exportsAsEsm });
+
   const monoRepoPackages: false | string[] = getMonoRepoPackages(dir);
 
   if (monoRepoPackages) {

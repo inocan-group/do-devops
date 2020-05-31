@@ -1,5 +1,3 @@
-import * as globby from "globby";
-
 import { existsSync, readdirSync } from "fs";
 
 import { join } from "path";

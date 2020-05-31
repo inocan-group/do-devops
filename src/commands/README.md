@@ -38,3 +38,5 @@ The `commands` directory is _autoindexed_ so that by simply adding in a file all
 
 At that point of course, you can add any file and it's exported symbols will be available to peers via the `private.ts`.
 
+## Plugins
+This is a future goal; not designed yet
