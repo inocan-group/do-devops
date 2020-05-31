@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const config = require("../../commands/config/index");
+const config = require("../../config/index");
 const index_1 = require("../index");
 const defaultConfigSections_1 = require("../defaultConfigSections");
 /**

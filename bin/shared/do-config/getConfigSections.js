@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const defaults = require("../../commands/config");
+const defaults = require("../../config");
 /**
  * **getConfigSections**
  *

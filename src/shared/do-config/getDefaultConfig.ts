@@ -1,7 +1,8 @@
-import * as config from "../../commands/config/index";
+import * as config from "../../config/index";
+
 import { DevopsError } from "../index";
-import { defaultConfigSections } from "../defaultConfigSections";
 import { IDoConfig } from "../../@types";
+import { defaultConfigSections } from "../defaultConfigSections";
 
 /**
  * **getDefaultConfig**

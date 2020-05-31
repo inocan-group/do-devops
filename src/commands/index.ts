@@ -16,6 +16,6 @@ export * as ssm from "./ssm";
 export * as test from "./test";
 export * from "./autoindex/index";
 export * from "./build-helpers/index";
-export * from "./config/index";
+export * from "../config/index";
 export * from "./deploy-helpers/index";
 //#endregion

@@ -1,4 +1,4 @@
-import { IDoTestConfig } from "../../@types/test";
+import { IDoTestConfig } from "../@types/test";
 
 export function test(): IDoTestConfig {
   return {

@@ -20,6 +20,6 @@ exports.ssm = require("./ssm");
 exports.test = require("./test");
 __export(require("./autoindex/index"));
 __export(require("./build-helpers/index"));
-__export(require("./config/index"));
+__export(require("../config/index"));
 __export(require("./deploy-helpers/index"));
 //#endregion

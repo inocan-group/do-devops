@@ -1,8 +1,8 @@
-import { IDoPkgConfig } from "../../@types";
+import { IDoPkgConfig } from "../@types";
 
 export function pkg(): IDoPkgConfig {
   return {
     preDeployHooks: ["clean"],
-    showUnderlyingCommands: true
+    showUnderlyingCommands: true,
   };
 }

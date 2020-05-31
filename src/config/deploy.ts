@@ -1,9 +1,9 @@
-import { IDoDeployConfig } from "../../@types";
+import { IDoDeployConfig } from "../@types";
 
 export function deploy(): IDoDeployConfig {
   return {
     target: "serverless",
     showUnderlyingCommands: true,
-    sandboxing: "user"
+    sandboxing: "user",
   };
 }

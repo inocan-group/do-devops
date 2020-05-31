@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const config = require("../commands/config/index");
+const config = require("../config/index");
 /**
  * returns a list of commands (or global scope) which have
  * a "default configuration"
