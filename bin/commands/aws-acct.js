@@ -9,14 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("./index");
-/**
- * Gets the list of functions defined in the `serverless.yml`
- * file.
- */
-function getLocalServerlessFunctionsFromServerlessYaml() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return index_1.serverlessYamlExists() ? (yield index_1.getServerlessYaml()).functions : {};
-    });
+function description() {
+    return `Given a user has their AWS credentials file configured, provides easy access to a particular (or all) AWS account ID's for the given user.`;
 }
-exports.getLocalServerlessFunctionsFromServerlessYaml = getLocalServerlessFunctionsFromServerlessYaml;
+exports.description = description;
+exports.signature = "<profile-name> | <empty>";
+exports.examples = [
+    {
+        name: "Interactive",
+        desc: "no parameters leads to an interactive session to determine profile",
+        example: "do aws-account",
+    },
+];
+function handler(argv, opts) {
+    return __awaiter(this, void 0, void 0, function* () { });
+}
+exports.handler = handler;

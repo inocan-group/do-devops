@@ -12,6 +12,10 @@ function getPackageJson(pathOverride) {
         return packageJsonCache_1.getLocalPackageJson();
     }
     const filename = path.join(pathOverride || process.cwd(), "package.json");
+    // TODO: come back and validate if this is a good idea
+    if (!fs.existsSync(filename)) {
+        return {};
+    }
     return JSON.parse(fs.readFileSync(filename, { encoding: "utf-8" }));
 }
 exports.getPackageJson = getPackageJson;

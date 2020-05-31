@@ -1,3 +1,5 @@
+// #autoindex:named-offset
+
 //#region autoindexed files
 // indexed at: 5th May, 2020, 01:23 PM ( GMT-7 )
 export * as autoindex from "./autoindex";

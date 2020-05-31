@@ -113,6 +113,8 @@ async function processFiles(paths: string[], opts: IDictionary) {
     for (const filePath of Object.keys(results)) {
       let fileContent = results[filePath];
       const excluded = exclusions(fileContent);
+      // console.log({ excluded });
+
       const exportableFiles = await exportable(filePath, excluded);
       const autoIndexContent: string = fileContent.includes(":default")
         ? defaultExports(exportableFiles)
@@ -179,7 +181,7 @@ function alreadyHasIndex(fileContent: string) {
 
 /** replace an existing region block with a new one */
 function replaceRegion(fileContent: string, regionContent: string) {
-  const re = new RegExp(`${START_REGION}.*${END_REGION}`, "gs");
+  const re = new RegExp(`${START_REGION}.*${END_REGION}\n`, "gs");
   const replacementContent = `${START_REGION}\n${timestamp()}${regionContent}\n${END_REGION}\n`;
   return fileContent.replace(re, replacementContent);
 }

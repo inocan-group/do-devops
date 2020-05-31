@@ -32,7 +32,8 @@ function getAccountInfoFromServerlessYaml() {
             return info;
         }
         catch (e) {
-            console.log(chalk `- Problems getting account info from {green serverless.yml}.`);
+            console.log(chalk `- Problems getting account info from {green serverless.yml}. `);
+            console.log(chalk `- Don't panic, be happy. This can happen for a variety of reasons ({italic {grey including this being your first build}})\n  and we will just build another serverless.yml file.`);
         }
     });
 }
