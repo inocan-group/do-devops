@@ -19,6 +19,7 @@ exports.pkg = require("./pkg");
 exports.ssm = require("./ssm");
 exports.test = require("./test");
 exports.autoindex = require("./autoindex/index");
+exports.awsid = require("./awsid/index");
 __export(require("./build-helpers/index"));
 __export(require("../config/index"));
 __export(require("./deploy-helpers/index"));

@@ -11,8 +11,9 @@ By adding a file that exports a `handler` function along a `description` then it
     ```
 
 2. **`description`** - to be active a command must also have a description, this can be exported as a _string_ or a _function_. In the case of a function, the function will be passed `argv` and `opts` to that it may respond to this information.
-3. **`examples`** - to add more information to the help system it is often a good idea to provide examples. This will be displayed along with other _meta_ when the user types: `do <command> --help`
-4. **`options`** - a command is allowed to add any additional options they need to fill out their functionality. This is done by exporting either an array format or a function which returns an array. This array is typed with the `OptionDefinition` type:
+3. **`syntax`** - you can override the generic syntax that displayed for the command in help
+4. **`examples`** - to add more information to the help system it is often a good idea to provide examples. This will be displayed along with other _meta_ when the user types: `do <command> --help`
+5. **`options`** - a command is allowed to add any additional options they need to fill out their functionality. This is done by exporting either an array format or a function which returns an array. This array is typed with the `OptionDefinition` type:
 
     **Static Form**:
     ```typescript
@@ -26,7 +27,7 @@ By adding a file that exports a `handler` function along a `description` then it
      export function options(argv, opts): OptionDefinition[] {...}
      ```
 
-5. **`excludeOptions`** - by default, all commands are seen as taking the _global options_ defined in `commands/global.ts`. A command can decide not to do anything with these options but if they do, it is considered _good form_ for them to explicitly exclude themself from that option.
+6. **`excludeOptions`** - by default, all commands are seen as taking the _global options_ defined in `commands/global.ts`. A command can decide not to do anything with these options but if they do, it is considered _good form_ for them to explicitly exclude themself from that option.
 
 ## Commands: Moving Beyond One File
 Outside of very simple commands, it's likely that a command will want to "spread out" across multiple files and there is no issue with that but there are some standards which help us to ensure that we have a dynamic import system that does not allow symbols to collide.

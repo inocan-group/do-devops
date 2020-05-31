@@ -18,6 +18,7 @@ export * from "./do-config/index";
 export * from "./errors/index";
 export * from "./file/index";
 export * from "./git/index";
+export * from "./interactive/index";
 export * from "./npm/index";
 export * from "./serverless/index";
 export * from "./sound/index";

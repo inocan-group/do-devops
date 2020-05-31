@@ -46,7 +46,6 @@ export const options: OptionDefinition[] = [
 export async function handler(argv: string[], opts: IDictionary): Promise<void> {
   const dir = opts.dir || process.env.PWD;
   const globInclude = opts.glob;
-  console.log({ getMonoRepoPackages, exportsAsEsm });
 
   const monoRepoPackages: false | string[] = getMonoRepoPackages(dir);
 

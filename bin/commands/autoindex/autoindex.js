@@ -59,7 +59,6 @@ function handler(argv, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const dir = opts.dir || process.env.PWD;
         const globInclude = opts.glob;
-        console.log({ getMonoRepoPackages: shared_1.getMonoRepoPackages, exportsAsEsm: shared_1.exportsAsEsm });
         const monoRepoPackages = shared_1.getMonoRepoPackages(dir);
         if (monoRepoPackages) {
             const response = yield local_1.askHowToHandleMonoRepoIndexing(monoRepoPackages);

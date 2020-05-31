@@ -1,7 +1,7 @@
 // #autoindex:named
 
 //#region autoindexed files
-// indexed at: 5th May, 2020, 08:38 PM ( GMT-7 )
+// indexed at: 5th May, 2020, 10:11 PM ( GMT-7 )
 export * from "./askForDataFile";
 export * from "./commands";
 export * from "./consoleDimensions";
@@ -22,6 +22,7 @@ export * from "./do-config/index";
 export * from "./errors/index";
 export * from "./file/index";
 export * from "./git/index";
+export * from "./interactive/index";
 export * from "./npm/index";
 export * from "./serverless/index";
 export * from "./sound/index";
