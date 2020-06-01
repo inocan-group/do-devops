@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.help = void 0;
 const chalk = require("chalk");
 const commandLineUsage = require("command-line-usage");
 const ui_1 = require("../shared/ui");

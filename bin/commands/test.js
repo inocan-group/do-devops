@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.handler = exports.examples = exports.description = void 0;
 const shared_1 = require("../shared");
 const askForUnitTestFramework_1 = require("./test-helpers/askForUnitTestFramework");
 function description() {

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCommandInterface = void 0;
 const commands = require("../commands/index");
 function getCommandInterface(cmd) {
     const cmdDefn = commands[cmd];

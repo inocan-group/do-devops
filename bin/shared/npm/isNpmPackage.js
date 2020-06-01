@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isNpmPackage = void 0;
 const index_1 = require("./index");
 function isNpmPackage() {
     return __awaiter(this, void 0, void 0, function* () {

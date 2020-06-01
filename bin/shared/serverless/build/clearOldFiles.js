@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.clearOldFiles = void 0;
 const path = require("path");
 const fs_1 = require("fs");
 const async_shelljs_1 = require("async-shelljs");

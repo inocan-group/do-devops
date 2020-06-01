@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getApiGatewayEndpoints = void 0;
 const aws_sdk_1 = require("aws-sdk");
 const index_1 = require("./index");
 /**

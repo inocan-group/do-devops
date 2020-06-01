@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.handler = exports.options = exports.examples = exports.commands = exports.syntax = exports.description = void 0;
 const chalk = require("chalk");
 const process = require("process");
 const shared_1 = require("../shared");

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getLocalServerlessFunctionsFromServerlessYaml = void 0;
 const index_1 = require("./index");
 /**
  * Gets the list of functions defined in the `serverless.yml`

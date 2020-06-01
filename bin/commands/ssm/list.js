@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.execute = void 0;
 const chalk = require("chalk");
 const process = require("process");
 const aws_ssm_1 = require("aws-ssm");

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.askAboutLogForwarding = void 0;
 const chalk = require("chalk");
 const index_1 = require("./index");
 const npm_1 = require("../npm");

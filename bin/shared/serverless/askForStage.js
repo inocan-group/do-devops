@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.askForStage = void 0;
 const inquirer = require("inquirer");
 /**
  * Asks the user to choose an AWS region

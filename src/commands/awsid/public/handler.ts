@@ -1,4 +1,4 @@
-import { emoji, getAwsProfileList, getIdentityFromProfile } from "../../../shared";
+import { emoji, getAwsIdentityFromProfile, getAwsProfileList } from "../../../shared";
 
 import { IDictionary } from "common-types";
 import { askUser } from "../private/askUser";
@@ -33,7 +33,7 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
 
   const results = [];
   for (const profile of chosen) {
-    results.push({ profile, ...(await getIdentityFromProfile(profiles[profile])) });
+    results.push({ profile, ...(await getAwsIdentityFromProfile(profiles[profile])) });
   }
   console.log(results);
 }

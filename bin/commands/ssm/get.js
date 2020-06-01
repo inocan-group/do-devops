@@ -16,6 +16,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.execute = void 0;
 const chalk = require("chalk");
 const shared_1 = require("../../shared");
 const aws_ssm_1 = require("aws-ssm");

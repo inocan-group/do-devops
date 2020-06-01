@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.writeDefaultConfig = exports.writeSection = exports.writeConfig = void 0;
 const fs_1 = require("fs");
 const getDefaultConfig_1 = require("./getDefaultConfig");
 const index_1 = require("./index");

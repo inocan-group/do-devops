@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.commands = void 0;
 const subCommands = require("../commands/index");
 /**
  * returns a list of commands (e.g., ssm, info, etc.)

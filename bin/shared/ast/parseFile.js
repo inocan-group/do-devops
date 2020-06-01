@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseFile = void 0;
 const recast = require("recast");
 const fs_1 = require("fs");
 /**

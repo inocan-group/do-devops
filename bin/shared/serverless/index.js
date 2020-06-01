@@ -1,34 +1,41 @@
 "use strict";
 // #autoindex:named
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 //#region autoindexed files
-// indexed at: 5th May, 2020, 10:11 PM ( GMT-7 )
-__export(require("./askAboutLogForwarding"));
-__export(require("./askForFunction"));
-__export(require("./askForStage"));
-__export(require("./determineProfile"));
-__export(require("./determineRegion"));
-__export(require("./determineStage"));
-__export(require("./findAllHandlerFiles"));
-__export(require("./findConfigFunctionDefnFiles"));
-__export(require("./findInlineFunctionDefnFiles"));
-__export(require("./findServerlessFunctions"));
-__export(require("./functions"));
-__export(require("./getAccountInfoFromServerlessYaml"));
-__export(require("./getAwsProfileFromServerless"));
-__export(require("./getLambdaFunctions"));
-__export(require("./getLocalHandlerInfo"));
-__export(require("./getLocalServerlessFunctionsFromServerlessYaml"));
-__export(require("./getMicroserviceConfig"));
-__export(require("./getServerlessYaml"));
-__export(require("./isServerless"));
-__export(require("./isTypescriptMicroserviceProject"));
-__export(require("./saveToServerlessYaml"));
-__export(require("./serverlessYamlExists"));
-__export(require("./accountInfo/index"));
-__export(require("./build/index"));
-__export(require("./webpack/index"));
+// indexed at: 5th May, 2020, 03:00 PM ( GMT-7 )
+__exportStar(require("./askAboutLogForwarding"), exports);
+__exportStar(require("./askForFunction"), exports);
+__exportStar(require("./askForStage"), exports);
+__exportStar(require("./determineProfile"), exports);
+__exportStar(require("./determineRegion"), exports);
+__exportStar(require("./determineStage"), exports);
+__exportStar(require("./findAllHandlerFiles"), exports);
+__exportStar(require("./findConfigFunctionDefnFiles"), exports);
+__exportStar(require("./findInlineFunctionDefnFiles"), exports);
+__exportStar(require("./findServerlessFunctions"), exports);
+__exportStar(require("./functions"), exports);
+__exportStar(require("./getAccountInfoFromServerlessYaml"), exports);
+__exportStar(require("./getAwsProfileFromServerless"), exports);
+__exportStar(require("./getLambdaFunctions"), exports);
+__exportStar(require("./getLocalHandlerInfo"), exports);
+__exportStar(require("./getLocalServerlessFunctionsFromServerlessYaml"), exports);
+__exportStar(require("./getMicroserviceConfig"), exports);
+__exportStar(require("./getServerlessYaml"), exports);
+__exportStar(require("./isServerless"), exports);
+__exportStar(require("./isTypescriptMicroserviceProject"), exports);
+__exportStar(require("./saveToServerlessYaml"), exports);
+__exportStar(require("./serverlessYamlExists"), exports);
+__exportStar(require("./accountInfo/index"), exports);
+__exportStar(require("./build/index"), exports);
+__exportStar(require("./webpack/index"), exports);
 //#endregion

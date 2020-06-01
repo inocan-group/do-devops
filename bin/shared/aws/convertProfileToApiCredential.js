@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.convertProfileToApiCredential = void 0;
 const credentialMap = {
     aws_access_key_id: "accessKeyId",
     aws_secret_access_key: "secretAccessKey"

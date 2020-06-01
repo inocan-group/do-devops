@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.filesInfo = void 0;
 const fs_1 = require("fs");
 const path_1 = require("path");
 const errors_1 = require("../errors");

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.relativePath = void 0;
 /**
  * reduces an absolute path to a relative path to the project root or optionally
  * the project root _offset_ by the `offset` property

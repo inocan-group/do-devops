@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.handler = exports.aliases = exports.syntax = exports.options = exports.description = void 0;
 const chalk = require("chalk");
 const shared_1 = require("../shared");
 const async_shelljs_1 = require("async-shelljs");

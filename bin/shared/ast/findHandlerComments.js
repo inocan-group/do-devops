@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.findHandlerComments = void 0;
 const index_1 = require("./index");
 const recast = require("recast");
 const types = recast.types.namedTypes;

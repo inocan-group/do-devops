@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAwsProfileList = void 0;
 const index_1 = require("../index");
 const readFile_1 = require("../readFile");
 /**

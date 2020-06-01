@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.handler = exports.options = exports.description = void 0;
 const chalk = require("chalk");
 const shared_1 = require("../shared");
 const date_fns_1 = require("date-fns");

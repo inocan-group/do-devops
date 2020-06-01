@@ -1,7 +1,7 @@
 // #autoindex:named
 
 //#region autoindexed files
-// indexed at: 5th May, 2020, 10:11 PM ( GMT-7 )
+// indexed at: 5th May, 2020, 03:00 PM ( GMT-7 )
 export * from "./directoryFiles";
 export * from "./filesExist";
 export * from "./filesInfo";

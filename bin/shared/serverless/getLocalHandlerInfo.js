@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getLocalHandlerInfo = void 0;
 const index_1 = require("../ast/index");
 const file_1 = require("../file");
 const path_1 = require("path");

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getPackageJson = void 0;
 const fs = require("fs");
 const path = require("path");
 const packageJsonCache_1 = require("./cache/packageJsonCache");

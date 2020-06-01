@@ -5,7 +5,7 @@ import { IAwsProfile } from "../../@types";
  *
  * @param profile a profile from a user's `credentials` file
  */
-export declare function getIdentityFromProfile(profile: IAwsProfile): Promise<{
+export declare function getAwsIdentityFromProfile(profile: IAwsProfile): Promise<{
     userId: string;
     accountId: string;
     arn: string;

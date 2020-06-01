@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.stripFileExtension = void 0;
 /**
  * Given a file or path and file, it strips off the
  * file's extension. Because extensions are typically
