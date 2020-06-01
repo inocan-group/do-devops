@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.askForFunction = exports.askForFunctions = void 0;
 const inquirer = require("inquirer");
 const getLocalServerlessFunctionsFromServerlessYaml_1 = require("./getLocalServerlessFunctionsFromServerlessYaml");
 /**

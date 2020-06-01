@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.play = exports.SoundEffect = void 0;
 require("./play-sound");
 const play_sound_1 = require("play-sound");
 var SoundEffect;

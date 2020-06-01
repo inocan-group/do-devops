@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createFunctionEnum = void 0;
 const chalk = require("chalk");
 const path = require("path");
 const findHandlerConfig_1 = require("../../ast/findHandlerConfig");

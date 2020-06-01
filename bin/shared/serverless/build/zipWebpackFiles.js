@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.zipWebpackFiles = void 0;
 const chalk = require("chalk");
 const path_1 = require("path");
 const bestzip_1 = require("bestzip");

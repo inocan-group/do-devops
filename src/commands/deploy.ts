@@ -1,13 +1,15 @@
-import { getConfig, runHooks, emoji } from "../shared";
-import { OptionDefinition } from "command-line-usage";
+import { emoji, getConfig, runHooks } from "../shared";
+
 import { IDictionary } from "common-types";
+import { OptionDefinition } from "command-line-usage";
 import { detectTarget } from "./deploy-helpers";
+import chalk = require("chalk");
 
 export const defaultConfig = {
   preDeployHooks: ["clean"],
   target: "serverless",
   showUnderlyingCommands: true,
-  sandboxing: "user"
+  sandboxing: "user",
 };
 
 export async function description(opts: IDictionary) {
@@ -16,10 +18,10 @@ export async function description(opts: IDictionary) {
   const detect = await detectTarget();
 
   const possibleTargets = {
-    serverless: `This project was detected to be a {bold Serverless} project. Unless you state explicitly that you want to use {bold NPM} targetting it will use Serverless.`,
-    npm: `This project was detected to be a {bold NPM} project. Unless you state explicitly that you want to use "serverless" targetting it will use NPM. `,
-    both: `This project was detected to have both {bold Serverless} functions {italic and} be an {bold NPM} library. By default the deploy command will assume you want to use {bold Serverless} deployment but the {italic options} listed below allow for both targets.`,
-    bespoke: "not implemented yet"
+    serverless: chalk`This project was detected to be a {bold Serverless} project. Unless you state explicitly that you want to use {bold NPM} targetting it will use Serverless.`,
+    npm: chalk`This project was detected to be a {bold NPM} project. Unless you state explicitly that you want to use "serverless" targetting it will use NPM. `,
+    both: chalk`This project was detected to have both {bold Serverless} functions {italic and} be an {bold NPM} library. By default the deploy command will assume you want to use {bold Serverless} deployment but the {italic options} listed below allow for both targets.`,
+    bespoke: "not implemented yet",
   };
 
   return base + possibleTargets[detect.target as keyof typeof possibleTargets];
@@ -38,7 +40,7 @@ export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
       alias: "i",
       type: Boolean,
       group: "serverlessDeploy",
-      description: `allow interactive choices for the functions you want to deploy`
+      description: `allow interactive choices for the functions you want to deploy`,
     },
     {
       name: "target",
@@ -46,7 +48,7 @@ export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
       typeLabel: "<target>",
       type: String,
       group: "deploy",
-      description: "manually override the project target (serverless, npm)"
+      description: "manually override the project target (serverless, npm)",
     },
     {
       name: "stage",
@@ -54,7 +56,7 @@ export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
       typeLabel: "<stage>",
       type: String,
       group: "serverlessDeploy",
-      description: "manually override the stage you're deploying to"
+      description: "manually override the stage you're deploying to",
     },
     {
       name: "region",
@@ -62,8 +64,8 @@ export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
       typeLabel: "<region>",
       type: String,
       group: "serverlessDeploy",
-      description: "explicitly state the region you're deploying to"
-    }
+      description: "explicitly state the region you're deploying to",
+    },
   ];
 }
 

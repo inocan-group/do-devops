@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.handler = void 0;
 const shared_1 = require("../../../shared");
 const askUser_1 = require("../private/askUser");
 const chalk = require("chalk");
@@ -38,8 +39,16 @@ function handler(argv, opts) {
             }
         }
         const results = [];
+        const errors = [];
         for (const profile of chosen) {
-            results.push(Object.assign({ profile }, (yield shared_1.getIdentityFromProfile(profiles[profile]))));
+            try {
+                results.push(Object.assign({ profile }, (yield shared_1.getAwsIdentityFromProfile(profiles[profile]))));
+                process.stdout.write(chalk `{green .}`);
+            }
+            catch (e) {
+                errors.push(e);
+                process.stdout.write(chalk `{red .}`);
+            }
         }
         console.log(results);
     });

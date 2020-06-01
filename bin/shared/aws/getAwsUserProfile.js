@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAwsUserProfile = void 0;
 const aws_sdk_1 = require("aws-sdk");
 const getAwsProfile_1 = require("./getAwsProfile");
 /**

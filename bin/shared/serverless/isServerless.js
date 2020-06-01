@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isServerless = void 0;
 const fs = require("fs");
 const path = require("path");
 const npm_1 = require("../npm");

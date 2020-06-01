@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAllFilesOfType = void 0;
 const globby = require("globby");
 const path_1 = require("path");
 /**

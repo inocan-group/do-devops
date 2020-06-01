@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.truncate = void 0;
 /**
  * Converts an array of _strings/numbers_ into a string representation where
  * there is a _maximum length_ if where exceeded the array is truncated and

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isTypescriptMicroserviceProject = void 0;
 const isServerless_1 = require("./isServerless");
 /**
  * Returns a boolean flag on whether or not this project appears to be

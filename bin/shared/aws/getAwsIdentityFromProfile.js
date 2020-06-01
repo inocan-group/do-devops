@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAwsIdentityFromProfile = void 0;
 const AWS = require("aws-sdk");
 /**
  * Returns the `userId`, `accountId`, `arn`, and `user` when passed
@@ -16,7 +17,7 @@ const AWS = require("aws-sdk");
  *
  * @param profile a profile from a user's `credentials` file
  */
-function getIdentityFromProfile(profile) {
+function getAwsIdentityFromProfile(profile) {
     return __awaiter(this, void 0, void 0, function* () {
         const sts = new AWS.STS({ accessKeyId: profile.aws_access_key_id, secretAccessKey: profile.aws_secret_access_key });
         const result = yield sts.getCallerIdentity().promise();
@@ -28,6 +29,6 @@ function getIdentityFromProfile(profile) {
         };
     });
 }
-exports.getIdentityFromProfile = getIdentityFromProfile;
+exports.getAwsIdentityFromProfile = getAwsIdentityFromProfile;
 // STS: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html
 // getCallerIdentity: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getCallerIdentity-property

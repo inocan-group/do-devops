@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.checkIfAwsInstalled = void 0;
 const async_shelljs_1 = require("async-shelljs");
 /**
  * Tests whether the executing environment has the **AWS CLI**

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateWebpackConfig = void 0;
 // import { readFileSync } from "fs";
 const path_1 = require("path");
 const index_1 = require("./index");

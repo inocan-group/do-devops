@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.askForDataFile = void 0;
 const inquirer = require("inquirer");
 const index_1 = require("./index");
 /**

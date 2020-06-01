@@ -1,5 +1,5 @@
-import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
+import { OptionDefinition } from "command-line-usage";
 export declare const defaultConfig: {
     preDeployHooks: string[];
     target: string;

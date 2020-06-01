@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.readDataFile = void 0;
 const path = require("path");
 const process = require("process");
 const index_1 = require("./index");

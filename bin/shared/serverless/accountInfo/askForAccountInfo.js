@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.askForAccountInfo = void 0;
 const aws_1 = require("../../aws");
 const npm_1 = require("../../npm");
 const __1 = require("..");

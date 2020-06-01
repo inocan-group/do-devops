@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getConfigSections = void 0;
 const defaults = require("../../config");
 /**
  * **getConfigSections**

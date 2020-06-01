@@ -1,3 +1,4 @@
+export * from "./addAwsProfile";
 export * from "./askForAwsProfile";
 export * from "./askForAwsRegion";
 export * from "./checkIfAwsInstalled";

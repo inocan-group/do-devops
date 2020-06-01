@@ -9,13 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.handler = exports.options = exports.syntax = exports.description = exports.defaultConfig = void 0;
 const shared_1 = require("../shared");
 const deploy_helpers_1 = require("./deploy-helpers");
+const chalk = require("chalk");
 exports.defaultConfig = {
     preDeployHooks: ["clean"],
     target: "serverless",
     showUnderlyingCommands: true,
-    sandboxing: "user"
+    sandboxing: "user",
 };
 function description(opts) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -23,10 +25,10 @@ function description(opts) {
         const { deploy: config } = yield shared_1.getConfig();
         const detect = yield deploy_helpers_1.detectTarget();
         const possibleTargets = {
-            serverless: `This project was detected to be a {bold Serverless} project. Unless you state explicitly that you want to use {bold NPM} targetting it will use Serverless.`,
-            npm: `This project was detected to be a {bold NPM} project. Unless you state explicitly that you want to use "serverless" targetting it will use NPM. `,
-            both: `This project was detected to have both {bold Serverless} functions {italic and} be an {bold NPM} library. By default the deploy command will assume you want to use {bold Serverless} deployment but the {italic options} listed below allow for both targets.`,
-            bespoke: "not implemented yet"
+            serverless: chalk `This project was detected to be a {bold Serverless} project. Unless you state explicitly that you want to use {bold NPM} targetting it will use Serverless.`,
+            npm: chalk `This project was detected to be a {bold NPM} project. Unless you state explicitly that you want to use "serverless" targetting it will use NPM. `,
+            both: chalk `This project was detected to have both {bold Serverless} functions {italic and} be an {bold NPM} library. By default the deploy command will assume you want to use {bold Serverless} deployment but the {italic options} listed below allow for both targets.`,
+            bespoke: "not implemented yet",
         };
         return base + possibleTargets[detect.target];
     });
@@ -43,7 +45,7 @@ function options(opts) {
                 alias: "i",
                 type: Boolean,
                 group: "serverlessDeploy",
-                description: `allow interactive choices for the functions you want to deploy`
+                description: `allow interactive choices for the functions you want to deploy`,
             },
             {
                 name: "target",
@@ -51,7 +53,7 @@ function options(opts) {
                 typeLabel: "<target>",
                 type: String,
                 group: "deploy",
-                description: "manually override the project target (serverless, npm)"
+                description: "manually override the project target (serverless, npm)",
             },
             {
                 name: "stage",
@@ -59,7 +61,7 @@ function options(opts) {
                 typeLabel: "<stage>",
                 type: String,
                 group: "serverlessDeploy",
-                description: "manually override the stage you're deploying to"
+                description: "manually override the stage you're deploying to",
             },
             {
                 name: "region",
@@ -67,8 +69,8 @@ function options(opts) {
                 typeLabel: "<region>",
                 type: String,
                 group: "serverlessDeploy",
-                description: "explicitly state the region you're deploying to"
-            }
+                description: "explicitly state the region you're deploying to",
+            },
         ];
     });
 }

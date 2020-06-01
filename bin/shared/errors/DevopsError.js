@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DevopsError = void 0;
 class DevopsError extends Error {
     constructor(message, classification = "Devops/unknown") {
         super(message);

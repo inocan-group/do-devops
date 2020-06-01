@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BuildTool = void 0;
 var BuildTool;
 (function (BuildTool) {
     BuildTool["typescript"] = "typescript";

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.hasDependency = void 0;
 const index_1 = require("./index");
 let _deps;
 function hasDependency(dep, pathOveride) {

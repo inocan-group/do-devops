@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useKey = exports.createWebpackEntryDictionaries = void 0;
 const path = require("path");
 const write_1 = require("../../file/write");
 /**

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.serverlessTranspilation = void 0;
 const chalk = require("chalk");
 const index_1 = require("../../shared/index");
 const index_2 = require("../../shared/serverless/index");

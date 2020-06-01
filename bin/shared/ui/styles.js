@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.dim = exports.green = void 0;
 const chalk = require("chalk");
 function green(...thingy) {
     const stringThingy = thingy.map((i) => (typeof i === "number" ? formatNumber(i) : i)).join("");

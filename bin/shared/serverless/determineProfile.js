@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.determineProfile = void 0;
 const index_1 = require("../index");
 const lodash_1 = require("lodash");
 /** ensure that during one CLI operation we cache this value */

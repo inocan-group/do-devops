@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.globalOptions = exports.globalAndLocalOptions = void 0;
 const chalk = require("chalk");
 const getCommandInterface_1 = require("./getCommandInterface");
 /**

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isTranspileNeeded = void 0;
 const chalk = require("chalk");
 const file_1 = require("../../shared/file");
 const date_fns_1 = require("date-fns");

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.detectTarget = void 0;
 const shared_1 = require("../../shared");
 /**
  * Detects the target type and also looks to see if it has

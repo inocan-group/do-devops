@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getServerlessYaml = void 0;
 const fs = require("fs");
 const path = require("path");
 const errors_1 = require("../errors");

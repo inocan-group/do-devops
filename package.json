@@ -1,6 +1,6 @@
 {
   "name": "do-devops",
-  "version": "0.3.10",
+  "version": "0.3.12",
   "description": "Devops commands for your nodejs projects",
   "main": "./bin/index.js",
   "typings": "./bin/index.map.ts",
@@ -48,12 +48,11 @@
     "inquirer": "^6.5.1",
     "js-yaml": "^3.13.1",
     "lodash.get": "^4.4.2",
-    "madge": "^3.9.0",
     "matcher": "^2.0.0",
     "play-sound": "^1.1.3",
     "recast": "^0.19.0",
     "table": "^5.4.6",
-    "webpack": "^4.42.1"
+    "webpack": "^4.43.0"
   },
   "devDependencies": {
     "@types/aws-sdk": "^2.7.0",
@@ -69,10 +68,10 @@
     "@types/table": "^5.0.0",
     "@types/webpack": "^4.41.11",
     "chai": "^4.2.0",
-    "mocha": "^7.1.1",
+    "mocha": "^7.2.0",
     "rimraf": "^3.0.2",
-    "ts-node": "^8.8.2",
-    "tslint": "^6.1.1",
-    "typescript": "^3.8.3"
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.3"
   }
 }
