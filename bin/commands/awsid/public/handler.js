@@ -39,8 +39,16 @@ function handler(argv, opts) {
             }
         }
         const results = [];
+        const errors = [];
         for (const profile of chosen) {
-            results.push(Object.assign({ profile }, (yield shared_1.getAwsIdentityFromProfile(profiles[profile]))));
+            try {
+                results.push(Object.assign({ profile }, (yield shared_1.getAwsIdentityFromProfile(profiles[profile]))));
+                process.stdout.write(chalk `{green .}`);
+            }
+            catch (e) {
+                errors.push(e);
+                process.stdout.write(chalk `{red .}`);
+            }
         }
         console.log(results);
     });
