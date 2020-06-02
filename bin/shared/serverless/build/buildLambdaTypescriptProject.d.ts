@@ -1,4 +1,4 @@
-import { IDictionary, IServerlessAccountInfo } from "common-types";
+import { IDictionary, IServerlessAccountInfo, IServerlessConfig } from "common-types";
 import { IDoBuildConfig } from "../../../@types";
 /**
  * Builds a `serverless.yml` file from the configuration
@@ -13,4 +13,4 @@ import { IDoBuildConfig } from "../../../@types";
  */
 export declare function buildLambdaTypescriptProject(opts?: IDictionary, config?: IDoBuildConfig, 
 /** modern scaffolding will pass in the config function to be managed here in this process */
-configFn?: (c: IServerlessAccountInfo) => void): Promise<void>;
+configFn?: (c: IServerlessAccountInfo) => IServerlessConfig): Promise<void>;

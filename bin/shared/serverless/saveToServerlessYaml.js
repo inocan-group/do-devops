@@ -13,14 +13,15 @@ exports.saveToServerlessYaml = void 0;
 const chalk = require("chalk");
 const fs = require("fs");
 const path = require("path");
-const util_1 = require("util");
 const js_yaml_1 = require("js-yaml");
+const util_1 = require("util");
 const writeFile = util_1.promisify(fs.writeFile);
 function saveToServerlessYaml(data) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const filename = path.join(process.cwd(), "serverless.yml");
-            const yamlData = js_yaml_1.safeDump(data);
+            console.log({ filename, data });
+            const yamlData = js_yaml_1.dump(data);
             yield writeFile(filename, yamlData, { encoding: "utf-8" });
         }
         catch (e) {

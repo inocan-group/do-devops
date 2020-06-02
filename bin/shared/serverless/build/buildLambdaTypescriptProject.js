@@ -13,12 +13,7 @@ exports.buildLambdaTypescriptProject = void 0;
 const chalk = require("chalk");
 const os = require("os");
 const async_shelljs_1 = require("async-shelljs");
-const file_1 = require("../../file");
-const __1 = require("../..");
-const createFunctionEnum_1 = require("./createFunctionEnum");
-const index_1 = require("./index");
-const createWebpackEntryDictionaries_1 = require("./createWebpackEntryDictionaries");
-const getLocalHandlerInfo_1 = require("../getLocalHandlerInfo");
+const shared_1 = require("../../../shared");
 const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 /**
  * Builds a `serverless.yml` file from the configuration
@@ -36,8 +31,8 @@ function buildLambdaTypescriptProject(opts = {}, config = {},
 configFn) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const modern = __1.getYeomanScaffolds().includes("generator-lambda-typescript");
-        const accountInfo = yield __1.getServerlessBuildConfiguration();
+        const modern = shared_1.getYeomanScaffolds().includes("generator-lambda-typescript");
+        const accountInfo = yield shared_1.getServerlessBuildConfiguration();
         const hasWebpackPlugin = (_a = accountInfo === null || accountInfo === void 0 ? void 0 : accountInfo.devDependencies) === null || _a === void 0 ? void 0 : _a.includes("serverless-webpack");
         const buildSystem = config.buildTool;
         // force transpilation
@@ -46,29 +41,30 @@ configFn) {
         }
         if (!modern) {
             // temporarily lay down a config file
-            file_1.saveYamlFile(ACCOUNT_INFO_YAML, accountInfo);
+            shared_1.saveYamlFile(ACCOUNT_INFO_YAML, accountInfo);
         }
         console.log(chalk `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`);
-        const handlerInfo = getLocalHandlerInfo_1.getLocalHandlerInfo();
+        const handlerInfo = shared_1.getLocalHandlerInfo();
         console.log(chalk `{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`);
-        yield index_1.createInlineExports(handlerInfo);
+        yield shared_1.createInlineExports(handlerInfo);
         console.log(chalk `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`);
-        yield createFunctionEnum_1.createFunctionEnum(handlerInfo);
+        yield shared_1.createFunctionEnum(handlerInfo);
         console.log(chalk `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`);
         if (!hasWebpackPlugin) {
             // the preferred means of bundling using webpack
-            yield createWebpackEntryDictionaries_1.createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
+            yield shared_1.createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
             console.log(chalk `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`);
         }
         else {
-            const exist = file_1.filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
+            const exist = shared_1.filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
             if (exist) {
                 async_shelljs_1.rm(...exist);
                 console.log(chalk `- ${"\uD83D\uDC40" /* eyeballs */} removed webpack entry point files so as not to confuse with what the {italic serverless-webpack} plugin is doing}`);
             }
         }
         if (modern && configFn) {
-            configFn(accountInfo);
+            const serverless = configFn(accountInfo);
+            yield shared_1.saveToServerlessYaml(serverless);
         }
         else {
             console.log(chalk `- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`);

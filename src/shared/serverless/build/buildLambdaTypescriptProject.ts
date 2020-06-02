@@ -1,17 +1,22 @@
 import * as chalk from "chalk";
 import * as os from "os";
 
-import { IDictionary, IServerlessAccountInfo } from "common-types";
+import { IDictionary, IServerlessAccountInfo, IServerlessConfig } from "common-types";
 import { asyncExec, rm } from "async-shelljs";
-import { filesExist, saveYamlFile } from "../../file";
-import { getServerlessBuildConfiguration, getYeomanScaffolds } from "../..";
+import {
+  createFunctionEnum,
+  createInlineExports,
+  createWebpackEntryDictionaries,
+  emoji,
+  filesExist,
+  getLocalHandlerInfo,
+  getServerlessBuildConfiguration,
+  getYeomanScaffolds,
+  saveToServerlessYaml,
+  saveYamlFile,
+} from "../../../shared";
 
 import { IDoBuildConfig } from "../../../@types";
-import { createFunctionEnum } from "./createFunctionEnum";
-import { createInlineExports } from "./index";
-import { createWebpackEntryDictionaries } from "./createWebpackEntryDictionaries";
-import { emoji } from "../../ui";
-import { getLocalHandlerInfo } from "../getLocalHandlerInfo";
 
 const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 
@@ -30,7 +35,7 @@ export async function buildLambdaTypescriptProject(
   opts: IDictionary = {},
   config: IDoBuildConfig = {},
   /** modern scaffolding will pass in the config function to be managed here in this process */
-  configFn?: (c: IServerlessAccountInfo) => void
+  configFn?: (c: IServerlessAccountInfo) => IServerlessConfig
 ) {
   const modern = getYeomanScaffolds().includes("generator-lambda-typescript");
   const accountInfo = await getServerlessBuildConfiguration();
@@ -79,7 +84,8 @@ export async function buildLambdaTypescriptProject(
   }
 
   if (modern && configFn) {
-    configFn(accountInfo);
+    const serverless = configFn(accountInfo);
+    await saveToServerlessYaml(serverless);
   } else {
     console.log(
       chalk`- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`
