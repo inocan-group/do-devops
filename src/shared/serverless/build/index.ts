@@ -1,8 +1,8 @@
 // #autoindex:named
 
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 04:34 PM ( GMT-7 )
-export * from "./buildServerlessMicroserviceProject";
+// indexed at: 6th Jun, 2020, 07:44 PM ( GMT-7 )
+export * from "./buildLambdaTypescriptProject";
 export * from "./clearOldFiles";
 export * from "./createFunctionEnum";
 export * from "./createInlineExports";

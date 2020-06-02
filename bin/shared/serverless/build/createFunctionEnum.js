@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createFunctionEnum = void 0;
 const chalk = require("chalk");
 const path = require("path");
+const fs_1 = require("fs");
 const findHandlerConfig_1 = require("../../ast/findHandlerConfig");
 const util_1 = require("util");
-const fs_1 = require("fs");
 const write = util_1.promisify(fs_1.writeFile);
 /**
  * creates an enumeration with all of the _functions_ which have
@@ -48,6 +48,9 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
             }
         });
         const fileText = `${header}${body.join(",")}${footer}`;
+        if (!fs_1.existsSync(path.join(process.cwd(), "/src/@types"))) {
+            fs_1.mkdirSync(path.join(process.cwd(), "/src/@types"));
+        }
         yield write(path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")), fileText, { encoding: "utf-8" });
         return fileText;
     });

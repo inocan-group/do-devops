@@ -14,7 +14,7 @@ const chalk = require("chalk");
 const os = require("os");
 const async_shelljs_1 = require("async-shelljs");
 const file_1 = require("../../file");
-const shared_1 = require("../../../shared");
+const __1 = require("../..");
 const createFunctionEnum_1 = require("./createFunctionEnum");
 const index_1 = require("./index");
 const createWebpackEntryDictionaries_1 = require("./createWebpackEntryDictionaries");
@@ -36,8 +36,8 @@ function buildLambdaTypescriptProject(opts = {}, config = {},
 configFn) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const modern = shared_1.getYeomanScaffolds().includes("generator-lambda-typescript");
-        const accountInfo = yield shared_1.getServerlessBuildConfiguration();
+        const modern = __1.getYeomanScaffolds().includes("generator-lambda-typescript");
+        const accountInfo = yield __1.getServerlessBuildConfiguration();
         const hasWebpackPlugin = (_a = accountInfo === null || accountInfo === void 0 ? void 0 : accountInfo.devDependencies) === null || _a === void 0 ? void 0 : _a.includes("serverless-webpack");
         const buildSystem = config.buildTool;
         // force transpilation

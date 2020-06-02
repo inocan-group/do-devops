@@ -14,6 +14,12 @@ const common_types_1 = require("common-types");
 const shared_1 = require("../../../shared");
 const inquirer = require("inquirer");
 const chalk = require("chalk");
+/**
+ * Allows the properties not yet defined in the configuration to be
+ * interactively added.
+ *
+ * @param config the configuration as it has been defined so far
+ */
 function askForAccountInfo(config = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         const pkgJson = yield shared_1.getPackageJson();

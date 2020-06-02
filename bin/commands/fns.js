@@ -36,7 +36,7 @@ function handler(args, opts) {
         else if (status.isUsingTypescriptMicroserviceTemplate) {
             if (opts.forceBuild) {
                 console.log(`- detected use of the ${chalk.blue("typescript-microservice")} template; rebuilding functions from config.`);
-                yield shared_1.buildServerlessMicroserviceProject();
+                yield shared_1.buildLambdaTypescriptProject();
             }
             else {
                 console.log(chalk `- detected use of the {blue typescript-microservice} template; use {bold {blue --forceBuild}} to rebuild prior to listing functions.\n`);

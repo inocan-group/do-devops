@@ -1,4 +1,4 @@
-export * from "./buildServerlessMicroserviceProject";
+export * from "./buildLambdaTypescriptProject";
 export * from "./clearOldFiles";
 export * from "./createFunctionEnum";
 export * from "./createInlineExports";

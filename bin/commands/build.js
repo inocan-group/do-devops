@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handler = exports.description = exports.options = exports.defaultConfig = void 0;
 const chalk = require("chalk");
-const index_1 = require("./build-helpers/index");
 const shared_1 = require("../shared");
+const index_1 = require("./build-helpers/index");
 const ast_1 = require("../shared/ast");
 exports.defaultConfig = {
     preBuildHooks: ["clean"],
@@ -50,8 +50,7 @@ function handler(argv, opts) {
         }
         if (serverless) {
             console.log(chalk `{bold {yellow - Starting SERVERLESS build process}}\n`);
-            yield index_1.serverlessTranspilation({ argv, opts, config, tooling, serverless });
-            yield shared_1.buildServerlessMicroserviceProject(opts, config);
+            yield shared_1.buildLambdaTypescriptProject(opts, config);
         }
         else {
             console.log(chalk `{bold {yellow - Starting code build process; using ${buildTool}}}`);

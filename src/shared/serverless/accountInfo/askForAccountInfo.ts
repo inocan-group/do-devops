@@ -14,6 +14,12 @@ import {
 import inquirer = require("inquirer");
 import chalk = require("chalk");
 
+/**
+ * Allows the properties not yet defined in the configuration to be
+ * interactively added.
+ *
+ * @param config the configuration as it has been defined so far
+ */
 export async function askForAccountInfo(config: Partial<IServerlessAccountInfo> = {}): Promise<IServerlessAccountInfo> {
   const pkgJson = await getPackageJson();
   const profiles = await getAwsProfileList();
