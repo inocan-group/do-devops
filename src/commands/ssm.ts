@@ -1,12 +1,13 @@
 import * as chalk from "chalk";
 import * as process from "process";
 
-import { buildServerlessMicroserviceProject, determineProfile, determineRegion, determineStage } from "../shared";
+import { buildLambdaTypescriptProject, determineProfile, determineRegion, determineStage } from "../shared";
 
 import { ICommandDescription } from "../@types/index";
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
 import { isServerless } from "../shared/serverless/isServerless";
+
 import commandLineArgs = require("command-line-args");
 
 /**
@@ -83,7 +84,7 @@ export async function handler(argv: string[], ssmOptions: IDictionary) {
 
   const serverless = await isServerless();
   if (serverless && serverless.isUsingTypescriptMicroserviceTemplate && !serverless.hasServerlessConfig) {
-    await buildServerlessMicroserviceProject();
+    await buildLambdaTypescriptProject();
   }
 
   const profile = await determineProfile({

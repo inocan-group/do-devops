@@ -37,7 +37,7 @@ function getAwsProfileFromServerless() {
             else {
                 console.log(chalk `- it appears that the {green serverless.yml} does not have the {bold provider} section; will build from {italic serverless-microservice} config ${"\uD83E\uDD16" /* robot */}`);
             }
-            yield index_1.buildServerlessMicroserviceProject();
+            yield index_1.buildLambdaTypescriptProject();
         }
         try {
             config = yield getServerlessYaml_1.getServerlessYaml();

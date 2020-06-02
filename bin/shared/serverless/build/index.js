@@ -12,8 +12,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 04:34 PM ( GMT-7 )
-__exportStar(require("./buildServerlessMicroserviceProject"), exports);
+// indexed at: 6th Jun, 2020, 07:44 PM ( GMT-7 )
+__exportStar(require("./buildLambdaTypescriptProject"), exports);
 __exportStar(require("./clearOldFiles"), exports);
 __exportStar(require("./createFunctionEnum"), exports);
 __exportStar(require("./createInlineExports"), exports);

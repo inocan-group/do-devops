@@ -1,11 +1,11 @@
 import * as chalk from "chalk";
 import * as os from "os";
 
+import { IDictionary, IServerlessAccountInfo } from "common-types";
 import { asyncExec, rm } from "async-shelljs";
 import { filesExist, saveYamlFile } from "../../file";
-import { getServerlessBuildConfiguration, getYeomanScaffolds } from "../../../shared";
+import { getServerlessBuildConfiguration, getYeomanScaffolds } from "../..";
 
-import { IDictionary } from "common-types";
 import { IDoBuildConfig } from "../../../@types";
 import { createFunctionEnum } from "./createFunctionEnum";
 import { createInlineExports } from "./index";
@@ -26,13 +26,26 @@ const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
  * 1. look within the `serverless.yml` for info (if it exists)
  * 2. ask the user for the information (saving values as default for next time)
  */
-export async function buildServerlessMicroserviceProject(opts: IDictionary = {}, config: IDoBuildConfig = {}) {
-  let stage = "starting";
+export async function buildLambdaTypescriptProject(
+  opts: IDictionary = {},
+  config: IDoBuildConfig = {},
+  /** modern scaffolding will pass in the config function to be managed here in this process */
+  configFn?: (c: IServerlessAccountInfo) => void
+) {
   const modern = getYeomanScaffolds().includes("generator-lambda-typescript");
   const accountInfo = await getServerlessBuildConfiguration();
-
-  saveYamlFile(ACCOUNT_INFO_YAML, accountInfo);
   const hasWebpackPlugin = accountInfo?.devDependencies?.includes("serverless-webpack");
+  const buildSystem = config.buildTool;
+
+  // force transpilation
+  if (opts.force) {
+    // await serverlessTranspilation({ argv, opts, config, tooling, serverless });
+  }
+
+  if (!modern) {
+    // temporarily lay down a config file
+    saveYamlFile(ACCOUNT_INFO_YAML, accountInfo);
+  }
 
   console.log(
     chalk`- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`
@@ -52,6 +65,7 @@ export async function buildServerlessMicroserviceProject(opts: IDictionary = {},
   );
 
   if (!hasWebpackPlugin) {
+    // the preferred means of bundling using webpack
     await createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
     console.log(chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`);
   } else {
@@ -64,18 +78,23 @@ export async function buildServerlessMicroserviceProject(opts: IDictionary = {},
     }
   }
 
-  console.log(chalk`- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`);
+  if (modern && configFn) {
+    configFn(accountInfo);
+  } else {
+    console.log(
+      chalk`- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`
+    );
 
-  await asyncExec(`yarn ts-node serverless-config/build.ts --color=always`, {
-    env: {
-      ...process.env,
-      TERM: "xterm-color",
-      ...(os.platform().includes("win") ? {} : { shell: "/bin/bash" }),
-    },
-  });
-
-  rm(ACCOUNT_INFO_YAML);
-  console.log(chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`);
+    await asyncExec(`yarn ts-node serverless-config/build.ts --color=always`, {
+      env: {
+        ...process.env,
+        TERM: "xterm-color",
+        ...(os.platform().includes("win") ? {} : { shell: "/bin/bash" }),
+      },
+    });
+    rm(ACCOUNT_INFO_YAML);
+    console.log(chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`);
+  }
 
   console.log(chalk`{green - {bold serverless.yml} has been updated successfully ${emoji.rocket}}\n`);
 }

@@ -1,6 +1,6 @@
 import * as chalk from "chalk";
 
-import { buildServerlessMicroserviceProject, consoleDimensions, getServerlessYaml, isServerless } from "../shared";
+import { buildLambdaTypescriptProject, consoleDimensions, getServerlessYaml, isServerless } from "../shared";
 
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
@@ -31,7 +31,7 @@ export async function handler(args: string[], opts: IDictionary) {
       console.log(
         `- detected use of the ${chalk.blue("typescript-microservice")} template; rebuilding functions from config.`
       );
-      await buildServerlessMicroserviceProject();
+      await buildLambdaTypescriptProject();
     } else {
       console.log(
         chalk`- detected use of the {blue typescript-microservice} template; use {bold {blue --forceBuild}} to rebuild prior to listing functions.\n`

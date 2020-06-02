@@ -1,12 +1,12 @@
 import * as chalk from "chalk";
 
-import { askBuildTool, serverlessTranspilation } from "./build-helpers/index";
-import { buildServerlessMicroserviceProject, emoji, getConfig, isServerless } from "../shared";
+import { buildLambdaTypescriptProject, emoji, getConfig, isServerless } from "../shared";
 
 import { IBuildTool } from "../@types";
 import { IBuildToolingOptions } from "./build-helpers/tools/types";
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
+import { askBuildTool } from "./build-helpers/index";
 import { getValidServerlessHandlers } from "../shared/ast";
 
 export const defaultConfig = {
@@ -51,8 +51,7 @@ export async function handler(argv: string[], opts: IDictionary) {
 
   if (serverless) {
     console.log(chalk`{bold {yellow - Starting SERVERLESS build process}}\n`);
-    await serverlessTranspilation({ argv, opts, config, tooling, serverless });
-    await buildServerlessMicroserviceProject(opts, config);
+    await buildLambdaTypescriptProject(opts, config);
   } else {
     console.log(chalk`{bold {yellow - Starting code build process; using ${buildTool}}}`);
     const fns = argv.length > 0 ? argv : getValidServerlessHandlers();

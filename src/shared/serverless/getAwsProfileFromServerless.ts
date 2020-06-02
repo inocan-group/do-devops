@@ -2,7 +2,7 @@ import * as chalk from "chalk";
 
 import { DevopsError } from "../errors";
 import { IServerlessConfig } from "common-types";
-import { buildServerlessMicroserviceProject } from "./index";
+import { buildLambdaTypescriptProject } from "./index";
 import { emoji } from "../ui";
 import { getServerlessYaml } from "./getServerlessYaml";
 import { isServerless } from "./isServerless";
@@ -36,7 +36,7 @@ export async function getAwsProfileFromServerless() {
       );
     }
 
-    await buildServerlessMicroserviceProject();
+    await buildLambdaTypescriptProject();
   }
 
   try {

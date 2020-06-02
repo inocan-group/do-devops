@@ -1,11 +1,13 @@
 import * as chalk from "chalk";
 import * as path from "path";
 
+import { existsSync, mkdirSync, writeFile } from "fs";
+
 import { IHandlerInfo } from "../getLocalHandlerInfo";
 import { emoji } from "../../ui";
 import { findHandlerConfig } from "../../ast/findHandlerConfig";
 import { promisify } from "util";
-import { writeFile } from "fs";
+
 const write = promisify(writeFile);
 
 /**
@@ -43,6 +45,10 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
   });
 
   const fileText = `${header}${body.join(",")}${footer}`;
+  if (!existsSync(path.join(process.cwd(), "/src/@types"))) {
+    mkdirSync(path.join(process.cwd(), "/src/@types"));
+  }
+
   await write(path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")), fileText, { encoding: "utf-8" });
   return fileText;
 }

@@ -78,7 +78,7 @@ function handler(argv, ssmOptions) {
         }
         const serverless = yield isServerless_1.isServerless();
         if (serverless && serverless.isUsingTypescriptMicroserviceTemplate && !serverless.hasServerlessConfig) {
-            yield shared_1.buildServerlessMicroserviceProject();
+            yield shared_1.buildLambdaTypescriptProject();
         }
         const profile = yield shared_1.determineProfile({
             cliOptions: subCmdOptions,
