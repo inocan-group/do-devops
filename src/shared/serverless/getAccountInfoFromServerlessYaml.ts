@@ -5,7 +5,7 @@ import { getServerlessYaml } from "./getServerlessYaml";
 
 /**
  * Gets the `accountInfo` from the `serverless.yml` file if
- * possible. If not it returns nothing.
+ * possible. If not it returns an empty object.
  */
 export async function getAccountInfoFromServerlessYaml() {
   try {
@@ -25,9 +25,7 @@ export async function getAccountInfoFromServerlessYaml() {
 
     return info;
   } catch (e) {
-    console.log(chalk`- Problems getting account info from {green serverless.yml}. `);
-    console.log(
-      chalk`- Don't panic, be happy. This can happen for a variety of reasons ({italic {grey including this being your first build}})\n  and we will just build another serverless.yml file.`
-    );
+    console.log(chalk`{grey - Unable to get account info from {green serverless.yml}}`);
+    return {};
   }
 }

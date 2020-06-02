@@ -43,9 +43,7 @@ function serverlessTranspilation(c) {
             console.log();
         }
         else {
-            console.log(chalk `{grey - {bold Note:} you're configured to use {bold "${config.buildTool}}" as your code build tool and do not appear to be
-using the {italic serverless-webpack} plugin. This is entirely fine but code will not be
-transpiled with the {italic build} command unless you include the {blue --force} switch.}`);
+            console.log(chalk `{grey - {bold Note:} you're using {bold "${config.buildTool}}" for build/bundling which means that by default your TS\nwill not be transpiled to JS during a build. The build process is entirely focused on\nbuilding the "serverless.yml" file. If you want to force transpilation you can do so\nwith the {blue --force} switch.}`);
             console.log(chalk `\n{grey - {bold Note:} for most people using this config, {blue yarn do watch} will be the most efficient way
 to ensure that you always have transpiled code when you {italic deploy}. If you do not then 
 the {italic deploy} command will detect this and transpile at deploy-time.}\n`);

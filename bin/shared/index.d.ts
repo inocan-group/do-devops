@@ -23,3 +23,4 @@ export * from "./npm/index";
 export * from "./serverless/index";
 export * from "./sound/index";
 export * from "./ui/index";
+export * from "./yeoman/index";

@@ -2,7 +2,8 @@ import * as chalk from "chalk";
 
 import { emoji } from "../../ui";
 import { join } from "path";
-import zip from "bestzip";
+
+import zip = require("bestzip");
 /**
  * Zips up a number of
  *

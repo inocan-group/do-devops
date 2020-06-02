@@ -1,13 +1,11 @@
-import { hasAwsProfileCredentialsFile } from "../index";
-import { IDictionary } from "common-types";
-import { readFile } from "../readFile";
 import { IAwsProfile } from "../../@types";
+import { IDictionary } from "common-types";
+import { hasAwsProfileCredentialsFile } from "../index";
+import { readFile } from "../readFile";
 
 /**
  * Interogates the `~/.aws/credentials` file to get a hash of
  * profiles (name/dictionary of values) the user has available.
- *
- * Returns _false_ if the credentials file is not found.
  */
 export async function getAwsProfileList() {
   try {
@@ -21,21 +19,16 @@ export async function getAwsProfileList() {
 
     // extracts structured information from the semi-structured
     // array of arrays
-    const extractor = (
-      agg: IDictionary<Partial<IAwsProfile>>,
-      curr: string[]
-    ) => {
+    const extractor = (agg: IDictionary<Partial<IAwsProfile>>, curr: string[]) => {
       let profileSection = "unknown";
-      curr.forEach(lineOfFile => {
+      curr.forEach((lineOfFile) => {
         if (lineOfFile.slice(-1) === "]") {
           profileSection = lineOfFile.slice(0, lineOfFile.length - 1);
           agg[profileSection] = {};
         }
-        targets.forEach(t => {
+        targets.forEach((t) => {
           if (lineOfFile.includes(t)) {
-            const [devnull, key, value] = lineOfFile.match(
-              /\s*(\S+)\s*=\s*(\S+)/
-            );
+            const [devnull, key, value] = lineOfFile.match(/\s*(\S+)\s*=\s*(\S+)/);
 
             agg[profileSection][key as keyof IAwsProfile] = value;
           }
@@ -45,13 +38,11 @@ export async function getAwsProfileList() {
     };
     const credentials = data
       .split("[")
-      .map(i => i.split("\n"))
-      .reduce(extractor, {} as IDictionary<IAwsProfile>) as IDictionary<
-      IAwsProfile
-    >;
+      .map((i) => i.split("\n"))
+      .reduce(extractor, {} as IDictionary<IAwsProfile>) as IDictionary<IAwsProfile>;
 
     return credentials;
   } catch (e) {
-    return false;
+    return {};
   }
 }

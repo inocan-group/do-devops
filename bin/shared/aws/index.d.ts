@@ -9,3 +9,4 @@ export * from "./getAwsProfile";
 export * from "./getAwsProfileList";
 export * from "./getAwsUserProfile";
 export * from "./hasAwsCredentialsFile";
+export * from "./userHasAwsProfile";

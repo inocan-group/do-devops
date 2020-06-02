@@ -1,7 +1,7 @@
 // #autoindex:named
 
 //#region autoindexed files
-// indexed at: 5th May, 2020, 03:00 PM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 04:34 PM ( GMT-7 )
 export * from "./askForDataFile";
 export * from "./commands";
 export * from "./consoleDimensions";
@@ -27,4 +27,5 @@ export * from "./npm/index";
 export * from "./serverless/index";
 export * from "./sound/index";
 export * from "./ui/index";
+export * from "./yeoman/index";
 //#endregion

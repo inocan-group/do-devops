@@ -1,6 +1,5 @@
-import { IServerlessAccountInfo } from "../../@types";
 /**
  * Gets the `accountInfo` from the `serverless.yml` file if
- * possible. If not it returns nothing.
+ * possible. If not it returns an empty object.
  */
-export declare function getAccountInfoFromServerlessYaml(): Promise<IServerlessAccountInfo>;
+export declare function getAccountInfoFromServerlessYaml(): Promise<{}>;

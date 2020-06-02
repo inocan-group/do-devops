@@ -41,9 +41,9 @@ const commandLineArgs = require("command-line-args");
             yield subModule.handler(subModuleArgv, subModuleOpts);
         }
         catch (e) {
-            console.log(chalk `{red - unhandled {bold do} error!}`);
+            console.log(chalk `\n{red An Error has occurred while running: {italic {bold do ${cmd}}}}`);
             console.log(`- ${e.message}`);
-            console.log(chalk `{grey ${e.stack}}\n`);
+            console.log(chalk `{grey   ${e.stack}}\n`);
             process.exit();
         }
     }

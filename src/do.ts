@@ -8,6 +8,7 @@ import { getCommandInterface, globalAndLocalOptions, globalOptions, inverted } f
 import { OptionDefinition } from "command-line-args";
 import { commands } from "./shared/commands";
 import { help } from "./commands/help";
+
 import commandLineArgs = require("command-line-args");
 
 (async () => {
@@ -40,9 +41,9 @@ import commandLineArgs = require("command-line-args");
     try {
       await subModule.handler(subModuleArgv, subModuleOpts);
     } catch (e) {
-      console.log(chalk`{red - unhandled {bold do} error!}`);
+      console.log(chalk`\n{red An Error has occurred while running: {italic {bold do ${cmd}}}}`);
       console.log(`- ${e.message}`);
-      console.log(chalk`{grey ${e.stack}}\n`);
+      console.log(chalk`{grey   ${e.stack}}\n`);
 
       process.exit();
     }

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.zipWebpackFiles = void 0;
 const chalk = require("chalk");
 const path_1 = require("path");
-const bestzip_1 = require("bestzip");
+const zip = require("bestzip");
 /**
  * Zips up a number of
  *
@@ -23,7 +23,7 @@ function zipWebpackFiles(fns) {
         const promises = [];
         try {
             const fnWithPath = (f) => path_1.join(".webpack", f);
-            fns.forEach((fn) => promises.push(bestzip_1.default({
+            fns.forEach((fn) => promises.push(zip({
                 source: `./${fnWithPath(fn)}.js`,
                 destination: `./${fnWithPath(fn)}.zip`,
             }).catch((e) => {
