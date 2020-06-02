@@ -15,6 +15,7 @@ export * from "./getLambdaFunctions";
 export * from "./getLocalHandlerInfo";
 export * from "./getLocalServerlessFunctionsFromServerlessYaml";
 export * from "./getMicroserviceConfig";
+export * from "./getServerlessBuildConfiguration";
 export * from "./getServerlessYaml";
 export * from "./isServerless";
 export * from "./isTypescriptMicroserviceProject";

@@ -1090,7 +1090,7 @@ commander@^2.12.1, commander@^2.20.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
-common-types@^1.12.12, common-types@^1.14.4:
+common-types@^1.12.12, common-types@^1.14.4, common-types@^1.8.16:
   version "1.14.8"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.14.8.tgz#80901576736dc3be85290483dcdfc3f0015f94c7"
   integrity sha512-pkWdpSeZfYKJUgBxsB03D9335a0JAe/WM1fbT7RFmkybgXbcuT5tbfx/6dCZiFHSq/QzzPtEs1EFj0RSuB7yPg==
@@ -3569,6 +3569,13 @@ type-detect@^4.0.0, type-detect@^4.0.5:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
   integrity sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==
+
+typed-mapper@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/typed-mapper/-/typed-mapper-0.2.0.tgz#5c4b0889042563cb8cb8b73f8e8061094d1c75dc"
+  integrity sha512-qWdB8AoQtlVL6xN66wIFmKJtmvfCHt9SvvKieKpa8Owmll0Z/l26Upmo3tEpIxPxUAcxI62uV6wOZWkmiUCjcQ==
+  dependencies:
+    common-types "^1.8.16"
 
 typedarray@^0.0.6:
   version "0.0.6"

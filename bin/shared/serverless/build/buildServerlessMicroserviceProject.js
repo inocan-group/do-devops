@@ -12,14 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildServerlessMicroserviceProject = void 0;
 const chalk = require("chalk");
 const os = require("os");
-const index_1 = require("../index");
 const async_shelljs_1 = require("async-shelljs");
 const file_1 = require("../../file");
+const shared_1 = require("../../../shared");
 const createFunctionEnum_1 = require("./createFunctionEnum");
-const index_2 = require("./index");
+const index_1 = require("./index");
 const createWebpackEntryDictionaries_1 = require("./createWebpackEntryDictionaries");
 const getLocalHandlerInfo_1 = require("../getLocalHandlerInfo");
-const npm_1 = require("../../npm");
 const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 /**
  * Builds a `serverless.yml` file from the configuration
@@ -33,17 +32,17 @@ const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
  * 2. ask the user for the information (saving values as default for next time)
  */
 function buildServerlessMicroserviceProject(opts = {}, config = {}) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         let stage = "starting";
-        const devDependencies = Object.keys(npm_1.getPackageJson().devDependencies);
-        const knownAccountInfo = Object.assign(Object.assign({}, (yield index_1.getAccountInfoFromServerlessYaml())), { devDependencies });
-        const accountInfo = yield index_1.askForAccountInfo(knownAccountInfo);
+        const modern = shared_1.getYeomanScaffolds().includes("generator-lambda-typescript");
+        const accountInfo = yield shared_1.getServerlessBuildConfiguration();
         file_1.saveYamlFile(ACCOUNT_INFO_YAML, accountInfo);
-        const hasWebpackPlugin = devDependencies.includes("serverless-webpack");
+        const hasWebpackPlugin = (_a = accountInfo === null || accountInfo === void 0 ? void 0 : accountInfo.devDependencies) === null || _a === void 0 ? void 0 : _a.includes("serverless-webpack");
         console.log(chalk `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`);
         const handlerInfo = getLocalHandlerInfo_1.getLocalHandlerInfo();
         console.log(chalk `{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`);
-        yield index_2.createInlineExports(handlerInfo);
+        yield index_1.createInlineExports(handlerInfo);
         console.log(chalk `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`);
         yield createFunctionEnum_1.createFunctionEnum(handlerInfo);
         console.log(chalk `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`);

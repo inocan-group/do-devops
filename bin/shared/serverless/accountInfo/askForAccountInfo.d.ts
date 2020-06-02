@@ -1,2 +1,2 @@
-import { IServerlessAccountInfo } from "../../../@types";
-export declare function askForAccountInfo(defaults?: Partial<IServerlessAccountInfo>): Promise<IServerlessAccountInfo>;
+import { IServerlessAccountInfo } from "common-types";
+export declare function askForAccountInfo(config?: Partial<IServerlessAccountInfo>): Promise<IServerlessAccountInfo>;

@@ -46,11 +46,16 @@ function handler(argv, opts) {
                 process.stdout.write(chalk `{green .}`);
             }
             catch (e) {
-                errors.push(e);
+                errors.push(Object.assign(Object.assign({}, e), { profile }));
                 process.stdout.write(chalk `{red .}`);
             }
         }
+        console.log();
         console.log(results);
+        if (errors.length > 0) {
+            console.log(chalk `- there ${errors.length === 1 ? "was" : "were"} ${errors.length} profile${errors.length === 1 ? "" : "s"} which encountered errors trying to authenticate, the rest were fine.`);
+            errors.forEach((e) => console.log(chalk `- {bold {red ${e.profile}}}: {grey ${e.message}}`));
+        }
     });
 }
 exports.handler = handler;

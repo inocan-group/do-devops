@@ -12,7 +12,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 //#region autoindexed files
-// indexed at: 5th May, 2020, 03:00 PM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 04:34 PM ( GMT-7 )
 __exportStar(require("./addAwsProfile"), exports);
 __exportStar(require("./askForAwsProfile"), exports);
 __exportStar(require("./askForAwsRegion"), exports);
@@ -24,4 +24,5 @@ __exportStar(require("./getAwsProfile"), exports);
 __exportStar(require("./getAwsProfileList"), exports);
 __exportStar(require("./getAwsUserProfile"), exports);
 __exportStar(require("./hasAwsCredentialsFile"), exports);
+__exportStar(require("./userHasAwsProfile"), exports);
 //#endregion

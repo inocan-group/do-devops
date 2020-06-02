@@ -1,9 +1,9 @@
 import * as chalk from "chalk";
 import * as os from "os";
 
-import { askForAccountInfo, getAccountInfoFromServerlessYaml } from "../index";
 import { asyncExec, rm } from "async-shelljs";
 import { filesExist, saveYamlFile } from "../../file";
+import { getServerlessBuildConfiguration, getYeomanScaffolds } from "../../../shared";
 
 import { IDictionary } from "common-types";
 import { IDoBuildConfig } from "../../../@types";
@@ -12,10 +12,6 @@ import { createInlineExports } from "./index";
 import { createWebpackEntryDictionaries } from "./createWebpackEntryDictionaries";
 import { emoji } from "../../ui";
 import { getLocalHandlerInfo } from "../getLocalHandlerInfo";
-import { getPackageJson } from "../../npm";
-import { getValidServerlessHandlers } from "../../ast/index";
-import { rmdirSync } from "fs";
-import { saveToServerlessYaml } from "../saveToServerlessYaml";
 
 const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 
@@ -32,17 +28,11 @@ const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
  */
 export async function buildServerlessMicroserviceProject(opts: IDictionary = {}, config: IDoBuildConfig = {}) {
   let stage = "starting";
-  const devDependencies = Object.keys(getPackageJson().devDependencies);
-  const knownAccountInfo = {
-    // TODO: add file storage for the askForAccountInfo
-    ...{},
-    ...(await getAccountInfoFromServerlessYaml()),
-    devDependencies,
-  };
+  const modern = getYeomanScaffolds().includes("generator-lambda-typescript");
+  const accountInfo = await getServerlessBuildConfiguration();
 
-  const accountInfo = await askForAccountInfo(knownAccountInfo);
   saveYamlFile(ACCOUNT_INFO_YAML, accountInfo);
-  const hasWebpackPlugin = devDependencies.includes("serverless-webpack");
+  const hasWebpackPlugin = accountInfo?.devDependencies?.includes("serverless-webpack");
 
   console.log(
     chalk`- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`

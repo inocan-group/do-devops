@@ -12,7 +12,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 //#region autoindexed files
-// indexed at: 5th May, 2020, 03:00 PM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 04:34 PM ( GMT-7 )
 __exportStar(require("./askAboutLogForwarding"), exports);
 __exportStar(require("./askForFunction"), exports);
 __exportStar(require("./askForStage"), exports);
@@ -30,6 +30,7 @@ __exportStar(require("./getLambdaFunctions"), exports);
 __exportStar(require("./getLocalHandlerInfo"), exports);
 __exportStar(require("./getLocalServerlessFunctionsFromServerlessYaml"), exports);
 __exportStar(require("./getMicroserviceConfig"), exports);
+__exportStar(require("./getServerlessBuildConfiguration"), exports);
 __exportStar(require("./getServerlessYaml"), exports);
 __exportStar(require("./isServerless"), exports);
 __exportStar(require("./isTypescriptMicroserviceProject"), exports);

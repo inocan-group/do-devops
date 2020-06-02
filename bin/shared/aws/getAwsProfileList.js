@@ -15,8 +15,6 @@ const readFile_1 = require("../readFile");
 /**
  * Interogates the `~/.aws/credentials` file to get a hash of
  * profiles (name/dictionary of values) the user has available.
- *
- * Returns _false_ if the credentials file is not found.
  */
 function getAwsProfileList() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -31,12 +29,12 @@ function getAwsProfileList() {
             // array of arrays
             const extractor = (agg, curr) => {
                 let profileSection = "unknown";
-                curr.forEach(lineOfFile => {
+                curr.forEach((lineOfFile) => {
                     if (lineOfFile.slice(-1) === "]") {
                         profileSection = lineOfFile.slice(0, lineOfFile.length - 1);
                         agg[profileSection] = {};
                     }
-                    targets.forEach(t => {
+                    targets.forEach((t) => {
                         if (lineOfFile.includes(t)) {
                             const [devnull, key, value] = lineOfFile.match(/\s*(\S+)\s*=\s*(\S+)/);
                             agg[profileSection][key] = value;
@@ -47,12 +45,12 @@ function getAwsProfileList() {
             };
             const credentials = data
                 .split("[")
-                .map(i => i.split("\n"))
+                .map((i) => i.split("\n"))
                 .reduce(extractor, {});
             return credentials;
         }
         catch (e) {
-            return false;
+            return {};
         }
     });
 }

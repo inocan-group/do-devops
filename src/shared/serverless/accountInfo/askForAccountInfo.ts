@@ -1,35 +1,40 @@
-import { getAwsProfile, getAwsProfileList, getAwsUserProfile } from "../../aws";
+import {} from "..";
 
-import { IDictionary } from "common-types";
-import { IServerlessAccountInfo } from "../../../@types";
-import { getPackageJson } from "../../npm";
-import { getServerlessYaml } from "..";
+import { AWS_REGIONS, IServerlessAccountInfo } from "common-types";
+import {
+  emoji,
+  getAwsIdentityFromProfile,
+  getAwsProfile,
+  getAwsProfileList,
+  getPackageJson,
+  getServerlessYaml,
+  userHasAwsProfile,
+} from "../../../shared";
 
 import inquirer = require("inquirer");
+import chalk = require("chalk");
 
-export async function askForAccountInfo(
-  defaults: Partial<IServerlessAccountInfo> = {}
-): Promise<IServerlessAccountInfo> {
+export async function askForAccountInfo(config: Partial<IServerlessAccountInfo> = {}): Promise<IServerlessAccountInfo> {
   const pkgJson = await getPackageJson();
   const profiles = await getAwsProfileList();
   const profileMessage = "choose a profile from your AWS credentials file";
 
   if (
-    defaults.profile &&
-    defaults.name &&
-    defaults.accountId &&
-    defaults.region &&
-    defaults.pluginsInstalled &&
-    (defaults.logForwarding || !Object.keys(pkgJson.devDependencies).includes("serverless-log-forwarding"))
+    config.profile &&
+    config.name &&
+    config.accountId &&
+    config.region &&
+    config.pluginsInstalled &&
+    (config.logForwarding || !Object.keys(pkgJson.devDependencies).includes("serverless-log-forwarding"))
   ) {
-    return defaults as IServerlessAccountInfo;
+    return config as IServerlessAccountInfo;
   }
 
   const baseProfileQuestion = {
     name: "profile",
     message: "Choose a profile from your AWS credentials file",
-    default: defaults.profile,
-    when: () => !defaults.profile,
+    default: config.profile,
+    when: () => !config.profile,
   };
   const profileQuestion: inquirer.Question | inquirer.ListQuestion = profiles
     ? {
@@ -45,51 +50,69 @@ export async function askForAccountInfo(
     {
       type: "input",
       name: "name",
-      message: "What is the service name which your functions will be prefixed with",
-      default: defaults.name || pkgJson.name,
-      when: () => !defaults.name,
+      message: "What is the Service Name for this repo?",
+      default: config.name || pkgJson.name,
+      when: () => !config.name,
     },
     profileQuestion,
   ];
 
   let answers: Partial<IServerlessAccountInfo> = await inquirer.prompt(questions);
-  const awsProfile = await getAwsProfile(answers.profile as string);
-  const userProfile = awsProfile && awsProfile.aws_secret_access_key ? await getAwsUserProfile(awsProfile) : undefined;
-  const accountId = userProfile ? userProfile.User.Arn.replace(/arn:aws:iam::([0-9]+):.*/, "$1") : undefined;
+  const merged = {
+    ...config,
+    ...answers,
+  };
+
+  if (!userHasAwsProfile(merged.profile)) {
+    console.log(
+      chalk`- you are deploying with the {green ${merged.profile} AWS profile but you do not have this defined yet! ${emoji.angry}`
+    );
+    console.log(chalk`{grey - AWS profiles must be added in {blue ~/.aws/credentials}}`);
+    console.log(
+      chalk`{grey - if you want to override the default behavior you can state a different profile with the {blue --profile} tag}`
+    );
+    process.exit();
+  }
+
+  if (!merged.profile) {
+    console.log(chalk`- you have not provided an AWS {bold profile}; exiting ...`);
+    process.exit();
+  }
+  if (!(await userHasAwsProfile(merged.profile))) {
+    console.log(
+      chalk`- you do {bold NOT} have the credentials for the profile {blue ${merged.profile}}! Please add this before\n  trying again. ${emoji.angry}\n`
+    );
+    console.log(chalk`{grey - the credentials file is located at {blue ~/.aws/credentials}}\n`);
+
+    process.exit();
+  }
+
+  const awsProfile = await getAwsProfile(merged.profile as string);
+
+  if (merged.region) {
+    config.region = awsProfile.region;
+  }
+  if (!merged.accountId) {
+    console.log(chalk`- looking up the Account ID for the given profile`);
+    try {
+      merged.accountId = (await getAwsIdentityFromProfile(awsProfile)).accountId;
+    } catch (e) {}
+  }
 
   questions = [
     {
       type: "input",
       name: "accountId",
       message: "what is the Amazon Account ID which you are deploying to?",
-      default: accountId,
-      when: () => !defaults.accountId,
+      when: () => !merged.accountId,
     },
     {
       type: "list",
       name: "region",
       message: "what is the region you will be deploying to?",
-      choices: [
-        "us-east-1",
-        "us-east-2",
-        "us-west-1",
-        "us-west-2",
-        "eu-west-1",
-        "eu-west-2",
-        "eu-west-3",
-        "eu-north-1",
-        "eu-central-1",
-        "sa-east-1",
-        "ca-central-1",
-        "ap-south-1",
-        "ap-northeast-1",
-        "ap-northeast-2",
-        "ap-northeast-3",
-        "ap-southeast-1",
-        "ap-southeast-2",
-      ],
-      default: defaults.region || awsProfile.region || "us-east-1",
-      when: () => !defaults.region,
+      choices: AWS_REGIONS,
+      default: merged.region || awsProfile.region || "us-east-1",
+      when: () => !config.region,
     },
   ];
   let plugins: { pluginsInstalled: string[] };
@@ -105,5 +128,5 @@ export async function askForAccountInfo(
     ...(await inquirer.prompt(questions)),
   };
 
-  return answers as IServerlessAccountInfo;
+  return merged as IServerlessAccountInfo;
 }
