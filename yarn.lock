@@ -1097,10 +1097,10 @@ common-types@^1.12.12, common-types@^1.8.16:
   dependencies:
     "@types/json-schema" "^7.0.4"
 
-common-types@^1.15.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.15.0.tgz#0b3b9501826de97a8cc60ad648e19c9347b078ca"
-  integrity sha512-hpcX37I5PUx4+E0nUTPFSQL13WNRO9UjH47Gu/oagJswTYSFdoLPTzmEC4bG5paMFNKjZsdhyo5L9brRWfI8pA==
+common-types@^1.15.4:
+  version "1.15.4"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.15.4.tgz#674d100785f5de59deb87820992b5b8bed71c01f"
+  integrity sha512-S0EYPALx+vP6Je60SkH44XfM+M3UO6Ez/xjNLF+w/16GZNXNNSiyeYODsvQzjGp2GybLyMNSDHXVzhC+tgAo9w==
   dependencies:
     "@types/json-schema" "^7.0.4"
 

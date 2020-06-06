@@ -23,4 +23,5 @@ export * from "./saveToServerlessYaml";
 export * from "./serverlessYamlExists";
 export * from "./accountInfo/index";
 export * from "./build/index";
+export * from "./layers/index";
 export * from "./webpack/index";

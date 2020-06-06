@@ -15,5 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //#region autoindexed files
 // indexed at: 5th May, 2020, 07:56 PM ( GMT-7 )
 __exportStar(require("./askHowToHandleMonoRepoIndexing"), exports);
-__exportStar(require("./autoindex"), exports);
+__exportStar(require("./handler"), exports);
+__exportStar(require("./exclusions"), exports);
 //#endregion

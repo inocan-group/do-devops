@@ -1,5 +1,3 @@
-import {} from "..";
-
 import { AWS_REGIONS, IServerlessAccountInfo } from "common-types";
 import {
   emoji,

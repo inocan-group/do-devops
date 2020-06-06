@@ -1,5 +1,5 @@
 "use strict";
-// #autoindex:named
+// #autoindex:named, exclude: foo,bar,baz
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -12,7 +12,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 07:44 PM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 03:35 PM ( GMT-7 )
 __exportStar(require("./askForDataFile"), exports);
 __exportStar(require("./commands"), exports);
 __exportStar(require("./consoleDimensions"), exports);

@@ -1,2 +1,3 @@
 export * from "./askHowToHandleMonoRepoIndexing";
-export * from "./autoindex";
+export * from "./handler";
+export * from "./exclusions";
