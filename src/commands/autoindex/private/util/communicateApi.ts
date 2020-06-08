@@ -19,3 +19,19 @@ export function communicateApi(paths: string[]) {
     chalk`  {white {bold Note:}}\n    {dim {italic you can also add the "--add" flag to look for other regex files patterns}}`
   );
 }
+
+//#region autoindexed files
+// indexed at: 6th Jun, 2020, 01:03 AM ( GMT-7 )
+// local file exports
+export * from "./alreadyHasAutoindexBlock";
+export * from "./askHowToHandleMonoRepoIndexing";
+export * from "./communicateApi";
+export * from "./detectExportType";
+export * from "./exportsHaveChanged";
+export * from "./index";
+export * from "./removeExtension";
+export * from "./replaceRegion";
+export * from "./structurePriorAutoindexContent";
+export * from "./timestamp";
+export * from "./unexpectedContent";
+//#endregion

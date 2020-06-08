@@ -1,4 +1,4 @@
-import { ExportType, IExportType } from "../private/index";
+import { ExportType, IExportType } from "../index";
 
 export function detectExportType(fileContent: string): IExportType {
   const defaultExport = /autoindex:default/;

@@ -106,13 +106,28 @@ export async function processFiles(paths: string[], opts: IDictionary) {
       } index {blue ./${relativePath(filePath)}}${metaInfo}${warningMessage}`;
       const unchangedMessage = chalk`- {italic no changes} to {blue ./${relativePath(filePath)}}`;
 
-      if (!opts.quiet) {
-        console.log(exportAction === ExportAction.noChange ? unchangedMessage : changeMessage);
+      if (!opts.quiet && exportAction === ExportAction.noChange) {
+        console.log(unchangedMessage);
       }
       if (exportAction !== ExportAction.noChange) {
+        console.log(changeMessage);
+
         writeFileSync(filePath, fileContent);
       }
     }
   }
   console.log();
 }
+
+//#region autoindexed files
+// indexed at: 6th Jun, 2020, 01:03 AM ( GMT-7 )
+// local file exports
+export * from "./exclusions";
+export * from "./exportable";
+export * from "./index";
+export * from "./processFiles";
+// directory exports
+export * from "./export/index";
+export * from "./reference/index";
+export * from "./util/index";
+//#endregion

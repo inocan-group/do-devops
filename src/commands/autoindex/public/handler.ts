@@ -1,11 +1,12 @@
 import * as chalk from "chalk";
 import * as globby from "globby";
 
+import { IDictionary, wait } from "common-types";
 import { askHowToHandleMonoRepoIndexing, processFiles } from "../private/index";
 
-import { IDictionary } from "common-types";
 import { getMonoRepoPackages } from "../../../shared";
 import { join } from "path";
+import { watch } from "chokidar";
 
 /**
  * Finds all `index.ts` and `index.js` files and looks for the `#autoindex`
@@ -37,19 +38,32 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
   }
 
   const srcDir = opts.dir ? join(process.cwd(), opts.dir) : join(process.cwd(), "src");
+  const globPattern = globInclude || [
+    `${srcDir}/**/index.ts`,
+    `${srcDir}/**/index.js`,
+    `${srcDir}/**/private.ts`,
+    `${srcDir}/**/private.js`,
+  ];
 
-  const paths = await globby(
-    globInclude || [
-      `${srcDir}/**/index.ts`,
-      `${srcDir}/**/index.js`,
-      `${srcDir}/**/private.ts`,
-      `${srcDir}/**/private.js`,
-      "!node_modules",
-    ]
-  );
+  if (opts.watch) {
+    console.log(chalk`- autoindex {italic watcher} has {bold {green started}} monitoring {blue ${srcDir}} for changes`);
 
-  const results = await processFiles(paths, opts);
-  if (!opts.quiet) {
-    console.log();
+    const watcher = watch(srcDir, {
+      ignored: /(^|[\/\\])\../, // ignore dotfiles
+      persistent: true,
+    });
+    watcher.on("add", (path) => processFiles([path], { ...opts, quiet: true }));
+    watcher.on("unlink", (path) => processFiles([path], { ...opts, quiet: true }));
+    watcher.on("addDir", (path) => processFiles([path], { ...opts, quiet: true }));
+    watcher.on("unlinkDir", (path) => processFiles([path], { ...opts, quiet: true }));
+    // watcher.close().then(() => {
+    //   console.log(chalk`- autoindex {italic watcher} has {bold {yellow stopped}}`);
+    // });
+  } else {
+    const paths = await globby(globPattern.concat("!node_modules"));
+    const results = await processFiles(paths, opts);
+    if (!opts.quiet) {
+      console.log();
+    }
   }
 }

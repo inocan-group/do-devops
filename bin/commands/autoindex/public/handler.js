@@ -22,6 +22,7 @@ const globby = require("globby");
 const index_1 = require("../private/index");
 const shared_1 = require("../../../shared");
 const path_1 = require("path");
+const chokidar_1 = require("chokidar");
 /**
  * Finds all `index.ts` and `index.js` files and looks for the `#autoindex`
  * signature. If found then it _auto_-builds this file based on files in
@@ -58,16 +59,32 @@ function handler(argv, opts) {
             }
         }
         const srcDir = opts.dir ? path_1.join(process.cwd(), opts.dir) : path_1.join(process.cwd(), "src");
-        const paths = yield globby(globInclude || [
+        const globPattern = globInclude || [
             `${srcDir}/**/index.ts`,
             `${srcDir}/**/index.js`,
             `${srcDir}/**/private.ts`,
             `${srcDir}/**/private.js`,
-            "!node_modules",
-        ]);
-        const results = yield index_1.processFiles(paths, opts);
-        if (!opts.quiet) {
-            console.log();
+        ];
+        if (opts.watch) {
+            console.log(chalk `- autoindex {italic watcher} has {bold {green started}} monitoring {blue ${srcDir}} for changes`);
+            const watcher = chokidar_1.watch(srcDir, {
+                ignored: /(^|[\/\\])\../,
+                persistent: true,
+            });
+            watcher.on("add", (path) => index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })));
+            watcher.on("unlink", (path) => index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })));
+            watcher.on("addDir", (path) => index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })));
+            watcher.on("unlinkDir", (path) => index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })));
+            // watcher.close().then(() => {
+            //   console.log(chalk`- autoindex {italic watcher} has {bold {yellow stopped}}`);
+            // });
+        }
+        else {
+            const paths = yield globby(globPattern.concat("!node_modules"));
+            const results = yield index_1.processFiles(paths, opts);
+            if (!opts.quiet) {
+                console.log();
+            }
         }
     });
 }

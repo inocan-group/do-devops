@@ -6,6 +6,7 @@ export * from "./ensureDirectory";
 export * from "./getCommandInterface";
 export * from "./getDataFiles";
 export * from "./getExportsFromFile";
+export * from "./index";
 export * from "./inverted";
 export * from "./options";
 export * from "./readDataFile";

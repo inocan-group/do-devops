@@ -1,10 +1,11 @@
 import * as chalk from "chalk";
 
+import { globalAndLocalOptions, globalOptions } from "../options";
+
 import { ICommandDescription } from "../../@types";
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
 import { commands } from "../commands";
-import { globalOptions } from "../options";
 
 export async function getCommands(fn?: string) {
   let meta: ICommandDescription[] = [];
@@ -116,14 +117,15 @@ export async function getExamples(opts: IDictionary, fn?: string) {
 }
 
 export async function getOptions(opts: IDictionary, fn?: string) {
-  let options: OptionDefinition[] = [];
-  if (fn) {
-    const defn = await import(`../../commands/${fn}`);
-    if (defn.options) {
-      options = options.concat(typeof defn.options === "function" ? await defn.options(opts) : defn.options);
-    }
-  }
-  options = options.concat(globalOptions);
+  // let options: OptionDefinition[] = [];
+  // if (fn) {
+  //   const defn = await import(`../../commands/${fn}`);
+  //   if (defn.options) {
+  //     options = options.concat(typeof defn.options === "function" ? await defn.options(opts) : defn.options);
+  //   }
+  // }
+  // options = options.concat(globalOptions);
 
-  return options;
+  // return options;
+  return globalAndLocalOptions(opts, fn);
 }

@@ -17,11 +17,16 @@ const getCommandInterface_1 = require("./getCommandInterface");
  */
 function globalAndLocalOptions(optsSet, fn) {
     return __awaiter(this, void 0, void 0, function* () {
-        let options = exports.globalOptions;
+        let options = [];
         const cmdDefn = getCommandInterface_1.getCommandInterface(fn);
         if (cmdDefn.options) {
             const localOptions = typeof cmdDefn.options === "object" ? cmdDefn.options : yield cmdDefn.options(optsSet);
-            options = options.concat(localOptions);
+            const localNames = localOptions.map((i) => i.name);
+            const nonInterferingGlobal = exports.globalOptions.filter((i) => !localNames.includes(i.name));
+            options = localOptions.concat(nonInterferingGlobal);
+        }
+        else {
+            options = exports.globalOptions;
         }
         return options;
     });

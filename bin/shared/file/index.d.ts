@@ -4,6 +4,7 @@ export * from "./filesInfo";
 export * from "./getAllFilesOfType";
 export * from "./getFileFromHomeDirectory";
 export * from "./getMonoRepoPackages";
+export * from "./index";
 export * from "./relativePath";
 export * from "./saveFileToHomeDirectory";
 export * from "./saveYamlFile";

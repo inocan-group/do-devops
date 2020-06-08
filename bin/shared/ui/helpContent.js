@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOptions = exports.getExamples = exports.getDescription = exports.getSyntax = exports.getCommands = void 0;
 const chalk = require("chalk");
-const commands_1 = require("../commands");
 const options_1 = require("../options");
+const commands_1 = require("../commands");
 function getCommands(fn) {
     return __awaiter(this, void 0, void 0, function* () {
         let meta = [];
@@ -118,15 +118,16 @@ function getExamples(opts, fn) {
 exports.getExamples = getExamples;
 function getOptions(opts, fn) {
     return __awaiter(this, void 0, void 0, function* () {
-        let options = [];
-        if (fn) {
-            const defn = yield Promise.resolve().then(() => require(`../../commands/${fn}`));
-            if (defn.options) {
-                options = options.concat(typeof defn.options === "function" ? yield defn.options(opts) : defn.options);
-            }
-        }
-        options = options.concat(options_1.globalOptions);
-        return options;
+        // let options: OptionDefinition[] = [];
+        // if (fn) {
+        //   const defn = await import(`../../commands/${fn}`);
+        //   if (defn.options) {
+        //     options = options.concat(typeof defn.options === "function" ? await defn.options(opts) : defn.options);
+        //   }
+        // }
+        // options = options.concat(globalOptions);
+        // return options;
+        return options_1.globalAndLocalOptions(opts, fn);
     });
 }
 exports.getOptions = getOptions;

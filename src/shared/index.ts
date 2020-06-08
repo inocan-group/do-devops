@@ -1,7 +1,7 @@
 // #autoindex:named, exclude: foo,bar,baz
-
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 04:31 PM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 01:06 AM ( GMT-7 )
+// local file exports
 export * from "./askForDataFile";
 export * from "./commands";
 export * from "./consoleDimensions";
@@ -10,12 +10,14 @@ export * from "./ensureDirectory";
 export * from "./getCommandInterface";
 export * from "./getDataFiles";
 export * from "./getExportsFromFile";
+export * from "./index";
 export * from "./inverted";
 export * from "./options";
 export * from "./readDataFile";
 export * from "./readFile";
 export * from "./runHooks";
 export * from "./sandbox";
+// directory exports
 export * from "./ast/index";
 export * from "./aws/index";
 export * from "./do-config/index";

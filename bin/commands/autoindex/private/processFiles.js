@@ -1,4 +1,14 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -109,10 +119,11 @@ function processFiles(paths, opts) {
                         : "";
                 const changeMessage = chalk `- ${exportAction === index_1.ExportAction.added ? "added" : "updated"} index {blue ./${shared_1.relativePath(filePath)}}${metaInfo}${warningMessage}`;
                 const unchangedMessage = chalk `- {italic no changes} to {blue ./${shared_1.relativePath(filePath)}}`;
-                if (!opts.quiet) {
-                    console.log(exportAction === index_1.ExportAction.noChange ? unchangedMessage : changeMessage);
+                if (!opts.quiet && exportAction === index_1.ExportAction.noChange) {
+                    console.log(unchangedMessage);
                 }
                 if (exportAction !== index_1.ExportAction.noChange) {
+                    console.log(changeMessage);
                     fs_1.writeFileSync(filePath, fileContent);
                 }
             }
@@ -121,3 +132,15 @@ function processFiles(paths, opts) {
     });
 }
 exports.processFiles = processFiles;
+//#region autoindexed files
+// indexed at: 6th Jun, 2020, 01:03 AM ( GMT-7 )
+// local file exports
+__exportStar(require("./exclusions"), exports);
+__exportStar(require("./exportable"), exports);
+__exportStar(require("./index"), exports);
+__exportStar(require("./processFiles"), exports);
+// directory exports
+__exportStar(require("./export/index"), exports);
+__exportStar(require("./reference/index"), exports);
+__exportStar(require("./util/index"), exports);
+//#endregion
