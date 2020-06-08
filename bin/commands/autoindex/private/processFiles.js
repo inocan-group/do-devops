@@ -1,14 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -81,13 +71,13 @@ function processFiles(paths, opts) {
                 let autoIndexContent;
                 switch (exportType) {
                     case reference_1.ExportType.default:
-                        autoIndexContent = index_1.defaultExports(exportableSymbols);
+                        autoIndexContent = index_1.defaultExports(exportableSymbols, opts);
                         break;
                     case reference_1.ExportType.namedOffset:
-                        autoIndexContent = export_1.namedOffsetExports(exportableSymbols);
+                        autoIndexContent = export_1.namedOffsetExports(exportableSymbols, opts);
                         break;
                     case reference_1.ExportType.named:
-                        autoIndexContent = index_1.namedExports(exportableSymbols);
+                        autoIndexContent = index_1.namedExports(exportableSymbols, opts);
                         break;
                     default:
                         throw new shared_1.DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
@@ -139,15 +129,3 @@ function processFiles(paths, opts) {
     });
 }
 exports.processFiles = processFiles;
-//#region autoindexed files
-// indexed at: 6th Jun, 2020, 01:03 AM ( GMT-7 )
-// local file exports
-__exportStar(require("./exclusions"), exports);
-__exportStar(require("./exportable"), exports);
-__exportStar(require("./index"), exports);
-__exportStar(require("./processFiles"), exports);
-// directory exports
-__exportStar(require("./export/index"), exports);
-__exportStar(require("./reference/index"), exports);
-__exportStar(require("./util/index"), exports);
-//#endregion

@@ -59,13 +59,13 @@ export async function processFiles(paths: string[], opts: IDictionary) {
 
       switch (exportType) {
         case ExportType.default:
-          autoIndexContent = defaultExports(exportableSymbols);
+          autoIndexContent = defaultExports(exportableSymbols, opts);
           break;
         case ExportType.namedOffset:
-          autoIndexContent = namedOffsetExports(exportableSymbols);
+          autoIndexContent = namedOffsetExports(exportableSymbols, opts);
           break;
         case ExportType.named:
-          autoIndexContent = namedExports(exportableSymbols);
+          autoIndexContent = namedExports(exportableSymbols, opts);
           break;
         default:
           throw new DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
@@ -125,16 +125,3 @@ export async function processFiles(paths: string[], opts: IDictionary) {
     console.log();
   }
 }
-
-//#region autoindexed files
-// indexed at: 6th Jun, 2020, 01:03 AM ( GMT-7 )
-// local file exports
-export * from "./exclusions";
-export * from "./exportable";
-export * from "./index";
-export * from "./processFiles";
-// directory exports
-export * from "./export/index";
-export * from "./reference/index";
-export * from "./util/index";
-//#endregion

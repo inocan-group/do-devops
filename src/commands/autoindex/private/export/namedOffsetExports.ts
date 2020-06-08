@@ -1,12 +1,13 @@
 import { IExportableSymbols, removeExtension } from "../index";
 
+import { IDictionary } from "common-types";
 import { exportsAsEsm } from "../../../../shared";
 
 /**
  * Given a set of files and directories that are exportable, this function will
  * boil this down to just the string needed for the autoindex block.
  */
-export function namedOffsetExports(exportable: IExportableSymbols) {
+export function namedOffsetExports(exportable: IExportableSymbols, opts: IDictionary = {}) {
   const contentLines: string[] = [];
   if (exportable.files.length > 0) {
     contentLines.push(`// local file exports`);
@@ -14,7 +15,7 @@ export function namedOffsetExports(exportable: IExportableSymbols) {
   exportable.files.forEach((file) => {
     contentLines.push(
       `export * as ${removeExtension(file, true)} from "./${
-        exportsAsEsm() ? removeExtension(file) + ".js" : removeExtension(file)
+        opts.preserveExtension ? removeExtension(file) + ".js" : removeExtension(file)
       }";`
     );
   });
@@ -22,7 +23,9 @@ export function namedOffsetExports(exportable: IExportableSymbols) {
     contentLines.push(`// directory exports`);
   }
   exportable.dirs.forEach((dir) => {
-    contentLines.push(`export * as ${removeExtension(dir, true)} from "./${dir}/index${exportsAsEsm() ? ".js" : ""}";`);
+    contentLines.push(
+      `export * as ${removeExtension(dir, true)} from "./${dir}/index${opts.preserveExtension ? ".js" : ""}";`
+    );
   });
 
   return contentLines.join("\n");
