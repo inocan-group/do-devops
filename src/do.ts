@@ -6,7 +6,7 @@ import * as process from "process";
 import { getCommandInterface, globalAndLocalOptions, globalOptions, inverted } from "./shared";
 
 import { OptionDefinition } from "command-line-args";
-import { commands } from "./shared/commands";
+import { getCommands } from "./shared/getCommands";
 import { help } from "./commands/help";
 
 import commandLineArgs = require("command-line-args");
@@ -24,7 +24,7 @@ import commandLineArgs = require("command-line-args");
     await help(opts);
   }
 
-  if (commands().includes(cmd)) {
+  if (getCommands().includes(cmd)) {
     opts =
       commandLineArgs(await globalAndLocalOptions({}, cmd), {
         partial: true,
@@ -51,7 +51,7 @@ import commandLineArgs = require("command-line-args");
     console.log(
       `${chalk.bold.red("DO:")} "${cmd}" is an unknown command! \n\n` +
         `- Valid command syntax is: ${chalk.bold("do [command] <options>")}\n  where valid commands are: ${chalk.italic(
-          commands().join(", ")
+          getCommands().join(", ")
         )}\n` +
         `- If you want more help use the ${inverted(" --help ")} option\n`
     );

@@ -1,13 +1,13 @@
-// #autoindex:named, exclude: commands
-export * from "./commands";
+// #autoindex:named
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 07:44 AM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 10:26 AM ( GMT-7 )
 // local file exports
 export * from "./askForDataFile";
 export * from "./consoleDimensions";
 export * from "./defaultConfigSections";
 export * from "./ensureDirectory";
 export * from "./getCommandInterface";
+export * from "./getCommands";
 export * from "./getDataFiles";
 export * from "./getExportsFromFile";
 export * from "./inverted";

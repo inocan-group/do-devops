@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // indexed at: 6th Jun, 2020, 01:50 AM ( GMT-7 )
 // local file exports
 __exportStar(require("./do"), exports);
-__exportStar(require("./testing.defn"), exports);
 // directory exports
 __exportStar(require("./@types/index"), exports);
 __exportStar(require("./commands/index"), exports);

@@ -18,7 +18,7 @@ const getCommandInterface_1 = require("./getCommandInterface");
 function globalAndLocalOptions(optsSet, fn) {
     return __awaiter(this, void 0, void 0, function* () {
         let options = [];
-        const cmdDefn = getCommandInterface_1.getCommandInterface(fn);
+        const cmdDefn = fn ? getCommandInterface_1.getCommandInterface(fn) : {};
         if (cmdDefn.options) {
             const localOptions = typeof cmdDefn.options === "object" ? cmdDefn.options : yield cmdDefn.options(optsSet);
             const localNames = localOptions.map((i) => i.name);

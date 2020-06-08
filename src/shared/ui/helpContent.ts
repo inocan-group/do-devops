@@ -1,20 +1,18 @@
 import * as chalk from "chalk";
 
-import { globalAndLocalOptions, globalOptions } from "../options";
+import { getCommands, globalAndLocalOptions } from "../../shared/index";
 
 import { ICommandDescription } from "../../@types";
 import { IDictionary } from "common-types";
-import { OptionDefinition } from "command-line-usage";
-import { commands } from "../commands";
 
-export async function getCommands(fn?: string) {
+export async function getHelpCommands(fn?: string) {
   let meta: ICommandDescription[] = [];
   let bold = false;
   if (fn) {
     const defn = await import(`../../commands/${fn}`);
     meta = defn.commands ? defn.commands : [];
   } else {
-    for (const cmd of commands()) {
+    for (const cmd of getCommands()) {
       const ref = await import(`../../commands/${cmd}`);
       meta.push({
         name: cmd,

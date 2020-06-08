@@ -9,7 +9,8 @@ import { getCommandInterface } from "./getCommandInterface";
  */
 export async function globalAndLocalOptions(optsSet: IDictionary, fn: string) {
   let options: OptionDefinition[] = [];
-  const cmdDefn = getCommandInterface(fn);
+
+  const cmdDefn = fn ? getCommandInterface(fn) : ({} as IDictionary);
   if (cmdDefn.options) {
     const localOptions: OptionDefinition[] =
       typeof cmdDefn.options === "object" ? cmdDefn.options : await cmdDefn.options(optsSet);

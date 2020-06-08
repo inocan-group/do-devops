@@ -1,10 +1,9 @@
 import * as chalk from "chalk";
 import * as commandLineUsage from "command-line-usage";
 
-import { emoji, getCommands, getDescription, getSyntax } from "../shared/ui";
+import { emoji, getDescription, getHelpCommands, getOptions, getSyntax } from "../shared/ui/index";
 
 import { IDictionary } from "common-types";
-import { getOptions } from "../shared";
 
 export async function help(opts: IDictionary, fn?: string) {
   const { commands, description, syntax, options } = await getHelpMeta(opts, fn);
@@ -46,8 +45,8 @@ export async function help(opts: IDictionary, fn?: string) {
 
 async function getHelpMeta(opts: IDictionary, fn?: string) {
   try {
-    const commands = await getCommands(fn);
     const syntax = await getSyntax(fn);
+    const commands = await getHelpCommands(fn);
     const options = await getOptions(opts, fn);
     const description = await getDescription(opts, fn);
 

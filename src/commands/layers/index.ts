@@ -1,1 +1,1 @@
-export * as layers from "./public/index";
+export * from "./public/index";
