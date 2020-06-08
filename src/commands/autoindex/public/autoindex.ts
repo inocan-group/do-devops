@@ -44,10 +44,9 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     `${srcDir}/**/private.ts`,
     `${srcDir}/**/private.js`,
   ];
+  let watcherReady: boolean = false;
 
   if (opts.watch) {
-    console.log();
-
     const watcher = watch(srcDir + "/**/*", {
       ignored: /(^|[\/\\])\../, // ignore dotfiles
       persistent: true,
@@ -55,13 +54,38 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     const log = console.log.bind(console);
     watcher.on("ready", () => {
       log(chalk`- autoindex {italic watcher} has {bold {green started}} monitoring {blue ${srcDir}} for changes`);
+      watcherReady = true;
     });
-    watcher.on("add", async (path) => processFiles([path], { ...opts, quiet: true }));
-    watcher.on("unlink", async (path) => processFiles([path], { ...opts, quiet: true }));
-    watcher.on("addDir", async (path) => processFiles([path], { ...opts, quiet: true }));
-    watcher.on("unlinkDir", async (path) => processFiles([path], { ...opts, quiet: true }));
+    watcher.on("add", async (path) => {
+      // if (watcherReady) {
+      //   log(chalk`- file added [ {blue ${path}} ]; re-running autoindex `);
+      // }
+      const paths = await globby(globPattern.concat("!node_modules"));
+      processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
+        log(chalk`Error re-running autoindex (on {italic add} event): ${e.message}\n`, e.stack)
+      );
+    });
+    watcher.on("unlink", async (path) => {
+      const paths = await globby(globPattern.concat("!node_modules"));
+      processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
+        log(chalk`Error re-running autoindex (on {italic unlink} event): ${e.message}\n`, e.stack)
+      );
+    });
+    watcher.on("addDir", async (path) => {
+      const paths = await globby(globPattern.concat("!node_modules"));
+      processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
+        log(chalk`Error re-running autoindex (on {italic addDir} event): ${e.message}\n`, e.stack)
+      );
+    });
+    watcher.on("unlinkDir", async (path) => {
+      const paths = await globby(globPattern.concat("!node_modules"));
+      processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
+        log(chalk`Error re-running autoindex (on {italic unlinkDir} event): ${e.message}\n`, e.stack)
+      );
+    });
+
     watcher.on("error", (e) => {
-      log(`- An error occurred: ${e.message}`);
+      log(`- An error occurred while watching autoindex paths: ${e.message}`);
     });
   } else {
     const paths = await globby(globPattern.concat("!node_modules"));

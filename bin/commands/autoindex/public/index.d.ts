@@ -1,3 +1,3 @@
 export * from "./description";
-export * from "./handler";
+export * from "./autoindex";
 export * from "./options";

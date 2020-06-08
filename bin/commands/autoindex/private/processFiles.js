@@ -133,7 +133,9 @@ function processFiles(paths, opts) {
                 }
             }
         }
-        console.log();
+        if (!opts.quiet) {
+            console.log();
+        }
     });
 }
 exports.processFiles = processFiles;

@@ -121,7 +121,9 @@ export async function processFiles(paths: string[], opts: IDictionary) {
       }
     }
   }
-  console.log();
+  if (!opts.quiet) {
+    console.log();
+  }
 }
 
 //#region autoindexed files
