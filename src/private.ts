@@ -1,13 +1,11 @@
-// #auto   index:named
-
-// TODO: need to turn on autoindex once this refactor has stablized
-
+// #auto    index:named, exclude: config
 //#region autoindexed files
-// indexed at: 5th May, 2020, 07:56 PM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 01:50 AM ( GMT-7 )
+// local file exports
 export * from "./do";
-// export * from "./testing.defn";
+export * from "./testing.defn";
+// directory exports
 export * from "./@types/index";
 export * from "./commands/index";
-export * from "./config/index";
 export * from "./shared/index";
 //#endregion

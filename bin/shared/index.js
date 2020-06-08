@@ -10,12 +10,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// #autoindex:named, exclude: foo,bar,baz
+// #autoindex:named, exclude: commands
+__exportStar(require("./commands"), exports);
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 07:44 AM ( GMT-7 )
 // local file exports
 __exportStar(require("./askForDataFile"), exports);
-__exportStar(require("./commands"), exports);
 __exportStar(require("./consoleDimensions"), exports);
 __exportStar(require("./defaultConfigSections"), exports);
 __exportStar(require("./ensureDirectory"), exports);

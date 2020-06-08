@@ -29,6 +29,10 @@ import chalk = require("chalk");
  */
 export async function processFiles(paths: string[], opts: IDictionary) {
   const results: IDictionary<string> = {};
+  const defaultExclusions = ["index", "private"];
+  const baseExclusions = opts.add
+    ? defaultExclusions.concat((opts.add as string).split(",").map((i) => i.trim()))
+    : defaultExclusions;
 
   for await (const path of paths) {
     const fileString = readFileSync(path, { encoding: "utf-8" });
@@ -47,7 +51,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
     // iterate over each autoindex file
     for (const filePath of Object.keys(results)) {
       let fileContent = results[filePath];
-      const excluded = exclusions(fileContent);
+      const excluded = exclusions(fileContent).concat(baseExclusions);
       const exportableSymbols = await exportable(filePath, excluded);
       const exportType = detectExportType(fileContent);
 

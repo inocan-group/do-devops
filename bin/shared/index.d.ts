@@ -1,5 +1,5 @@
-export * from "./askForDataFile";
 export * from "./commands";
+export * from "./askForDataFile";
 export * from "./consoleDimensions";
 export * from "./defaultConfigSections";
 export * from "./ensureDirectory";

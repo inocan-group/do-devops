@@ -21,7 +21,7 @@ function exportable(filePath, excluded) {
     return __awaiter(this, void 0, void 0, function* () {
         const dir = path_1.dirname(filePath);
         const thisFile = path_1.basename(filePath);
-        const exclusions = excluded.concat(thisFile).concat(["index.js", "index.ts"]);
+        const exclusions = excluded.concat(thisFile);
         const files = (yield globby([`${dir}/*.ts`, `${dir}/*.js`]))
             .filter((file) => !exclusions.includes(util_1.removeExtension(path_1.basename(file))))
             .map((i) => path_1.basename(i));
@@ -29,6 +29,8 @@ function exportable(filePath, excluded) {
         fs_1.readdirSync(dir, { withFileTypes: true })
             .filter((i) => i.isDirectory())
             .map((i) => {
+            // directories must have a `index` file within them to considered
+            // as a directory export
             if (fs_1.existsSync(path_1.join(dir, i.name, "index.ts"))) {
                 dirs.push(i.name);
             }

@@ -12,7 +12,7 @@ import globby = require("globby");
 export async function exportable(filePath: string, excluded: string[]): Promise<IExportableSymbols> {
   const dir = dirname(filePath);
   const thisFile = basename(filePath);
-  const exclusions = excluded.concat(thisFile).concat(["index.js", "index.ts"]);
+  const exclusions = excluded.concat(thisFile);
   const files = (await globby([`${dir}/*.ts`, `${dir}/*.js`]))
     .filter((file) => !exclusions.includes(removeExtension(basename(file))))
     .map((i) => basename(i));
@@ -20,6 +20,8 @@ export async function exportable(filePath: string, excluded: string[]): Promise<
   readdirSync(dir, { withFileTypes: true })
     .filter((i) => i.isDirectory())
     .map((i) => {
+      // directories must have a `index` file within them to considered
+      // as a directory export
       if (existsSync(join(dir, i.name, "index.ts"))) {
         dirs.push(i.name);
       } else if (existsSync(join(dir, i.name, "index.js"))) {

@@ -42,6 +42,10 @@ function processFiles(paths, opts) {
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
         const results = {};
+        const defaultExclusions = ["index", "private"];
+        const baseExclusions = opts.add
+            ? defaultExclusions.concat(opts.add.split(",").map((i) => i.trim()))
+            : defaultExclusions;
         try {
             for (paths_1 = __asyncValues(paths); paths_1_1 = yield paths_1.next(), !paths_1_1.done;) {
                 const path = paths_1_1.value;
@@ -71,7 +75,7 @@ function processFiles(paths, opts) {
             // iterate over each autoindex file
             for (const filePath of Object.keys(results)) {
                 let fileContent = results[filePath];
-                const excluded = index_1.exclusions(fileContent);
+                const excluded = index_1.exclusions(fileContent).concat(baseExclusions);
                 const exportableSymbols = yield index_1.exportable(filePath, excluded);
                 const exportType = index_1.detectExportType(fileContent);
                 let autoIndexContent;

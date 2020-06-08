@@ -27,7 +27,7 @@ exports.ssm = require("./ssm");
 exports.test = require("./test");
 exports.autoindex = require("./autoindex/index");
 exports.awsid = require("./awsid/index");
+exports.layers = require("./layers/index");
 __exportStar(require("./build-helpers/index"), exports);
-__exportStar(require("../config/index"), exports);
 __exportStar(require("./deploy-helpers/index"), exports);
 //#endregion
