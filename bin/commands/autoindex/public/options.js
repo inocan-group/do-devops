@@ -35,4 +35,11 @@ exports.options = [
         group: "autoindex",
         description: chalk `watches for changes and runs {italic autoindex} when detected`,
     },
+    {
+        name: "preserveExtension",
+        alias: "p",
+        type: Boolean,
+        group: "autoindex",
+        description: chalk `exports -- by default -- will {italic not} include the file's {blue .js} extension but sometimes with ES modules you want to include this. If you do then you should set this flag.`,
+    },
 ];
