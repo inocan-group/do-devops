@@ -12,20 +12,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 03:35 PM ( GMT-7 )
-__exportStar(require("./askHowToHandleMonoRepoIndexing"), exports);
-__exportStar(require("./communicateApi"), exports);
+// indexed at: 6th Jun, 2020, 04:31 PM ( GMT-7 )
+__exportStar(require("./detectExportType"), exports);
 __exportStar(require("./exclusions"), exports);
-__exportStar(require("./types"), exports);
-__exportStar(require("./constants"), exports);
-__exportStar(require("./defaultExports"), exports);
-__exportStar(require("./namedExports"), exports);
-__exportStar(require("./namedOffsetExports"), exports);
-__exportStar(require("./processFiles"), exports);
-__exportStar(require("./removeExtension"), exports);
-__exportStar(require("./unexpectedContent"), exports);
-__exportStar(require("./timestamp"), exports);
 __exportStar(require("./exportable"), exports);
-__exportStar(require("./replaceRegion"), exports);
-__exportStar(require("./alreadyHasIndex"), exports);
+__exportStar(require("./processFiles"), exports);
+__exportStar(require("./export/index"), exports);
+__exportStar(require("./reference/index"), exports);
+__exportStar(require("./util/index"), exports);
 //#endregion

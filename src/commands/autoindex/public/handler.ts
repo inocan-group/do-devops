@@ -13,10 +13,9 @@ import { join } from "path";
  * the file's current directory
  */
 export async function handler(argv: string[], opts: IDictionary): Promise<void> {
-  const dir = opts.dir || process.env.PWD;
-  const globInclude = opts.glob;
+  const globInclude = opts.glob ? (opts.glob as string[]).concat("!node_modules") : false;
 
-  const monoRepoPackages: false | string[] = getMonoRepoPackages(dir);
+  const monoRepoPackages: false | string[] = getMonoRepoPackages(process.cwd());
 
   if (monoRepoPackages) {
     const response: string = await askHowToHandleMonoRepoIndexing(monoRepoPackages);
@@ -37,15 +36,17 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     }
   }
 
-  const srcDir = join(dir, "src");
+  const srcDir = opts.dir ? join(process.cwd(), opts.dir) : join(process.cwd(), "src");
 
-  const paths = await globby([
-    `${srcDir}/**/index.ts`,
-    `${srcDir}/**/index.js`,
-    `${srcDir}/**/private.ts`,
-    `${srcDir}/**/private.js`,
-    "!node_modules",
-  ]);
+  const paths = await globby(
+    globInclude || [
+      `${srcDir}/**/index.ts`,
+      `${srcDir}/**/index.js`,
+      `${srcDir}/**/private.ts`,
+      `${srcDir}/**/private.js`,
+      "!node_modules",
+    ]
+  );
 
   const results = await processFiles(paths, opts);
   if (!opts.quiet) {

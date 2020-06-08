@@ -9,7 +9,7 @@
   },
   "scripts": {
     "clean": "rimraf src/**/*.js && rimraf bin",
-    "test": "mocha --require ts-node/register test/**/*-spec.ts",
+    "test": "mocha -r ts-node/register test/**/*-spec.ts",
     "build": "tsc && chmod +x bin/do.js",
     "watch": "tsc -w",
     "do": "./bin/do.js"
@@ -41,7 +41,7 @@
     "chalk": "^4.0.0",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.0.2",
-    "common-types": "^1.15.4",
+    "common-types": "^1.15.6",
     "date-fns": "^2.14.0",
     "fast-glob": "^3.2.2",
     "globby": "^11.0.0",
@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@types/aws-sdk": "^2.7.0",
-    "@types/chai": "^4.2.0",
+    "@types/chai": "^4.2.11",
     "@types/chalk": "^2.2.0",
     "@types/globby": "^9.1.0",
     "@types/inquirer": "^6.5.0",

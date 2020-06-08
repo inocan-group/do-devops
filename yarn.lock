@@ -56,7 +56,7 @@
   dependencies:
     aws-sdk "*"
 
-"@types/chai@^4.2.0":
+"@types/chai@^4.2.11":
   version "4.2.11"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.11.tgz#d3614d6c5f500142358e6ed24e1bf16657536c50"
   integrity sha512-t7uW6eFafjO+qJ3BIV2gGUyZs27egcNRkUdalkud+Qa3+kg//f129iuOFivHDXQ+vnU3fDXuwgv0cqMCbcE8sw==
@@ -1097,10 +1097,10 @@ common-types@^1.12.12, common-types@^1.8.16:
   dependencies:
     "@types/json-schema" "^7.0.4"
 
-common-types@^1.15.4:
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.15.4.tgz#674d100785f5de59deb87820992b5b8bed71c01f"
-  integrity sha512-S0EYPALx+vP6Je60SkH44XfM+M3UO6Ez/xjNLF+w/16GZNXNNSiyeYODsvQzjGp2GybLyMNSDHXVzhC+tgAo9w==
+common-types@^1.15.6:
+  version "1.15.6"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.15.6.tgz#822e88ae178a35dbf3adf71330c247ab4d4bd165"
+  integrity sha512-+NSTvWuAMgLmJitu5yfhUQf0pLfpUtIQ5PHzxty/hMSoRZnl0N0TU+PFvDzmKWijEJfuUN5bTtN3Lg65vTOm2A==
   dependencies:
     "@types/json-schema" "^7.0.4"
 

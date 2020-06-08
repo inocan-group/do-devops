@@ -30,7 +30,7 @@ describe("AWS Credentials => ", () => {
     if (!credentialsFile) {
       console.log("this test will not run as there is not a credentials file");
     } else {
-      const profile = await getAwsProfileList("default");
+      const profile = await getAwsProfileList();
       expect(profile).to.be.an("object");
       expect(Object.keys(profile)).to.include("aws_access_key_id");
       expect(Object.keys(profile)).to.include("aws_secret_access_key");

@@ -9,8 +9,7 @@
     "noImplicitAny": true,
     "outDir": "./bin",
     "removeComments": false,
-    "typeRoots": ["@types/bestzip", "node_modules/@types"]
+    "typeRoots": ["src/@polyfills"]
   },
-  "include": ["src/**/*.ts"],
-  "filesGlob": ["**/*.ts", "../serverless-config/**/*.ts"]
+  "include": ["src/**/*.ts"]
 }

@@ -17,9 +17,11 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.processFiles = void 0;
+const shared_1 = require("../../../shared");
 const index_1 = require("./index");
 const fs_1 = require("fs");
-const shared_1 = require("../../../shared");
+const reference_1 = require("./reference");
+const export_1 = require("./export");
 const chalk = require("chalk");
 /**
  * Reach into each file and look to see if it is a "autoindex" file; if it is
@@ -61,23 +63,58 @@ function processFiles(paths, opts) {
                 let fileContent = results[filePath];
                 const excluded = index_1.exclusions(fileContent);
                 const exportableFiles = yield index_1.exportable(filePath, excluded);
-                const autoIndexContent = fileContent.includes(":default")
-                    ? index_1.defaultExports(exportableFiles)
-                    : index_1.namedExports(exportableFiles);
-                if (index_1.alreadyHasIndex(fileContent)) {
-                    fileContent = index_1.replaceRegion(fileContent, autoIndexContent);
-                    const warnings = index_1.unexpectedContent(fileContent);
-                    const warningMessage = warnings
-                        ? chalk ` {red has unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`
+                const exportType = index_1.detectExportType(fileContent);
+                let autoIndexContent;
+                switch (exportType) {
+                    case reference_1.ExportType.default:
+                        autoIndexContent = index_1.defaultExports(exportableFiles);
+                        break;
+                    case reference_1.ExportType.namedOffset:
+                        autoIndexContent = export_1.namedOffsetExports(exportableFiles);
+                        break;
+                    case reference_1.ExportType.named:
+                        autoIndexContent = index_1.namedExports(exportableFiles);
+                        break;
+                    default:
+                        throw new shared_1.DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
+                }
+                let exportAction;
+                if (autoIndexContent && index_1.alreadyHasAutoindexBlock(fileContent)) {
+                    const priorContent = index_1.structurePriorAutoindexContent(fileContent);
+                    const currentSymbols = exportableFiles.files.concat(exportableFiles.dirs).map((i) => i.replace(".ts", ""));
+                    if (priorContent.quantity === currentSymbols.length &&
+                        currentSymbols.every((i) => priorContent.symbols.includes(i))) {
+                        exportAction = index_1.ExportAction.noChange;
+                    }
+                    else {
+                        exportAction = index_1.ExportAction.updated;
+                        fileContent = index_1.replaceRegion(fileContent, autoIndexContent);
+                    }
+                }
+                else if (autoIndexContent) {
+                    exportAction = index_1.ExportAction.added;
+                    fileContent = chalk `${fileContent}\n${index_1.START_REGION}\n${index_1.timestamp()}${autoIndexContent}\n${index_1.END_REGION}`;
+                }
+                // BUILD UP CLI MESSAGE
+                const warnings = index_1.unexpectedContent(fileContent);
+                const warningMessage = warnings
+                    ? chalk ` {red has unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`
+                    : "";
+                const exclusionMessage = excluded.length > 0 ? chalk ` {italic excluding: } {grey ${excluded.join(", ")}}` : "";
+                const typeMessage = exportType === reference_1.ExportType.named ? "" : chalk `{grey using }{italic ${exportType}} {grey export}`;
+                const metaInfo = typeMessage && exclusionMessage
+                    ? chalk `{dim  [ ${typeMessage}; ${exclusionMessage} ]}`
+                    : typeMessage && exclusionMessage
+                        ? chalk `{dim  [ ${typeMessage}; ${exclusionMessage} ]}`
                         : "";
-                    const exclusionMessage = excluded.length > 0 ? chalk ` {dim [ {italic excluding: } {grey ${excluded.join(",")}} ]}` : "";
-                    console.log(chalk `- updated index {blue ./${shared_1.relativePath(filePath)}}${exclusionMessage}${warningMessage}`);
+                const changeMessage = chalk `- ${exportAction === index_1.ExportAction.added ? "added" : "updated"} index {blue ./${shared_1.relativePath(filePath)}}${metaInfo}${warningMessage}`;
+                const unchangedMessage = chalk `- {italic no changes} to {blue ./${shared_1.relativePath(filePath)}}`;
+                if (!opts.quiet) {
+                    console.log(exportAction === index_1.ExportAction.noChange ? unchangedMessage : changeMessage);
                 }
-                else {
-                    fileContent = `${fileContent}\n${index_1.START_REGION}\n${index_1.timestamp()}${autoIndexContent}\n${index_1.END_REGION}`;
-                    console.log(chalk `- added index to {blue ./${shared_1.relativePath(filePath)}}`);
+                if (exportAction !== index_1.ExportAction.noChange) {
+                    fs_1.writeFileSync(filePath, fileContent);
                 }
-                fs_1.writeFileSync(filePath, fileContent);
             }
         }
         console.log();
