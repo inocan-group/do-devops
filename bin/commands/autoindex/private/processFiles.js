@@ -62,18 +62,18 @@ function processFiles(paths, opts) {
             for (const filePath of Object.keys(results)) {
                 let fileContent = results[filePath];
                 const excluded = index_1.exclusions(fileContent);
-                const exportableFiles = yield index_1.exportable(filePath, excluded);
+                const exportableSymbols = yield index_1.exportable(filePath, excluded);
                 const exportType = index_1.detectExportType(fileContent);
                 let autoIndexContent;
                 switch (exportType) {
                     case reference_1.ExportType.default:
-                        autoIndexContent = index_1.defaultExports(exportableFiles);
+                        autoIndexContent = index_1.defaultExports(exportableSymbols);
                         break;
                     case reference_1.ExportType.namedOffset:
-                        autoIndexContent = export_1.namedOffsetExports(exportableFiles);
+                        autoIndexContent = export_1.namedOffsetExports(exportableSymbols);
                         break;
                     case reference_1.ExportType.named:
-                        autoIndexContent = index_1.namedExports(exportableFiles);
+                        autoIndexContent = index_1.namedExports(exportableSymbols);
                         break;
                     default:
                         throw new shared_1.DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
@@ -81,7 +81,7 @@ function processFiles(paths, opts) {
                 let exportAction;
                 if (autoIndexContent && index_1.alreadyHasAutoindexBlock(fileContent)) {
                     const priorContent = index_1.structurePriorAutoindexContent(fileContent);
-                    const currentSymbols = exportableFiles.files.concat(exportableFiles.dirs).map((i) => i.replace(".ts", ""));
+                    const currentSymbols = exportableSymbols.files.concat(exportableSymbols.dirs).map((i) => i.replace(".ts", ""));
                     if (priorContent.quantity === currentSymbols.length &&
                         currentSymbols.every((i) => priorContent.symbols.includes(i))) {
                         exportAction = index_1.ExportAction.noChange;
@@ -104,8 +104,8 @@ function processFiles(paths, opts) {
                 const typeMessage = exportType === reference_1.ExportType.named ? "" : chalk `{grey using }{italic ${exportType}} {grey export}`;
                 const metaInfo = typeMessage && exclusionMessage
                     ? chalk `{dim  [ ${typeMessage}; ${exclusionMessage} ]}`
-                    : typeMessage && exclusionMessage
-                        ? chalk `{dim  [ ${typeMessage}; ${exclusionMessage} ]}`
+                    : typeMessage || exclusionMessage
+                        ? chalk `{dim  [ ${typeMessage}${exclusionMessage} ]}`
                         : "";
                 const changeMessage = chalk `- ${exportAction === index_1.ExportAction.added ? "added" : "updated"} index {blue ./${shared_1.relativePath(filePath)}}${metaInfo}${warningMessage}`;
                 const unchangedMessage = chalk `- {italic no changes} to {blue ./${shared_1.relativePath(filePath)}}`;

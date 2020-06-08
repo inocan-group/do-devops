@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.exportable = void 0;
 const path_1 = require("path");
 const fs_1 = require("fs");
+const util_1 = require("./util");
 const globby = require("globby");
 /**
  * determines the files and directories in a _given directory_ that should be included in the index file
@@ -22,7 +23,7 @@ function exportable(filePath, excluded) {
         const thisFile = path_1.basename(filePath);
         const exclusions = excluded.concat(thisFile).concat(["index.js", "index.ts"]);
         const files = (yield globby([`${dir}/*.ts`, `${dir}/*.js`]))
-            .filter((file) => !exclusions.includes(path_1.basename(file)))
+            .filter((file) => !exclusions.includes(util_1.removeExtension(path_1.basename(file))))
             .map((i) => path_1.basename(i));
         const dirs = [];
         fs_1.readdirSync(dir, { withFileTypes: true })

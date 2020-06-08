@@ -48,20 +48,20 @@ export async function processFiles(paths: string[], opts: IDictionary) {
     for (const filePath of Object.keys(results)) {
       let fileContent = results[filePath];
       const excluded = exclusions(fileContent);
-      const exportableFiles = await exportable(filePath, excluded);
+      const exportableSymbols = await exportable(filePath, excluded);
       const exportType = detectExportType(fileContent);
 
       let autoIndexContent: string;
 
       switch (exportType) {
         case ExportType.default:
-          autoIndexContent = defaultExports(exportableFiles);
+          autoIndexContent = defaultExports(exportableSymbols);
           break;
         case ExportType.namedOffset:
-          autoIndexContent = namedOffsetExports(exportableFiles);
+          autoIndexContent = namedOffsetExports(exportableSymbols);
           break;
         case ExportType.named:
-          autoIndexContent = namedExports(exportableFiles);
+          autoIndexContent = namedExports(exportableSymbols);
           break;
         default:
           throw new DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
@@ -70,7 +70,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
       let exportAction: ExportAction;
       if (autoIndexContent && alreadyHasAutoindexBlock(fileContent)) {
         const priorContent = structurePriorAutoindexContent(fileContent);
-        const currentSymbols = exportableFiles.files.concat(exportableFiles.dirs).map((i) => i.replace(".ts", ""));
+        const currentSymbols = exportableSymbols.files.concat(exportableSymbols.dirs).map((i) => i.replace(".ts", ""));
         if (
           priorContent.quantity === currentSymbols.length &&
           currentSymbols.every((i) => priorContent.symbols.includes(i))
@@ -97,8 +97,8 @@ export async function processFiles(paths: string[], opts: IDictionary) {
       const metaInfo =
         typeMessage && exclusionMessage
           ? chalk`{dim  [ ${typeMessage}; ${exclusionMessage} ]}`
-          : typeMessage && exclusionMessage
-          ? chalk`{dim  [ ${typeMessage}; ${exclusionMessage} ]}`
+          : typeMessage || exclusionMessage
+          ? chalk`{dim  [ ${typeMessage}${exclusionMessage} ]}`
           : "";
 
       const changeMessage = chalk`- ${

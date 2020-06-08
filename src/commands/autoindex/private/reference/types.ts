@@ -1,4 +1,4 @@
-export interface IExportableFiles {
+export interface IExportableSymbols {
   /** files which being exported */
   files: string[];
   /** directories which have an index.ts in them */

@@ -1,11 +1,14 @@
-import { IExportableFiles, removeExtension } from "../index";
+import { IExportableSymbols, removeExtension } from "../index";
 
 /**
  * Given a set of files and directories that are exportable, this function will
  * boil this down to just the string needed for the autoindex block.
  */
-export function defaultExports(exportable: IExportableFiles) {
+export function defaultExports(exportable: IExportableSymbols) {
   const contentLines: string[] = [];
+  if (exportable.files.length > 0) {
+    contentLines.push(`// local file exports`);
+  }
   exportable.files.forEach((file) => {
     contentLines.push(`export { default as ${removeExtension(file, true)} } from "./${removeExtension(file)}";`);
   });

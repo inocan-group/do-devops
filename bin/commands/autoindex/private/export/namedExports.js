@@ -9,6 +9,9 @@ const shared_1 = require("../../../../shared");
  */
 function namedExports(exportable) {
     const contentLines = [];
+    if (exportable.files.length > 0) {
+        contentLines.push(`// local file exports`);
+    }
     exportable.files.forEach((file) => {
         contentLines.push(`export * from "./${shared_1.exportsAsEsm() ? index_1.removeExtension(file) + ".js" : index_1.removeExtension(file)}";`);
     });

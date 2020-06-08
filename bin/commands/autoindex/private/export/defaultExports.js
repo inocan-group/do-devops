@@ -8,6 +8,9 @@ const index_1 = require("../index");
  */
 function defaultExports(exportable) {
     const contentLines = [];
+    if (exportable.files.length > 0) {
+        contentLines.push(`// local file exports`);
+    }
     exportable.files.forEach((file) => {
         contentLines.push(`export { default as ${index_1.removeExtension(file, true)} } from "./${index_1.removeExtension(file)}";`);
     });
