@@ -13,11 +13,11 @@ export interface ILayerMetaLookups {
  * indicated as a **keyword** and then returns two dictionaries: `byMeta`
  * and `byArn` which serve as handy lookup services.
  */
-export function getLayerMeta(): ILayerMetaLookups {
+export function getLayersWithMeta(): ILayerMetaLookups {
   const devDeps = Object.keys(getPackageJson().devDependencies);
   const pkgJsonFiles = devDeps.filter((d) => {
     const keywords = getPackageJson(join(process.cwd(), "node_modules", d)).keywords;
-    return keywords.includes("aws-layer-meta");
+    return keywords ? keywords.includes("aws-layer-meta") : false;
   });
   const byName = pkgJsonFiles.reduce((agg: IDictionary, d) => {
     const meta = require(join(process.cwd(), "node_modules", d)).meta;

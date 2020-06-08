@@ -1,8 +1,6 @@
 import * as fg from "fast-glob";
 import * as path from "path";
 
-import { getExportsFromFile } from "../index";
-
 /**
  * Finds all typescript files in the `src/handlers`
  * directory which have a **handler** export.

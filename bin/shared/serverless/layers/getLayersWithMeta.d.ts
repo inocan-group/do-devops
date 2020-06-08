@@ -8,4 +8,4 @@ export interface ILayerMetaLookups {
  * indicated as a **keyword** and then returns two dictionaries: `byMeta`
  * and `byArn` which serve as handy lookup services.
  */
-export declare function getLayersMeta(): ILayerMetaLookups;
+export declare function getLayersWithMeta(): ILayerMetaLookups;
