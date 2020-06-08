@@ -111,7 +111,6 @@ export async function processFiles(paths: string[], opts: IDictionary) {
       }
       if (exportAction !== ExportAction.noChange) {
         console.log(changeMessage);
-
         writeFileSync(filePath, fileContent);
       }
     }

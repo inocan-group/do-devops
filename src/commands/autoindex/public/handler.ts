@@ -46,19 +46,23 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
   ];
 
   if (opts.watch) {
-    console.log(chalk`- autoindex {italic watcher} has {bold {green started}} monitoring {blue ${srcDir}} for changes`);
+    console.log();
 
-    const watcher = watch(srcDir, {
+    const watcher = watch(srcDir + "/*", {
       ignored: /(^|[\/\\])\../, // ignore dotfiles
       persistent: true,
+    });
+    const log = console.log.bind(console);
+    watcher.on("ready", () => {
+      log(chalk`- autoindex {italic watcher} has {bold {green started}} monitoring {blue ${srcDir}} for changes`);
     });
     watcher.on("add", (path) => processFiles([path], { ...opts, quiet: true }));
     watcher.on("unlink", (path) => processFiles([path], { ...opts, quiet: true }));
     watcher.on("addDir", (path) => processFiles([path], { ...opts, quiet: true }));
     watcher.on("unlinkDir", (path) => processFiles([path], { ...opts, quiet: true }));
-    // watcher.close().then(() => {
-    //   console.log(chalk`- autoindex {italic watcher} has {bold {yellow stopped}}`);
-    // });
+    watcher.on("error", (e) => {
+      log(`- An error occurred: ${e.message}`);
+    });
   } else {
     const paths = await globby(globPattern.concat("!node_modules"));
     const results = await processFiles(paths, opts);
