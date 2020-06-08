@@ -12,7 +12,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // #autoindex:named
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 12:13 AM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
 // local file exports
 __exportStar(require("./directoryFiles"), exports);
 __exportStar(require("./filesExist"), exports);
@@ -20,7 +20,6 @@ __exportStar(require("./filesInfo"), exports);
 __exportStar(require("./getAllFilesOfType"), exports);
 __exportStar(require("./getFileFromHomeDirectory"), exports);
 __exportStar(require("./getMonoRepoPackages"), exports);
-__exportStar(require("./index"), exports);
 __exportStar(require("./relativePath"), exports);
 __exportStar(require("./saveFileToHomeDirectory"), exports);
 __exportStar(require("./saveYamlFile"), exports);

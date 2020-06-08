@@ -12,14 +12,13 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // #autoindex:named
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 12:52 AM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
 // local file exports
 __exportStar(require("./alreadyHasAutoindexBlock"), exports);
 __exportStar(require("./askHowToHandleMonoRepoIndexing"), exports);
 __exportStar(require("./communicateApi"), exports);
 __exportStar(require("./detectExportType"), exports);
 __exportStar(require("./exportsHaveChanged"), exports);
-__exportStar(require("./index"), exports);
 __exportStar(require("./removeExtension"), exports);
 __exportStar(require("./replaceRegion"), exports);
 __exportStar(require("./structurePriorAutoindexContent"), exports);

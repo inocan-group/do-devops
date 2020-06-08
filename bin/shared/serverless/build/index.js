@@ -12,14 +12,13 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // #autoindex:named
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 12:13 AM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
 // local file exports
 __exportStar(require("./buildLambdaTypescriptProject"), exports);
 __exportStar(require("./clearOldFiles"), exports);
 __exportStar(require("./createFunctionEnum"), exports);
 __exportStar(require("./createInlineExports"), exports);
 __exportStar(require("./createWebpackEntryDictionaries"), exports);
-__exportStar(require("./index"), exports);
 __exportStar(require("./saveFunctionsTypeDefinition"), exports);
 __exportStar(require("./writeInlineFunctions"), exports);
 __exportStar(require("./zipWebpackFiles"), exports);

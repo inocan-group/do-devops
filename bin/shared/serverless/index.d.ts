@@ -17,7 +17,6 @@ export * from "./getLocalServerlessFunctionsFromServerlessYaml";
 export * from "./getMicroserviceConfig";
 export * from "./getServerlessBuildConfiguration";
 export * from "./getServerlessYaml";
-export * from "./index";
 export * from "./isServerless";
 export * from "./isTypescriptMicroserviceProject";
 export * from "./saveToServerlessYaml";

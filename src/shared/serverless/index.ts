@@ -1,6 +1,6 @@
 // #autoindex:named
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 12:13 AM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
 // local file exports
 export * from "./askAboutLogForwarding";
 export * from "./askForFunction";
@@ -21,7 +21,6 @@ export * from "./getLocalServerlessFunctionsFromServerlessYaml";
 export * from "./getMicroserviceConfig";
 export * from "./getServerlessBuildConfiguration";
 export * from "./getServerlessYaml";
-export * from "./index";
 export * from "./isServerless";
 export * from "./isTypescriptMicroserviceProject";
 export * from "./saveToServerlessYaml";

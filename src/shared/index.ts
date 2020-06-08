@@ -1,6 +1,6 @@
 // #autoindex:named, exclude: foo,bar,baz
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 01:06 AM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
 // local file exports
 export * from "./askForDataFile";
 export * from "./commands";
@@ -10,7 +10,6 @@ export * from "./ensureDirectory";
 export * from "./getCommandInterface";
 export * from "./getDataFiles";
 export * from "./getExportsFromFile";
-export * from "./index";
 export * from "./inverted";
 export * from "./options";
 export * from "./readDataFile";
