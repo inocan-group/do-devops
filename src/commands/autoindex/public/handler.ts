@@ -48,7 +48,7 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
   if (opts.watch) {
     console.log();
 
-    const watcher = watch(srcDir + "/*", {
+    const watcher = watch(srcDir + "/**/*", {
       ignored: /(^|[\/\\])\../, // ignore dotfiles
       persistent: true,
     });
@@ -56,10 +56,10 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     watcher.on("ready", () => {
       log(chalk`- autoindex {italic watcher} has {bold {green started}} monitoring {blue ${srcDir}} for changes`);
     });
-    watcher.on("add", (path) => processFiles([path], { ...opts, quiet: true }));
-    watcher.on("unlink", (path) => processFiles([path], { ...opts, quiet: true }));
-    watcher.on("addDir", (path) => processFiles([path], { ...opts, quiet: true }));
-    watcher.on("unlinkDir", (path) => processFiles([path], { ...opts, quiet: true }));
+    watcher.on("add", async (path) => processFiles([path], { ...opts, quiet: true }));
+    watcher.on("unlink", async (path) => processFiles([path], { ...opts, quiet: true }));
+    watcher.on("addDir", async (path) => processFiles([path], { ...opts, quiet: true }));
+    watcher.on("unlinkDir", async (path) => processFiles([path], { ...opts, quiet: true }));
     watcher.on("error", (e) => {
       log(`- An error occurred: ${e.message}`);
     });

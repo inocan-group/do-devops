@@ -67,7 +67,7 @@ function handler(argv, opts) {
         ];
         if (opts.watch) {
             console.log();
-            const watcher = chokidar_1.watch(srcDir + "/*", {
+            const watcher = chokidar_1.watch(srcDir + "/**/*", {
                 ignored: /(^|[\/\\])\../,
                 persistent: true,
             });
@@ -75,10 +75,10 @@ function handler(argv, opts) {
             watcher.on("ready", () => {
                 log(chalk `- autoindex {italic watcher} has {bold {green started}} monitoring {blue ${srcDir}} for changes`);
             });
-            watcher.on("add", (path) => index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })));
-            watcher.on("unlink", (path) => index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })));
-            watcher.on("addDir", (path) => index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })));
-            watcher.on("unlinkDir", (path) => index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })));
+            watcher.on("add", (path) => __awaiter(this, void 0, void 0, function* () { return index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })); }));
+            watcher.on("unlink", (path) => __awaiter(this, void 0, void 0, function* () { return index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })); }));
+            watcher.on("addDir", (path) => __awaiter(this, void 0, void 0, function* () { return index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })); }));
+            watcher.on("unlinkDir", (path) => __awaiter(this, void 0, void 0, function* () { return index_1.processFiles([path], Object.assign(Object.assign({}, opts), { quiet: true })); }));
             watcher.on("error", (e) => {
                 log(`- An error occurred: ${e.message}`);
             });
