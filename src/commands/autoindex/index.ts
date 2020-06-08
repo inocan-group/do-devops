@@ -1,1 +1,1 @@
-export * from "./autoindex";
+export * from "./public/index";

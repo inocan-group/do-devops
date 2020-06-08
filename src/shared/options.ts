@@ -8,12 +8,18 @@ import { getCommandInterface } from "./getCommandInterface";
  * A list of all options from all commands (including global options)
  */
 export async function globalAndLocalOptions(optsSet: IDictionary, fn: string) {
-  let options: OptionDefinition[] = globalOptions;
-  const cmdDefn = getCommandInterface(fn);
+  let options: OptionDefinition[] = [];
+
+  const cmdDefn = fn ? getCommandInterface(fn) : ({} as IDictionary);
   if (cmdDefn.options) {
     const localOptions: OptionDefinition[] =
       typeof cmdDefn.options === "object" ? cmdDefn.options : await cmdDefn.options(optsSet);
-    options = options.concat(localOptions);
+    const localNames = localOptions.map((i) => i.name);
+
+    const nonInterferingGlobal = globalOptions.filter((i) => !localNames.includes(i.name));
+    options = localOptions.concat(nonInterferingGlobal);
+  } else {
+    options = globalOptions;
   }
 
   return options;

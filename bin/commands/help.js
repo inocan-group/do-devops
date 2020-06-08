@@ -12,8 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.help = void 0;
 const chalk = require("chalk");
 const commandLineUsage = require("command-line-usage");
-const ui_1 = require("../shared/ui");
-const shared_1 = require("../shared");
+const index_1 = require("../shared/ui/index");
 function help(opts, fn) {
     return __awaiter(this, void 0, void 0, function* () {
         const { commands, description, syntax, options } = yield getHelpMeta(opts, fn);
@@ -54,10 +53,10 @@ exports.help = help;
 function getHelpMeta(opts, fn) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const commands = yield ui_1.getCommands(fn);
-            const syntax = yield ui_1.getSyntax(fn);
-            const options = yield shared_1.getOptions(opts, fn);
-            const description = yield ui_1.getDescription(opts, fn);
+            const syntax = yield index_1.getSyntax(fn);
+            const commands = yield index_1.getHelpCommands(fn);
+            const options = yield index_1.getOptions(opts, fn);
+            const description = yield index_1.getDescription(opts, fn);
             return { commands, options, syntax, description };
         }
         catch (e) {

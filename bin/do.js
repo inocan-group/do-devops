@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chalk = require("chalk");
 const process = require("process");
 const shared_1 = require("./shared");
-const commands_1 = require("./shared/commands");
+const getCommands_1 = require("./shared/getCommands");
 const help_1 = require("./commands/help");
 const commandLineArgs = require("command-line-args");
 (() => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,7 +26,7 @@ const commandLineArgs = require("command-line-args");
     if (!cmd) {
         yield help_1.help(opts);
     }
-    if (commands_1.commands().includes(cmd)) {
+    if (getCommands_1.getCommands().includes(cmd)) {
         opts =
             commandLineArgs(yield shared_1.globalAndLocalOptions({}, cmd), {
                 partial: true,
@@ -49,7 +49,7 @@ const commandLineArgs = require("command-line-args");
     }
     else {
         console.log(`${chalk.bold.red("DO:")} "${cmd}" is an unknown command! \n\n` +
-            `- Valid command syntax is: ${chalk.bold("do [command] <options>")}\n  where valid commands are: ${chalk.italic(commands_1.commands().join(", "))}\n` +
+            `- Valid command syntax is: ${chalk.bold("do [command] <options>")}\n  where valid commands are: ${chalk.italic(getCommands_1.getCommands().join(", "))}\n` +
             `- If you want more help use the ${shared_1.inverted(" --help ")} option\n`);
     }
 }))();

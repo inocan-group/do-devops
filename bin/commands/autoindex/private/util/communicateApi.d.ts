@@ -1,0 +1,12 @@
+export declare function communicateApi(paths: string[]): void;
+export * from "./alreadyHasAutoindexBlock";
+export * from "./askHowToHandleMonoRepoIndexing";
+export * from "./communicateApi";
+export * from "./detectExportType";
+export * from "./exportsHaveChanged";
+export * from "./index";
+export * from "./removeExtension";
+export * from "./replaceRegion";
+export * from "./structurePriorAutoindexContent";
+export * from "./timestamp";
+export * from "./unexpectedContent";

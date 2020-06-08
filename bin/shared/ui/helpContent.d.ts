@@ -1,7 +1,6 @@
 import { ICommandDescription } from "../../@types";
 import { IDictionary } from "common-types";
-import { OptionDefinition } from "command-line-usage";
-export declare function getCommands(fn?: string): Promise<ICommandDescription[]>;
+export declare function getHelpCommands(fn?: string): Promise<ICommandDescription[]>;
 /**
  * Gets the syntax for the help system for both "global help"
  * as well as on a per function basis. The syntax for a function
@@ -19,4 +18,4 @@ export declare function getDescription(opts: IDictionary, fn?: string): Promise<
  * @param fn
  */
 export declare function getExamples(opts: IDictionary, fn?: string): Promise<any>;
-export declare function getOptions(opts: IDictionary, fn?: string): Promise<OptionDefinition[]>;
+export declare function getOptions(opts: IDictionary, fn?: string): Promise<import("command-line-usage").OptionDefinition[]>;

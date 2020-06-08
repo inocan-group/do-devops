@@ -1,19 +1,18 @@
 import * as chalk from "chalk";
 
+import { getCommands, globalAndLocalOptions } from "../../shared/index";
+
 import { ICommandDescription } from "../../@types";
 import { IDictionary } from "common-types";
-import { OptionDefinition } from "command-line-usage";
-import { commands } from "../commands";
-import { globalOptions } from "../options";
 
-export async function getCommands(fn?: string) {
+export async function getHelpCommands(fn?: string) {
   let meta: ICommandDescription[] = [];
   let bold = false;
   if (fn) {
     const defn = await import(`../../commands/${fn}`);
     meta = defn.commands ? defn.commands : [];
   } else {
-    for (const cmd of commands()) {
+    for (const cmd of getCommands()) {
       const ref = await import(`../../commands/${cmd}`);
       meta.push({
         name: cmd,
@@ -116,14 +115,15 @@ export async function getExamples(opts: IDictionary, fn?: string) {
 }
 
 export async function getOptions(opts: IDictionary, fn?: string) {
-  let options: OptionDefinition[] = [];
-  if (fn) {
-    const defn = await import(`../../commands/${fn}`);
-    if (defn.options) {
-      options = options.concat(typeof defn.options === "function" ? await defn.options(opts) : defn.options);
-    }
-  }
-  options = options.concat(globalOptions);
+  // let options: OptionDefinition[] = [];
+  // if (fn) {
+  //   const defn = await import(`../../commands/${fn}`);
+  //   if (defn.options) {
+  //     options = options.concat(typeof defn.options === "function" ? await defn.options(opts) : defn.options);
+  //   }
+  // }
+  // options = options.concat(globalOptions);
 
-  return options;
+  // return options;
+  return globalAndLocalOptions(opts, fn);
 }

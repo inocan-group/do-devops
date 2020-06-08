@@ -8,7 +8,7 @@ function getCommandInterface(cmd) {
         throw new Error(`The command "${cmd}" is not known`);
     }
     if (!cmdDefn.description) {
-        console.warn(`The command "${cmd} has been defined but does NOT have a description which is a informal part of the contract!`);
+        console.warn(`The command "${cmd}" has been defined but does NOT have a description which is a informal part of the contract!`);
     }
     return cmdDefn;
 }

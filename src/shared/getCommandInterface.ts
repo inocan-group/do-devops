@@ -20,7 +20,7 @@ export function getCommandInterface(cmd: string) {
   }
   if (!cmdDefn.description) {
     console.warn(
-      `The command "${cmd} has been defined but does NOT have a description which is a informal part of the contract!`
+      `The command "${cmd}" has been defined but does NOT have a description which is a informal part of the contract!`
     );
   }
 

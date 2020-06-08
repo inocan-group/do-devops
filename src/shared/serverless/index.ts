@@ -1,7 +1,7 @@
 // #autoindex:named
-
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 07:44 PM ( GMT-7 )
+// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
+// local file exports
 export * from "./askAboutLogForwarding";
 export * from "./askForFunction";
 export * from "./askForStage";
@@ -25,7 +25,9 @@ export * from "./isServerless";
 export * from "./isTypescriptMicroserviceProject";
 export * from "./saveToServerlessYaml";
 export * from "./serverlessYamlExists";
+// directory exports
 export * from "./accountInfo/index";
 export * from "./build/index";
+export * from "./layers/index";
 export * from "./webpack/index";
 //#endregion

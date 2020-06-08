@@ -1,8 +1,5 @@
-import {
-  getAwsProfile,
-  getAwsProfileList,
-  hasAwsProfileCredentialsFile
-} from "../src/shared/getAwsProfile";
+import { getAwsProfile, getAwsProfileList, hasAwsProfileCredentialsFile } from "../src/shared";
+
 import { expect } from "chai";
 
 describe("AWS Credentials => ", () => {
@@ -20,9 +17,7 @@ describe("AWS Credentials => ", () => {
         const firstKey = Object.keys(profiles).pop();
         expect(profiles[firstKey]).to.be.an("object");
         expect(Object.keys(profiles[firstKey])).to.include("aws_access_key_id");
-        expect(Object.keys(profiles[firstKey])).to.include(
-          "aws_secret_access_key"
-        );
+        expect(Object.keys(profiles[firstKey])).to.include("aws_secret_access_key");
       } else {
         console.log("This condition should not be met");
       }
@@ -35,7 +30,7 @@ describe("AWS Credentials => ", () => {
     if (!credentialsFile) {
       console.log("this test will not run as there is not a credentials file");
     } else {
-      const profile = await getAwsProfileList("default");
+      const profile = await getAwsProfileList();
       expect(profile).to.be.an("object");
       expect(Object.keys(profile)).to.include("aws_access_key_id");
       expect(Object.keys(profile)).to.include("aws_secret_access_key");
