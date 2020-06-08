@@ -111,10 +111,11 @@ function processFiles(paths, opts) {
                 }
                 // BUILD UP CLI MESSAGE
                 const warnings = index_1.unexpectedContent(fileContent);
+                const excludedWithoutBase = excluded.filter((i) => !baseExclusions.includes(i));
                 const warningMessage = warnings
                     ? chalk ` {red has unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`
                     : "";
-                const exclusionMessage = excluded.length > 0 ? chalk ` {italic excluding: } {grey ${excluded.join(", ")}}` : "";
+                const exclusionMessage = excludedWithoutBase.length > 0 ? chalk ` {italic excluding: } {grey ${excludedWithoutBase.join(", ")}}` : "";
                 const typeMessage = exportType === reference_1.ExportType.named ? "" : chalk `{grey using }{italic ${exportType}} {grey export}`;
                 const metaInfo = typeMessage && exclusionMessage
                     ? chalk `{dim  [ ${typeMessage}; ${exclusionMessage} ]}`

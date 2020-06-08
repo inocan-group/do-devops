@@ -7,7 +7,7 @@ exports.options = [
         name: "add",
         type: String,
         group: "autoindex",
-        description: `adds additional glob patterns to look for`,
+        description: `adds additional files to include as possible autoindex sources; you can comma delimit to add more than one`,
     },
     {
         name: "glob",

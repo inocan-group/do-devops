@@ -15,7 +15,8 @@ const fs_1 = require("fs");
 const util_1 = require("./util");
 const globby = require("globby");
 /**
- * determines the files and directories in a _given directory_ that should be included in the index file
+ * Determines the files and directories in a _given directory_ that should be included
+ * in the index file. Files which match the
  */
 function exportable(filePath, excluded) {
     return __awaiter(this, void 0, void 0, function* () {

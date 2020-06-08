@@ -7,7 +7,8 @@ import { removeExtension } from "./util";
 import globby = require("globby");
 
 /**
- * determines the files and directories in a _given directory_ that should be included in the index file
+ * Determines the files and directories in a _given directory_ that should be included
+ * in the index file. Files which match the
  */
 export async function exportable(filePath: string, excluded: string[]): Promise<IExportableSymbols> {
   const dir = dirname(filePath);
