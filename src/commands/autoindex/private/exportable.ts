@@ -20,6 +20,7 @@ export async function exportable(filePath: string, excluded: string[]): Promise<
   const dirs: string[] = [];
   readdirSync(dir, { withFileTypes: true })
     .filter((i) => i.isDirectory())
+    .filter((i) => !exclusions.includes(removeExtension(i.name)))
     .map((i) => {
       // directories must have a `index` file within them to considered
       // as a directory export
