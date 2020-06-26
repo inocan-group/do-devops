@@ -24,9 +24,10 @@ function getServerlessYaml() {
             stepFunctions: { stateMachines: {} },
         };
         try {
-            const config = js_yaml_1.safeLoad(fs.readFileSync(path.join(process.cwd(), "serverless.yml"), {
+            const fileContents = fs.readFileSync(path.join(process.cwd(), "serverless.yml"), {
                 encoding: "utf-8",
-            }));
+            });
+            const config = js_yaml_1.safeLoad(fileContents);
             return Object.assign(Object.assign({}, baseStructure), config);
         }
         catch (e) {

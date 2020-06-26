@@ -6,5 +6,5 @@ import { IDictionary } from "common-types";
 export async function handler(args: string[], opts: IDictionary) {
   const layers = findLayersReferencedByFns();
   const layersWithMeta = getLayersWithMeta();
-  console.log({ layers, layersWithMeta });
+  console.log(JSON.stringify({ layers, layersWithMeta }, null, 2));
 }
