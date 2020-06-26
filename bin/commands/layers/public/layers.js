@@ -16,7 +16,7 @@ function handler(args, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const layers = shared_1.findLayersReferencedByFns();
         const layersWithMeta = shared_1.getLayersWithMeta();
-        console.log({ layers, layersWithMeta });
+        console.log(JSON.stringify({ layers, layersWithMeta }, null, 2));
     });
 }
 exports.handler = handler;

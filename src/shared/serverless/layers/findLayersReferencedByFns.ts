@@ -1,4 +1,4 @@
-import { getLambdaFunctions } from "../../../private";
+import { getLambdaFunctions } from "../../../shared";
 
 /**
  * Introspects your current configuration (ts config) and finds all

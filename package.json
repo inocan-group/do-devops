@@ -1,6 +1,6 @@
 {
   "name": "do-devops",
-  "version": "0.3.18",
+  "version": "0.3.19",
   "description": "Devops commands for your nodejs projects",
   "main": "./bin/index.js",
   "typings": "./bin/index.map.ts",
@@ -12,7 +12,14 @@
     "test": "mocha -r ts-node/register test/**/*-spec.ts",
     "build": "tsc && chmod +x bin/do.js",
     "watch": "tsc -w",
-    "do": "./bin/do.js"
+    "do": "./bin/do.js",
+    "visualize": "yarn madge src --extensions ts -i /tmp/dep-ts-visualize.png && open /tmp/dep-ts-visualize.png",
+    "visualize:js": "yarn madge bin --extensions js -i /tmp/dep-js-visualize.png && open /tmp/dep-js-visualize.png",
+    "circular": "yarn madge src --extensions ts --circular",
+    "orphans": "yarn madge src --extensions ts --orphans",
+    "leaves": "yarn madge src --extensions ts --leaves",
+    "warnings": "yarn madge src --extensions ts --warnings",
+    "summary": "yarn madge src --extensions ts --summary"
   },
   "repository": {
     "type": "git",
@@ -42,7 +49,7 @@
     "chokidar": "^3.4.0",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.0.2",
-    "common-types": "^1.15.6",
+    "common-types": "^1.15.7",
     "date-fns": "^2.14.0",
     "fast-glob": "^3.2.2",
     "globby": "^11.0.0",
@@ -71,6 +78,7 @@
     "@types/table": "^5.0.0",
     "@types/webpack": "^4.41.11",
     "chai": "^4.2.0",
+    "madge": "^3.9.1",
     "mocha": "^7.2.0",
     "rimraf": "^3.0.2",
     "ts-node": "^8.10.2",
