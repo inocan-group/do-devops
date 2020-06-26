@@ -29,6 +29,7 @@ function exportable(filePath, excluded) {
         const dirs = [];
         fs_1.readdirSync(dir, { withFileTypes: true })
             .filter((i) => i.isDirectory())
+            .filter((i) => !exclusions.includes(util_1.removeExtension(i.name)))
             .map((i) => {
             // directories must have a `index` file within them to considered
             // as a directory export
