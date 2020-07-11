@@ -65,7 +65,7 @@ const mocha = (args) => __awaiter(void 0, void 0, void 0, function* () {
     console.log();
     yield tsExecution(selectedTests).catch((e) => {
         console.log(chalk `\n- ${"\uD83D\uDE21" /* angry */}  tests completed but {red errors} were encountered`);
-        process.exit();
+        process.exit(1);
     });
     console.log(chalk `- ${"\uD83C\uDF89" /* party */}  all tests completed successfully\n`);
     process.exit();

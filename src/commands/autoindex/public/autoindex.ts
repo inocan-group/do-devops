@@ -6,6 +6,7 @@ import { askHowToHandleMonoRepoIndexing, processFiles } from "../private/index";
 
 import { getMonoRepoPackages } from "../../../shared";
 import { join } from "path";
+import { options } from "../../deploy";
 import { watch } from "chokidar";
 
 /**
@@ -14,12 +15,11 @@ import { watch } from "chokidar";
  * the file's current directory
  */
 export async function handler(argv: string[], opts: IDictionary): Promise<void> {
-  const globInclude = opts.glob ? (opts.glob as string[]).concat("!node_modules") : false;
-
   const monoRepoPackages: false | string[] = getMonoRepoPackages(process.cwd());
 
-  if (monoRepoPackages) {
+  if (monoRepoPackages && !opts.dir) {
     const response: string = await askHowToHandleMonoRepoIndexing(monoRepoPackages);
+
     if (response === "ALL") {
       for await (const pkg of monoRepoPackages) {
         if (!opts.quiet) {
@@ -37,13 +37,16 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     }
   }
 
+  const globInclude = opts.glob ? (opts.glob as string[]).concat("!node_modules") : false;
   const srcDir = opts.dir ? join(process.cwd(), opts.dir) : join(process.cwd(), "src");
+
   const globPattern = globInclude || [
     `${srcDir}/**/index.ts`,
     `${srcDir}/**/index.js`,
     `${srcDir}/**/private.ts`,
     `${srcDir}/**/private.js`,
   ];
+  console.log({ globPattern });
   let watcherReady: boolean = false;
 
   if (opts.watch) {
@@ -89,6 +92,8 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     });
   } else {
     const paths = await globby(globPattern.concat("!node_modules"));
+    console.log({ paths });
+
     const results = await processFiles(paths, opts);
     if (!opts.quiet) {
       console.log();

@@ -110,7 +110,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
       const changeMessage = chalk`- ${
         exportAction === ExportAction.added ? "added" : "updated"
       } index {blue ./${relativePath(filePath)}}${metaInfo}${warningMessage}`;
-      const unchangedMessage = chalk`- {italic no changes} to {blue ./${relativePath(filePath)}}`;
+      const unchangedMessage = chalk`{dim - {italic no changes} to {blue ./${relativePath(filePath)}}}`;
 
       if (!opts.quiet && exportAction === ExportAction.noChange) {
         console.log(unchangedMessage);
