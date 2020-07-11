@@ -67,7 +67,7 @@ const mocha = async (args: string[]) => {
   console.log();
   await tsExecution(selectedTests).catch((e) => {
     console.log(chalk`\n- ${emoji.angry}  tests completed but {red errors} were encountered`);
-    process.exit();
+    process.exit(1);
   });
   console.log(chalk`- ${emoji.party}  all tests completed successfully\n`);
   process.exit();

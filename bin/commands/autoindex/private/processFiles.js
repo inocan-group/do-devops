@@ -113,7 +113,7 @@ function processFiles(paths, opts) {
                         ? chalk `{dim  [ ${typeMessage}${exclusionMessage} ]}`
                         : "";
                 const changeMessage = chalk `- ${exportAction === index_1.ExportAction.added ? "added" : "updated"} index {blue ./${shared_1.relativePath(filePath)}}${metaInfo}${warningMessage}`;
-                const unchangedMessage = chalk `- {italic no changes} to {blue ./${shared_1.relativePath(filePath)}}`;
+                const unchangedMessage = chalk `{dim - {italic no changes} to {blue ./${shared_1.relativePath(filePath)}}}`;
                 if (!opts.quiet && exportAction === index_1.ExportAction.noChange) {
                     console.log(unchangedMessage);
                 }

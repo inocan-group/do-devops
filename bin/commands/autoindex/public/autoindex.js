@@ -31,9 +31,8 @@ const chokidar_1 = require("chokidar");
 function handler(argv, opts) {
     var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const globInclude = opts.glob ? opts.glob.concat("!node_modules") : false;
         const monoRepoPackages = shared_1.getMonoRepoPackages(process.cwd());
-        if (monoRepoPackages) {
+        if (monoRepoPackages && !opts.dir) {
             const response = yield index_1.askHowToHandleMonoRepoIndexing(monoRepoPackages);
             if (response === "ALL") {
                 try {
@@ -58,6 +57,7 @@ function handler(argv, opts) {
                 return handler(argv, Object.assign(Object.assign({}, opts), { dir: path_1.join(opts.dir || process.env.PWD, "packages", response), withinMonorepo: true }));
             }
         }
+        const globInclude = opts.glob ? opts.glob.concat("!node_modules") : false;
         const srcDir = opts.dir ? path_1.join(process.cwd(), opts.dir) : path_1.join(process.cwd(), "src");
         const globPattern = globInclude || [
             `${srcDir}/**/index.ts`,
@@ -65,6 +65,7 @@ function handler(argv, opts) {
             `${srcDir}/**/private.ts`,
             `${srcDir}/**/private.js`,
         ];
+        console.log({ globPattern });
         let watcherReady = false;
         if (opts.watch) {
             const watcher = chokidar_1.watch(srcDir + "/**/*", {
@@ -101,6 +102,7 @@ function handler(argv, opts) {
         }
         else {
             const paths = yield globby(globPattern.concat("!node_modules"));
+            console.log({ paths });
             const results = yield index_1.processFiles(paths, opts);
             if (!opts.quiet) {
                 console.log();
