@@ -9,17 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getGitBranch = void 0;
-const async_shelljs_1 = require("async-shelljs");
+exports.getCurrentGitBranch = void 0;
+const git_1 = require("./git");
 /**
- * returns the current git branch in the given repo
+ * returns the _current_ git branch in the given repo
  */
-function getGitBranch() {
+function getCurrentGitBranch(baseDir) {
     return __awaiter(this, void 0, void 0, function* () {
-        const branch = (yield async_shelljs_1.asyncExec("git branch | sed -n '/* /s///p'", {
-            silent: true
-        })).replace("\n", "");
-        return branch;
+        baseDir = baseDir ? baseDir : process.cwd();
+        const g = git_1.git(baseDir);
+        const branch = yield g.branch();
+        return branch.current;
     });
 }
-exports.getGitBranch = getGitBranch;
+exports.getCurrentGitBranch = getCurrentGitBranch;

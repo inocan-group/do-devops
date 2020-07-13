@@ -1,7 +1,7 @@
 import * as chalk from "chalk";
 
 import { IDictionary, INpmInfo } from "common-types";
-import { dim, getGitBranch, getGitLastCommit, getPackageInfo, getPackageJson, green } from "../shared";
+import { dim, getCurrentGitBranch, getGitLastCommit, getPackageInfo, getPackageJson, green } from "../shared";
 import { format, parseISO } from "date-fns";
 
 import { asyncExec } from "async-shelljs";
@@ -39,7 +39,7 @@ export async function handler(argv: string[], opts: any) {
         .join(", ")
     : "";
   const gitLastCommit = await getGitLastCommit();
-  const branch = await getGitBranch();
+  const branch = await getCurrentGitBranch();
   const localFilesChanged = (
     await asyncExec("git diff --name-only", {
       silent: true,

@@ -65,7 +65,6 @@ function handler(argv, opts) {
             `${srcDir}/**/private.ts`,
             `${srcDir}/**/private.js`,
         ];
-        console.log({ globPattern });
         let watcherReady = false;
         if (opts.watch) {
             const watcher = chokidar_1.watch(srcDir + "/**/*", {

@@ -51,7 +51,7 @@ import commandLineArgs = require("command-line-args");
     console.log(
       `${chalk.bold.red("DO:")} "${cmd}" is an unknown command! \n\n` +
         `- Valid command syntax is: ${chalk.bold("do [command] <options>")}\n  where valid commands are: ${chalk.italic(
-          getCommands().join(", ")
+          getCommands().sort().join(", ")
         )}\n` +
         `- If you want more help use the ${inverted(" --help ")} option\n`
     );

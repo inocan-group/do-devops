@@ -48,7 +48,7 @@ function handler(argv, opts) {
                 .join(", ")
             : "";
         const gitLastCommit = yield shared_1.getGitLastCommit();
-        const branch = yield shared_1.getGitBranch();
+        const branch = yield shared_1.getCurrentGitBranch();
         const localFilesChanged = (yield async_shelljs_1.asyncExec("git diff --name-only", {
             silent: true,
         })).split("\n").length;
