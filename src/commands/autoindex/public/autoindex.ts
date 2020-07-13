@@ -6,7 +6,7 @@ import { askHowToHandleMonoRepoIndexing, processFiles } from "../private/index";
 
 import { getMonoRepoPackages } from "../../../shared";
 import { join } from "path";
-import { options } from "../../deploy";
+
 import { watch } from "chokidar";
 
 /**
@@ -46,7 +46,7 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     `${srcDir}/**/private.ts`,
     `${srcDir}/**/private.js`,
   ];
-  console.log({ globPattern });
+
   let watcherReady: boolean = false;
 
   if (opts.watch) {

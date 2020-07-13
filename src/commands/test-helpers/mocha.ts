@@ -5,7 +5,6 @@ import { SpecificTestReason, askForSpecificTests } from "./askForSpecificTests";
 import { emoji, getConfig, hasDevDependency } from "../../shared";
 
 import { asyncExec } from "async-shelljs";
-import { options } from "../deploy";
 import { pathJoin } from "common-types";
 import { testName } from "./testName";
 

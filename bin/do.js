@@ -49,7 +49,7 @@ const commandLineArgs = require("command-line-args");
     }
     else {
         console.log(`${chalk.bold.red("DO:")} "${cmd}" is an unknown command! \n\n` +
-            `- Valid command syntax is: ${chalk.bold("do [command] <options>")}\n  where valid commands are: ${chalk.italic(getCommands_1.getCommands().join(", "))}\n` +
+            `- Valid command syntax is: ${chalk.bold("do [command] <options>")}\n  where valid commands are: ${chalk.italic(getCommands_1.getCommands().sort().join(", "))}\n` +
             `- If you want more help use the ${shared_1.inverted(" --help ")} option\n`);
     }
 }))();

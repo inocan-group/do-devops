@@ -1,7 +1,6 @@
 import { IExportableSymbols, removeExtension } from "../index";
 
 import { IDictionary } from "common-types";
-import { exportsAsEsm } from "../../../../shared";
 
 /**
  * Given a set of files and directories that are exportable, this function will
