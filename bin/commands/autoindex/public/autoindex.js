@@ -101,7 +101,6 @@ function handler(argv, opts) {
         }
         else {
             const paths = yield globby(globPattern.concat("!node_modules"));
-            console.log({ paths });
             const results = yield index_1.processFiles(paths, opts);
             if (!opts.quiet) {
                 console.log();

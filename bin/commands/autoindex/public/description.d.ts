@@ -1,1 +1,1 @@
-export declare const description: () => string;
+export declare const description: () => Promise<string>;
