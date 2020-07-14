@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 //#autoindex:named-offset, exclude:  build-helpers, deploy-helpers
 //#region autoindexed files
-// indexed at: 7th Jul, 2020, 05:12 PM ( GMT-7 )
+// indexed at: 7th Jul, 2020, 01:38 PM ( GMT-7 )
 // local file exports
 exports.build = require("./build");
 exports.deploy = require("./deploy");
@@ -18,6 +18,7 @@ exports.test = require("./test");
 // directory exports
 exports.autoindex = require("./autoindex/index");
 exports.awsid = require("./awsid/index");
+exports.bitbucket = require("./bitbucket/index");
 exports.latest = require("./latest/index");
 exports.layers = require("./layers/index");
 exports.validate = require("./validate/index");

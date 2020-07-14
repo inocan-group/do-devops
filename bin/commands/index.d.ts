@@ -11,6 +11,7 @@ export * as ssm from "./ssm";
 export * as test from "./test";
 export * as autoindex from "./autoindex/index";
 export * as awsid from "./awsid/index";
+export * as bitbucket from "./bitbucket/index";
 export * as latest from "./latest/index";
 export * as layers from "./layers/index";
 export * as validate from "./validate/index";
