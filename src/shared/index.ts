@@ -1,6 +1,6 @@
 // #autoindex:named
 //#region autoindexed files
-// indexed at: 7th Jul, 2020, 01:43 PM ( GMT-7 )
+// indexed at: 7th Jul, 2020, 02:21 PM ( GMT-7 )
 // local file exports
 export * from "./askForDataFile";
 export * from "./consoleDimensions";
