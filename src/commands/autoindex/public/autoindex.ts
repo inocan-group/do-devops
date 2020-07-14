@@ -92,7 +92,6 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     });
   } else {
     const paths = await globby(globPattern.concat("!node_modules"));
-    console.log({ paths });
 
     const results = await processFiles(paths, opts);
     if (!opts.quiet) {

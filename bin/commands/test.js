@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handler = exports.examples = exports.description = void 0;
+exports.handler = exports.options = exports.examples = exports.description = void 0;
 const shared_1 = require("../shared");
 const askForUnitTestFramework_1 = require("./test-helpers/askForUnitTestFramework");
+const chalk = require("chalk");
 function description() {
     return `Test some or all of your tests and incorporate useful test data without effort.`;
 }
@@ -23,6 +24,14 @@ function examples() {
     ];
 }
 exports.examples = examples;
+exports.options = [
+    {
+        name: "onSourceChanged",
+        type: Boolean,
+        group: "test",
+        description: `only run tests if the source files in the repo are changed from what is in git`,
+    },
+];
 function handler(args, opt) {
     return __awaiter(this, void 0, void 0, function* () {
         let test;
@@ -30,6 +39,12 @@ function handler(args, opt) {
             const config = yield shared_1.getConfig();
             if (!config.test || !config.test.unitTestFramework) {
                 const unitTestFramework = yield askForUnitTestFramework_1.askForUnitTestFramework();
+                const g = shared_1.git();
+                const sourceFiles = (yield g.status()).files.map((f) => f.path).filter((p) => p.includes("src/"));
+                if (sourceFiles.length === 0 && opt.onSourceChanged) {
+                    console.log(chalk `- skipping tests because no {italic source} files were changed!`);
+                    process.exit();
+                }
                 yield shared_1.writeSection("test", Object.assign(Object.assign({}, config.test), unitTestFramework), "project");
             }
             if ((config === null || config === void 0 ? void 0 : config.test.unitTestFramework) === "mocha") {
