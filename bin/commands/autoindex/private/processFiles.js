@@ -83,7 +83,7 @@ function processFiles(paths, opts) {
                         throw new shared_1.DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
                 }
                 /** content that defines the full region owned by autoindex */
-                const blockContent = `${index_1.START_REGION}\n\n${index_1.timestamp()}\n${index_1.createMetaInfo(exportType, exportableSymbols, opts)}\n${autoIndexContent}\n\n${index_1.END_REGION}`;
+                const blockContent = `${index_1.START_REGION}\n\n${index_1.timestamp()}\n${index_1.createMetaInfo(exportType, exportableSymbols, index_1.exclusions(fileContent), opts)}\n${autoIndexContent}\n\n${index_1.END_REGION}`;
                 const existingContentMeta = index_1.getExistingMetaInfo(fileContent);
                 let exportAction;
                 const bracketedMessages = [];
@@ -93,7 +93,9 @@ function processFiles(paths, opts) {
                 if (autoIndexContent && index_1.alreadyHasAutoindexBlock(fileContent)) {
                     if (index_1.noDifference(existingContentMeta.files, util_1.removeAllExtensions(exportableSymbols.files)) &&
                         index_1.noDifference(existingContentMeta.dirs, util_1.removeAllExtensions(exportableSymbols.dirs)) &&
-                        index_1.noDifference(existingContentMeta.sfcs, util_1.removeAllExtensions(exportableSymbols.sfcs))) {
+                        index_1.noDifference(existingContentMeta.sfcs, util_1.removeAllExtensions(exportableSymbols.sfcs)) &&
+                        exportType === existingContentMeta.exportType &&
+                        index_1.noDifference(existingContentMeta.exclusions, excluded)) {
                         exportAction = index_1.ExportAction.noChange;
                     }
                     else {
@@ -110,7 +112,7 @@ function processFiles(paths, opts) {
                 }
                 const excludedWithoutBase = excluded.filter((i) => !baseExclusions.includes(i));
                 if (excludedWithoutBase.length > 0) {
-                    bracketedMessages.push(chalk ` {italic excluding: } {grey ${excludedWithoutBase.join(", ")}}`);
+                    bracketedMessages.push(chalk `{italic excluding:} {grey ${excludedWithoutBase.join(", ")}}`);
                 }
                 const bracketedMessage = bracketedMessages.length > 0 ? chalk `{dim [ ${bracketedMessages.join(", ")} ]}` : "";
                 const changeMessage = chalk `- ${exportAction === index_1.ExportAction.added ? "added" : "updated"} {blue ./${shared_1.relativePath(filePath)}} ${bracketedMessage}`;

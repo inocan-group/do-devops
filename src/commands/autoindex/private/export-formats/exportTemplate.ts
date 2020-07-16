@@ -1,23 +1,29 @@
 import { IExportableSymbols, removeExtension } from "../index";
 
 import { IDictionary } from "common-types";
+export interface IExportCallbacks {
+  file?: (file: string) => string;
+  postFile?: () => string;
+  dir?: (dir: string) => string;
+  postDir?: () => string;
+}
 
 /**
  * the general template used for all export types
  */
-export function exportTemplate(
-  exportable: IExportableSymbols,
-  opts: IDictionary = {},
-  fileFn: (file: string) => string,
-  dirFn: (dir: string) => string
-) {
+export function exportTemplate(exportable: IExportableSymbols, opts: IDictionary = {}, callbacks: IExportCallbacks) {
   const contentLines: string[] = [];
   if (exportable.files.length > 0) {
     contentLines.push(`\n// local file exports`);
+
+    if (callbacks.file) {
+      exportable.files.forEach((file) => {
+        contentLines.push(callbacks.file(file));
+      });
+    } else {
+      contentLines.push(`// the export strategy chosen does not write file exports`);
+    }
   }
-  exportable.files.forEach((file) => {
-    contentLines.push(fileFn(file));
-  });
 
   // if the command line switch for Vue SFC's is turned on
   if (opts.sfc && exportable.sfcs.length > 0) {
@@ -28,9 +34,13 @@ export function exportTemplate(
   if (exportable.dirs.length > 0) {
     contentLines.push(`\n// directory exports`);
   }
-  exportable.dirs.forEach((dir) => {
-    contentLines.push(dirFn(dir));
-  });
+  if (callbacks.dir) {
+    exportable.dirs.forEach((dir) => {
+      contentLines.push(callbacks.dir(dir));
+    });
+  } else {
+    contentLines.push(`// the export strategy chosen does not write directories to this file`);
+  }
 
   return contentLines.join("\n");
 }

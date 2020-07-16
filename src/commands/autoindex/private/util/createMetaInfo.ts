@@ -2,10 +2,15 @@ import { IDictionary } from "common-types";
 import { IExportableSymbols, IExportType } from "../index";
 import { removeExtension } from "./removeExtension";
 
-export function createMetaInfo(exportType: IExportType, sym: IExportableSymbols, opts: IDictionary) {
+export function createMetaInfo(
+  exportType: IExportType,
+  sym: IExportableSymbols,
+  exclusions: string[],
+  opts: IDictionary
+) {
   const output: string[] = [];
 
-  output.push(`// export: ${exportType}.`);
+  output.push(`// export: ${exportType}; exclusions: ${exclusions.join(", ")}.`);
 
   if (sym.files.length > 0) {
     output.push(`// files: ${sym.files.map((i) => removeExtension(i)).join(", ")}.`);

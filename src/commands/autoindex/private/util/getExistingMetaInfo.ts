@@ -9,6 +9,10 @@ export interface IExistingMetaInfo {
   dirs: string[];
   /** all SFCs found to already exist as exports */
   sfcs: string[];
+  /** the export type used last time autoindex was run */
+  exportType: string;
+  /** the _exclusions_ included last time autoindex was run */
+  exclusions: string[];
 }
 
 /**
@@ -20,7 +24,20 @@ export function getExistingMetaInfo(fileContent: string): IExistingMetaInfo {
   const dirs = hasExistingMeta ? getDirsMeta(fileContent) : [];
   const sfcs = hasExistingMeta ? getSFCsMeta(fileContent) : [];
 
-  return { hasExistingMeta, files, dirs, sfcs };
+  const exportType = hasExistingMeta ? getExportType(fileContent) : "";
+  const exclusions = hasExistingMeta ? getExclusions(fileContent) : [];
+
+  return { hasExistingMeta, files, dirs, sfcs, exportType, exclusions };
+}
+
+function getExportType(content: string): string {
+  const matches = content.match(/\/\/ export: (.*)\;/);
+  return Array.isArray(matches) ? matches[1].trim() : "";
+}
+
+function getExclusions(content: string): string[] {
+  const matches = content.match(/\/\/ export: .*\; exclusions: (.*)\./);
+  return Array.isArray(matches) ? matches[1].trim().split(", ") : [];
 }
 
 function getFilesMeta(content: string): string[] {

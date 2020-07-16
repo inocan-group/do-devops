@@ -1,3 +1,6 @@
+/**
+ * returns the explicitly excluded files/directory names that are stated on a given file
+ */
 export function exclusions(file: string): string[] {
   const explicit = file.includes("exclude:")
     ? file

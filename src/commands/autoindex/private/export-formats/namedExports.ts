@@ -12,5 +12,5 @@ export function namedExports(exportable: IExportableSymbols, opts: IDictionary =
 
   const dir = (dir: string) => `export * from "./${dir}/index${opts.preserveExtension ? ".js" : ""}";`;
 
-  return exportTemplate(exportable, opts, file, dir);
+  return exportTemplate(exportable, opts, { file, dir });
 }

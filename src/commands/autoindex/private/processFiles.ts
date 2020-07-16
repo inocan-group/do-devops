@@ -78,6 +78,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
       const blockContent = `${START_REGION}\n\n${timestamp()}\n${createMetaInfo(
         exportType,
         exportableSymbols,
+        exclusions(fileContent),
         opts
       )}\n${autoIndexContent}\n\n${END_REGION}`;
 
@@ -93,7 +94,9 @@ export async function processFiles(paths: string[], opts: IDictionary) {
         if (
           noDifference(existingContentMeta.files, removeAllExtensions(exportableSymbols.files)) &&
           noDifference(existingContentMeta.dirs, removeAllExtensions(exportableSymbols.dirs)) &&
-          noDifference(existingContentMeta.sfcs, removeAllExtensions(exportableSymbols.sfcs))
+          noDifference(existingContentMeta.sfcs, removeAllExtensions(exportableSymbols.sfcs)) &&
+          exportType === existingContentMeta.exportType &&
+          noDifference(existingContentMeta.exclusions, excluded)
         ) {
           exportAction = ExportAction.noChange;
         } else {
@@ -111,7 +114,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
 
       const excludedWithoutBase = excluded.filter((i) => !baseExclusions.includes(i));
       if (excludedWithoutBase.length > 0) {
-        bracketedMessages.push(chalk` {italic excluding: } {grey ${excludedWithoutBase.join(", ")}}`);
+        bracketedMessages.push(chalk`{italic excluding:} {grey ${excludedWithoutBase.join(", ")}}`);
       }
 
       const bracketedMessage = bracketedMessages.length > 0 ? chalk`{dim [ ${bracketedMessages.join(", ")} ]}` : "";
