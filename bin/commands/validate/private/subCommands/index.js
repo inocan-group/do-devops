@@ -1,8 +1,10 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 //#autoindex:named-offset
 //#region autoindexed files
-// indexed at: 7th Jul, 2020, 11:37 PM ( GMT-7 )
+Object.defineProperty(exports, "__esModule", { value: true });
+// index last changed at: 7th Jul, 2020, 12:31 AM ( GMT-7 )
+// export: namedOffset.
+// files: NpmVersion, TestingFailure, TscFailure.
 // local file exports
 exports.NpmVersion = require("./NpmVersion");
 exports.TestingFailure = require("./TestingFailure");

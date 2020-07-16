@@ -9,7 +9,10 @@ var ExportAction;
 })(ExportAction = exports.ExportAction || (exports.ExportAction = {}));
 var ExportType;
 (function (ExportType) {
+    /** export the default export as the name of the file */
     ExportType["default"] = "default";
+    /** export all named exports from files and directories (with another index file) */
     ExportType["named"] = "named";
+    /** export all  */
     ExportType["namedOffset"] = "namedOffset";
 })(ExportType = exports.ExportType || (exports.ExportType = {}));

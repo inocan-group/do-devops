@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.detectExportType = void 0;
 const index_1 = require("../index");
 function detectExportType(fileContent) {
-    const defaultExport = /autoindex:default/;
-    const namedOffsetExport = /autoindex:named\-offset/;
+    const defaultExport = /autoindex:\s*default/;
+    const namedOffsetExport = /autoindex:\s*named\-offset/;
     if (defaultExport.test(fileContent)) {
         return index_1.ExportType.default;
     }

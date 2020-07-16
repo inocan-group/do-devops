@@ -1,6 +1,10 @@
 // #autoindex:named
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
+
+// index last changed at: 7th Jul, 2020, 12:31 AM ( GMT-7 )
+// export: named.
+// files: buildLambdaTypescriptProject, clearOldFiles, createFunctionEnum, createInlineExports, createWebpackEntryDictionaries, saveFunctionsTypeDefinition, writeInlineFunctions, zipWebpackFiles.
+
 // local file exports
 export * from "./buildLambdaTypescriptProject";
 export * from "./clearOldFiles";
@@ -10,4 +14,5 @@ export * from "./createWebpackEntryDictionaries";
 export * from "./saveFunctionsTypeDefinition";
 export * from "./writeInlineFunctions";
 export * from "./zipWebpackFiles";
+
 //#endregion

@@ -11,17 +11,21 @@ import {
   exportable,
   namedExports,
   replaceRegion,
-  structurePriorAutoindexContent,
   timestamp,
   unexpectedContent,
+  namedOffsetExports,
+  createMetaInfo,
+  getExistingMetaInfo,
+  nonBlockContent,
+  noDifference,
 } from "./index";
 import { readFileSync, writeFileSync } from "fs";
 
 import { ExportType } from "./reference";
 import { IDictionary } from "common-types";
-import { namedOffsetExports } from "./export";
 
 import chalk = require("chalk");
+import { removeAllExtensions } from "./util";
 
 /**
  * Reach into each file and look to see if it is a "autoindex" file; if it is
@@ -70,54 +74,70 @@ export async function processFiles(paths: string[], opts: IDictionary) {
         default:
           throw new DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
       }
+      /** content that defines the full region owned by autoindex */
+      const blockContent = `${START_REGION}\n\n${timestamp()}\n${createMetaInfo(
+        exportType,
+        exportableSymbols,
+        exclusions(fileContent),
+        opts
+      )}\n${autoIndexContent}\n\n${END_REGION}`;
+
+      const existingContentMeta = getExistingMetaInfo(fileContent);
 
       let exportAction: ExportAction;
+      const bracketedMessages: string[] = [];
+      if (exportType !== ExportType.named) {
+        bracketedMessages.push(chalk`{grey using }{italic ${exportType}} {grey export}`);
+      }
+
       if (autoIndexContent && alreadyHasAutoindexBlock(fileContent)) {
-        const priorContent = structurePriorAutoindexContent(fileContent);
-        const currentSymbols = exportableSymbols.files.concat(exportableSymbols.dirs).map((i) => i.replace(".ts", ""));
         if (
-          priorContent.quantity === currentSymbols.length &&
-          currentSymbols.every((i) => priorContent.symbols.includes(i))
+          noDifference(existingContentMeta.files, removeAllExtensions(exportableSymbols.files)) &&
+          noDifference(existingContentMeta.dirs, removeAllExtensions(exportableSymbols.dirs)) &&
+          noDifference(existingContentMeta.sfcs, removeAllExtensions(exportableSymbols.sfcs)) &&
+          exportType === existingContentMeta.exportType &&
+          noDifference(existingContentMeta.exclusions, excluded)
         ) {
           exportAction = ExportAction.noChange;
         } else {
           exportAction = ExportAction.updated;
-          fileContent = replaceRegion(fileContent, autoIndexContent);
         }
       } else if (autoIndexContent) {
         exportAction = ExportAction.added;
-        fileContent = chalk`${fileContent}\n${START_REGION}\n${timestamp()}${autoIndexContent}\n${END_REGION}`;
       }
 
       // BUILD UP CLI MESSAGE
-      const warnings = unexpectedContent(fileContent);
+      const warnings = unexpectedContent(nonBlockContent(fileContent));
+      if (warnings) {
+        bracketedMessages.push(chalk` {red unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`);
+      }
+
       const excludedWithoutBase = excluded.filter((i) => !baseExclusions.includes(i));
-      const warningMessage = warnings
-        ? chalk` {red has unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`
-        : "";
-      const exclusionMessage =
-        excludedWithoutBase.length > 0 ? chalk` {italic excluding: } {grey ${excludedWithoutBase.join(", ")}}` : "";
-      const typeMessage =
-        exportType === ExportType.named ? "" : chalk`{grey using }{italic ${exportType}} {grey export}`;
+      if (excludedWithoutBase.length > 0) {
+        bracketedMessages.push(chalk`{italic excluding:} {grey ${excludedWithoutBase.join(", ")}}`);
+      }
 
-      const metaInfo =
-        typeMessage && exclusionMessage
-          ? chalk`{dim  [ ${typeMessage}; ${exclusionMessage} ]}`
-          : typeMessage || exclusionMessage
-          ? chalk`{dim  [ ${typeMessage}${exclusionMessage} ]}`
-          : "";
+      const bracketedMessage = bracketedMessages.length > 0 ? chalk`{dim [ ${bracketedMessages.join(", ")} ]}` : "";
 
-      const changeMessage = chalk`- ${
-        exportAction === ExportAction.added ? "added" : "updated"
-      } index {blue ./${relativePath(filePath)}}${metaInfo}${warningMessage}`;
-      const unchangedMessage = chalk`{dim - {italic no changes} to {blue ./${relativePath(filePath)}}}`;
+      const changeMessage = chalk`- ${exportAction === ExportAction.added ? "added" : "updated"} {blue ./${relativePath(
+        filePath
+      )}} ${bracketedMessage}`;
+
+      const unchangedMessage = chalk`{dim - {italic no changes} to {blue ./${relativePath(
+        filePath
+      )}}} ${bracketedMessage}`;
 
       if (!opts.quiet && exportAction === ExportAction.noChange) {
         console.log(unchangedMessage);
       }
       if (exportAction !== ExportAction.noChange) {
         console.log(changeMessage);
-        writeFileSync(filePath, fileContent);
+        writeFileSync(
+          filePath,
+          existingContentMeta.hasExistingMeta
+            ? replaceRegion(fileContent, blockContent)
+            : fileContent.concat("\n" + blockContent)
+        );
       }
     }
   }

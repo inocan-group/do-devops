@@ -7,7 +7,7 @@ import { removeExtension } from "./util";
 import globby = require("globby");
 
 /**
- * Determines the files and directories in a _given directory_ that should be included
+ * Determines the _files_, _directories_, and _sfc_'s in a _given directory_ that should be included
  * in the index file. Files which match the
  */
 export async function exportable(filePath: string, excluded: string[]): Promise<IExportableSymbols> {
@@ -17,6 +17,10 @@ export async function exportable(filePath: string, excluded: string[]): Promise<
   const files = (await globby([`${dir}/*.ts`, `${dir}/*.js`]))
     .filter((file) => !exclusions.includes(removeExtension(basename(file))))
     .map((i) => basename(i));
+  const sfcs = (await globby([`${dir}/*.vue`]))
+    .filter((file) => !exclusions.includes(removeExtension(basename(file))))
+    .map((i) => basename(i));
+
   const dirs: string[] = [];
   readdirSync(dir, { withFileTypes: true })
     .filter((i) => i.isDirectory())
@@ -30,5 +34,5 @@ export async function exportable(filePath: string, excluded: string[]): Promise<
         dirs.push(i.name);
       }
     });
-  return { files, base: dir, dirs };
+  return { files, base: dir, dirs, sfcs };
 }

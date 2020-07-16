@@ -15,7 +15,7 @@ const fs_1 = require("fs");
 const util_1 = require("./util");
 const globby = require("globby");
 /**
- * Determines the files and directories in a _given directory_ that should be included
+ * Determines the _files_, _directories_, and _sfc_'s in a _given directory_ that should be included
  * in the index file. Files which match the
  */
 function exportable(filePath, excluded) {
@@ -24,6 +24,9 @@ function exportable(filePath, excluded) {
         const thisFile = path_1.basename(filePath);
         const exclusions = excluded.concat(thisFile);
         const files = (yield globby([`${dir}/*.ts`, `${dir}/*.js`]))
+            .filter((file) => !exclusions.includes(util_1.removeExtension(path_1.basename(file))))
+            .map((i) => path_1.basename(i));
+        const sfcs = (yield globby([`${dir}/*.vue`]))
             .filter((file) => !exclusions.includes(util_1.removeExtension(path_1.basename(file))))
             .map((i) => path_1.basename(i));
         const dirs = [];
@@ -40,7 +43,7 @@ function exportable(filePath, excluded) {
                 dirs.push(i.name);
             }
         });
-        return { files, base: dir, dirs };
+        return { files, base: dir, dirs, sfcs };
     });
 }
 exports.exportable = exportable;

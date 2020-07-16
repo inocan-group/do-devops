@@ -1,6 +1,11 @@
 // #autoindex:named
 //#region autoindexed files
-// indexed at: 7th Jul, 2020, 02:21 PM ( GMT-7 )
+
+// index last changed at: 7th Jul, 2020, 12:31 AM ( GMT-7 )
+// export: named.
+// files: askForDataFile, consoleDimensions, defaultConfigSections, ensureDirectory, getCommandInterface, getCommands, getDataFiles, getExportsFromFile, inverted, options, readDataFile, readFile, runHooks, sandbox.
+// directories: ast, aws, do-config, errors, file, git, interactive, npm, serverless, sound, ui, yeoman.
+
 // local file exports
 export * from "./askForDataFile";
 export * from "./consoleDimensions";
@@ -16,6 +21,7 @@ export * from "./readDataFile";
 export * from "./readFile";
 export * from "./runHooks";
 export * from "./sandbox";
+
 // directory exports
 export * from "./ast/index";
 export * from "./aws/index";
@@ -29,4 +35,5 @@ export * from "./serverless/index";
 export * from "./sound/index";
 export * from "./ui/index";
 export * from "./yeoman/index";
+
 //#endregion

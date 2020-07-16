@@ -16,6 +16,12 @@ exports.options = [
         description: `replaces the glob file matching pattern with your own (however "node_modules" still excluded)`,
     },
     {
+        name: "sfc",
+        type: Boolean,
+        group: "autoindex",
+        description: chalk `allows switching on the inclusion of VueJS SFC files; when turned on it is an {italic additive} inclusion where the configured export type is respected but the SFC's are always default exports who's name is transformed to the component name.`,
+    },
+    {
         name: "dir",
         type: String,
         group: "autoindex",

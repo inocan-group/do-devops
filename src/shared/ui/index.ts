@@ -1,9 +1,14 @@
 //#autoindex:named
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
+
+// index last changed at: 7th Jul, 2020, 12:31 AM ( GMT-7 )
+// export: named.
+// files: emoji, helpContent, styles, truncate.
+
 // local file exports
 export * from "./emoji";
 export * from "./helpContent";
 export * from "./styles";
 export * from "./truncate";
+
 //#endregion
