@@ -1,6 +1,11 @@
 // #autoindex:named
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 01:44 AM ( GMT-7 )
+
+// index last changed at: 7th Jul, 2020, 12:31 AM ( GMT-7 )
+// export: named.
+// files: askAboutLogForwarding, askForFunction, askForStage, determineProfile, determineRegion, determineStage, findAllHandlerFiles, findConfigFunctionDefnFiles, findInlineFunctionDefnFiles, findServerlessFunctions, functions, getAccountInfoFromServerlessYaml, getAwsProfileFromServerless, getLambdaFunctions, getLocalHandlerInfo, getLocalServerlessFunctionsFromServerlessYaml, getMicroserviceConfig, getServerlessBuildConfiguration, getServerlessYaml, isServerless, isTypescriptMicroserviceProject, saveToServerlessYaml, serverlessYamlExists.
+// directories: accountInfo, build, layers, webpack.
+
 // local file exports
 export * from "./askAboutLogForwarding";
 export * from "./askForFunction";
@@ -25,9 +30,11 @@ export * from "./isServerless";
 export * from "./isTypescriptMicroserviceProject";
 export * from "./saveToServerlessYaml";
 export * from "./serverlessYamlExists";
+
 // directory exports
 export * from "./accountInfo/index";
 export * from "./build/index";
 export * from "./layers/index";
 export * from "./webpack/index";
+
 //#endregion

@@ -1,8 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 //#autoindex:named-offset, exclude:  build-helpers, deploy-helpers
 //#region autoindexed files
-// indexed at: 7th Jul, 2020, 01:38 PM ( GMT-7 )
+Object.defineProperty(exports, "__esModule", { value: true });
+// index last changed at: 7th Jul, 2020, 12:31 AM ( GMT-7 )
+// export: namedOffset.
+// files: build, deploy, endpoints, fns, global, help, info, invoke, pkg, ssm, test.
+// directories: autoindex, awsid, bitbucket, latest, layers, validate.
 // local file exports
 exports.build = require("./build");
 exports.deploy = require("./deploy");

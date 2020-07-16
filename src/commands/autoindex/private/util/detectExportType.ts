@@ -1,8 +1,8 @@
 import { ExportType, IExportType } from "../index";
 
 export function detectExportType(fileContent: string): IExportType {
-  const defaultExport = /autoindex:default/;
-  const namedOffsetExport = /autoindex:named\-offset/;
+  const defaultExport = /autoindex:\s*default/;
+  const namedOffsetExport = /autoindex:\s*named\-offset/;
   if (defaultExport.test(fileContent)) {
     return ExportType.default;
   }

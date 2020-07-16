@@ -21,8 +21,8 @@ const shared_1 = require("../../../shared");
 const index_1 = require("./index");
 const fs_1 = require("fs");
 const reference_1 = require("./reference");
-const export_1 = require("./export");
 const chalk = require("chalk");
+const util_1 = require("./util");
 /**
  * Reach into each file and look to see if it is a "autoindex" file; if it is
  * then create the autoindex.
@@ -74,7 +74,7 @@ function processFiles(paths, opts) {
                         autoIndexContent = index_1.defaultExports(exportableSymbols, opts);
                         break;
                     case reference_1.ExportType.namedOffset:
-                        autoIndexContent = export_1.namedOffsetExports(exportableSymbols, opts);
+                        autoIndexContent = index_1.namedOffsetExports(exportableSymbols, opts);
                         break;
                     case reference_1.ExportType.named:
                         autoIndexContent = index_1.namedExports(exportableSymbols, opts);
@@ -82,44 +82,47 @@ function processFiles(paths, opts) {
                     default:
                         throw new shared_1.DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
                 }
+                /** content that defines the full region owned by autoindex */
+                const blockContent = `${index_1.START_REGION}\n\n${index_1.timestamp()}\n${index_1.createMetaInfo(exportType, exportableSymbols, opts)}\n${autoIndexContent}\n\n${index_1.END_REGION}`;
+                const existingContentMeta = index_1.getExistingMetaInfo(fileContent);
                 let exportAction;
+                const bracketedMessages = [];
+                if (exportType !== reference_1.ExportType.named) {
+                    bracketedMessages.push(chalk `{grey using }{italic ${exportType}} {grey export}`);
+                }
                 if (autoIndexContent && index_1.alreadyHasAutoindexBlock(fileContent)) {
-                    const priorContent = index_1.structurePriorAutoindexContent(fileContent);
-                    const currentSymbols = exportableSymbols.files.concat(exportableSymbols.dirs).map((i) => i.replace(".ts", ""));
-                    if (priorContent.quantity === currentSymbols.length &&
-                        currentSymbols.every((i) => priorContent.symbols.includes(i))) {
+                    if (index_1.noDifference(existingContentMeta.files, util_1.removeAllExtensions(exportableSymbols.files)) &&
+                        index_1.noDifference(existingContentMeta.dirs, util_1.removeAllExtensions(exportableSymbols.dirs)) &&
+                        index_1.noDifference(existingContentMeta.sfcs, util_1.removeAllExtensions(exportableSymbols.sfcs))) {
                         exportAction = index_1.ExportAction.noChange;
                     }
                     else {
                         exportAction = index_1.ExportAction.updated;
-                        fileContent = index_1.replaceRegion(fileContent, autoIndexContent);
                     }
                 }
                 else if (autoIndexContent) {
                     exportAction = index_1.ExportAction.added;
-                    fileContent = chalk `${fileContent}\n${index_1.START_REGION}\n${index_1.timestamp()}${autoIndexContent}\n${index_1.END_REGION}`;
                 }
                 // BUILD UP CLI MESSAGE
-                const warnings = index_1.unexpectedContent(fileContent);
+                const warnings = index_1.unexpectedContent(index_1.nonBlockContent(fileContent));
+                if (warnings) {
+                    bracketedMessages.push(chalk ` {red unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`);
+                }
                 const excludedWithoutBase = excluded.filter((i) => !baseExclusions.includes(i));
-                const warningMessage = warnings
-                    ? chalk ` {red has unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`
-                    : "";
-                const exclusionMessage = excludedWithoutBase.length > 0 ? chalk ` {italic excluding: } {grey ${excludedWithoutBase.join(", ")}}` : "";
-                const typeMessage = exportType === reference_1.ExportType.named ? "" : chalk `{grey using }{italic ${exportType}} {grey export}`;
-                const metaInfo = typeMessage && exclusionMessage
-                    ? chalk `{dim  [ ${typeMessage}; ${exclusionMessage} ]}`
-                    : typeMessage || exclusionMessage
-                        ? chalk `{dim  [ ${typeMessage}${exclusionMessage} ]}`
-                        : "";
-                const changeMessage = chalk `- ${exportAction === index_1.ExportAction.added ? "added" : "updated"} index {blue ./${shared_1.relativePath(filePath)}}${metaInfo}${warningMessage}`;
-                const unchangedMessage = chalk `{dim - {italic no changes} to {blue ./${shared_1.relativePath(filePath)}}}`;
+                if (excludedWithoutBase.length > 0) {
+                    bracketedMessages.push(chalk ` {italic excluding: } {grey ${excludedWithoutBase.join(", ")}}`);
+                }
+                const bracketedMessage = bracketedMessages.length > 0 ? chalk `{dim [ ${bracketedMessages.join(", ")} ]}` : "";
+                const changeMessage = chalk `- ${exportAction === index_1.ExportAction.added ? "added" : "updated"} {blue ./${shared_1.relativePath(filePath)}} ${bracketedMessage}`;
+                const unchangedMessage = chalk `{dim - {italic no changes} to {blue ./${shared_1.relativePath(filePath)}}} ${bracketedMessage}`;
                 if (!opts.quiet && exportAction === index_1.ExportAction.noChange) {
                     console.log(unchangedMessage);
                 }
                 if (exportAction !== index_1.ExportAction.noChange) {
                     console.log(changeMessage);
-                    fs_1.writeFileSync(filePath, fileContent);
+                    fs_1.writeFileSync(filePath, existingContentMeta.hasExistingMeta
+                        ? index_1.replaceRegion(fileContent, blockContent)
+                        : fileContent.concat("\n" + blockContent));
                 }
             }
         }
