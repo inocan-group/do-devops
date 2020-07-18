@@ -8,7 +8,7 @@ import { IDictionary } from "common-types";
  */
 export function namedOffsetExports(exportable: IExportableSymbols, opts: IDictionary = {}) {
   const file = (file: string) =>
-    `import * as ${removeExtension(file, true)} from "./${
+    `export * as ${removeExtension(file, true)} from "./${
       opts.preserveExtension ? removeExtension(file) + ".js" : removeExtension(file)
     }";`;
 

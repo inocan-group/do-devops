@@ -1,11 +1,6 @@
 import { IServerlessConfig, IDictionary } from "common-types";
-import {
-  getServerlessYaml,
-  getConfig,
-  askForAwsProfile,
-  DevopsError
-} from "../index";
-import { IDetermineOptions } from "../../@types";
+import { getServerlessYaml, getConfig, askForAwsProfile, DevopsError, askToSaveConfig } from "../index";
+import { IDetermineOptions, IDoConfig } from "../../@types";
 import { get } from "lodash";
 
 /** ensure that during one CLI operation we cache this value */
@@ -22,13 +17,7 @@ let profile: string;
  * - look at the global default for the `user configuration`
  * - if "interactive", then ask user for profile name from available options
  */
-export async function determineProfile(
-  opts: IDetermineOptions
-): Promise<string> {
-  if (get(opts, "cliOptions.profile")) {
-    return opts.cliOptions.profile;
-  }
-
+export async function determineProfile(opts: IDetermineOptions): Promise<string> {
   if (get(opts, "cliOptions.profile", undefined)) {
     return opts.cliOptions.profile;
   }
@@ -43,37 +32,24 @@ export async function determineProfile(
   } catch (e) {
     // nothing to do
   }
-  let projectConfig;
-  let userConfig;
+  let doConfig: IDoConfig;
   try {
-    projectConfig = await getConfig({
-      exitIfNotFound: false,
-      projectOrUserConfig: "project"
-    });
+    doConfig = await getConfig("both");
+
+    if (doConfig && doConfig.global.defaultAwsProfile) {
+      profile = doConfig.global.defaultAwsProfile;
+    }
   } catch (e) {}
 
-  try {
-    userConfig = await getConfig({
-      exitIfNotFound: false,
-      projectOrUserConfig: "user"
-    });
-  } catch (e) {}
-
-  if (projectConfig && projectConfig.global.defaultAwsProfile) {
-    profile = projectConfig.global.defaultAwsProfile;
-  } else if (userConfig && userConfig.global.defaultAwsProfile) {
-    profile = userConfig.global.defaultAwsProfile;
-  } else if (opts.interactive) {
+  if (!profile && opts.interactive) {
     try {
       profile = await askForAwsProfile({ exitOnError: false });
+      const saveForNextTime = await askToSaveConfig("global.defaultAwsProfile", profile);
     } catch (e) {}
   }
 
   if (!profile) {
-    throw new DevopsError(
-      `Could not determine the AWS profile! [ ${JSON.stringify(opts)}]`,
-      "devops/not-ready"
-    );
+    throw new DevopsError(`Could not determine the AWS profile! [ ${JSON.stringify(opts)}]`, "devops/not-ready");
   }
 
   return profile;

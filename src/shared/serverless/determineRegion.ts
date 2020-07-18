@@ -39,10 +39,7 @@ export async function determineRegion(opts?: IDetermineOptions) {
 
   // USER Config is last resort
   if (!outcome) {
-    const userConfig = await getConfig({
-      projectOrUserConfig: "user",
-      exitIfNotFound: false,
-    });
+    const userConfig = await getConfig("user");
     if (userConfig && userConfig.global.defaultAwsRegion) {
       if (opts.cliOptions && !opts.cliOptions.quiet) {
         console.log(
