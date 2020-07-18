@@ -1,8 +1,8 @@
 // #autoindex:named
 //#region autoindexed files
 
-// index last changed at: 7th Jul, 2020, 12:31 AM ( GMT-7 )
-// export: named.
+// index last changed at: 7th Jul, 2020, 12:18 PM ( GMT-7 )
+// export: named; exclusions: index, private.
 // files: alreadyHasAutoindexBlock, askHowToHandleMonoRepoIndexing, communicateApi, createMetaInfo, detectExportType, exportsHaveChanged, getExistingMetaInfo, noDifference, nonBlockContent, removeExtension, replaceRegion, structurePriorAutoindexContent, timestamp, unexpectedContent.
 
 // local file exports

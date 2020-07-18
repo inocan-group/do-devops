@@ -1,12 +1,10 @@
-import * as chalk from "chalk";
-
 import { getConfigFilename, writeDefaultConfig } from "./index";
 
 import { IDoConfig } from "../../@types";
 import { existsSync } from "fs";
+import { DevopsError } from "../errors";
 
 export interface IGetConfigOptions {
-  projectOrUserConfig: "user" | "project";
   exitIfNotFound: boolean;
 }
 
@@ -22,52 +20,37 @@ const cache: {
  * **getConfig**
  *
  * Gets the current configuration based on the `do.config.js` file.
- * This will include global as well as command-specific configuration.
  *
- * The _command-specific_ config should be stored off the root of
- * the configuration with the same name as the command. The _global_ 
- * config is stored off the root config on the property of `global`. 
- * This allows for consumers of this function to isolate like so:
- * 
-```typescript
-const { global, myCommand } = await getConfig();
-```
- * 
- * Note: if you opt to exit on the config file not being found you will 
- * get a sensible message to the console and the process will exit. 
- * 
- * If you decide _not_ to exit then it return the configuration if found
- * but otherwise return `undefined`.
+ * By default the configuration that will be loaded is the project's
+ * configuration but you can state to instead use the `user` config
+ * or `both`. In the case of `both`, the two config's will be merged
+ * and the project config will take precedence.
  */
-export async function getConfig(callerOptions: Partial<IGetConfigOptions> = {}): Promise<IDoConfig> {
-  const options: IGetConfigOptions = {
-    ...{
-      projectOrUserConfig: "project",
-      exitIfNotFound: true,
-    },
-    ...callerOptions,
-  };
-  const filename = getConfigFilename(options.projectOrUserConfig);
+export async function getConfig(userOrProject: "user" | "project" | "both" = "both"): Promise<IDoConfig> {
   let config: IDoConfig;
+  const userFilename = getConfigFilename("user");
+  const projectFilename = getConfigFilename("project");
+  const userConfig = existsSync(userFilename) ? (await import(userFilename)).config : {};
+  const projectConfig = existsSync(projectFilename) ? await import(projectFilename) : {};
 
-  if (!existsSync(filename) && options.projectOrUserConfig === "project") {
-    console.log(`- configuration file not found [ %s ]`, chalk.grey(process.env.PWD));
-    writeDefaultConfig();
-    console.log(`- default configuration was written to "%s" in project root`, chalk.bold.italic("do.config.js"));
+  if (!projectConfig && userOrProject === "project") {
+    throw new DevopsError(`Project configuration [${projectFilename}] for do-devops not found!`, "no-config");
+  }
+  if (!userConfig && userOrProject === "user") {
+    throw new DevopsError("User configuration for do-devops not found!", "no-config");
+  }
+  if (!userConfig && !projectConfig && userOrProject === "both") {
+    throw new DevopsError("Neither user nor project configuration for do-devops was found!", "no-config");
   }
 
-  try {
-    config = await import(filename);
-    return config;
-  } catch (e) {
-    if (options.exitIfNotFound) {
-      console.log("- \ud83d\udca9  Problem importing the config file [ %s ]: %s", filename, chalk.grey(e.message));
-      console.log(
-        "- Either edit the file to the correct %s or delete the config and it will be recreated with the default values\n",
-        chalk.italic("typing")
-      );
-      process.exit();
-    }
-    return;
+  switch (userOrProject) {
+    case "both":
+      return { ...(userConfig ? userConfig : {}), ...(projectConfig ? projectConfig : {}) };
+    case "project":
+      return projectConfig;
+    case "user":
+      return userConfig;
+    default:
+      throw new DevopsError(`Unknown configuration type "${userOrProject}" passed in!`, "invalid-config-type");
   }
 }
