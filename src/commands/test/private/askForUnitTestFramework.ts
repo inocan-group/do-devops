@@ -1,9 +1,7 @@
 import inquirer = require("inquirer");
 
-import * as chalk from "chalk";
-
 import { IDictionary } from "common-types";
-import { getPackageJson } from "../../shared";
+import { getPackageJson } from "../../../shared";
 
 /**
  * Asks the user to choose an AWS profile
