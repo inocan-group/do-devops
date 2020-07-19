@@ -2,7 +2,7 @@ import * as chalk from "chalk";
 import * as globby from "globby";
 
 import { SpecificTestReason, askForSpecificTests } from "./askForSpecificTests";
-import { emoji, getConfig, hasDevDependency } from "../../shared";
+import { emoji, getConfig, hasDevDependency } from "../../../shared";
 
 import { asyncExec } from "async-shelljs";
 import { pathJoin } from "common-types";

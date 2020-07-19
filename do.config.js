@@ -16,6 +16,11 @@ const config = {
       "clean"
     ],
     "showUnderlyingCommands": true
+  },
+  "test": {
+    "unitTestFramework": "mocha",
+    "testDirectory": "test",
+    "testPattern": "**/*-spec.ts"
   }
 };
 module.exports = config;
