@@ -7,7 +7,7 @@ import { askHowToHandleMonoRepoIndexing, processFiles } from "../private/index";
 import { getMonoRepoPackages } from "../../../shared";
 import { join } from "path";
 
-import { watch } from "chokidar";
+import { FSWatcher, watch } from "chokidar";
 
 /**
  * Finds all `index.ts` and `index.js` files and looks for the `#autoindex`
@@ -16,31 +16,14 @@ import { watch } from "chokidar";
  */
 export async function handler(argv: string[], opts: IDictionary): Promise<void> {
   const monoRepoPackages: false | string[] = getMonoRepoPackages(process.cwd());
-
-  if (monoRepoPackages && !opts.dir) {
-    const response: string = await askHowToHandleMonoRepoIndexing(monoRepoPackages);
-
-    if (response === "ALL") {
-      for await (const pkg of monoRepoPackages) {
-        if (!opts.quiet) {
-          console.log(chalk`Running {bold autoindex} for the {green ${pkg}}:`);
-        }
-        await handler(argv, { ...opts, dir: join(opts.dir || process.env.PWD, "packages", pkg), withinMonorepo: true });
-      }
-      return;
-    } else {
-      return handler(argv, {
-        ...opts,
-        dir: join(opts.dir || process.env.PWD, "packages", response),
-        withinMonorepo: true,
-      });
-    }
-  }
-
   const globInclude = opts.glob ? (opts.glob as string[]).concat("!node_modules") : false;
-  const srcDir = opts.dir ? join(process.cwd(), opts.dir) : join(process.cwd(), "src");
+  const srcDir = opts.dir
+    ? join(process.cwd(), opts.dir)
+    : monoRepoPackages
+    ? join(process.cwd(), "packages/**/src")
+    : join(process.cwd(), "src");
 
-  const globPattern = globInclude || [
+  let globPattern = globInclude || [
     `${srcDir}/**/index.ts`,
     `${srcDir}/**/index.js`,
     `${srcDir}/**/private.ts`,
@@ -48,54 +31,87 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
   ];
 
   let watcherReady: boolean = false;
+  let pathsToIndexFiles = await globby(globPattern.concat("!**/node_modules"));
+  const pkgsWithIndexFiles = monoRepoPackages
+    ? Array.from(
+        pathsToIndexFiles.reduce((acc, globPath) => {
+          const [_, pkg] = /^.*packages\/(\S*?)\/.*\//.exec(globPath);
+          acc.add(pkg);
+          return acc;
+        }, new Set<string>())
+      )
+    : false;
+  if (monoRepoPackages && pkgsWithIndexFiles) {
+    const answer = await askHowToHandleMonoRepoIndexing(pkgsWithIndexFiles);
+    if (answer !== "ALL") {
+      pathsToIndexFiles = pathsToIndexFiles.filter((p) => p.includes(`packages/${answer}`));
+    }
+  }
+
+  // explict run of autoindex (not watch)
+
+  const results = await processFiles(pathsToIndexFiles, opts);
+  if (!opts.quiet) {
+    console.log();
+  }
 
   if (opts.watch) {
-    const watcher = watch(srcDir + "/**/*", {
-      ignored: /(^|[\/\\])\../, // ignore dotfiles
-      persistent: true,
-    });
+    let watcher: FSWatcher;
     const log = console.log.bind(console);
+    if (monoRepoPackages) {
+      if (!pkgsWithIndexFiles) {
+        console.log(
+          chalk`- this monorepo has NO packages which have autoindex files so no watching is required!`
+        );
+        process.exit();
+      }
+      console.log(chalk`- will watch TS files in {italic packages} which have autoindex files,`);
+      console.log(
+        chalk`- this includes the following packages:\n  {dim - ${pkgsWithIndexFiles.join("\n  ")}}`
+      );
+      const watchPaths = pkgsWithIndexFiles.map((pkg) => `./packages/${pkg}/src/*.ts`);
+    } else {
+      watcher = watch(srcDir + "/**/*.ts", {
+        ignored: /(^|[\/\\])\../, // ignore dotfiles
+        persistent: true,
+      });
+    }
     watcher.on("ready", () => {
-      log(chalk`- autoindex {italic watcher} has {bold {green started}} monitoring {blue ${srcDir}} for changes`);
+      log(
+        chalk`- autoindex {italic watcher} has {bold {green started}}; monitoring {blue ${srcDir}} for changes`
+      );
       watcherReady = true;
-    });
-    watcher.on("add", async (path) => {
-      // if (watcherReady) {
-      //   log(chalk`- file added [ {blue ${path}} ]; re-running autoindex `);
-      // }
-      const paths = await globby(globPattern.concat("!node_modules"));
-      processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
-        log(chalk`Error re-running autoindex (on {italic add} event): ${e.message}\n`, e.stack)
-      );
-    });
-    watcher.on("unlink", async (path) => {
-      const paths = await globby(globPattern.concat("!node_modules"));
-      processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
-        log(chalk`Error re-running autoindex (on {italic unlink} event): ${e.message}\n`, e.stack)
-      );
-    });
-    watcher.on("addDir", async (path) => {
-      const paths = await globby(globPattern.concat("!node_modules"));
-      processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
-        log(chalk`Error re-running autoindex (on {italic addDir} event): ${e.message}\n`, e.stack)
-      );
-    });
-    watcher.on("unlinkDir", async (path) => {
-      const paths = await globby(globPattern.concat("!node_modules"));
-      processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
-        log(chalk`Error re-running autoindex (on {italic unlinkDir} event): ${e.message}\n`, e.stack)
-      );
+      watcher.on("add", async (path) => {
+        console.log(chalk`- {italic file added}, re-running autoindex`);
+
+        processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
+          log(chalk`Error re-running autoindex (on {italic add} event): ${e.message}\n`, e.stack)
+        );
+      });
+      watcher.on("unlink", async (path) => {
+        console.log(chalk`- {italic file removed}, re-running autoindex`);
+
+        processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
+          log(chalk`Error re-running autoindex (on {italic unlink} event): ${e.message}\n`, e.stack)
+        );
+      });
+      watcher.on("addDir", async (path) => {
+        processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
+          log(chalk`Error re-running autoindex (on {italic addDir} event): ${e.message}\n`, e.stack)
+        );
+      });
+      watcher.on("unlinkDir", async (path) => {
+        processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
+          log(
+            chalk`Error re-running autoindex (on {italic unlinkDir} event): ${e.message}\n`,
+            e.stack
+          )
+        );
+      });
     });
 
     watcher.on("error", (e) => {
       log(`- An error occurred while watching autoindex paths: ${e.message}`);
     });
-  } else {
-    const paths = await globby(globPattern.concat("!node_modules"));
-
-    const results = await processFiles(paths, opts);
-    if (!opts.quiet) {
-      console.log();
-    }
   }
 }

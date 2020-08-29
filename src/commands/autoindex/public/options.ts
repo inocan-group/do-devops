@@ -34,6 +34,13 @@ export const options: OptionDefinition[] = [
     description: chalk`stops most output to {italic stdout}; changes are still output`,
   },
   {
+    name: "all",
+    alias: "a",
+    type: Boolean,
+    group: "autoindex",
+    description: chalk`this option can be used in monorepos to avoid the interactive dialog and always set the scope of autoindex to ALL packages`,
+  },
+  {
     name: "watch",
     alias: "w",
     type: Boolean,
