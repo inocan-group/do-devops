@@ -46,7 +46,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
   }
   if (Object.keys(results).length === 0) {
     if (opts.withinMonorepo) {
-      console.log(chalk`- No {italic autoindex} files found`);
+      console.log(chalk`- No {italic autoindex} files found in this monorepo`);
       return;
     } else {
       communicateApi(paths);
@@ -109,7 +109,9 @@ export async function processFiles(paths: string[], opts: IDictionary) {
       // BUILD UP CLI MESSAGE
       const warnings = unexpectedContent(nonBlockContent(fileContent));
       if (warnings) {
-        bracketedMessages.push(chalk` {red unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`);
+        bracketedMessages.push(
+          chalk` {red unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`
+        );
       }
 
       const excludedWithoutBase = excluded.filter((i) => !baseExclusions.includes(i));
@@ -117,11 +119,12 @@ export async function processFiles(paths: string[], opts: IDictionary) {
         bracketedMessages.push(chalk`{italic excluding:} {grey ${excludedWithoutBase.join(", ")}}`);
       }
 
-      const bracketedMessage = bracketedMessages.length > 0 ? chalk`{dim [ ${bracketedMessages.join(", ")} ]}` : "";
+      const bracketedMessage =
+        bracketedMessages.length > 0 ? chalk`{dim [ ${bracketedMessages.join(", ")} ]}` : "";
 
-      const changeMessage = chalk`- ${exportAction === ExportAction.added ? "added" : "updated"} {blue ./${relativePath(
-        filePath
-      )}} ${bracketedMessage}`;
+      const changeMessage = chalk`- ${
+        exportAction === ExportAction.added ? "added" : "updated"
+      } {blue ./${relativePath(filePath)}} ${bracketedMessage}`;
 
       const unchangedMessage = chalk`{dim - {italic no changes} to {blue ./${relativePath(
         filePath
