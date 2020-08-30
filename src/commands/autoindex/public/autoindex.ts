@@ -1,12 +1,14 @@
 import * as chalk from "chalk";
 import * as globby from "globby";
-
 import { IDictionary, wait } from "common-types";
-import { askHowToHandleMonoRepoIndexing, processFiles } from "../private/index";
-
-import { getMonoRepoPackages } from "../../../shared";
+import {
+  askHowToHandleMonoRepoIndexing,
+  isAutoindexFile,
+  processFiles,
+  watchHandlers,
+} from "../private/index";
+import { getMonoRepoPackages, relativePath } from "../../../shared";
 import { join } from "path";
-
 import { FSWatcher, watch } from "chokidar";
 
 /**
@@ -22,16 +24,16 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     : monoRepoPackages
     ? join(process.cwd(), "packages/**/src")
     : join(process.cwd(), "src");
+  const testDir = monoRepoPackages ? "packages/**/test[s]{0,1}" : `test[s]{0,1}`;
+  /** default glob pattern which includes index files in _source_ and _test_ directories */
+  let defaultIndexGlob = globInclude || [`${srcDir}/**/index.[tj]s`, `${testDir}/**index.[tj]s`];
+  let pathsToIndexFiles = (await globby(defaultIndexGlob.concat("!**/node_modules"))).filter((fp) =>
+    isAutoindexFile(fp)
+  );
 
-  let globPattern = globInclude || [
-    `${srcDir}/**/index.ts`,
-    `${srcDir}/**/index.js`,
-    `${srcDir}/**/private.ts`,
-    `${srcDir}/**/private.js`,
-  ];
-
-  let watcherReady: boolean = false;
-  let pathsToIndexFiles = await globby(globPattern.concat("!**/node_modules"));
+  /**
+   * The packages in a monorepo that _have_ autoindex files
+   */
   const pkgsWithIndexFiles = monoRepoPackages
     ? Array.from(
         pathsToIndexFiles.reduce((acc, globPath) => {
@@ -41,14 +43,14 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
         }, new Set<string>())
       )
     : false;
+
+  let whichPackage: string;
   if (monoRepoPackages && pkgsWithIndexFiles) {
-    const answer = await askHowToHandleMonoRepoIndexing(pkgsWithIndexFiles);
-    if (answer !== "ALL") {
-      pathsToIndexFiles = pathsToIndexFiles.filter((p) => p.includes(`packages/${answer}`));
+    whichPackage = opts.all ? "ALL" : await askHowToHandleMonoRepoIndexing(pkgsWithIndexFiles);
+    if (whichPackage !== "ALL") {
+      pathsToIndexFiles = pathsToIndexFiles.filter((p) => p.includes(`packages/${whichPackage}`));
     }
   }
-
-  // explict run of autoindex (not watch)
 
   const results = await processFiles(pathsToIndexFiles, opts);
   if (!opts.quiet) {
@@ -56,62 +58,45 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
   }
 
   if (opts.watch) {
-    let watcher: FSWatcher;
-    const log = console.log.bind(console);
-    if (monoRepoPackages) {
-      if (!pkgsWithIndexFiles) {
-        console.log(
-          chalk`- this monorepo has NO packages which have autoindex files so no watching is required!`
-        );
-        process.exit();
-      }
-      console.log(chalk`- will watch TS files in {italic packages} which have autoindex files,`);
-      console.log(
-        chalk`- this includes the following packages:\n  {dim - ${pkgsWithIndexFiles.join("\n  ")}}`
-      );
-      const watchPaths = pkgsWithIndexFiles.map((pkg) => `./packages/${pkg}/src/*.ts`);
-    } else {
-      watcher = watch(srcDir + "/**/*.ts", {
-        ignored: /(^|[\/\\])\../, // ignore dotfiles
-        persistent: true,
-      });
-    }
-    watcher.on("ready", () => {
-      log(
-        chalk`- autoindex {italic watcher} has {bold {green started}}; monitoring {blue ${srcDir}} for changes`
-      );
-      watcherReady = true;
-      watcher.on("add", async (path) => {
-        console.log(chalk`- {italic file added}, re-running autoindex`);
-
-        processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
-          log(chalk`Error re-running autoindex (on {italic add} event): ${e.message}\n`, e.stack)
-        );
-      });
-      watcher.on("unlink", async (path) => {
-        console.log(chalk`- {italic file removed}, re-running autoindex`);
-
-        processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
-          log(chalk`Error re-running autoindex (on {italic unlink} event): ${e.message}\n`, e.stack)
-        );
-      });
-      watcher.on("addDir", async (path) => {
-        processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
-          log(chalk`Error re-running autoindex (on {italic addDir} event): ${e.message}\n`, e.stack)
-        );
-      });
-      watcher.on("unlinkDir", async (path) => {
-        processFiles(paths, { ...opts, quiet: true }).catch((e: Error) =>
-          log(
-            chalk`Error re-running autoindex (on {italic unlinkDir} event): ${e.message}\n`,
-            e.stack
-          )
-        );
-      });
+    const watchGlob = pathsToIndexFiles.map((p) => {
+      const parts = p.replace(/\\/g, "/").replace(process.cwd(), "").split("/");
+      return relativePath(join(...parts.slice(0, parts.length - 1), "*.ts"), process.cwd());
     });
 
+    const ignored = pathsToIndexFiles.map((p) => {
+      const parts = p.split(/[\/\\]/);
+      return relativePath(
+        join(...parts.slice(0, parts.length - 1), "node_modules/**"),
+        process.cwd()
+      );
+    });
+    const log = console.log.bind(console);
+    const h = watchHandlers(pathsToIndexFiles, log);
+    const watcher = watch(watchGlob, {
+      ignored,
+      persistent: true,
+      usePolling: true,
+      interval: 100,
+    });
+    const status = { ready: false };
+    watcher.on("ready", (...args: any[]) => {
+      const pkgMessage = pkgsWithIndexFiles
+        ? pkgsWithIndexFiles && whichPackage !== "ALL"
+          ? `; focused only on the "${whichPackage}" package.`
+          : chalk`; across {yellow {bold ${String(pkgsWithIndexFiles.length)}}} packages`
+        : "";
+      log(
+        chalk`- watcher has started watching {bold {yellow ${String(
+          pathsToIndexFiles.length
+        )}}} directories${pkgMessage}`
+      );
+      watcher.on("add", h("added", status));
+      watcher.on("change", h("changed", status));
+      watcher.on("unlink", h("removed", status));
+      // log(watchGlob);
+    });
     watcher.on("error", (e) => {
-      log(`- An error occurred while watching autoindex paths: ${e.message}`);
+      log(`Error occurred: ${e.message}`);
     });
   }
 }
