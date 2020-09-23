@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { determineStage, getConfig, getLocalHandlerInfo, hasDevDependency } from "../../shared";
 
@@ -35,9 +35,9 @@ export default async function serverlessDeploy(argv: string[], opts: IDictionary
 async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   const { stage, opts, config } = meta;
   console.log(
-    chalk`- {bold serverless} deployment for {bold ${String(fns.length)}} functions to {italic ${stage}} stage ${
-      emoji.party
-    }`
+    chalk`- {bold serverless} deployment for {bold ${String(
+      fns.length
+    )}} functions to {italic ${stage}} stage ${emoji.party}`
   );
 
   const transpile = isTranspileNeeded(meta);
@@ -48,7 +48,9 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
     await build();
   }
 
-  console.log(chalk`{grey - zipping up ${String(fns.length)} {bold Serverless} {italic handler} functions }`);
+  console.log(
+    chalk`{grey - zipping up ${String(fns.length)} {bold Serverless} {italic handler} functions }`
+  );
   await zipWebpackFiles(fns);
   console.log(chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`);
 
@@ -61,10 +63,16 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   const promises: any[] = [];
   try {
     fns.map((fn) => {
-      promises.push(asyncExec(`sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`));
+      promises.push(
+        asyncExec(
+          `sls deploy function --force --aws-s3-accelerate --function ${fn} --stage ${stage}`
+        )
+      );
     });
     await Promise.all(promises);
-    console.log(chalk`\n- all {bold ${String(fns.length)}} function(s) were deployed! ${emoji.rocket}\n`);
+    console.log(
+      chalk`\n- all {bold ${String(fns.length)}} function(s) were deployed! ${emoji.rocket}\n`
+    );
   } catch (e) {
     console.log(chalk`- {red {bold problems deploying functions!}} ${emoji.poop}`);
     console.log(`- ${e.message}`);
@@ -77,7 +85,9 @@ async function fullDeploy(meta: IServerlessDeployMeta) {
   console.log(chalk`- Starting {bold FULL serverless} deployment for {italic ${stage}} stage`);
 
   if (!hasDevDependency("serverless-webpack")) {
-    console.log(chalk`{grey - checking timestamps to determine what {bold webpack} transpilation is needed}`);
+    console.log(
+      chalk`{grey - checking timestamps to determine what {bold webpack} transpilation is needed}`
+    );
     const transpile = isTranspileNeeded(meta);
 
     if (transpile.length > 0) {
@@ -96,7 +106,9 @@ async function fullDeploy(meta: IServerlessDeployMeta) {
   }
 
   if (config.showUnderlyingCommands) {
-    console.log(chalk`{grey > {italic sls deploy --aws-s3-accelerate  --stage ${stage} --verbose}}\n`);
+    console.log(
+      chalk`{grey > {italic sls deploy --aws-s3-accelerate  --stage ${stage} --verbose}}\n`
+    );
     try {
       await asyncExec(`sls deploy --aws-s3-accelerate  --stage ${stage} --verbose`);
       console.log(chalk`\n- The full deploy was successful! ${emoji.rocket}\n`);

@@ -1,5 +1,5 @@
-import * as chalk from "chalk";
-import * as globby from "globby";
+import chalk from "chalk";
+import globby from "globby";
 import { IDictionary, wait } from "common-types";
 import {
   askHowToHandleMonoRepoIndexing,
@@ -93,7 +93,9 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
       watcher.on("add", h("added", status));
       watcher.on("change", h("changed", status));
       watcher.on("unlink", h("removed", status));
-      // log(watchGlob);
+      watcher.on("link", h("added", status));
+      watcher.on("addDir", h("added directory", status));
+      watcher.on("unlinkDir", h("removed directory", status));
     });
     watcher.on("error", (e) => {
       log(`Error occurred: ${e.message}`);

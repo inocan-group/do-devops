@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { IDetermineOptions } from "../../@types";
 import { IDictionary } from "common-types";

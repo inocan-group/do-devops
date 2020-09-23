@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as os from "os";
 
 import { IDictionary, IServerlessAccountInfo, IServerlessConfig } from "common-types";
@@ -57,7 +57,9 @@ export async function buildLambdaTypescriptProject(
   );
 
   const handlerInfo = getLocalHandlerInfo();
-  console.log(chalk`{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`);
+  console.log(
+    chalk`{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`
+  );
 
   await createInlineExports(handlerInfo);
   console.log(
@@ -72,7 +74,9 @@ export async function buildLambdaTypescriptProject(
   if (!hasWebpackPlugin) {
     // the preferred means of bundling using webpack
     await createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
-    console.log(chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`);
+    console.log(
+      chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
+    );
   } else {
     const exist = filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
     if (exist) {
@@ -102,5 +106,7 @@ export async function buildLambdaTypescriptProject(
     console.log(chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`);
   }
 
-  console.log(chalk`{green - {bold serverless.yml} has been updated successfully ${emoji.rocket}}\n`);
+  console.log(
+    chalk`{green - {bold serverless.yml} has been updated successfully ${emoji.rocket}}\n`
+  );
 }

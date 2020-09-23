@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as path from "path";
 
 import { existsSync, mkdirSync, writeFile } from "fs";
@@ -49,6 +49,8 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
     mkdirSync(path.join(process.cwd(), "/src/@types"));
   }
 
-  await write(path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")), fileText, { encoding: "utf-8" });
+  await write(path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")), fileText, {
+    encoding: "utf-8",
+  });
   return fileText;
 }

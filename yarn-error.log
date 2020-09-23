@@ -1,20 +1,25 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js
 
 PATH: 
   /Users/ken/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/Library/Apple/usr/bin:/usr/local/aws/bin:/user/local/lib/node_modules:/Users/ken/.cargo/bin:/usr/local/itms/bin
 
 Yarn version: 
-  1.22.4
+  1.22.5
 
 Node version: 
-  13.14.0
+  12.18.3
 
 Platform: 
   darwin x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, stat '/Volumes/Coding/inocan/open-source/do-devops/node_modules/do-devops'
+  SyntaxError: /Volumes/Coding/inocan/open-source/do-devops/package.json: Unexpected string in JSON at position 455
+      at JSON.parse (<anonymous>)
+      at /usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:310:30)
+      at /usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:321:13
 
 npm manifest: 
   {
@@ -34,6 +39,7 @@ npm manifest:
       "test": "mocha -r ts-node/register test/**/*-spec.ts",
       "build": "tsc && chmod +x bin/do.js",
       "watch": "tsc -w",
+      "watch:autoindex": ""
       "do": "./bin/do.js",
       "visualize": "yarn madge src --extensions ts -i /tmp/dep-ts-visualize.png && open /tmp/dep-ts-visualize.png",
       "visualize:js": "yarn madge bin --extensions js -i /tmp/dep-js-visualize.png && open /tmp/dep-js-visualize.png",
@@ -102,11 +108,11 @@ npm manifest:
       "@types/table": "^5.0.0",
       "@types/webpack": "^4.41.11",
       "chai": "^4.2.0",
-      "madge": "^3.9.1",
-      "mocha": "^7.2.0",
+      "madge": "^3.10.0",
+      "mocha": "^8.1.3",
       "rimraf": "^3.0.2",
-      "ts-node": "^8.10.2",
-      "tslint": "^6.1.2",
+      "ts-node": "^9.0.0",
+      "tslint": "^6.1.3",
       "typescript": "^4.0.2"
     }
   }
@@ -201,13 +207,6 @@ Lockfile:
     integrity sha512-1zzPV9FDe1I/WHhRkf9SNgqtRJWZqrBWgu7JGveuHmmyR9CnAPCie2N/x+iHrgnpYBIcCJWHBoMRv2TRWktsvw==
     dependencies:
       chalk "*"
-  
-  "@types/chokidar@^2.1.3":
-    version "2.1.3"
-    resolved "https://registry.yarnpkg.com/@types/chokidar/-/chokidar-2.1.3.tgz#123ab795dba6d89be04bf076e6aecaf8620db674"
-    integrity sha512-6qK3xoLLAhQVTucQGHTySwOVA1crHRXnJeLwqK6KIFkkKa2aoMFXh+WEi8PotxDtvN6MQJLyYN9ag9P6NLV81w==
-    dependencies:
-      chokidar "*"
   
   "@types/color-name@^1.1.1":
     version "1.1.1"
@@ -1102,21 +1101,6 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
     integrity sha1-V00xLt2Iu13YkS6Sht1sCu1KrII=
   
-  chokidar@*, chokidar@^3.4.0:
-    version "3.4.0"
-    resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.4.0.tgz#b30611423ce376357c765b9b8f904b9fba3c0be8"
-    integrity sha512-aXAaho2VJtisB/1fg1+3nlLJqGOuewTzQpd/Tz0yTg2R0e4IGtshYvtjowyEumcBv2z+y4+kc75Mz7j5xJskcQ==
-    dependencies:
-      anymatch "~3.1.1"
-      braces "~3.0.2"
-      glob-parent "~5.1.0"
-      is-binary-path "~2.1.0"
-      is-glob "~4.0.1"
-      normalize-path "~3.0.0"
-      readdirp "~3.4.0"
-    optionalDependencies:
-      fsevents "~2.1.2"
-  
   chokidar@3.3.0:
     version "3.3.0"
     resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.3.0.tgz#12c0714668c55800f659e262d4962a97faf554a6"
@@ -1150,6 +1134,36 @@ Lockfile:
       upath "^1.1.1"
     optionalDependencies:
       fsevents "^1.2.7"
+  
+  chokidar@^3.4.0:
+    version "3.4.0"
+    resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.4.0.tgz#b30611423ce376357c765b9b8f904b9fba3c0be8"
+    integrity sha512-aXAaho2VJtisB/1fg1+3nlLJqGOuewTzQpd/Tz0yTg2R0e4IGtshYvtjowyEumcBv2z+y4+kc75Mz7j5xJskcQ==
+    dependencies:
+      anymatch "~3.1.1"
+      braces "~3.0.2"
+      glob-parent "~5.1.0"
+      is-binary-path "~2.1.0"
+      is-glob "~4.0.1"
+      normalize-path "~3.0.0"
+      readdirp "~3.4.0"
+    optionalDependencies:
+      fsevents "~2.1.2"
+  
+  chokidar@^3.4.2:
+    version "3.4.2"
+    resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.4.2.tgz#38dc8e658dec3809741eb3ef7bb0a47fe424232d"
+    integrity sha512-IZHaDeBeI+sZJRX7lGcXsdzgvZqKv6sECqsbErJA4mHWfpRrD8B97kSFN4cQz6nGBGiuFia1MKR4d6c1o8Cv7A==
+    dependencies:
+      anymatch "~3.1.1"
+      braces "~3.0.2"
+      glob-parent "~5.1.0"
+      is-binary-path "~2.1.0"
+      is-glob "~4.0.1"
+      normalize-path "~3.0.0"
+      readdirp "~3.4.0"
+    optionalDependencies:
+      fsevents "~2.1.2"
   
   chownr@^1.1.1:
     version "1.1.4"
@@ -4290,10 +4304,15 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
     integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
   
-  typescript@^3.0.3, typescript@^3.7.5, typescript@^3.8.3, typescript@^3.9.3, typescript@^3.9.5:
+  typescript@^3.0.3, typescript@^3.7.5, typescript@^3.8.3, typescript@^3.9.5:
     version "3.9.5"
     resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.5.tgz#586f0dba300cde8be52dd1ac4f7e1009c1b13f36"
     integrity sha512-hSAifV3k+i6lEoCJ2k6R2Z/rp/H3+8sdmcn5NrS3/3kE7+RyZXm9aqvxWqjEXHAd8b0pShatpcdMTvEdvAJltQ==
+  
+  typescript@^4.0.2:
+    version "4.0.2"
+    resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.2.tgz#7ea7c88777c723c681e33bf7988be5d008d05ac2"
+    integrity sha512-e4ERvRV2wb+rRZ/IQeb3jm2VxBsirQLpQhdxplZ2MEzGvDkkMmPglecnNDfSUBivMjP93vRbngYYDQqQ/78bcQ==
   
   typical@^4.0.0:
     version "4.0.0"

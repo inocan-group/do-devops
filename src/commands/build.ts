@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { buildLambdaTypescriptProject, emoji, getConfig, isServerless } from "../shared";
 
@@ -38,10 +38,12 @@ export function description() {
 export async function handler(argv: string[], opts: IDictionary) {
   const { build: config } = await getConfig();
   const serverless = await isServerless();
-  const buildTool: IBuildTool = opts.buildTool || config.buildTool || (await askBuildTool(serverless ? true : false));
+  const buildTool: IBuildTool =
+    opts.buildTool || config.buildTool || (await askBuildTool(serverless ? true : false));
 
-  const tooling: (options?: IBuildToolingOptions) => Promise<any> = (await import(`./build-helpers/tools/${buildTool}`))
-    .default;
+  const tooling: (options?: IBuildToolingOptions) => Promise<any> = (
+    await import(`./build-helpers/tools/${buildTool}`)
+  ).default;
 
   if (opts.output && !opts.quiet) {
     console.log(

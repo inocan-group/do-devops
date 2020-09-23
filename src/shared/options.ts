@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";

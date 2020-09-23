@@ -3,6 +3,12 @@ import { existsSync, readFileSync } from "fs";
 import { DevopsError } from "../errors";
 import { join } from "path";
 
+/**
+ * Returns the file contents of a file off of the user's home directory.
+ *
+ * @param filename the filename relative to the home directory
+ * @param ignoreMissing if set to TRUE then no error is thrown when file is not found but instead the value `FALSE` is passed back
+ */
 export function getFileFromHomeDirectory(filename: string, ignoreMissing: boolean = false) {
   const homedir = require("os").homedir();
   const fqName = join(homedir, filename);

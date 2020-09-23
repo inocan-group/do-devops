@@ -1,6 +1,12 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
-import { DevopsError, consoleDimensions, determineProfile, getAwsProfile, determineRegion } from "../../../../shared";
+import {
+  DevopsError,
+  consoleDimensions,
+  determineProfile,
+  getAwsProfile,
+  determineRegion,
+} from "../../../../shared";
 
 import { CommandLineOptions } from "command-line-args";
 import { SSM } from "aws-ssm";
@@ -11,7 +17,9 @@ export async function execute(argv: string[], options: CommandLineOptions) {
   const profile = await determineProfile({ cliOptions: options, interactive: true });
   const profileInfo = await getAwsProfile(profile);
   const region: string =
-    options.region || profileInfo.region || (await determineRegion({ cliOptions: options, interactive: true }));
+    options.region ||
+    profileInfo.region ||
+    (await determineRegion({ cliOptions: options, interactive: true }));
   const secrets: string[] = argv;
   const nonStandardPath: boolean = options.nonStandardPath;
   const { width } = await consoleDimensions();
@@ -56,7 +64,12 @@ export async function execute(argv: string[], options: CommandLineOptions) {
       ],
     ];
     const data = await ssm.get(secret, { decrypt: true, nonStandardPath });
-    tableData.push([data.path, data.arn, String(data.version), format(data.lastUpdated, "dd MMM, yyyy")]);
+    tableData.push([
+      data.path,
+      data.arn,
+      String(data.version),
+      format(data.lastUpdated, "dd MMM, yyyy"),
+    ]);
     if (!options.quiet) {
       console.log(table(tableData, tableConfig as any));
       console.log(chalk.yellow.bold("VALUE:\n"));

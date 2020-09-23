@@ -1,4 +1,4 @@
-import * as wp from "webpack";
+import wp from "webpack";
 
 import { getValidServerlessHandlers, validateWebpackConfig } from "../../../shared/ast/index";
 

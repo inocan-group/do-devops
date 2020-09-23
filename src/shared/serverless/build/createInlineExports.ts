@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as path from "path";
 
 import { IDictionary, IServerlessFunction } from "common-types";
@@ -27,7 +27,8 @@ export interface IInlineExportConfig {
  * an `package: { artifact: fn.zip }`
  */
 export async function createInlineExports(handlers: IHandlerInfo[]) {
-  const bespokeWebpack = (await getConfig()).build.buildTool === "webpack" && !hasDevDependency("serverless-webpack");
+  const bespokeWebpack =
+    (await getConfig()).build.buildTool === "webpack" && !hasDevDependency("serverless-webpack");
 
   const header = 'import { IServerlessFunction } from "common-types";\n';
   let body: string[] = [];

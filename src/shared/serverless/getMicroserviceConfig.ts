@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as path from "path";
 
 import { DevopsError } from "../errors";
@@ -13,7 +13,9 @@ import { asyncExec } from "async-shelljs";
 export async function getMicroserviceConfig(accountInfo: IServerlessAccountInfo) {
   const cliFile = path.join(process.env.PWD, "serverless-config", "build.ts");
   try {
-    const config = await asyncExec(`yarn ts-node ${cliFile} '${JSON.stringify(accountInfo)}'`, { silent: true });
+    const config = await asyncExec(`yarn ts-node ${cliFile} '${JSON.stringify(accountInfo)}'`, {
+      silent: true,
+    });
 
     return config;
   } catch (e) {

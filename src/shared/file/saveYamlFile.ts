@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as path from "path";
 
 import { IDictionary } from "common-types";
@@ -17,7 +17,9 @@ export async function saveYamlFile(filename: string, data: IDictionary) {
     await write(fqFilename, yamlData, { encoding: "utf-8" });
     return;
   } catch (e) {
-    console.log(chalk`- {red writing the {bold {italic ${filename}} YAML file has failed!} ${emoji.poop}}`);
+    console.log(
+      chalk`- {red writing the {bold {italic ${filename}} YAML file has failed!} ${emoji.poop}}`
+    );
     console.log(e.message);
     console.log(chalk`{dim ${e.stack}}`);
     process.exit();

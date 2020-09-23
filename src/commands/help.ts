@@ -1,5 +1,5 @@
-import * as chalk from "chalk";
-import * as commandLineUsage from "command-line-usage";
+import chalk from "chalk";
+import commandLineUsage from "command-line-usage";
 
 import { emoji, getDescription, getHelpCommands, getOptions, getSyntax } from "../shared/ui/index";
 
@@ -52,7 +52,9 @@ async function getHelpMeta(opts: IDictionary, fn?: string) {
 
     return { commands, options, syntax, description };
   } catch (e) {
-    console.log(`  - ${emoji.poop}  ${chalk.red.bold("Problem getting help meta:")} ${e.messsage}\n`);
+    console.log(
+      `  - ${emoji.poop}  ${chalk.red.bold("Problem getting help meta:")} ${e.messsage}\n`
+    );
     console.log(chalk.grey(e.stack));
     process.exit();
   }

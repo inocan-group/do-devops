@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as process from "process";
 
 import { getCommandInterface, globalAndLocalOptions, globalOptions, inverted } from "./shared";
@@ -50,9 +50,9 @@ import commandLineArgs = require("command-line-args");
   } else {
     console.log(
       `${chalk.bold.red("DO:")} "${cmd}" is an unknown command! \n\n` +
-        `- Valid command syntax is: ${chalk.bold("do [command] <options>")}\n  where valid commands are: ${chalk.italic(
-          getCommands().sort().join(", ")
-        )}\n` +
+        `- Valid command syntax is: ${chalk.bold(
+          "do [command] <options>"
+        )}\n  where valid commands are: ${chalk.italic(getCommands().sort().join(", "))}\n` +
         `- If you want more help use the ${inverted(" --help ")} option\n`
     );
   }

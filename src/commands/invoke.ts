@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import {
   askForDataFile,
@@ -49,7 +49,9 @@ export async function handler(args: string[], opts: IDictionary) {
   try {
     const sls = await isServerless();
     if (!sls) {
-      console.log(chalk`{red - This project is not configured as a {bold Serverless} project!} ${emoji.angry}\n`);
+      console.log(
+        chalk`{red - This project is not configured as a {bold Serverless} project!} ${emoji.angry}\n`
+      );
 
       process.exit();
     }
@@ -64,7 +66,9 @@ export async function handler(args: string[], opts: IDictionary) {
       fn = args[0];
       const availableFns = Object.keys(await getLocalServerlessFunctionsFromServerlessYaml());
       if (!availableFns.includes(fn)) {
-        console.log(chalk`{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`);
+        console.log(
+          chalk`{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`
+        );
         console.log(`- valid functions are:`);
         console.log(chalk`{dim   - ${availableFns.join("\n  - ")}}`);
 
@@ -95,7 +99,9 @@ export async function handler(args: string[], opts: IDictionary) {
     }
 
     if (!opts.quiet) {
-      console.log(chalk`{grey > sls invoke local --function {dim {white ${fn}}} --data '{dim {white ${data}}}'}`);
+      console.log(
+        chalk`{grey > sls invoke local --function {dim {white ${fn}}} --data '{dim {white ${data}}}'}`
+      );
     }
     await asyncExec(`sls invoke local --function ${fn} --data '${data}'`);
   } catch (e) {

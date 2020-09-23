@@ -9,6 +9,7 @@
     "noImplicitAny": true,
     "outDir": "./bin",
     "removeComments": false,
+    "esModuleInterop": true,
     "typeRoots": ["src/@polyfills"]
   },
   "include": ["src/**/*.ts"]

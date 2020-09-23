@@ -1,6 +1,11 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
-import { buildLambdaTypescriptProject, consoleDimensions, getServerlessYaml, isServerless } from "../shared";
+import {
+  buildLambdaTypescriptProject,
+  consoleDimensions,
+  getServerlessYaml,
+  isServerless,
+} from "../shared";
 
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
@@ -29,7 +34,9 @@ export async function handler(args: string[], opts: IDictionary) {
   } else if (status.isUsingTypescriptMicroserviceTemplate) {
     if (opts.forceBuild) {
       console.log(
-        `- detected use of the ${chalk.blue("typescript-microservice")} template; rebuilding functions from config.`
+        `- detected use of the ${chalk.blue(
+          "typescript-microservice"
+        )} template; rebuilding functions from config.`
       );
       await buildLambdaTypescriptProject();
     } else {

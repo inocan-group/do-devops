@@ -1,9 +1,13 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import inquirer = require("inquirer");
 
 export default async function deployBoth() {
-  console.log(chalk`- This repo appears to be {italic both} a {bold Serverless} and an {bold NPM} project.`);
-  console.log(chalk`- In the future you can use the {blue --target [ {dim serverless,npm} ]} switch to be explicit.`);
+  console.log(
+    chalk`- This repo appears to be {italic both} a {bold Serverless} and an {bold NPM} project.`
+  );
+  console.log(
+    chalk`- In the future you can use the {blue --target [ {dim serverless,npm} ]} switch to be explicit.`
+  );
 
   console.log();
   const question: inquirer.Question | inquirer.ListQuestion = {

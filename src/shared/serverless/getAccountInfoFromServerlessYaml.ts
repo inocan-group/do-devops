@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { IServerlessAccountInfo } from "../../@types";
 import { getServerlessYaml } from "./getServerlessYaml";

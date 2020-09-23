@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as process from "process";
 
 import { askForStage, getServerlessYaml } from "./index";

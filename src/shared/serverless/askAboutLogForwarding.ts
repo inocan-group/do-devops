@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { IDictionary, IServerlessConfig } from "common-types";
 import { determineStage, getLambdaFunctions } from "./index";
@@ -65,7 +65,9 @@ export async function askAboutLogForwarding(config: IServerlessConfig) {
     const awsFunctions = await getLambdaFunctions();
     const stage = (await determineStage({})) || "dev";
     const fns = awsFunctions.map((i) => i.FunctionName).concat("CANCEL");
-    const defaultFn = fns.filter((i) => i.toLocaleLowerCase().includes("shipper")).find((i) => i.includes(stage));
+    const defaultFn = fns
+      .filter((i) => i.toLocaleLowerCase().includes("shipper"))
+      .find((i) => i.includes(stage));
     questions = [
       {
         type: "list",

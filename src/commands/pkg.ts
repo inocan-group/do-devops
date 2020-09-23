@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { determineRegion, determineStage, emoji, getConfig, runHooks } from "../shared";
 
@@ -52,8 +52,12 @@ export async function handler(argv: string[], opts: any) {
     );
   }
 
-  console.log(chalk`- {bold Serverless} {italic packaging} for {bold ${stage}} stage ${emoji.party}`);
-  const command = `sls package --stage ${stage} --region ${region} ${opts.dir ? `--package ${opts.dir}` : ""}`;
+  console.log(
+    chalk`- {bold Serverless} {italic packaging} for {bold ${stage}} stage ${emoji.party}`
+  );
+  const command = `sls package --stage ${stage} --region ${region} ${
+    opts.dir ? `--package ${opts.dir}` : ""
+  }`;
   console.log(chalk`{dim {italic ${command}}}\n`);
 
   await asyncExec(command, { silent: opts.quiet ? true : false });
@@ -63,7 +67,9 @@ export async function handler(argv: string[], opts: any) {
   console.log(chalk`- the assets can all be found in the {italic {blue ${directory}} directory.}`);
   await asyncExec(`ls -l ${directory}`);
   if (opts.validate) {
-    console.log(chalk`\n- validating the {bold cloudformation} {italic create} template ${emoji.eyeballs}`);
+    console.log(
+      chalk`\n- validating the {bold cloudformation} {italic create} template ${emoji.eyeballs}`
+    );
 
     const validateCmd = `aws cloudformation validate-template --template-body file://${directory}/cloudformation-template-create-stack.json`;
     try {
@@ -73,7 +79,9 @@ export async function handler(argv: string[], opts: any) {
       console.log(chalk`{red - Error validating the {italic create} template!}`);
     }
 
-    console.log(chalk`\n- validating the {bold cloudformation} {italic update} template ${emoji.eyeballs}`);
+    console.log(
+      chalk`\n- validating the {bold cloudformation} {italic update} template ${emoji.eyeballs}`
+    );
 
     const validateUpdate = `aws cloudformation validate-template --template-body file://${directory}/cloudformation-template-update-stack.json`;
 
