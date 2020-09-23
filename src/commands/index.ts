@@ -1,7 +1,7 @@
 //#autoindex:named-offset, exclude:  build-helpers, deploy-helpers
 //#region autoindexed files
 
-// index last changed at: 7th Jul, 2020, 04:22 PM ( GMT-7 )
+// index last changed at: 9th Sep, 2020, 08:41 PM ( GMT-7 )
 // export: namedOffset; exclusions: build-helpers, deploy-helpers, index, private.
 // files: build, deploy, endpoints, fns, global, help, info, invoke, pkg.
 // directories: autoindex, awsid, bitbucket, latest, layers, ssm, test, validate.
