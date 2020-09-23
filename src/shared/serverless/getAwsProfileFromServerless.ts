@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { DevopsError } from "../errors";
 import { IServerlessConfig } from "common-types";
@@ -25,7 +25,10 @@ export async function getAwsProfileFromServerless() {
     );
   }
 
-  if ((!sls.hasServerlessConfig || !sls.hasProviderSection) && sls.isUsingTypescriptMicroserviceTemplate) {
+  if (
+    (!sls.hasServerlessConfig || !sls.hasProviderSection) &&
+    sls.isUsingTypescriptMicroserviceTemplate
+  ) {
     if (!sls.hasServerlessConfig) {
       console.log(
         chalk`- it appears that the {green serverless.yml} {italic does not} exist; will build from {italic serverless-microservice} config ${emoji.robot}`
@@ -42,7 +45,9 @@ export async function getAwsProfileFromServerless() {
   try {
     config = await getServerlessYaml();
     if (!config.provider) {
-      console.log(chalk`- the {red serverless.yaml} file doesn't have a {bold provider} section! ${emoji.poop}`);
+      console.log(
+        chalk`- the {red serverless.yaml} file doesn't have a {bold provider} section! ${emoji.poop}`
+      );
       console.log("- this section must exist before you can deploy\n");
       process.exit();
     }

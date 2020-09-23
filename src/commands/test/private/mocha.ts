@@ -1,5 +1,5 @@
-import * as chalk from "chalk";
-import * as globby from "globby";
+import chalk from "chalk";
+import globby from "globby";
 
 import { SpecificTestReason, askForSpecificTests } from "./askForSpecificTests";
 import { emoji, getConfig, hasDevDependency } from "../../../shared";
@@ -12,14 +12,22 @@ import { testName } from "./testName";
 const tsExecution = async (fns: string[]) => {
   /** the tsconfig-paths npm package can provide convenient path alias which work with ts-node */
   const hasTsconfigPaths = hasDevDependency("tsconfig-paths");
-  const mochaRequires = hasTsconfigPaths ? ["ts-node/register", "tsconfig-paths/register"] : ["ts-node/register"];
-  const command = `yarn mocha --no-timeouts ${mochaRequires.map((i) => `-r ${i}`).join(" ")} --exit ${fns.join(" ")}`;
+  const mochaRequires = hasTsconfigPaths
+    ? ["ts-node/register", "tsconfig-paths/register"]
+    : ["ts-node/register"];
+  const command = `yarn mocha --no-timeouts ${mochaRequires
+    .map((i) => `-r ${i}`)
+    .join(" ")} --exit ${fns.join(" ")}`;
   if (hasTsconfigPaths) {
     console.log(
       chalk`- using {blue tsconfig-paths} with mocha to support path aliases. {grey remove the npm package to have this behavior stop}\n`
     );
   }
-  return asyncExec(`yarn mocha --no-timeouts ${mochaRequires.map((i) => `-r ${i}`).join(" ")} --exit ${fns.join(" ")}`);
+  return asyncExec(
+    `yarn mocha --no-timeouts ${mochaRequires.map((i) => `-r ${i}`).join(" ")} --exit ${fns.join(
+      " "
+    )}`
+  );
 };
 
 const mocha = async (args: string[]) => {
@@ -30,7 +38,9 @@ const mocha = async (args: string[]) => {
     args.forEach((searchTerm) => {
       const found = allTests.filter((t) => t.includes(searchTerm));
       if (found.length === 0) {
-        console.log(chalk`- the {italic.blue ${searchTerm}} search term found no matches in the available tests`);
+        console.log(
+          chalk`- the {italic.blue ${searchTerm}} search term found no matches in the available tests`
+        );
       } else {
         selectedTests = selectedTests.concat(...found);
       }
@@ -40,12 +50,20 @@ const mocha = async (args: string[]) => {
     }
     if (selectedTests.length === 0) {
       console.log(chalk`- no tests matched; valid tests include:\n`);
-      console.log(chalk`{dim ${allTests.map((t) => testName(t, config.test.testPattern).padEnd(20)).join("\t")}}`);
+      console.log(
+        chalk`{dim ${allTests
+          .map((t) => testName(t, config.test.testPattern).padEnd(20))
+          .join("\t")}}`
+      );
     } else {
       console.log(
-        chalk`- ${emoji.run} running {bold ${String(selectedTests.length)}} ({italic of} {bold ${String(
+        chalk`- ${emoji.run} running {bold ${String(
+          selectedTests.length
+        )}} ({italic of} {bold ${String(
           allTests.length
-        )}}) mocha tests: {grey ${selectedTests.map((t) => testName(t, config.test.testPattern)).join(", ")}}`
+        )}}) mocha tests: {grey ${selectedTests
+          .map((t) => testName(t, config.test.testPattern))
+          .join(", ")}}`
       );
     }
   } else {
@@ -59,7 +77,9 @@ const mocha = async (args: string[]) => {
       console.log(
         chalk`- ${emoji.run} running {italic all} {bold ${String(
           selectedTests.length
-        )}} mocha tests: {grey ${selectedTests.map((t) => testName(t, config.test.testPattern)).join(", ")}}`
+        )}} mocha tests: {grey ${selectedTests
+          .map((t) => testName(t, config.test.testPattern))
+          .join(", ")}}`
       );
     }
   }

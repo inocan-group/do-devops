@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as path from "path";
 
 import { IDictionary } from "common-types";
@@ -13,7 +13,9 @@ import { IDictionary } from "common-types";
 export async function getExportsFromFile(file: string, filter: (i: any) => boolean = () => true) {
   const srcDir = path.join(process.env.PWD, "src");
 
-  const exports: IDictionary = await import(path.join("..", file.replace(srcDir, "").replace(".ts", "")));
+  const exports: IDictionary = await import(
+    path.join("..", file.replace(srcDir, "").replace(".ts", ""))
+  );
 
   return Object.keys(exports).reduce((agg: IDictionary, key) => {
     const value = exports[key];

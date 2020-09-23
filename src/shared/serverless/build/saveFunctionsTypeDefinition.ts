@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -32,7 +32,9 @@ export async function saveFunctionsTypeDefinition(config: IServerlessConfig) {
     if (functions) {
       contents += "export enum AvailableFunctions {";
       functions.forEach((f, i) => {
-        const description = config.functions[f].description ? config.functions[f].description : false;
+        const description = config.functions[f].description
+          ? config.functions[f].description
+          : false;
         contents += description ? `\n  /**\n   * ${description}\n   **/` : "";
         const comma = i === functions.length - 1 ? "" : ",";
         contents += `\n  ${f} = "${f}"${comma}`;

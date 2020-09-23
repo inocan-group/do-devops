@@ -1,7 +1,14 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { IDictionary, INpmInfo } from "common-types";
-import { dim, getCurrentGitBranch, getGitLastCommit, getPackageInfo, getPackageJson, green } from "../shared";
+import {
+  dim,
+  getCurrentGitBranch,
+  getGitLastCommit,
+  getPackageInfo,
+  getPackageJson,
+  green,
+} from "../shared";
 import { format, parseISO } from "date-fns";
 
 import { asyncExec } from "async-shelljs";
@@ -88,7 +95,9 @@ export async function handler(argv: string[], opts: any) {
         )}.`
       : "."
   }`;
-  const depDetails = `${depsSummary}\n\nThe dependencies are:\n - ${dim(Object.keys(pkg.dependencies).join("\n - "))}`;
+  const depDetails = `${depsSummary}\n\nThe dependencies are:\n - ${dim(
+    Object.keys(pkg.dependencies).join("\n - ")
+  )}`;
 
   const pkgJson = getPackageJson();
 

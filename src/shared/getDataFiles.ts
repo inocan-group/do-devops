@@ -1,4 +1,4 @@
-import * as fg from "fast-glob";
+import fg from "fast-glob";
 import * as path from "path";
 import * as process from "process";
 
@@ -16,7 +16,11 @@ export interface IDataFileOptions {
  * `test/data` directory.
  */
 export async function getDataFiles(opts: IDataFileOptions = {}) {
-  const glob = path.join(process.cwd(), "test/data", opts.fileType ? `**/*.${opts.fileType}` : `**/*`);
+  const glob = path.join(
+    process.cwd(),
+    "test/data",
+    opts.fileType ? `**/*.${opts.fileType}` : `**/*`
+  );
   const results = await fg(glob);
 
   return strip(opts)(results);

@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as process from "process";
 
 import { CommandLineOptions } from "command-line-args";
@@ -11,7 +11,9 @@ export async function execute(argv: string[], options: CommandLineOptions) {
   const profile = await determineProfile({ cliOptions: options, interactive: true });
   const profileInfo = await getAwsProfile(profile);
   const region =
-    options.region || profileInfo.region || (await determineRegion({ cliOptions: options, interactive: true }));
+    options.region ||
+    profileInfo.region ||
+    (await determineRegion({ cliOptions: options, interactive: true }));
   const filterBy = argv.length > 0 ? argv[0] : undefined;
 
   if (!profile || !region) {
@@ -28,7 +30,9 @@ export async function execute(argv: string[], options: CommandLineOptions) {
 
   if (!options.quiet) {
     console.log(
-      `- Listing SSM parameters in profile "${chalk.bold(profile)}", region "${chalk.bold(region)}"${
+      `- Listing SSM parameters in profile "${chalk.bold(profile)}", region "${chalk.bold(
+        region
+      )}"${
         filterBy ? `; results reduced to those with "${chalk.bold(filterBy)}" in the name.` : ""
       }`
     );
@@ -43,7 +47,13 @@ export async function execute(argv: string[], options: CommandLineOptions) {
   const list = await ssm.describeParameters();
 
   let tableData = [
-    [chalk.bold("Name"), chalk.bold("Version"), chalk.bold("Type"), chalk.bold("LastModified"), chalk.bold("User")],
+    [
+      chalk.bold("Name"),
+      chalk.bold("Version"),
+      chalk.bold("Type"),
+      chalk.bold("LastModified"),
+      chalk.bold("User"),
+    ],
   ];
 
   list

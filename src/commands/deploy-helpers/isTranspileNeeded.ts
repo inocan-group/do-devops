@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { filesInfo, getAllFilesOfType } from "../../shared/file";
 
@@ -28,11 +28,15 @@ export function isTranspileNeeded(meta: IServerlessDeployMeta, fns?: string[]) {
         .join(", ")}}}`
     );
   } else {
-    console.log(chalk`{grey - transpiled handler functions are newer than handler source {green ${emoji.thumbsUp}}}`);
+    console.log(
+      chalk`{grey - transpiled handler functions are newer than handler source {green ${emoji.thumbsUp}}}`
+    );
   }
 
   const handlerFns = handlerInfo.map((i) => i.source);
-  const sharedFnInfo = filesInfo(...getAllFilesOfType("ts").filter((i: any) => !handlerFns.includes(i)));
+  const sharedFnInfo = filesInfo(
+    ...getAllFilesOfType("ts").filter((i: any) => !handlerFns.includes(i))
+  );
 
   const mostRecentShared = sharedFnInfo.reduce((agg: Date, fn) => {
     return fn.stats.mtime > agg ? fn.stats.mtime : agg;
@@ -50,7 +54,9 @@ export function isTranspileNeeded(meta: IServerlessDeployMeta, fns?: string[]) {
       } }} [ {grey ${format(mostRecentShared, "h:mm aaaa @ d MMM")}} ]`
     );
   } else {
-    console.log(chalk`{grey - transpiled handler functions newer than shared functions {green ${emoji.thumbsUp}}}`);
+    console.log(
+      chalk`{grey - transpiled handler functions newer than shared functions {green ${emoji.thumbsUp}}}`
+    );
   }
   const needsTranspilation = new Set<string>(fnsOlderThanShared.map((i) => i.source));
   fnsNotTranspiled.forEach((i) => needsTranspilation.add(i.source));

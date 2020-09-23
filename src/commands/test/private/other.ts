@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 const otherFramework = async (args: string[]) => {
   console.log(

@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 import { IDictionary, IServerlessFunction } from "common-types";
 import { namedExports, parseFile } from "./index";
