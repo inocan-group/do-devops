@@ -73,7 +73,7 @@ export async function handler(argv: string[], opts: any) {
             parseISO(npm.time[npm.version]),
             dateFormat
           )} ].\nLocally in package.json, version is ${chalk.bold.green(pkg.version)}.`
-        : `Locally in {italic package.json}, the version is ${chalk.bold.green(
+        : chalk`Locally in {italic package.json}, the version is ${chalk.bold.green(
             pkg.version
           )} but this is {italic not} an npm package.`,
     ],
