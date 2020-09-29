@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import globby from "globby";
+import { posix } from "path";
 
 import { SpecificTestReason, askForSpecificTests } from "./askForSpecificTests";
 import { emoji, getConfig, hasDevDependency } from "../../../shared";
 
 import { asyncExec } from "async-shelljs";
-import { pathJoin } from "common-types";
 import { testName } from "./testName";
 
 /** runs the Mocha command to execute the tests */
@@ -32,7 +32,7 @@ const tsExecution = async (fns: string[]) => {
 
 const mocha = async (args: string[]) => {
   const config = await getConfig();
-  const allTests = await globby([pathJoin(config.test.testDirectory, config.test.testPattern)]);
+  const allTests = await globby([posix.join(config.test.testDirectory, config.test.testPattern)]);
   let selectedTests: string[] = [];
   if (args.length > 0) {
     args.forEach((searchTerm) => {

@@ -14,8 +14,8 @@ export async function exportable(
   filePath: string,
   excluded: string[]
 ): Promise<IExportableSymbols> {
-  const dir = dirname(filePath);
-  const thisFile = basename(filePath);
+  const dir = posix.dirname(filePath);
+  const thisFile = posix.basename(filePath);
   const exclusions = excluded.concat(thisFile);
   const files = (await globby([`${dir}/*.ts`, `${dir}/*.js`]))
     .filter((file) => !exclusions.includes(removeExtension(basename(file))))
