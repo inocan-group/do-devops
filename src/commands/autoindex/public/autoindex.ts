@@ -8,7 +8,7 @@ import {
   watchHandlers,
 } from "../private/index";
 import { getMonoRepoPackages, relativePath } from "../../../shared";
-import { join } from "path";
+import { posix } from "path";
 import { FSWatcher, watch } from "chokidar";
 
 /**
@@ -20,10 +20,10 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
   const monoRepoPackages: false | string[] = getMonoRepoPackages(process.cwd());
   const globInclude = opts.glob ? (opts.glob as string[]).concat("!node_modules") : false;
   const srcDir = opts.dir
-    ? join(process.cwd(), opts.dir)
+    ? posix.join(process.cwd(), opts.dir)
     : monoRepoPackages
-    ? join(process.cwd(), "packages/**/src")
-    : join(process.cwd(), "src");
+    ? posix.join(process.cwd(), "packages/**/src")
+    : posix.join(process.cwd(), "src");
   const testDir = monoRepoPackages ? "packages/**/test[s]{0,1}" : `test[s]{0,1}`;
   /** default glob pattern which includes index files in _source_ and _test_ directories */
   let defaultIndexGlob = globInclude || [`${srcDir}/**/index.[tj]s`, `${testDir}/**index.[tj]s`];
@@ -60,13 +60,13 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
   if (opts.watch) {
     const watchGlob = pathsToIndexFiles.map((p) => {
       const parts = p.replace(/\\/g, "/").replace(process.cwd(), "").split("/");
-      return relativePath(join(...parts.slice(0, parts.length - 1), "*.ts"), process.cwd());
+      return relativePath(posix.join(...parts.slice(0, parts.length - 1), "*.ts"), process.cwd());
     });
 
     const ignored = pathsToIndexFiles.map((p) => {
       const parts = p.split(/[\/\\]/);
       return relativePath(
-        join(...parts.slice(0, parts.length - 1), "node_modules/**"),
+        posix.join(...parts.slice(0, parts.length - 1), "node_modules/**"),
         process.cwd()
       );
     });
