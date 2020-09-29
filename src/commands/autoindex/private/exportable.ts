@@ -1,4 +1,4 @@
-import { basename, dirname, join } from "path";
+import { basename, dirname, posix } from "path";
 import { existsSync, readdirSync } from "fs";
 
 import { IExportableSymbols } from "./index";
@@ -10,7 +10,10 @@ import globby = require("globby");
  * Determines the _files_, _directories_, and _sfc_'s in a _given directory_ that should be included
  * in the index file. Files which match the
  */
-export async function exportable(filePath: string, excluded: string[]): Promise<IExportableSymbols> {
+export async function exportable(
+  filePath: string,
+  excluded: string[]
+): Promise<IExportableSymbols> {
   const dir = dirname(filePath);
   const thisFile = basename(filePath);
   const exclusions = excluded.concat(thisFile);
@@ -28,9 +31,9 @@ export async function exportable(filePath: string, excluded: string[]): Promise<
     .map((i) => {
       // directories must have a `index` file within them to considered
       // as a directory export
-      if (existsSync(join(dir, i.name, "index.ts"))) {
+      if (existsSync(posix.join(dir, i.name, "index.ts"))) {
         dirs.push(i.name);
-      } else if (existsSync(join(dir, i.name, "index.js"))) {
+      } else if (existsSync(posix.join(dir, i.name, "index.js"))) {
         dirs.push(i.name);
       }
     });
