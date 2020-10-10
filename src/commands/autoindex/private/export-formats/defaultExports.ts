@@ -8,11 +8,12 @@ import { IDictionary } from "common-types";
  */
 export function defaultExports(exportable: IExportableSymbols, opts: IDictionary = {}) {
   const file = (file: string) =>
-    `export {  default as ${removeExtension(file)}} from "./${
+    `export {  default as ${removeExtension(file)} } from "./${
       opts.preserveExtension ? removeExtension(file) + ".js" : removeExtension(file)
     }";`;
 
-  const dir = (dir: string) => `export * from "./${dir}/index${opts.preserveExtension ? ".js" : ""}";`;
+  const dir = (dir: string) =>
+    `export * from "./${dir}/index${opts.preserveExtension ? ".js" : ""}";`;
 
   return exportTemplate(exportable, opts, { file, dir });
 }
