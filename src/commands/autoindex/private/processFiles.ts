@@ -21,7 +21,7 @@ import {
 } from "./index";
 import { readFileSync, writeFileSync } from "fs";
 
-import { ExportType } from "./reference";
+import { AUTOINDEX_INFO_MSG, ExportType } from "./reference";
 import { IDictionary } from "common-types";
 
 import chalk = require("chalk");
@@ -80,7 +80,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
         exportableSymbols,
         exclusions(fileContent),
         opts
-      )}\n${autoIndexContent}\n\n${END_REGION}`;
+      )}\n${autoIndexContent}\n\n${AUTOINDEX_INFO_MSG}\n\n${END_REGION}`;
 
       const existingContentMeta = getExistingMetaInfo(fileContent);
 
@@ -139,7 +139,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
           filePath,
           existingContentMeta.hasExistingMeta
             ? replaceRegion(fileContent, blockContent)
-            : fileContent.concat("\n" + blockContent)
+            : fileContent.concat("\n" + blockContent) + "\n"
         );
       }
     }
