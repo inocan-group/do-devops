@@ -13,7 +13,7 @@ const info = [
   `${noteIndent}the 'do-devops' pkg installed as a dev dep.`,
   `${comment}`,
   `${noteIndent}By default it assumes that exports are named exports but this can be changed by`,
-  `${noteIndent}adding a modifier to the '//#autoindex' syntax:`,
+  `${noteIndent}adding a modifier to the '// #autoindex' syntax:`,
   `${comment}`,
   `${bulletLine}autoindex:named     same as default, exports "named symbols"`,
   `${bulletLine}autoindex:default   assumes each file is exporting a default export`,

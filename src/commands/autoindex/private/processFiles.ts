@@ -40,7 +40,8 @@ export async function processFiles(paths: string[], opts: IDictionary) {
 
   for await (const path of paths) {
     const fileString = readFileSync(path, { encoding: "utf-8" });
-    if (fileString.includes("// #autoindex") || fileString.includes("//#autoindex")) {
+    const isAutoIndex = /^\/\/\s+#autoindex/;
+    if (isAutoIndex.test(fileString)) {
       results[path] = fileString;
     }
   }
