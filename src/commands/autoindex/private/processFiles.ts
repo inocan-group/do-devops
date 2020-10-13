@@ -91,8 +91,6 @@ export async function processFiles(paths: string[], opts: IDictionary) {
         bracketedMessages.push(chalk`{grey using }{italic ${exportType}} {grey export}`);
       }
 
-      console.log("EXCLUDE", existingContentMeta.exclusions, excluded);
-
       if (autoIndexContent && alreadyHasAutoindexBlock(fileContent)) {
         if (
           noDifference(existingContentMeta.files, removeAllExtensions(exportableSymbols.files)) &&
