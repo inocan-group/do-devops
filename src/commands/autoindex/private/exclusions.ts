@@ -5,7 +5,7 @@ export function exclusions(file: string): string[] {
   const hasExclusions = /^\/\/\s*#autoindex.*,\s*exclude:/;
   const explicit = hasExclusions.test(file)
     ? file
-        .replace(/[^\0]*exclude:([^;|\n]*)[\n|;][^\0]*/g, "$1")
+        .replace(/^\/\/\s*#autoindex.*,\s*exclude:([^;|\n]*)[\n|;][^\0]*/g, "$1")
         .split(",")
         .map((i) => i.trim())
     : [];

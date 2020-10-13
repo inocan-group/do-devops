@@ -1,5 +1,5 @@
 // #autoindex:named
-//#region autoindexed files
+// #region autoindexed files
 
 // index last changed at: 8th Aug, 2020, 05:02 PM ( GMT-7 )
 // export: named; exclusions: index, private.
@@ -22,4 +22,4 @@ export * from "./structurePriorAutoindexContent";
 export * from "./timestamp";
 export * from "./unexpectedContent";
 
-//#endregion
+// #endregion
