@@ -1,5 +1,5 @@
-export const START_REGION = "//#region autoindexed files";
-export const END_REGION = "//#endregion";
+export const START_REGION = "// #region autoindexed files";
+export const END_REGION = "// #endregion";
 
 const comment = "//";
 const noteIndent = `${comment} ${" ".repeat(0)}`;
