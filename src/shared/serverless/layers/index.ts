@@ -1,19 +1,9 @@
 // #autoindex
-//#region autoindexed files
 
-// index last changed at: 7th Jul, 2020, 12:18 PM ( GMT-7 )
-// export: named; exclusions: index, private.
-// files: findLayersReferencedByFns, getLayersWithMeta.
-
-// local file exports
-export * from "./findLayersReferencedByFns";
-export * from "./getLayersWithMeta";
-
-//#endregion
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 09:57 PM ( GMT-7 )
+// index last changed at: 10th Oct, 2020, 09:14 AM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: findLayersReferencedByFns, getLayersWithMeta.
 

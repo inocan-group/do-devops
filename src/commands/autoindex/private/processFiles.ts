@@ -25,7 +25,8 @@ import { AUTOINDEX_INFO_MSG, ExportType } from "./reference";
 import { IDictionary } from "common-types";
 
 import chalk = require("chalk");
-import { removeAllExtensions } from "./util";
+import { removeAllExtensions, cleanOldBlockFormat } from "./util";
+import { highlightFilepath } from "../../../shared/ui";
 
 /**
  * Reach into each file and look to see if it is a "autoindex" file; if it is
@@ -40,7 +41,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
 
   for await (const path of paths) {
     const fileString = readFileSync(path, { encoding: "utf-8" });
-    const isAutoIndex = /^\/\/\s+#autoindex/;
+    const isAutoIndex = /^\/\/\s*#autoindex/;
     if (isAutoIndex.test(fileString)) {
       results[path] = fileString;
     }
@@ -91,7 +92,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
         bracketedMessages.push(chalk`{grey using }{italic ${exportType}} {grey export}`);
       }
 
-      console.log("EXCLUDE", existingContentMeta.exclusions, excluded);
+      const hasOldStyleBlock = /\/\/#region.*\/\/#endregion/s.test(fileContent);
 
       if (autoIndexContent && alreadyHasAutoindexBlock(fileContent)) {
         if (
@@ -101,7 +102,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
           exportType === existingContentMeta.exportType &&
           noDifference(existingContentMeta.exclusions, excluded)
         ) {
-          exportAction = ExportAction.noChange;
+          exportAction = hasOldStyleBlock ? ExportAction.refactor : ExportAction.noChange;
         } else {
           exportAction = ExportAction.updated;
         }
@@ -127,22 +128,37 @@ export async function processFiles(paths: string[], opts: IDictionary) {
 
       const changeMessage = chalk`- ${
         exportAction === ExportAction.added ? "added" : "updated"
-      } {blue ./${relativePath(filePath)}} ${bracketedMessage}`;
+      } ${highlightFilepath(filePath)} ${bracketedMessage}`;
 
-      const unchangedMessage = chalk`{dim - {italic no changes} to {blue ./${relativePath(
+      const refactorMessage = chalk`- removing an old form of autoindex block style at ${highlightFilepath(
         filePath
-      )}}} ${bracketedMessage}`;
+      )}`;
+
+      const unchangedMessage = chalk`{dim - {italic no changes} to ${highlightFilepath(
+        filePath
+      )}} ${bracketedMessage}`;
 
       if (!opts.quiet && exportAction === ExportAction.noChange) {
         console.log(unchangedMessage);
-      }
-      if (exportAction !== ExportAction.noChange) {
+      } else if (exportAction === ExportAction.refactor) {
+        console.log(refactorMessage);
+        writeFileSync(
+          filePath,
+          cleanOldBlockFormat(
+            existingContentMeta.hasExistingMeta
+              ? replaceRegion(fileContent, blockContent)
+              : fileContent.concat("\n" + blockContent) + "\n"
+          )
+        );
+      } else {
         console.log(changeMessage);
         writeFileSync(
           filePath,
-          existingContentMeta.hasExistingMeta
-            ? replaceRegion(fileContent, blockContent)
-            : fileContent.concat("\n" + blockContent) + "\n"
+          cleanOldBlockFormat(
+            existingContentMeta.hasExistingMeta
+              ? replaceRegion(fileContent, blockContent)
+              : fileContent.concat("\n" + blockContent) + "\n"
+          )
         );
       }
     }

@@ -19,7 +19,7 @@ export interface IFileInfo {
 }
 
 /**
- * Runs **Node**'s `stat()` function across an array of functions
+ * Get's file info from an array of files (using Node's `stat` operation).
  *
  * @param files the list of files to **stat**. The files will automatically
  * be associated with the current working directory unless the filenames start
@@ -50,9 +50,7 @@ export function filesInfo(...files: string[]): IFileInfo[] {
       `Attempt to get info/stat from the file "${rememberFile}" [ ${join(
         process.cwd(),
         rememberFile
-      )} ] failed [ call included request for ${files.length} files ]: ${
-        e.message
-      }`,
+      )} ] failed [ call included request for ${files.length} files ]: ${e.message}`,
       "do-devops/filesInfo"
     );
   }

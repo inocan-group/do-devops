@@ -9,9 +9,17 @@ export interface IExportCallbacks {
 }
 
 /**
- * the general template used for all export types
+ * The general template used for all export types.
+ *
+ * Uses passed in templates for file and directory exports
+ * but then also adds any SFC files because this format is
+ * unrelated to the chosen export type.
  */
-export function exportTemplate(exportable: IExportableSymbols, opts: IDictionary = {}, callbacks: IExportCallbacks) {
+export function exportTemplate(
+  exportable: IExportableSymbols,
+  opts: IDictionary = {},
+  callbacks: IExportCallbacks
+) {
   const contentLines: string[] = [];
   if (exportable.files.length > 0) {
     contentLines.push(`\n// local file exports`);
@@ -28,7 +36,9 @@ export function exportTemplate(exportable: IExportableSymbols, opts: IDictionary
   // if the command line switch for Vue SFC's is turned on
   if (opts.sfc && exportable.sfcs.length > 0) {
     contentLines.push(`\n// SFC components`);
-    exportable.sfcs.forEach((sfc) => contentLines.push(`export { default as ${removeExtension(sfc)} } from "${sfc}";`));
+    exportable.sfcs.forEach((sfc) =>
+      contentLines.push(`export { default as ${removeExtension(sfc)} } from "./${sfc}";`)
+    );
   }
 
   if (exportable.dirs.length > 0) {
