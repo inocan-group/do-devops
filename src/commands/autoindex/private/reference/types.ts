@@ -16,6 +16,7 @@ export enum ExportAction {
   updated,
   added,
   noChange,
+  refactor,
 }
 
 export enum ExportType {
