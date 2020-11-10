@@ -4,6 +4,7 @@ import { IDictionary } from "common-types";
 import { write } from "../file";
 
 import get = require("lodash.get");
+import { parseFile } from "./index";
 
 type VariableDeclaration = recast.types.namedTypes.VariableDeclaration;
 type TSInterfaceDeclaration = recast.types.namedTypes.TSInterfaceDeclaration;
@@ -41,7 +42,9 @@ export interface IPropertyInfo {
  *
  * @param ast a Typescript file based AST
  */
-export function namedExports(ast: recast.types.namedTypes.File): IExportedDeclaration[] {
+export function namedExports(file: string | recast.types.namedTypes.File): IExportedDeclaration[] {
+  const ast: recast.types.namedTypes.File = typeof file === "string" ? parseFile(file) : file;
+
   const namedExports = ast.program.body.filter((i) => i.type === "ExportNamedDeclaration");
 
   const output: IExportedDeclaration[] = [];
@@ -58,7 +61,11 @@ export function namedExports(ast: recast.types.namedTypes.File): IExportedDeclar
           : type === "TSInterfaceDeclaration"
           ? "interface"
           : "",
-      interface: get(i, "declaration.declarations.0.id.typeAnnotation.typeAnnotation.typeName.name", null),
+      interface: get(
+        i,
+        "declaration.declarations.0.id.typeAnnotation.typeAnnotation.typeName.name",
+        null
+      ),
       comments: get(i, "comments", []) as CommentLine[],
       ...(type === "VariableDeclaration"
         ? getVariableDeclaration(get(i, "declaration"))
