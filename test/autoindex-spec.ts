@@ -1,7 +1,5 @@
 import "mocha";
 
-import * as helpers from "./helpers";
-
 import { expect } from "chai";
 
 describe("autoindex => ", () => {

@@ -10,6 +10,12 @@ export interface IExportableSymbols {
    * single JS default export when transpiled)
    */
   sfcs: string[];
+
+  /**
+   * sub-directories which do have an index file but have explicitly
+   * orphaned themselves
+   */
+  orphans?: string[];
 }
 
 export enum ExportAction {

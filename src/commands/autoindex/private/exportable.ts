@@ -2,7 +2,7 @@ import { basename, dirname, posix } from "path";
 import { existsSync, readdirSync } from "fs";
 
 import { IExportableSymbols } from "./index";
-import { removeExtension } from "./util";
+import { isOrphanedIndexFile, removeExtension } from "./util";
 
 import globby = require("globby");
 
@@ -25,17 +25,28 @@ export async function exportable(
     .map((i) => basename(i));
 
   const dirs: string[] = [];
+  const orphans: string[] = [];
   readdirSync(dir, { withFileTypes: true })
     .filter((i) => i.isDirectory())
     .filter((i) => !exclusions.includes(removeExtension(i.name)))
     .map((i) => {
       // directories must have a `index` file within them to considered
       // as a directory export
-      if (existsSync(posix.join(dir, i.name, "index.ts"))) {
-        dirs.push(i.name);
-      } else if (existsSync(posix.join(dir, i.name, "index.js"))) {
-        dirs.push(i.name);
+      const ts = posix.join(dir, i.name, "index.ts");
+      const js = posix.join(dir, i.name, "index.js");
+      if (existsSync(ts)) {
+        if (!isOrphanedIndexFile(ts)) {
+          dirs.push(i.name);
+        } else {
+          orphans.push(i.name);
+        }
+      } else if (existsSync(js)) {
+        if (!isOrphanedIndexFile(js)) {
+          dirs.push(i.name);
+        } else {
+          orphans.push(i.name);
+        }
       }
     });
-  return { files, base: dir, dirs, sfcs };
+  return { files, base: dir, dirs, sfcs, orphans };
 }

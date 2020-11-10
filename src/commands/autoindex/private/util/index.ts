@@ -1,9 +1,9 @@
 // #autoindex:named
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 08:50 AM ( GMT-7 )
+// index last changed at: 11th Nov, 2020, 09:32 AM ( GMT-8 )
 // export: named; exclusions: index, private.
-// files: alreadyHasAutoindexBlock, askHowToHandleMonoRepoIndexing, cleanOldBlockFormat, communicateApi, createMetaInfo, detectExportType, exportsHaveChanged, getExistingMetaInfo, isAutoindexFile, noDifference, nonBlockContent, removeExtension, replaceRegion, structurePriorAutoindexContent, timestamp, unexpectedContent.
+// files: alreadyHasAutoindexBlock, askHowToHandleMonoRepoIndexing, cleanOldBlockFormat, communicateApi, createMetaInfo, detectExportType, exportsHaveChanged, getExistingMetaInfo, isAutoindexFile, isOrphanedIndexFile, noDifference, nonBlockContent, removeExtension, replaceRegion, structurePriorAutoindexContent, timestamp, unexpectedContent.
 
 // local file exports
 export * from "./alreadyHasAutoindexBlock";
@@ -15,6 +15,7 @@ export * from "./detectExportType";
 export * from "./exportsHaveChanged";
 export * from "./getExistingMetaInfo";
 export * from "./isAutoindexFile";
+export * from "./isOrphanedIndexFile";
 export * from "./noDifference";
 export * from "./nonBlockContent";
 export * from "./removeExtension";

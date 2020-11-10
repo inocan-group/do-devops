@@ -52,5 +52,9 @@ export function exportTemplate(
     contentLines.push(`// the export strategy chosen does not write directories to this file`);
   }
 
+  if (exportable.orphans.length > 0) {
+    contentLines.push(`\n// there were directories orphaned: ${exportable.orphans.join(", ")}`);
+  }
+
   return contentLines.join("\n");
 }
