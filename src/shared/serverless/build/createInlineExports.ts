@@ -28,7 +28,8 @@ export interface IInlineExportConfig {
  */
 export async function createInlineExports(handlers: IHandlerInfo[]) {
   const bespokeWebpack =
-    (await getConfig()).build.buildTool === "webpack" && !hasDevDependency("serverless-webpack");
+    (await getConfig()).build.buildTool === "webpack" &&
+    !hasDevDependency("serverless-webpack");
 
   const header = 'import { IServerlessFunction } from "common-types";\n';
   let body: string[] = [];
@@ -71,9 +72,13 @@ export default {
   ${exportSymbols.join(",\n\t")}
 }`;
 
-  writeFileSync(path.join(process.env.PWD, "serverless-config/functions/inline.ts"), file, {
-    encoding: "utf-8",
-  });
+  writeFileSync(
+    path.join(process.env.PWD, "serverless-config/functions/inline.ts"),
+    file,
+    {
+      encoding: "utf-8",
+    }
+  );
 }
 
 function objectPrint(obj: IDictionary) {
@@ -98,12 +103,12 @@ function convertToWebpackResource(fn: string) {
 }
 
 function warnAboutMissingTyping(config: IInlineExportConfig[]) {
-  const incorrectOrMissingTyping = config.filter((i) => i.interface !== "IWrapperFunction");
+  const incorrectOrMissingTyping = config.filter((i) => i.interface !== "IHandlerConfig");
   if (incorrectOrMissingTyping.length > 0) {
     console.log(
       chalk`- there were ${String(
         incorrectOrMissingTyping.length
-      )} handler functions who defined a {italic config} but did not type it as {bold IWrapperFunction}`
+      )} handler functions who defined a {italic config} but did not type it as {bold IHandlerConfig}`
     );
     console.log(
       chalk`{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
