@@ -10,8 +10,10 @@ import {
 import chalk = require("chalk");
 import { SSM } from "aws-ssm";
 import { completeSsmName } from "../index";
+import { ISsmOptions } from "../../public";
+import { toBase64 } from "native-dash";
 
-export async function execute(argv: string[], options: IDictionary) {
+export async function execute(argv: string[], options: ISsmOptions) {
   if (argv.length < 2) {
     console.log(
       chalk`The "do ssm set" command expects the variable name and value as parameters on the command line: {blue {bold do ssm set} <{italic name}> <{italic value}>}\n`
@@ -27,7 +29,10 @@ export async function execute(argv: string[], options: IDictionary) {
   const profile = await determineProfile({ cliOptions: options, interactive: true });
   const profileInfo = await getAwsProfile(profile);
   const identity = await getAwsIdentityFromProfile(profileInfo);
-  const region = options.region || profileInfo.region || (await determineRegion(options));
+  const region =
+    options.region ||
+    profileInfo.region ||
+    (await determineRegion({ cliOptions: options }));
   const stage =
     process.env.AWS_STAGE ||
     process.env.NODE_ENV ||
@@ -37,6 +42,9 @@ export async function execute(argv: string[], options: IDictionary) {
 
   const ssm = new SSM({ profile, region });
   name = await completeSsmName(name, options);
+  if (options.base64) {
+    value = toBase64(value);
+  }
   process.env.AWS_STAGE = stage;
 
   try {

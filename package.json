@@ -69,7 +69,7 @@
     "simple-git": "^2.12.0",
     "table": "^6.0.8",
     "typed-mapper": "^0.4.1",
-    "webpack": "4.43.0"
+    "webpack": "^4.46.0"
   },
   "devDependencies": {
     "@types/aws-sdk": "^2.7.0",
@@ -80,10 +80,10 @@
     "@types/js-yaml": "^4.0.0",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.set": "^4.3.6",
-    "@types/mocha": "^7.0.2",
+    "@types/mocha": "^8.2.2",
     "@types/node": "^14",
     "@types/table": "^6.0.0",
-    "@types/webpack": "^4.41.11",
+    "@types/webpack": "^4.41.27",
     "chai": "^4.2.0",
     "madge": "^4.0.2",
     "mocha": "^8.3.2",

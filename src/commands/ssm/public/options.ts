@@ -31,6 +31,12 @@ export const options: OptionDefinition[] = [
       "allows the naming convention for SSM paths to be ignored for a given operation",
   },
   {
+    name: "description",
+    type: String,
+    group: "ssm",
+    description: `sets the description of the SSM variable (only used in ADD)`,
+  },
+  {
     name: "force",
     alias: "f",
     type: Boolean,

@@ -2,15 +2,16 @@
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 08:43 AM ( GMT-7 )
+// index last changed at: 3rd Mar, 2021, 01:19 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: commands, description, examples, options, ssm, syntax.
+// files: commands, description, examples, options, ssm-types, ssm, syntax.
 
 // local file exports
 export * from "./commands";
 export * from "./description";
 export * from "./examples";
 export * from "./options";
+export * from "./ssm-types";
 export * from "./ssm";
 export * from "./syntax";
 
