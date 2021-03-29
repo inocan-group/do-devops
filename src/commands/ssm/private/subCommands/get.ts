@@ -7,13 +7,14 @@ import {
   getAwsProfile,
   determineRegion,
 } from "../../../../shared";
+import { fromBase64 } from "native-dash";
 
-import { CommandLineOptions } from "command-line-args";
 import { SSM } from "aws-ssm";
 import { format } from "date-fns";
 import { table } from "table";
+import { ISsmOptions } from "../../public/ssm-types";
 
-export async function execute(argv: string[], options: CommandLineOptions) {
+export async function execute(argv: string[], options: ISsmOptions) {
   const profile = await determineProfile({ cliOptions: options, interactive: true });
   const profileInfo = await getAwsProfile(profile);
   const region: string =
@@ -41,7 +42,9 @@ export async function execute(argv: string[], options: CommandLineOptions) {
   }
 
   if (!options.quiet) {
-    console.log(`- Getting SSM details for: ${chalk.italic.grey.bold(secrets.join(", "))}\n`);
+    console.log(
+      `- Getting SSM details for: ${chalk.italic.grey.bold(secrets.join(", "))}\n`
+    );
   }
 
   const tableConfig = {
@@ -70,13 +73,14 @@ export async function execute(argv: string[], options: CommandLineOptions) {
       String(data.version),
       format(data.lastUpdated, "dd MMM, yyyy"),
     ]);
+    const value = options.base64 ? fromBase64(String(data.value)) : String(data.value);
     if (!options.quiet) {
       console.log(table(tableData, tableConfig as any));
       console.log(chalk.yellow.bold("VALUE:\n"));
-      console.log(String(data.value));
+      console.log(value);
       console.log();
     } else {
-      console.log(String(data.value));
+      console.log(value);
     }
   }
 

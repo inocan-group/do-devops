@@ -13,16 +13,27 @@ export async function globalAndLocalOptions(optsSet: IDictionary, fn: string) {
   const cmdDefn = fn ? getCommandInterface(fn) : ({} as IDictionary);
   if (cmdDefn.options) {
     const localOptions: OptionDefinition[] =
-      typeof cmdDefn.options === "object" ? cmdDefn.options : await cmdDefn.options(optsSet);
+      typeof cmdDefn.options === "object"
+        ? cmdDefn.options
+        : await cmdDefn.options(optsSet);
     const localNames = localOptions.map((i) => i.name);
 
-    const nonInterferingGlobal = globalOptions.filter((i) => !localNames.includes(i.name));
+    const nonInterferingGlobal = globalOptions.filter(
+      (i) => !localNames.includes(i.name)
+    );
     options = localOptions.concat(nonInterferingGlobal);
   } else {
     options = globalOptions;
   }
 
   return options;
+}
+
+export interface IGlobalOptions {
+  output?: string;
+  quiet?: boolean;
+  verbose?: boolean;
+  help?: boolean;
 }
 
 export const globalOptions: OptionDefinition[] = [

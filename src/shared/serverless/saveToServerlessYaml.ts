@@ -2,7 +2,7 @@ import chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
 
-import { dump, safeDump } from "js-yaml";
+import { dump } from "js-yaml";
 
 import { IServerlessConfig } from "common-types";
 import { emoji } from "../ui";
@@ -18,7 +18,9 @@ export async function saveToServerlessYaml(data: IServerlessConfig) {
 
     await writeFile(filename, yamlData, { encoding: "utf-8" });
   } catch (e) {
-    console.log(chalk`- {red writing the {bold serverless.yml} file has failed!} ${emoji.poop}`);
+    console.log(
+      chalk`- {red writing the {bold serverless.yml} file has failed!} ${emoji.poop}`
+    );
     console.log(e.message);
     console.log(chalk`{dim ${e.stack}}`);
     process.exit();

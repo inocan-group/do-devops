@@ -1,3 +1,3 @@
 export const defaultConfig = {
-  projectType: "serverless-library"
+  projectType: "serverless-library",
 };

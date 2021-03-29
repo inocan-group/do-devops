@@ -27,7 +27,14 @@ export const options: OptionDefinition[] = [
     name: "nonStandardPath",
     type: Boolean,
     group: "ssm",
-    description: "allows the naming convention for SSM paths to be ignored for a given operation",
+    description:
+      "allows the naming convention for SSM paths to be ignored for a given operation",
+  },
+  {
+    name: "description",
+    type: String,
+    group: "ssm",
+    description: `sets the description of the SSM variable (only used in ADD)`,
   },
   {
     name: "force",
@@ -37,10 +44,17 @@ export const options: OptionDefinition[] = [
     description: chalk`force a {italic set} operation to complete even when the variable being set alread exists`,
   },
   {
+    name: "base64",
+    type: Boolean,
+    group: "ssm",
+    description: chalk`adding this flag will encode with base64 when adding and decode from base64 to utf-8 when getting`,
+  },
+  {
     name: "quiet",
     alias: "q",
     type: Boolean,
     group: "ssm",
-    description: "allows the naming convention for SSM paths to be ignored for a given operation",
+    description:
+      "allows the naming convention for SSM paths to be ignored for a given operation",
   },
 ];

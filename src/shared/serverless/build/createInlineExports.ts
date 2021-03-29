@@ -1,7 +1,11 @@
 import chalk from "chalk";
 import * as path from "path";
 
-import { IDictionary, IServerlessFunction } from "common-types";
+import {
+  IDictionary,
+  IServerlessFunction,
+  isServerlessFunctionHandler,
+} from "common-types";
 import { relativePath, stripFileExtension } from "../../file";
 
 import { IHandlerInfo } from "../getLocalHandlerInfo";
@@ -52,18 +56,25 @@ export async function createInlineExports(handlers: IHandlerInfo[]) {
   warnAboutMissingTyping(config);
 
   config.forEach((handler) => {
-    const fnName = handler.config.handler
-      .split("/")
-      .pop()
-      .replace(/\.[^.]+$/, "");
+    if (isServerlessFunctionHandler(handler.config)) {
+      const fnName = handler.config.handler
+        .split("/")
+        .pop()
+        .replace(/\.[^.]+$/, "");
 
-    exportSymbols.push(fnName);
-    const symbol = `const ${fnName}: IServerlessFunction = { 
-${objectPrint(handler.config)}
-}
-`;
-    body.push(symbol);
+      exportSymbols.push(fnName);
+      const symbol = `const ${fnName}: IServerlessFunction = { 
+  ${objectPrint(handler.config)}
+  }
+  `;
+      body.push(symbol);
+    } else {
+      console.warn(
+        `[${handler.config.image}]: the serverless function passed into createInlineExports appears to define an "image" rather than a "handler". This should be investigated!`
+      );
+    }
   });
+
   const file: string = `
 ${header}
 ${body.join("\n")}
@@ -112,7 +123,9 @@ function warnAboutMissingTyping(config: IInlineExportConfig[]) {
     );
     console.log(
       chalk`{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
-        .map((i) => i.config.handler)
+        .map((i) =>
+          isServerlessFunctionHandler(i.config) ? i.config.handler : i.config.image
+        )
         .join(", ")}}}`
     );
   }
