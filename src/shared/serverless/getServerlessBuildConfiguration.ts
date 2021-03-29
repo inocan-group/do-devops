@@ -7,7 +7,7 @@ import {
   getYeomanScaffolds,
 } from "../../shared";
 
-import TypedMapper from "typed-mapper";
+import { TypedMapper } from "typed-mapper";
 
 /**
  * Will find the appropriate configuration information
@@ -22,9 +22,13 @@ import TypedMapper from "typed-mapper";
 export async function getServerlessBuildConfiguration(): Promise<IServerlessAccountInfo> {
   const modern = getYeomanScaffolds().includes("generator-lambda-typescript");
   const knownAccountInfo: Partial<IServerlessAccountInfo> = {
-    ...(modern ? transformYeomanFormat(await getYeomanConfig()) : await getAccountInfoFromServerlessYaml()),
+    ...(modern
+      ? transformYeomanFormat(await getYeomanConfig())
+      : await getAccountInfoFromServerlessYaml()),
     devDependencies: Object.keys(getPackageJson().devDependencies),
-    pluginsInstalled: Object.keys(getPackageJson().devDependencies).filter((i) => i.startsWith("serverless-")),
+    pluginsInstalled: Object.keys(getPackageJson().devDependencies).filter((i) =>
+      i.startsWith("serverless-")
+    ),
   };
 
   const accountInfo = await askForAccountInfo(knownAccountInfo);
@@ -38,7 +42,7 @@ function transformYeomanFormat(input: IDictionary) {
     accountId: "awsAccount",
     profile: "awsProfile",
     region: "awsRegion",
-    devDependencies: () => [],
-    pluginsInstalled: () => [],
+    devDependencies: (): string[] => [],
+    pluginsInstalled: (): string[] => [],
   }).convertObject(input);
 }

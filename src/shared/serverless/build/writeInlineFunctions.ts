@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { IHandlerReference } from "../../../@types/index";
-import { IServerlessFunction } from "common-types";
+import { IServerlessFunction, IServerlessFunctionHandler } from "common-types";
 import { promisify } from "util";
 const writeFile = promisify(fs.writeFile);
 
@@ -15,19 +15,25 @@ const writeFile = promisify(fs.writeFile);
  * file unless the function exports a `config` property to express
  * other configuration properties.
  */
-export async function writeInlineFunctions(handlers: IHandlerReference[], functionRoot = "src", fileName = "inline") {
+export async function writeInlineFunctions(
+  handlers: IHandlerReference[],
+  functionRoot = "src",
+  fileName = "inline"
+) {
   let contents = 'import { IServerlessFunction } from "common-types";\n\n';
   const fnNames = [];
   for (const handler of handlers) {
-    const localPath = handler.file.replace(/.*src\//, `${functionRoot}/`).replace(".ts", "");
+    const localPath = handler.file
+      .replace(/.*src\//, `${functionRoot}/`)
+      .replace(".ts", "");
     const functionName = handler.file.split("/").pop().replace(".ts", "");
     fnNames.push(functionName);
-    let config: IServerlessFunction = {
+    let config: IServerlessFunctionHandler = {
       handler: `${localPath}.handler`,
     };
-    if (handler.ref.config) {
-      config = { ...config, ...handler.ref.config };
-    }
+    // if (handler.ref.config) {
+    //   config = { ...config, ...handler.ref.config.con };
+    // }
 
     contents += `const ${functionName}: IServerlessFunction = {\n`;
     Object.keys(config).forEach((key) => {
@@ -44,7 +50,11 @@ export async function writeInlineFunctions(handlers: IHandlerReference[], functi
   }
   contents += `export default {\n  ${fnNames.join(",\n  ")}\n}`;
 
-  await writeFile(path.join(process.cwd(), `serverless-config/functions/${fileName}.ts`), contents, {
-    encoding: "utf-8",
-  });
+  await writeFile(
+    path.join(process.cwd(), `serverless-config/functions/${fileName}.ts`),
+    contents,
+    {
+      encoding: "utf-8",
+    }
+  );
 }
