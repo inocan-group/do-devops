@@ -34,6 +34,7 @@ export async function execute(argv: string[], options: ISsmOptions) {
     profileInfo.region ||
     (await determineRegion({ cliOptions: options }));
   const stage =
+    options.stage ||
     process.env.AWS_STAGE ||
     process.env.NODE_ENV ||
     (await askForStage(
@@ -41,7 +42,7 @@ export async function execute(argv: string[], options: ISsmOptions) {
     ));
 
   const ssm = new SSM({ profile, region });
-  name = await completeSsmName(name, options);
+  name = await completeSsmName(name, { stage });
   if (options.base64) {
     value = toBase64(value);
   }
