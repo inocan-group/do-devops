@@ -59,13 +59,15 @@ function formatCommands(cmds: ICommandDescription[]) {
  */
 export async function getSyntax(fn?: string): Promise<string> {
   if (!fn) {
-    return "do [command] <options>";
+    return "dd [command] <options>";
   }
 
   const defn = await import(`../../commands/${fn}`);
   const hasSubCommands = defn.subCommands ? true : false;
 
-  return defn.syntax ? defn.syntax : `do ${fn} ${hasSubCommands ? "[command] " : ""}<options>`;
+  return defn.syntax
+    ? defn.syntax
+    : `do ${fn} ${hasSubCommands ? "[command] " : ""}<options>`;
 }
 
 /**
@@ -74,7 +76,7 @@ export async function getSyntax(fn?: string): Promise<string> {
 export async function getDescription(opts: IDictionary, fn?: string) {
   if (!fn) {
     return `DevOps toolkit [ ${chalk.bold.italic(
-      "do"
+      "dd"
     )} ] is a simple CLI interface intended to automate most of the highly repeatable tasks on your team.`;
   }
 
@@ -110,7 +112,11 @@ export async function getExamples(opts: IDictionary, fn?: string) {
       const examples = defnIsFunction ? defn.examples(opts) : defn.examples;
     }
 
-    return hasExamples ? (defnIsFunction ? await defn.description(opts) : defn.description) : ``;
+    return hasExamples
+      ? defnIsFunction
+        ? await defn.description(opts)
+        : defn.description
+      : ``;
   }
 }
 

@@ -16,7 +16,7 @@ import { toBase64 } from "native-dash";
 export async function execute(argv: string[], options: ISsmOptions) {
   if (argv.length < 2) {
     console.log(
-      chalk`The "do ssm set" command expects the variable name and value as parameters on the command line: {blue {bold do ssm set} <{italic name}> <{italic value}>}\n`
+      chalk`The "dd ssm set" command expects the variable name and value as parameters on the command line: {blue {bold do ssm set} <{italic name}> <{italic value}>}\n`
     );
     console.log(
       chalk`{grey {bold - Note:} you can include a {italic partial name} for the variable and things like the AWS profile, region, stage, and version number\n  will be filled in where possible}\n`

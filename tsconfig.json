@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "module": "commonjs",
-    "lib": ["es2015", "es2016", "es2017", "esnext.asynciterable"],
+    "lib": ["esnext.asynciterable"],
     "target": "esnext",
     "moduleResolution": "node",
     "sourceMap": false,
@@ -12,5 +12,5 @@
     "esModuleInterop": true,
     "typeRoots": ["src/@polyfills"]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src"]
 }

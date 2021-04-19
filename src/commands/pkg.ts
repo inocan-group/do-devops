@@ -28,7 +28,7 @@ export const options: OptionDefinition[] = [
   },
 ];
 
-export const syntax = "do pkg <options>";
+export const syntax = "dd pkg <options>";
 export const aliases = ["package"];
 
 /**
@@ -64,7 +64,9 @@ export async function handler(argv: string[], opts: any) {
   const directory = opts.dir ? opts.dir : ".serverless";
 
   console.log(chalk`\n{bold {green - Packaging is complete!}} ${emoji.rocket}`);
-  console.log(chalk`- the assets can all be found in the {italic {blue ${directory}} directory.}`);
+  console.log(
+    chalk`- the assets can all be found in the {italic {blue ${directory}} directory.}`
+  );
   await asyncExec(`ls -l ${directory}`);
   if (opts.validate) {
     console.log(
@@ -89,7 +91,9 @@ export async function handler(argv: string[], opts: any) {
       console.log(chalk`{dim    ${validateUpdate}}`);
       await asyncExec(validateUpdate);
     } catch (e) {
-      console.log(chalk`{red - Error validating the {italic update} template!} ${emoji.poop}`);
+      console.log(
+        chalk`{red - Error validating the {italic update} template!} ${emoji.poop}`
+      );
     }
   }
 

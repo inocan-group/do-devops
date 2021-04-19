@@ -28,7 +28,7 @@ export async function description(opts: IDictionary) {
 }
 
 export const syntax =
-  "do deploy [fn1] [fn2] <options>\n\n{dim Note: {italic stating particular functions is {italic optional} and if excluded will result in a full deployment of all functions.}}";
+  "dd deploy [fn1] [fn2] <options>\n\n{dim Note: {italic stating particular functions is {italic optional} and if excluded will result in a full deployment of all functions.}}";
 
 export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
   const { deploy: config } = await getConfig();

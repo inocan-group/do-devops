@@ -4,8 +4,12 @@ import { IDictionary } from "common-types";
 import chalk = require("chalk");
 import { emoji } from "../../../../shared";
 
-export async function handler(action: ValidationAction, currentBranch: string, options: IDictionary = {}) {
-  const target = options.target || "do test";
+export async function handler(
+  action: ValidationAction,
+  currentBranch: string,
+  options: IDictionary = {}
+) {
+  const target = options.target || "dd test";
   if (options.quiet) console.log(chalk`- ${emoji.run} running unit tests`);
 
   const result = exec(`yarn ${target}`, { silent: options.quiet });

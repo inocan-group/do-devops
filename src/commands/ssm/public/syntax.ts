@@ -1,1 +1,1 @@
-export const syntax = "do ssm <sub-command> <options>";
+export const syntax = "dd ssm <sub-command> <options>";

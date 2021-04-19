@@ -1,11 +1,12 @@
 {
   "name": "do-devops",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Devops commands for your nodejs projects",
   "main": "./bin/index.js",
   "typings": "./bin/index.d.ts",
   "bin": {
-    "do": "./bin/do.js"
+    "dd": "./bin/dd.js",
+    "do": "./bin/dd.js"
   },
   "files": [
     "bin"
@@ -13,11 +14,11 @@
   "scripts": {
     "clean": "rimraf src/**/*.js && rimraf bin",
     "test": "mocha -r ts-node/register test/**/*-spec.ts",
-    "build": "tsc && chmod +x bin/do.js",
+    "build": "tsc && chmod +x bin/dd.js",
     "watch": "run-p watch:*",
     "watch:build": "tsc -w",
-    "watch:autoindex": "yarn do autoindex -w",
-    "do": "./bin/do.js",
+    "watch:autoindex": "yarn dd autoindex -w",
+    "dd": "./bin/dd.js",
     "visualize": "yarn madge src --extensions ts -i /tmp/dep-ts-visualize.png && open /tmp/dep-ts-visualize.png",
     "visualize:js": "yarn madge bin --extensions js -i /tmp/dep-js-visualize.png && open /tmp/dep-js-visualize.png",
     "circular": "yarn madge src --extensions ts --circular",
@@ -44,22 +45,22 @@
   "dependencies": {
     "@types/command-line-args": "^5.0.0",
     "@types/command-line-usage": "^5.0.1",
+    "@types/table": "^6.0.0",
     "ast-types": "^0.14.2",
     "async-shelljs": "^0.1.3",
     "aws-sdk": "^2.874.0",
     "aws-ssm": "^0.3.13",
-    "babylon": "^7.0.0-beta.47",
     "bestzip": "^2.2.0",
     "chalk": "^4.0.0",
     "chokidar": "^3.5.1",
     "command-line-args": "^5.1.1",
-    "command-line-usage": "^6.0.2",
+    "command-line-usage": "^6.1.1",
     "common-types": "^1.20.4",
-    "date-fns": "^2.19.0",
+    "date-fns": "^2.21.0",
     "fast-glob": "^3.2.2",
     "globby": "^11.0.0",
     "inquirer": "^6.5.1",
-    "js-yaml": "^4.0.0",
+    "js-yaml": "^4.1.0",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "matcher": "^4.0.0",
@@ -67,7 +68,7 @@
     "play-sound": "^1.1.3",
     "recast": "^0.20.4",
     "simple-git": "^2.12.0",
-    "table": "^6.0.8",
+    "table": "6.2.0",
     "typed-mapper": "^0.4.1",
     "webpack": "^4.46.0"
   },
@@ -82,7 +83,6 @@
     "@types/lodash.set": "^4.3.6",
     "@types/mocha": "^8.2.2",
     "@types/node": "^14",
-    "@types/table": "^6.0.0",
     "@types/webpack": "^4.41.27",
     "chai": "^4.2.0",
     "madge": "^4.0.2",

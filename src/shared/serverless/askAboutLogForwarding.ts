@@ -41,7 +41,7 @@ export async function askAboutLogForwarding(config: IServerlessConfig) {
   enum Action {
     now = "configure now",
     remove = 'remove "serverless-log-forwarding" from package.json',
-    later = "do this later",
+    later = "dd this later",
   }
   let answers: {
     action: Action;
@@ -80,10 +80,13 @@ export async function askAboutLogForwarding(config: IServerlessConfig) {
     ];
     answers = { ...answers, ...(await inquirer.prompt(questions)) };
     if (answers.shipper !== "CANCEL") {
-      const arn = awsFunctions.find((i) => i.FunctionName === answers.shipper).FunctionArn;
+      const arn = awsFunctions.find((i) => i.FunctionName === answers.shipper)
+        .FunctionArn;
       config.custom.logForwarding = { destinationARN: arn };
     } else {
-      console.log(chalk`{grey - ok, cancelling the config of a shipping function for now}`);
+      console.log(
+        chalk`{grey - ok, cancelling the config of a shipping function for now}`
+      );
     }
   } else if (answers.action === Action.remove) {
     const pkg = await getPackageJson();
