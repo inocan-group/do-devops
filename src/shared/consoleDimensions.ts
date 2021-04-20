@@ -5,7 +5,7 @@ import { asyncExec } from "async-shelljs";
  * console
  */
 export async function consoleDimensions() {
-  let [width, height] = (await asyncExec(`echo $(tput cols),$(tput lines)`, {
+  let [width, height] = (await asyncExec("echo $(tput cols),$(tput lines)", {
     silent: true
   }))
     .split(",")

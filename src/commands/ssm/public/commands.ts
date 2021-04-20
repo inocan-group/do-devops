@@ -1,4 +1,4 @@
-import { ICommandDescription } from "../../../private";
+import { ICommandDescription } from "../../../@types/general";
 
 export const commands: ICommandDescription[] = [
   {

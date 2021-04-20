@@ -16,12 +16,17 @@ export async function findOrgFromGitRemote(baseDir?: string): Promise<string | f
     const origin = remotes.find((r) => r.name === "origin");
     const findOrg = /.*:(.*)\//gm;
 
-    const [_, org] = origin
+    const results = origin
       ? findOrg.exec(origin.refs.fetch || origin.refs.push)
       : findOrg.exec(remotes[0].refs.fetch || remotes[0].refs.push);
 
-    return org;
-  } catch (e) {
+    if (results) {
+      const [_, org] = results;
+      return org;
+    } else {
+      return false;
+    }
+  } catch {
     return false;
   }
 }

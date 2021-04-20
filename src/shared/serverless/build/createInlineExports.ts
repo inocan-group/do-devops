@@ -1,100 +1,27 @@
+/* eslint-disable quotes */
 import chalk from "chalk";
-import * as path from "path";
-
+import path from "path";
+import { writeFileSync } from "fs";
 import {
   IDictionary,
   IServerlessFunction,
   isServerlessFunctionHandler,
 } from "common-types";
-import { relativePath, stripFileExtension } from "../../file";
-
-import { IHandlerInfo } from "../getLocalHandlerInfo";
-import { emoji } from "../../ui";
-import { findHandlerConfig } from "../../ast/index";
+import { IWebpackHandlerDates } from "~/@types";
+import { relativePath } from "~/shared/file";
+import { emoji } from "~/shared/ui";
+import { findHandlerConfig } from "~/shared/ast";
+import { hasDevDependency } from "~/shared/npm";
 import { getConfig } from "../../do-config";
-import { hasDevDependency } from "../../npm";
-import { join } from "path";
-import { writeFileSync } from "fs";
 
 export interface IInlineExportConfig {
   interface: string;
   config: IServerlessFunction;
 }
 
-/**
- * Writes the serverless configuration file which contains
- * all the _inline_ function definitions found under `src/handlers`.
- *
- * **Note:** if the build tool is _webpack_ and the `serverless-webpack`
- * plugin is _not_ installed then it the inline functions will instead
- * be pointed to the transpiled location in the `.webpack` directory with
- * an `package: { artifact: fn.zip }`
- */
-export async function createInlineExports(handlers: IHandlerInfo[]) {
-  const bespokeWebpack =
-    (await getConfig()).build.buildTool === "webpack" &&
-    !hasDevDependency("serverless-webpack");
-
-  const header = 'import { IServerlessFunction } from "common-types";\n';
-  let body: string[] = [];
-  const config: IInlineExportConfig[] = [];
-  handlers.forEach((handler) => {
-    // const comments = findHandlerComments(handler);
-    const handlerConfig = findHandlerConfig(handler.source, bespokeWebpack);
-    if (handlerConfig) {
-      config.push(handlerConfig);
-    } else {
-      console.log(
-        chalk`- ${emoji.poop} the {red ${relativePath(
-          handler.source
-        )}} file will be ignored as a handler as it has no CONFIG section defined. This is probably a mistake!`
-      );
-    }
-  });
-  const exportSymbols: string[] = [];
-
-  warnAboutMissingTyping(config);
-
-  config.forEach((handler) => {
-    if (isServerlessFunctionHandler(handler.config)) {
-      const fnName = handler.config.handler
-        .split("/")
-        .pop()
-        .replace(/\.[^.]+$/, "");
-
-      exportSymbols.push(fnName);
-      const symbol = `const ${fnName}: IServerlessFunction = { 
-  ${objectPrint(handler.config)}
-  }
-  `;
-      body.push(symbol);
-    } else {
-      console.warn(
-        `[${handler.config.image}]: the serverless function passed into createInlineExports appears to define an "image" rather than a "handler". This should be investigated!`
-      );
-    }
-  });
-
-  const file: string = `
-${header}
-${body.join("\n")}
-
-export default {
-  ${exportSymbols.join(",\n\t")}
-}`;
-
-  writeFileSync(
-    path.join(process.env.PWD, "serverless-config/functions/inline.ts"),
-    file,
-    {
-      encoding: "utf-8",
-    }
-  );
-}
-
 function objectPrint(obj: IDictionary) {
-  let contents: string[] = [];
-  Object.keys(obj).forEach((key) => {
+  const contents: string[] = [];
+  for (const key of Object.keys(obj)) {
     let value = obj[key as keyof typeof obj];
     if (typeof value === "string") {
       value = `"${value.replace(/"/g, '\\"')}"`;
@@ -103,14 +30,11 @@ function objectPrint(obj: IDictionary) {
       value = JSON.stringify(value);
     }
     contents.push(`  ${key}: ${value}`);
-    return contents.join(",\n\t");
-  });
+    contents.join(",\n\t");
+    continue;
+  }
 
   return contents;
-}
-
-function convertToWebpackResource(fn: string) {
-  return join(".webpack/", fn.split("/").pop().replace(".ts", ".js"));
 }
 
 function warnAboutMissingTyping(config: IInlineExportConfig[]) {
@@ -129,4 +53,75 @@ function warnAboutMissingTyping(config: IInlineExportConfig[]) {
         .join(", ")}}}`
     );
   }
+}
+
+/**
+ * Writes the serverless configuration file which contains
+ * all the _inline_ function definitions found under `src/handlers`.
+ *
+ * **Note:** if the build tool is _webpack_ and the `serverless-webpack`
+ * plugin is _not_ installed then it the inline functions will instead
+ * be pointed to the transpiled location in the `.webpack` directory with
+ * an `package: { artifact: fn.zip }`
+ */
+export async function createInlineExports(handlers: IWebpackHandlerDates[]) {
+  const bespokeWebpack =
+    (await getConfig()).build.buildTool === "webpack" &&
+    !hasDevDependency("serverless-webpack");
+
+  const header = 'import { IServerlessFunction } from "common-types";\n';
+  const body: string[] = [];
+  const config: IInlineExportConfig[] = [];
+  for (const handler of handlers) {
+    // const comments = findHandlerComments(handler);
+    const handlerConfig = findHandlerConfig(handler.source, bespokeWebpack);
+    if (handlerConfig && handlerConfig.interface) {
+      config.push(handlerConfig as IInlineExportConfig);
+    } else {
+      console.log(
+        chalk`- ${emoji.poop} the {red ${relativePath(
+          handler.source
+        )}} file will be ignored as a handler as it has no CONFIG section defined. This is probably a mistake!`
+      );
+    }
+  }
+  const exportSymbols: string[] = [];
+
+  warnAboutMissingTyping(config);
+
+  for (const handler of config) {
+    if (isServerlessFunctionHandler(handler.config)) {
+      const fnName = (handler?.config?.handler.split("/").pop() || "").replace(
+        /\.[^.]+$/,
+        ""
+      );
+
+      exportSymbols.push(fnName);
+      const symbol = `const ${fnName}: IServerlessFunction = { 
+  ${objectPrint(handler.config)}
+  }
+  `;
+      body.push(symbol);
+    } else {
+      console.warn(
+        `[${handler.config.image}]: the serverless function passed into createInlineExports appears to define an "image" rather than a "handler". This should be investigated!`
+      );
+    }
+  }
+
+  const file: string = `
+${header}
+${body.join("\n")}
+
+export default {
+  ${exportSymbols.join(",\n\t")}
+}`;
+
+  writeFileSync(
+    path.join(process.env.PWD || "", "serverless-config/functions/inline.ts"),
+    file,
+    {
+      encoding: "utf-8",
+    }
+  );
 }

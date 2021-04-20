@@ -5,7 +5,8 @@ import { CommandLineOptions } from "command-line-args";
 import { SSM } from "aws-ssm";
 import { format } from "date-fns";
 import { table } from "table";
-import { determineProfile, determineRegion, getAwsProfile } from "../../../../shared";
+import { getAwsProfile } from "~/shared/aws";
+import { determineProfile, determineRegion } from "~/shared/observations";
 
 export async function execute(argv: string[], options: CommandLineOptions) {
   const profile = await determineProfile({ cliOptions: options, interactive: true });
@@ -33,7 +34,9 @@ export async function execute(argv: string[], options: CommandLineOptions) {
       `- Listing SSM parameters in profile "${chalk.bold(profile)}", region "${chalk.bold(
         region
       )}"${
-        filterBy ? `; results reduced to those with "${chalk.bold(filterBy)}" in the name.` : ""
+        filterBy
+          ? `; results reduced to those with "${chalk.bold(filterBy)}" in the name.`
+          : ""
       }`
     );
     console.log();
@@ -46,7 +49,7 @@ export async function execute(argv: string[], options: CommandLineOptions) {
 
   const list = await ssm.describeParameters();
 
-  let tableData = [
+  const tableData = [
     [
       chalk.bold("Name"),
       chalk.bold("Version"),
@@ -56,17 +59,15 @@ export async function execute(argv: string[], options: CommandLineOptions) {
     ],
   ];
 
-  list
-    .filter((i) => !filterBy || i.Name.includes(filterBy))
-    .forEach((i) => {
-      tableData.push([
-        i.Name,
-        String(i.Version),
-        i.Type,
-        format(i.LastModifiedDate, "dd MMM, yyyy"),
-        i.LastModifiedUser.replace(/.*user\//, ""),
-      ]);
-    });
+  for (const i of list.filter((i) => !filterBy || (i.Name || "").includes(filterBy))) {
+    tableData.push([
+      i.Name || "",
+      String(i.Version),
+      i.Type || "",
+      i.LastModifiedDate ? format(i.LastModifiedDate, "dd MMM, yyyy") : "",
+      i.LastModifiedUser ? i.LastModifiedUser.replace(/.*user\//, "") : "",
+    ]);
+  }
   const tableConfig = {
     columns: {
       0: { width: 42, alignment: "left" },

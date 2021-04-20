@@ -1,24 +1,20 @@
+/* eslint-disable quotes */
 import chalk from "chalk";
 
-import {
-  askForDataFile,
-  askForFunction,
-  askForFunctions,
-  emoji,
-  getDataFiles,
-  getFunctionNames,
-  getLambdaFunctions,
-  isServerless,
-  readDataFile,
-} from "../shared";
+import { emoji } from "~/shared/ui";
 
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
 import { asyncExec } from "async-shelljs";
 import { getLocalServerlessFunctionsFromServerlessYaml } from "../shared/serverless/getLocalServerlessFunctionsFromServerlessYaml";
+import { isServerless } from "~/shared/observations";
+import { askForFunction } from "~/shared/serverless";
+import { readDataFile } from "~/shared/readDataFile";
+import { getDataFiles } from "~/shared/getDataFiles";
+import { askForDataFile } from "~/shared/askForDataFile";
 
 export function description() {
-  return `invoke serverless functions locally, leveraging test data where desired`;
+  return "invoke serverless functions locally, leveraging test data where desired";
 }
 
 export const options: OptionDefinition[] = [
@@ -27,14 +23,14 @@ export const options: OptionDefinition[] = [
     type: String,
     typeLabel: "<stage>",
     group: "invoke",
-    description: `state the "stage" you want to emulate with invokation`,
+    description: 'state the "stage" you want to emulate with invokation',
   },
   {
     name: "data",
     type: String,
     typeLabel: "<dataFile>",
     group: "invoke",
-    description: `use a known data input`,
+    description: "use a known data input",
   },
   {
     name: "interactive",
@@ -56,20 +52,26 @@ export async function handler(args: string[], opts: IDictionary) {
       process.exit();
     }
     if (args.length > 1) {
-      console.log(chalk`{dim - you have stated more than one function to {italic invoke}.}`);
-      console.log(chalk`{dim - this command only executes one at a time; the rest are ignored.}`);
+      console.log(
+        chalk`{dim - you have stated more than one function to {italic invoke}.}`
+      );
+      console.log(
+        chalk`{dim - this command only executes one at a time; the rest are ignored.}`
+      );
     }
     let fn: string;
     if (args.length === 0) {
       fn = await askForFunction();
     } else {
       fn = args[0];
-      const availableFns = Object.keys(await getLocalServerlessFunctionsFromServerlessYaml());
+      const availableFns = Object.keys(
+        (await getLocalServerlessFunctionsFromServerlessYaml()) || {}
+      );
       if (!availableFns.includes(fn)) {
         console.log(
           chalk`{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`
         );
-        console.log(`- valid functions are:`);
+        console.log("- valid functions are:");
         console.log(chalk`{dim   - ${availableFns.join("\n  - ")}}`);
 
         process.exit();
@@ -79,7 +81,7 @@ export async function handler(args: string[], opts: IDictionary) {
     if (opts.data) {
       try {
         data = await readDataFile(opts.data, "json");
-      } catch (e) {
+      } catch {
         const possible = await getDataFiles({
           filterBy: opts.data,
         });
@@ -104,8 +106,8 @@ export async function handler(args: string[], opts: IDictionary) {
       );
     }
     await asyncExec(`sls invoke local --function ${fn} --data '${data}'`);
-  } catch (e) {
-    console.log(`- Error finding functions: ${e.message}\n`);
+  } catch (error) {
+    console.log(`- Error finding functions: ${error.message}\n`);
     process.exit();
   }
 }

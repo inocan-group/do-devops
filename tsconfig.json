@@ -1,16 +1,38 @@
 {
   "compilerOptions": {
-    "declaration": true,
     "module": "commonjs",
-    "lib": ["es2015", "es2016", "es2017", "esnext.asynciterable"],
-    "target": "esnext",
+    "target": "ES2020",
     "moduleResolution": "node",
+
     "sourceMap": false,
-    "noImplicitAny": true,
-    "outDir": "./bin",
-    "removeComments": false,
+    "incremental": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "typeRoots": ["src/@polyfills"]
+
+    "strict": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "allowSyntheticDefaultImports": true,
+
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "bin",
+    "typeRoots": ["src/@polyfills"],
+
+    "paths": {
+      "~/*": ["src/*"],
+      "/~/*": ["src/*"]
+    },
+    "plugins": [
+      // Transform paths in output .js files
+      { "transform": "typescript-transform-paths" },
+
+      // Transform paths in output .d.ts files (Include this line if you output declarations files)
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src"]
 }

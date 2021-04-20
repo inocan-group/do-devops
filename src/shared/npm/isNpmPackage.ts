@@ -2,9 +2,9 @@ import { getPackageInfo } from "./index";
 
 export async function isNpmPackage() {
   try {
-    const npm = await getPackageInfo();
+    await getPackageInfo();
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }

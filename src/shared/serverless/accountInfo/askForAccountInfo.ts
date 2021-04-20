@@ -9,8 +9,8 @@ import {
   userHasAwsProfile,
 } from "../../../shared";
 
-import inquirer = require("inquirer");
-import chalk = require("chalk");
+import inquirer from "inquirer";
+import chalk from "chalk";
 
 /**
  * Allows the properties not yet defined in the configuration to be
@@ -18,10 +18,11 @@ import chalk = require("chalk");
  *
  * @param config the configuration as it has been defined so far
  */
-export async function askForAccountInfo(config: Partial<IServerlessAccountInfo> = {}): Promise<IServerlessAccountInfo> {
-  const pkgJson = await getPackageJson();
+export async function askForAccountInfo(
+  config: Partial<IServerlessAccountInfo> = {}
+): Promise<IServerlessAccountInfo> {
+  const pkgJson = getPackageJson();
   const profiles = await getAwsProfileList();
-  const profileMessage = "choose a profile from your AWS credentials file";
 
   if (
     config.profile &&
@@ -29,7 +30,8 @@ export async function askForAccountInfo(config: Partial<IServerlessAccountInfo> 
     config.accountId &&
     config.region &&
     config.pluginsInstalled &&
-    (config.logForwarding || !Object.keys(pkgJson.devDependencies).includes("serverless-log-forwarding"))
+    (config.logForwarding ||
+      !Object.keys(pkgJson.devDependencies || {}).includes("serverless-log-forwarding"))
   ) {
     return config as IServerlessAccountInfo;
   }
@@ -67,7 +69,7 @@ export async function askForAccountInfo(config: Partial<IServerlessAccountInfo> 
     ...answers,
   };
 
-  if (!userHasAwsProfile(merged.profile)) {
+  if (merged.profile && !userHasAwsProfile(merged.profile)) {
     console.log(
       chalk`- you are deploying with the {green ${merged.profile} AWS profile but you do not have this defined yet! ${emoji.angry}`
     );
@@ -86,7 +88,9 @@ export async function askForAccountInfo(config: Partial<IServerlessAccountInfo> 
     console.log(
       chalk`- you do {bold NOT} have the credentials for the profile {blue ${merged.profile}}! Please add this before\n  trying again. ${emoji.angry}\n`
     );
-    console.log(chalk`{grey - the credentials file is located at {blue ~/.aws/credentials}}\n`);
+    console.log(
+      chalk`{grey - the credentials file is located at {blue ~/.aws/credentials}}\n`
+    );
 
     process.exit();
   }
@@ -100,7 +104,7 @@ export async function askForAccountInfo(config: Partial<IServerlessAccountInfo> 
     console.log(chalk`- looking up the Account ID for the given profile`);
     try {
       merged.accountId = (await getAwsIdentityFromProfile(awsProfile)).accountId;
-    } catch (e) {}
+    } catch {}
   }
 
   questions = [
@@ -122,8 +126,8 @@ export async function askForAccountInfo(config: Partial<IServerlessAccountInfo> 
   let plugins: { pluginsInstalled: string[] };
   try {
     const sls = await getServerlessYaml();
-    plugins = { pluginsInstalled: sls.plugins };
-  } catch (e) {
+    plugins = { pluginsInstalled: sls.plugins || [] };
+  } catch {
     plugins = { pluginsInstalled: [] };
   }
   answers = {

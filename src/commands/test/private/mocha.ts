@@ -1,12 +1,14 @@
 import chalk from "chalk";
 import globby from "globby";
-import { posix } from "path";
+import path from "path";
 
 import { SpecificTestReason, askForSpecificTests } from "./askForSpecificTests";
-import { emoji, getConfig, hasDevDependency } from "../../../shared";
+import { emoji } from "~/shared/ui";
 
 import { asyncExec } from "async-shelljs";
 import { testName } from "./testName";
+import { hasDevDependency } from "~/shared/npm";
+import { getConfig } from "~/shared/do-config";
 
 /** runs the Mocha command to execute the tests */
 const tsExecution = async (fns: string[]) => {
@@ -15,44 +17,49 @@ const tsExecution = async (fns: string[]) => {
   const mochaRequires = hasTsconfigPaths
     ? ["ts-node/register", "tsconfig-paths/register"]
     : ["ts-node/register"];
-  const command = `yarn mocha --no-timeouts ${mochaRequires
-    .map((i) => `-r ${i}`)
-    .join(" ")} --exit ${fns.join(" ")}`;
+
+  // const command = `yarn mocha --no-timeouts ${mochaRequires
+  //   .map((i) => `-r ${i}`)
+  //   .join(" ")} --exit ${fns.join(" ")}`;
+
   if (hasTsconfigPaths) {
     console.log(
       chalk`- using {blue tsconfig-paths} with mocha to support path aliases. {grey remove the npm package to have this behavior stop}\n`
     );
   }
   return asyncExec(
-    `yarn mocha --no-timeouts ${mochaRequires.map((i) => `-r ${i}`).join(" ")} --exit ${fns.join(
-      " "
-    )}`
+    `yarn mocha --no-timeouts ${mochaRequires
+      .map((i) => `-r ${i}`)
+      .join(" ")} --exit ${fns.join(" ")}`
   );
 };
 
 const mocha = async (args: string[]) => {
   const config = await getConfig();
-  const allTests = await globby([posix.join(config.test.testDirectory, config.test.testPattern)]);
+  const allTests = await globby([
+    path.posix.join(config?.test?.testDirectory || "", config?.test?.testPattern || ""),
+  ]);
   let selectedTests: string[] = [];
   if (args.length > 0) {
-    args.forEach((searchTerm) => {
+    for (const searchTerm of args) {
       const found = allTests.filter((t) => t.includes(searchTerm));
       if (found.length === 0) {
         console.log(
           chalk`- the {italic.blue ${searchTerm}} search term found no matches in the available tests`
         );
       } else {
-        selectedTests = selectedTests.concat(...found);
+        selectedTests = [...found, ...selectedTests];
       }
-    });
+    }
+
     if (selectedTests.length === 0) {
-      const selectedTests = await askForSpecificTests(SpecificTestReason.noResultsFound, allTests);
+      selectedTests = askForSpecificTests(SpecificTestReason.noResultsFound, allTests);
     }
     if (selectedTests.length === 0) {
       console.log(chalk`- no tests matched; valid tests include:\n`);
       console.log(
         chalk`{dim ${allTests
-          .map((t) => testName(t, config.test.testPattern).padEnd(20))
+          .map((t) => testName(t, config?.test?.testPattern || "").padEnd(20))
           .join("\t")}}`
       );
     } else {
@@ -62,7 +69,7 @@ const mocha = async (args: string[]) => {
         )}} ({italic of} {bold ${String(
           allTests.length
         )}}) mocha tests: {grey ${selectedTests
-          .map((t) => testName(t, config.test.testPattern))
+          .map((t) => testName(t, config?.test?.testPattern || ""))
           .join(", ")}}`
       );
     }
@@ -78,14 +85,16 @@ const mocha = async (args: string[]) => {
         chalk`- ${emoji.run} running {italic all} {bold ${String(
           selectedTests.length
         )}} mocha tests: {grey ${selectedTests
-          .map((t) => testName(t, config.test.testPattern))
+          .map((t) => testName(t, config?.test?.testPattern || ""))
           .join(", ")}}`
       );
     }
   }
   console.log();
-  await tsExecution(selectedTests).catch((e) => {
-    console.log(chalk`\n- ${emoji.angry}  tests completed but {red errors} were encountered`);
+  await tsExecution(selectedTests).catch(() => {
+    console.log(
+      chalk`\n- ${emoji.angry}  tests completed but {red errors} were encountered`
+    );
     process.exit(1);
   });
   console.log(chalk`- ${emoji.party}  all tests completed successfully\n`);

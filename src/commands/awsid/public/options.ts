@@ -6,6 +6,6 @@ export const options: OptionDefinition[] = [
     alias: "a",
     type: Boolean,
     group: "awsid",
-    description: `looks up the AWS account ID's for all profiles in the credentials file`,
+    description: "looks up the AWS account ID's for all profiles in the credentials file",
   },
 ];

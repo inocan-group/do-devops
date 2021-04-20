@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-array-callback-reference */
 import { IAwsProfile } from "../../@types";
 import { IDictionary } from "common-types";
 import { hasAwsProfileCredentialsFile } from "../index";
@@ -21,19 +22,23 @@ export async function getAwsProfileList() {
     // array of arrays
     const extractor = (agg: IDictionary<Partial<IAwsProfile>>, curr: string[]) => {
       let profileSection = "unknown";
-      curr.forEach((lineOfFile) => {
+      for (const lineOfFile of curr) {
         if (lineOfFile.slice(-1) === "]") {
-          profileSection = lineOfFile.slice(0, lineOfFile.length - 1);
+          profileSection = lineOfFile.slice(0, -1);
           agg[profileSection] = {};
         }
-        targets.forEach((t) => {
+        for (const t of targets) {
           if (lineOfFile.includes(t)) {
-            const [devnull, key, value] = lineOfFile.match(/\s*(\S+)\s*=\s*(\S+)/);
+            const [_, key, value] = lineOfFile.match(/\s*(\S+)\s*=\s*(\S+)/) as [
+              unknown,
+              string,
+              string
+            ];
 
             agg[profileSection][key as keyof IAwsProfile] = value;
           }
-        });
-      });
+        }
+      }
       return agg as IDictionary<IAwsProfile>;
     };
     const credentials = data
@@ -42,7 +47,7 @@ export async function getAwsProfileList() {
       .reduce(extractor, {} as IDictionary<IAwsProfile>) as IDictionary<IAwsProfile>;
 
     return credentials;
-  } catch (e) {
+  } catch {
     return {};
   }
 }

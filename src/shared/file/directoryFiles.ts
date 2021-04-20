@@ -1,28 +1,31 @@
-import { statSync, readdirSync, Stats } from "fs";
-import { posix } from "path";
-import { DevopsError } from "../errors";
+import { statSync, readdirSync } from "fs";
+import path from "path";
+import { IFileWithStats } from "~/@types";
+import { DevopsError } from "~/errors";
 
 /**
- * Given a passed in _directory_, this function returns the files in that directory
- * as well as their "stats".
+ * Returns all files in the specified directory along with their "stats".
  *
- * Note: _relative_ paths to the current working directory are assumed but you can
- * lead with the `/` character to indicate a full directory path
+ * Note: _relative paths to the current working directory are assumed but you can
+ * lead with the `/` character to indicate a full directory path_
  */
-export function directoryFiles(dir: string) {
+export function directoryFiles(dir: string): IFileWithStats[] {
   try {
-    const fullDir = ["/", "\\"].includes(dir.slice(0, 1)) ? dir : posix.join(process.cwd(), dir);
+    const fullDir = ["/", "\\"].includes(dir.slice(0, 1))
+      ? dir
+      : path.posix.join(process.cwd(), dir);
     const files = readdirSync(fullDir);
-    return files.reduce((agg: [{ file: string; stats: Stats }], file: string) => {
-      const stats = statSync(posix.join(process.cwd(), dir, file));
-      return agg.concat({ file, stats });
+    return files.reduce((agg: IFileWithStats[], file: string) => {
+      const stats = statSync(path.posix.join(process.cwd(), dir, file));
+      agg.push({ file, stats });
+      return agg;
     }, []);
-  } catch (e) {
+  } catch (error) {
     throw new DevopsError(
-      `Attempt to get files from the directory "${dir}" [ ${posix.join(
+      `Attempt to get files from the directory "${dir}" [ ${path.posix.join(
         process.cwd(),
         dir
-      )} ] failed: ${e.message}`,
+      )} ] failed: ${error.message}`,
       "do-devops/directoryFiles"
     );
   }

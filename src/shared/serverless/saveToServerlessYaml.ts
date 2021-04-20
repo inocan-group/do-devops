@@ -1,28 +1,23 @@
 import chalk from "chalk";
-import * as fs from "fs";
-import * as path from "path";
-
+import fs from "fs";
+import path from "path";
 import { dump } from "js-yaml";
-
-import { IServerlessConfig } from "common-types";
+import { IServerlessYaml } from "common-types";
 import { emoji } from "../ui";
-import { promisify } from "util";
 
-const writeFile = promisify(fs.writeFile);
-
-export async function saveToServerlessYaml(data: IServerlessConfig) {
+export async function saveToServerlessYaml(data: IServerlessYaml) {
   try {
     const filename = path.join(process.cwd(), "serverless.yml");
     console.log({ filename, data });
     const yamlData = dump(data);
 
-    await writeFile(filename, yamlData, { encoding: "utf-8" });
-  } catch (e) {
+    fs.writeFileSync(filename, yamlData, { encoding: "utf-8" });
+  } catch (error) {
     console.log(
       chalk`- {red writing the {bold serverless.yml} file has failed!} ${emoji.poop}`
     );
-    console.log(e.message);
-    console.log(chalk`{dim ${e.stack}}`);
+    console.log(error.message);
+    console.log(chalk`{dim ${error.stack}}`);
     process.exit();
   }
 }

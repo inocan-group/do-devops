@@ -1,12 +1,9 @@
 import chalk from "chalk";
-import * as fs from "fs";
-import * as path from "path";
+import fs from "fs";
+import path from "path";
 
-import { IServerlessConfig } from "common-types";
+import { IServerlessYaml } from "common-types";
 import { ensureDirectory } from "../..";
-import { promisify } from "util";
-
-const writeFile = promisify(fs.writeFile);
 
 /**
  * Once a build is complete, this function will review the
@@ -20,25 +17,26 @@ const writeFile = promisify(fs.writeFile);
  * Note that errors encountered are trapped so as to not block
  * completion but a warning message will be sent to the console.
  */
-export async function saveFunctionsTypeDefinition(config: IServerlessConfig) {
+export async function saveFunctionsTypeDefinition(config: IServerlessYaml) {
   try {
-    const functions = config.functions ? Object.keys(config.functions) : false;
     const stepFunctions =
       config.stepFunctions && config.stepFunctions.stateMachines
         ? Object.keys(config.stepFunctions.stateMachines)
         : false;
 
+    const functions = config.functions ? Object.keys(config.functions) : [];
+
     let contents = "";
-    if (functions) {
+
+    // Functions
+    if (config.functions) {
       contents += "export enum AvailableFunctions {";
-      functions.forEach((f, i) => {
-        const description = config.functions[f].description
-          ? config.functions[f].description
-          : false;
-        contents += description ? `\n  /**\n   * ${description}\n   **/` : "";
-        const comma = i === functions.length - 1 ? "" : ",";
-        contents += `\n  ${f} = "${f}"${comma}`;
-      });
+      for (const key in functions) {
+        const fn = config.functions[key];
+        const isLast = key === functions.slice(-1).pop();
+        contents += fn.description ? `\n  /**\n   * ${fn.description}\n   **/` : "";
+        contents += `\n  ${fn} = "${fn}"${isLast ? "" : ","}`;
+      }
       contents += "\n};\n";
     }
 
@@ -49,11 +47,11 @@ export async function saveFunctionsTypeDefinition(config: IServerlessConfig) {
     const dir = path.join(process.cwd(), "src/@types");
     const filename = path.join(dir, "build.ts");
     await ensureDirectory(dir);
-    await writeFile(filename, contents, { encoding: "utf-8" });
-  } catch (e) {
+    fs.writeFileSync(filename, contents, { encoding: "utf-8" });
+  } catch (error) {
     console.log(
       chalk`- Attempt to save {italic type definitions} for {bold functions} and {bold stepFunctions} failed; this will be ignored for now so build can continue.`
     );
-    console.log(chalk`- The actual error received was: {dim ${e.message}}`);
+    console.log(chalk`- The actual error received was: {dim ${error.message}}`);
   }
 }

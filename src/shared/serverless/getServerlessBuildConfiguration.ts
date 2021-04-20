@@ -1,4 +1,5 @@
 import { IDictionary, IServerlessAccountInfo } from "common-types";
+import { TypedMapper } from "typed-mapper";
 import {
   askForAccountInfo,
   getAccountInfoFromServerlessYaml,
@@ -7,7 +8,16 @@ import {
   getYeomanScaffolds,
 } from "../../shared";
 
-import { TypedMapper } from "typed-mapper";
+function transformYeomanFormat(input: IDictionary) {
+  return TypedMapper.map<IDictionary, IServerlessAccountInfo>({
+    name: "serviceName",
+    accountId: "awsAccount",
+    profile: "awsProfile",
+    region: "awsRegion",
+    devDependencies: (): string[] => [],
+    pluginsInstalled: (): string[] => [],
+  }).convertObject(input);
+}
 
 /**
  * Will find the appropriate configuration information
@@ -23,10 +33,10 @@ export async function getServerlessBuildConfiguration(): Promise<IServerlessAcco
   const modern = getYeomanScaffolds().includes("generator-lambda-typescript");
   const knownAccountInfo: Partial<IServerlessAccountInfo> = {
     ...(modern
-      ? transformYeomanFormat(await getYeomanConfig())
+      ? transformYeomanFormat(getYeomanConfig())
       : await getAccountInfoFromServerlessYaml()),
-    devDependencies: Object.keys(getPackageJson().devDependencies),
-    pluginsInstalled: Object.keys(getPackageJson().devDependencies).filter((i) =>
+    devDependencies: Object.keys(getPackageJson().devDependencies || {}),
+    pluginsInstalled: Object.keys(getPackageJson().devDependencies || {}).filter((i) =>
       i.startsWith("serverless-")
     ),
   };
@@ -34,15 +44,4 @@ export async function getServerlessBuildConfiguration(): Promise<IServerlessAcco
   const accountInfo = await askForAccountInfo(knownAccountInfo);
 
   return accountInfo;
-}
-
-function transformYeomanFormat(input: IDictionary) {
-  return TypedMapper.map<IDictionary, IServerlessAccountInfo>({
-    name: "serviceName",
-    accountId: "awsAccount",
-    profile: "awsProfile",
-    region: "awsRegion",
-    devDependencies: (): string[] => [],
-    pluginsInstalled: (): string[] => [],
-  }).convertObject(input);
 }

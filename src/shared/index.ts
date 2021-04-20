@@ -2,10 +2,10 @@
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 09:57 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 02:55 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: askForDataFile, consoleDimensions, defaultConfigSections, ensureDirectory, getCommandInterface, getCommands, getDataFiles, getExportsFromFile, inverted, options, readDataFile, readFile, runHooks, sandbox.
-// directories: ast, aws, do-config, errors, file, git, interactive, npm, serverless, sound, ui, yeoman.
+// files: askForDataFile, consoleDimensions, defaultConfigSections, ensureDirectory, getCommandInterface, getDataFiles, getExportsFromFile, inverted, options, readDataFile, readFile, runHooks, sandbox.
+// directories: ast, aws, commands, do-config, file, git, interactive, npm, observations, serverless, sound, ui, yeoman.
 
 // local file exports
 export * from "./askForDataFile";
@@ -13,7 +13,6 @@ export * from "./consoleDimensions";
 export * from "./defaultConfigSections";
 export * from "./ensureDirectory";
 export * from "./getCommandInterface";
-export * from "./getCommands";
 export * from "./getDataFiles";
 export * from "./getExportsFromFile";
 export * from "./inverted";
@@ -26,12 +25,13 @@ export * from "./sandbox";
 // directory exports
 export * from "./ast/index";
 export * from "./aws/index";
+export * from "./commands/index";
 export * from "./do-config/index";
-export * from "./errors/index";
 export * from "./file/index";
 export * from "./git/index";
 export * from "./interactive/index";
 export * from "./npm/index";
+export * from "./observations/index";
 export * from "./serverless/index";
 export * from "./sound/index";
 export * from "./ui/index";
@@ -39,7 +39,7 @@ export * from "./yeoman/index";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

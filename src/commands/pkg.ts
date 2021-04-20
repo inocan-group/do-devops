@@ -1,13 +1,12 @@
 import chalk from "chalk";
-
-import { determineRegion, determineStage, emoji, getConfig, runHooks } from "../shared";
-
 import { IDictionary } from "common-types";
-import { OptionDefinition } from "command-line-usage";
 import { asyncExec } from "async-shelljs";
+import { OptionDefinition } from "command-line-usage";
+import { emoji } from "~/shared/ui";
 import { detectTarget } from "./deploy-helpers";
+import { determineRegion, determineStage } from "~/shared/observations";
 
-export async function description(opts: IDictionary) {
+export async function description(_opts: IDictionary) {
   return chalk`Package up resources for {bold Serverless} publishing but do not actually {italic deploy}.`;
 }
 
@@ -28,7 +27,7 @@ export const options: OptionDefinition[] = [
   },
 ];
 
-export const syntax = "do pkg <options>";
+export const syntax = "dd pkg <options>";
 export const aliases = ["package"];
 
 /**
@@ -37,8 +36,8 @@ export const aliases = ["package"];
  * The `package` command is used in **Serverless** projects to build all of
  * the _deployable_ assets but without actually deploying.
  */
-export async function handler(argv: string[], opts: any) {
-  const { pkg } = await getConfig();
+export async function handler(_argv: string[], opts: any) {
+  // const { pkg } = await getConfig();
   const detect = await detectTarget();
   const target = detect.target;
   const stage = await determineStage(opts);
@@ -64,7 +63,9 @@ export async function handler(argv: string[], opts: any) {
   const directory = opts.dir ? opts.dir : ".serverless";
 
   console.log(chalk`\n{bold {green - Packaging is complete!}} ${emoji.rocket}`);
-  console.log(chalk`- the assets can all be found in the {italic {blue ${directory}} directory.}`);
+  console.log(
+    chalk`- the assets can all be found in the {italic {blue ${directory}} directory.}`
+  );
   await asyncExec(`ls -l ${directory}`);
   if (opts.validate) {
     console.log(
@@ -75,7 +76,7 @@ export async function handler(argv: string[], opts: any) {
     try {
       console.log(chalk`{dim    ${validateCmd}}`);
       await asyncExec(validateCmd);
-    } catch (e) {
+    } catch {
       console.log(chalk`{red - Error validating the {italic create} template!}`);
     }
 
@@ -88,8 +89,10 @@ export async function handler(argv: string[], opts: any) {
     try {
       console.log(chalk`{dim    ${validateUpdate}}`);
       await asyncExec(validateUpdate);
-    } catch (e) {
-      console.log(chalk`{red - Error validating the {italic update} template!} ${emoji.poop}`);
+    } catch {
+      console.log(
+        chalk`{red - Error validating the {italic update} template!} ${emoji.poop}`
+      );
     }
   }
 

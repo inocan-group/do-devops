@@ -30,7 +30,7 @@ export * as validate from "./validate/index";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

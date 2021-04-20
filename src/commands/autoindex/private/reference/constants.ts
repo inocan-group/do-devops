@@ -9,7 +9,7 @@ const bulletIndent = `${comment}${" ".repeat(20)}      `;
 const info = [
   `${comment} Note:`,
   `${comment} -----`,
-  `${noteIndent}This file was created by running: "do devops autoindex"; it assumes you have`,
+  `${noteIndent}This file was created by running: "dd devops autoindex"; it assumes you have`,
   `${noteIndent}the 'do-devops' pkg installed as a dev dep.`,
   `${comment}`,
   `${noteIndent}By default it assumes that exports are named exports but this can be changed by`,

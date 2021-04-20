@@ -1,5 +1,4 @@
 import chalk from "chalk";
-
 import { IDictionary, IServerlessFunction } from "common-types";
 import { namedExports, parseFile } from "./index";
 
@@ -20,13 +19,15 @@ export function findHandlerConfig(
   if (!config) {
     return;
   } else {
-    const fn = filename.split("/").pop().replace(".ts", "");
+    const fn = (filename.split("/").pop() || "").replace(".ts", "");
 
-    config.properties.forEach((i) => {
+    for (const i of config.properties || []) {
       hash[i.name] = i.value;
-    });
+    }
 
-    hash.handler = isWebpackZip ? `.webpack/${fn}.handler` : filename.replace(".ts", ".handler");
+    hash.handler = isWebpackZip
+      ? `.webpack/${fn}.handler`
+      : filename.replace(".ts", ".handler");
 
     if (isWebpackZip) {
       if (hash.package) {

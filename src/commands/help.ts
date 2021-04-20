@@ -1,10 +1,41 @@
 import chalk from "chalk";
 import commandLineUsage from "command-line-usage";
-
-import { emoji, getDescription, getHelpCommands, getOptions, getSyntax } from "../shared/ui/index";
-
 import { IDictionary } from "common-types";
 
+import {
+  emoji,
+  getDescription,
+  getHelpCommands,
+  getOptions,
+  getSyntax,
+} from "../shared/ui";
+
+/**
+ * Gets meta information about the specific funcctions syntax, commands, description, and options
+ */
+async function getHelpMeta(opts: IDictionary, fn?: string) {
+  try {
+    const syntax = await getSyntax(fn);
+    const commands = await getHelpCommands(fn);
+    const options = await getOptions(opts, fn);
+    const description = await getDescription(opts, fn);
+
+    return { commands, options, syntax, description };
+  } catch (error) {
+    console.log(
+      `  - ${emoji.poop}  ${chalk.red.bold("Problem getting help meta:")} ${
+        error.message
+      }\n`
+    );
+    console.log(chalk.grey(error.stack));
+    process.exit();
+  }
+}
+
+/**
+ * Provide help on **do-devops**, either in a global sense or for a
+ * particular function.
+ */
 export async function help(opts: IDictionary, fn?: string) {
   const { commands, description, syntax, options } = await getHelpMeta(opts, fn);
 
@@ -35,27 +66,12 @@ export async function help(opts: IDictionary, fn?: string) {
 
   try {
     console.log(commandLineUsage(sections));
-  } catch (e) {
-    console.log(`  - ${emoji.poop}  ${chalk.red("Problem displaying help:")} ${e.message}\n`);
-    console.log(chalk.grey(e.stack));
+  } catch (error) {
+    console.log(
+      `  - ${emoji.poop}  ${chalk.red("Problem displaying help:")} ${error.message}\n`
+    );
+    console.log(chalk.grey(error.stack));
   }
   console.log();
   process.exit();
-}
-
-async function getHelpMeta(opts: IDictionary, fn?: string) {
-  try {
-    const syntax = await getSyntax(fn);
-    const commands = await getHelpCommands(fn);
-    const options = await getOptions(opts, fn);
-    const description = await getDescription(opts, fn);
-
-    return { commands, options, syntax, description };
-  } catch (e) {
-    console.log(
-      `  - ${emoji.poop}  ${chalk.red.bold("Problem getting help meta:")} ${e.messsage}\n`
-    );
-    console.log(chalk.grey(e.stack));
-    process.exit();
-  }
 }

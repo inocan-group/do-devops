@@ -1,7 +1,9 @@
-export function removeExtension(file: string, force: boolean = false) {
+export function removeExtension(file: string) {
   const parts = file.split(".");
-  const [fn, ext] =
-    parts.length > 2 ? [file.replace("." + parts[parts.length - 1], ""), parts[parts.length - 1]] : file.split(".");
+  const [fn] =
+    parts.length > 2
+      ? [file.replace("." + parts[parts.length - 1], ""), parts[parts.length - 1]]
+      : file.split(".");
 
   return fn;
 }

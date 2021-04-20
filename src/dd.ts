@@ -3,34 +3,44 @@
 import chalk from "chalk";
 import * as process from "process";
 
-import { getCommandInterface, globalAndLocalOptions, globalOptions, inverted } from "./shared";
+import {
+  getCommandInterface,
+  globalAndLocalOptions,
+  globalOptions,
+  inverted,
+} from "./shared";
 
 import { OptionDefinition } from "command-line-args";
-import { getCommands } from "./shared/getCommands";
+import { getCommands } from "./shared/commands/getCommands";
 import { help } from "./commands/help";
 
 import commandLineArgs = require("command-line-args");
+import { isKnownCommand } from "./shared/commands";
 
 (async () => {
-  const command: OptionDefinition[] = [{ name: "command", defaultOption: true }, ...globalOptions];
+  const command: OptionDefinition[] = [
+    { name: "command", defaultOption: true },
+    ...globalOptions,
+  ];
   const mainCommand = commandLineArgs(command, { stopAtFirstUnknown: true });
   const cmd = (mainCommand._all || {}).command;
-  let argv = mainCommand._unknown || [];
   let opts = mainCommand.global;
 
-  console.log(chalk.bold.white(`do ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`));
+  console.log(
+    chalk.bold.white(`do ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
+  );
 
   if (!cmd) {
     await help(opts);
   }
 
-  if (getCommands().includes(cmd)) {
+  if (isKnownCommand(cmd)) {
     opts =
       commandLineArgs(await globalAndLocalOptions({}, cmd), {
         partial: true,
       }) || {};
 
-    let subModule = getCommandInterface(cmd);
+    const subModule = getCommandInterface(cmd);
     const subModuleArgv = opts._unknown.filter((i: any) => i !== cmd);
     const subModuleOpts = opts._all;
 
@@ -40,19 +50,25 @@ import commandLineArgs = require("command-line-args");
 
     try {
       await subModule.handler(subModuleArgv, subModuleOpts);
-    } catch (e) {
-      console.log(chalk`\n{red An Error has occurred while running: {italic {bold do ${cmd}}}}`);
-      console.log(`- ${e.message}`);
-      console.log(chalk`{grey   ${e.stack}}\n`);
+    } catch (error) {
+      console.log(
+        chalk`\n{red An Error has occurred while running: {italic {bold do-devops ${cmd}}}}`
+      );
+      console.log(`- ${error.message}`);
+      console.log(chalk`{grey   ${error.stack}}\n`);
 
       process.exit();
     }
   } else {
     console.log(
-      `${chalk.bold.red("DO:")} "${cmd}" is an unknown command! \n\n` +
+      `${chalk.bold.red("Whoops! ")} ${chalk.italic.yellowBright(
+        cmd
+      )} is an unknown command! \n\n` +
         `- Valid command syntax is: ${chalk.bold(
-          "do [command] <options>"
-        )}\n  where valid commands are: ${chalk.italic(getCommands().sort().join(", "))}\n` +
+          "dd [command] <options>"
+        )}\n  where valid commands are: ${chalk.italic(
+          getCommands().sort().join(", ")
+        )}\n\n` +
         `- If you want more help use the ${inverted(" --help ")} option\n`
     );
   }

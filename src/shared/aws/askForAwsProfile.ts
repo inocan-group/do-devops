@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { DevopsError } from "../errors/index";
+import { DevopsError } from "~/errors/index";
 import { getAwsProfileList } from "./index";
 import inquirer = require("inquirer");
 
@@ -25,7 +25,7 @@ export async function askForAwsProfile(opts?: IAskForProfileOptions): Promise<st
   const profiles = await getAwsProfileList();
   const profileNames = Object.keys(profiles);
   if (!profiles) {
-    const message = `Attempt to "ask" for the AWS profile assumes there is at least one defined AWS profile in the credentials file but that could not be found.`;
+    const message = "Attempt to \"ask\" for the AWS profile assumes there is at least one defined AWS profile in the credentials file but that could not be found.";
 
     if (opts.exitOnError) {
       console.log(chalk`{red - Missing AWS credentials file}`);

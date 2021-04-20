@@ -1,10 +1,14 @@
-import chalk = require("chalk");
-import { confirmQuestion } from "../../../shared";
-import { ask } from "../../../shared/interactive/ask";
+import chalk from "chalk";
+import { DevopsError } from "~/errors";
+import { ask, confirmQuestion } from "~/shared/interactive";
 
 export interface ISsmNameHints {
   stage?: string;
   version?: string;
+}
+
+function nameToUpper(parts: string[]) {
+  return [...parts.slice(0, -1), parts.slice(-1)[0].toUpperCase()].join("/");
 }
 
 /**
@@ -14,10 +18,7 @@ export interface ISsmNameHints {
  * @param name
  * @param hints
  */
-export async function completeSsmName(
-  name: string,
-  hints: ISsmNameHints = {}
-): Promise<string> {
+export async function completeSsmName(name: string, hints: ISsmNameHints = {}) {
   const parts = name.split("/");
   const lastIsUpper = parts.slice(-1)[0].toUpperCase() === parts.slice(-1)[0];
 
@@ -51,13 +52,8 @@ export async function completeSsmName(
         chalk`In most cases the best strategy is just to state the module name and final\nvariable name and let the autocomplete do the rest.`
       );
 
-      process.exit(1);
+      throw new DevopsError("Incorrect SSM variable formatting", "ssm/invalid-format");
     }
   }
-}
-
-function nameToUpper(parts: string[]) {
-  return [...parts.slice(0, parts.length - 1), parts.slice(-1)[0].toUpperCase()].join(
-    "/"
-  );
+  throw new DevopsError("Incorrect SSM variable structure", "ssm/invalid-structure");
 }

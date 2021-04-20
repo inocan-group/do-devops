@@ -1,31 +1,11 @@
+/* eslint-disable unicorn/consistent-function-scoping */
 import { getValidServerlessHandlers } from "../ast/index";
 import { filesInfo, filesExist } from "../file";
-import { join } from "path";
+import path from "path";
 import get = require("lodash.get");
+import { IWebpackHandlerDates } from "~/@types";
 
-export interface IHandlerInfo {
-  /** the function name (no _path_ or _file extension_) */
-  fn: string;
-  /**
-   * the fully qualified _path_ and _filename_ to the source file
-   */
-  source: string;
-  /**
-   * date/time the source file was last modified
-   */
-  sourceModified: Date;
-  /**
-   * the fully qualified _path_ and _filename_ to the **webpack** transpiled file;
-   * blank if this doesn't exist
-   */
-  webpack: string;
-  /**
-   * the date/time the transpiled file was last modified
-   */
-  webpackModified: Date;
-}
-
-let _cache: IHandlerInfo[];
+let _cache: IWebpackHandlerDates[];
 
 /**
  * Based on the inline serverless functions, it gets the following:
@@ -39,40 +19,36 @@ let _cache: IHandlerInfo[];
  * **Note:** this function _caches_ results for better performance but you
  * can break the cache by send in a `true` value to the `breakCache` parameter.
  */
-export function getLocalHandlerInfo(
-  breakCache: boolean = false
-): IHandlerInfo[] {
+export function getLocalHandlerInfo(breakCache: boolean = false): IWebpackHandlerDates[] {
   if (_cache && !breakCache) {
     return _cache;
   }
 
   const sourcePaths = getValidServerlessHandlers();
   const convertToWebpackPath = (source: string) =>
-    join(
+    path.join(
       process.cwd(),
       ".webpack",
-      source
-        .split("/")
-        .pop()
-        .replace(".ts", ".js")
+      (source.split("/").pop() || "").replace(".ts", ".js")
     );
-  const webpackPaths = sourcePaths.map(i => convertToWebpackPath(i));
+  const webpackPaths = sourcePaths.map((i) => convertToWebpackPath(i));
   const sourceInfo = filesInfo(...sourcePaths);
   // some handlers may not have been transpiled yet
   const webpackFilesExist = filesExist(...webpackPaths);
   const webpackInfo = webpackFilesExist ? filesInfo(...webpackFilesExist) : [];
 
-  return sourceInfo.reduce((agg: IHandlerInfo[], source) => {
-    return agg.concat({
+  return sourceInfo.reduce((agg: IWebpackHandlerDates[], source) => {
+    return {
+      ...agg,
       fn: source.fileName,
       source: source.filePath,
       sourceModified: source.stats.mtime,
       webpack: convertToWebpackPath(source.filePath),
       webpackModified: get(
-        webpackInfo.find(w => w.fileName === source.fileName) || {},
+        webpackInfo.find((w) => w.fileName === source.fileName) || {},
         "stats.mtime",
         new Date("1970-01-01")
-      )
-    });
+      ),
+    };
   }, []);
 }

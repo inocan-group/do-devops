@@ -1,8 +1,8 @@
 import { IDictionary } from "common-types";
+import path from "path";
 import { writeFile } from "fs";
 import { promisify } from "util";
-import { DevopsError } from "../errors";
-import { join } from "path";
+import { DevopsError } from "~/errors";
 import { filesExist } from "./filesExist";
 
 const w = promisify(writeFile);
@@ -37,28 +37,25 @@ export async function write(
           : JSON.stringify(data);
     }
     if (![".", "/"].includes(filename.slice(0, 1))) {
-      filename = join(process.cwd(), filename);
+      filename = path.join(process.cwd(), filename);
     }
-    let offset: number;
+    let offset: number | undefined;
     while (options.offsetIfExists && filesExist(filename)) {
       const before = new RegExp(`-${offset}.(.*)$`);
       filename = offset ? filename.replace(before, ".$1") : filename;
       offset = !offset ? 1 : offset++;
-      const after = new RegExp(`-${offset}$`);
+      // const after = new RegExp(`-${offset}$`);
       const parts = filename.split(".");
-      filename =
-        parts.slice(0, parts.length - 1).join(".") +
-        `-${offset}.` +
-        parts.slice(-1);
+      filename = parts.slice(0, -1).join(".") + `-${offset}.` + parts.slice(-1);
     }
     await w(filename, data, {
-      encoding: "utf-8"
+      encoding: "utf-8",
     });
 
     return { filename, data };
-  } catch (e) {
+  } catch (error) {
     throw new DevopsError(
-      `Problem writing file "${filename}": ${e.message}`,
+      `Problem writing file "${filename}": ${error.message}`,
       "do-devops/can-not-write"
     );
   }

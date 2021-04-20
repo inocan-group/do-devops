@@ -1,11 +1,11 @@
 import chalk from "chalk";
 
-import { DevopsError } from "../errors";
-import { IServerlessConfig } from "common-types";
+import { DevopsError } from "~/errors";
+import { IServerlessYaml } from "common-types";
 import { buildLambdaTypescriptProject } from "./index";
-import { emoji } from "../ui";
+import { emoji } from "~/shared/ui";
 import { getServerlessYaml } from "./getServerlessYaml";
-import { isServerless } from "./isServerless";
+import { isServerless } from "../observations/isServerless";
 
 /**
  * Returns the **AWS Profile** which is used as part
@@ -17,10 +17,10 @@ import { isServerless } from "./isServerless";
  */
 export async function getAwsProfileFromServerless() {
   const sls = await isServerless();
-  let config: IServerlessConfig;
+  let config: IServerlessYaml;
   if (!sls) {
     throw new DevopsError(
-      `Attempt to get the AWS profile from the serverless config failed because this project is not setup as a serverless project!`,
+      "Attempt to get the AWS profile from the serverless config failed because this project is not setup as a serverless project!",
       "devops/not-allowed"
     );
   }
@@ -52,9 +52,9 @@ export async function getAwsProfileFromServerless() {
       process.exit();
     }
     return config.provider.profile;
-  } catch (e) {
+  } catch {
     console.log(chalk`- {red serverless.yml} file is missing! ${emoji.poop}`);
-    console.log(`- this file must exist before you can deploy\n`);
+    console.log("- this file must exist before you can deploy\n");
     process.exit();
   }
 }

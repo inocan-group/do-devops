@@ -1,4 +1,4 @@
-import { BuildTool, IBuildTool } from "../../@types/defaultConfig";
+import { IBuildTool } from "../../@types/defaultConfig";
 import { getConfig, writeSection } from "../../shared/index";
 
 /**

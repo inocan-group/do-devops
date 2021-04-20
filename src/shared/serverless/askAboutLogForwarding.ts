@@ -1,7 +1,9 @@
+/* eslint-disable quotes */
 import chalk from "chalk";
 
-import { IDictionary, IServerlessConfig } from "common-types";
-import { determineStage, getLambdaFunctions } from "./index";
+import { IDictionary, IServerlessYaml } from "common-types";
+import { getLambdaFunctions } from "./index";
+import { determineStage } from "~/shared/observations";
 import { getPackageJson, hasDevDependency, writePackageJson } from "../npm";
 import inquirer = require("inquirer");
 /**
@@ -11,9 +13,9 @@ import inquirer = require("inquirer");
  * interactive mode if the `serverless-log-forwarding` is installed
  * as a **devDep**.
  */
-export async function askAboutLogForwarding(config: IServerlessConfig) {
-  const hasServerlessLogForwarding = await hasDevDependency("serverless-log-forwarding");
-  const hasConfigInfoForForwarding = config.custom.logForwarding ? true : false;
+export async function askAboutLogForwarding(config: IServerlessYaml) {
+  const hasServerlessLogForwarding = hasDevDependency("serverless-log-forwarding");
+  const hasConfigInfoForForwarding = config?.custom?.logForwarding ? true : false;
   if (!hasServerlessLogForwarding) {
     if (hasConfigInfoForForwarding) {
       console.log(
@@ -29,7 +31,7 @@ export async function askAboutLogForwarding(config: IServerlessConfig) {
 
   if (hasConfigInfoForForwarding) {
     console.log(
-      chalk`{grey - the {blue serverless-log-forwarding} is configured [ ${config.custom.logForwarding.destinationARN} ]}`
+      chalk`{grey - the {blue serverless-log-forwarding} is configured [ ${config?.custom?.logForwarding?.destinationARN} ]}`
     );
     return config;
   }
@@ -41,7 +43,7 @@ export async function askAboutLogForwarding(config: IServerlessConfig) {
   enum Action {
     now = "configure now",
     remove = 'remove "serverless-log-forwarding" from package.json',
-    later = "do this later",
+    later = "dd this later",
   }
   let answers: {
     action: Action;
@@ -64,7 +66,10 @@ export async function askAboutLogForwarding(config: IServerlessConfig) {
   if (answers.action === Action.now) {
     const awsFunctions = await getLambdaFunctions();
     const stage = (await determineStage({})) || "dev";
-    const fns = awsFunctions.map((i) => i.FunctionName).concat("CANCEL");
+    const fns: string[] = [
+      ...awsFunctions.map((i) => i.FunctionName as string),
+      "CANCEL",
+    ];
     const defaultFn = fns
       .filter((i) => i.toLocaleLowerCase().includes("shipper"))
       .find((i) => i.includes(stage));
@@ -79,17 +84,23 @@ export async function askAboutLogForwarding(config: IServerlessConfig) {
       },
     ];
     answers = { ...answers, ...(await inquirer.prompt(questions)) };
-    if (answers.shipper !== "CANCEL") {
-      const arn = awsFunctions.find((i) => i.FunctionName === answers.shipper).FunctionArn;
+    if (answers.shipper && answers.shipper !== "CANCEL") {
+      const arn = awsFunctions.find((i) => i.FunctionName === answers.shipper)
+        ?.FunctionArn as string;
+      if (!config.custom) {
+        config.custom = {};
+      }
       config.custom.logForwarding = { destinationARN: arn };
     } else {
-      console.log(chalk`{grey - ok, cancelling the config of a shipping function for now}`);
+      console.log(
+        chalk`{grey - ok, cancelling the config of a shipping function for now}`
+      );
     }
   } else if (answers.action === Action.remove) {
-    const pkg = await getPackageJson();
-    pkg.devDependencies = Object.keys(pkg.devDependencies).reduce((agg, key: string) => {
+    const pkg = getPackageJson();
+    pkg.devDependencies = Object.keys(pkg.devDependencies || {}).reduce((agg, key) => {
       if (key !== "serverless-log-forwarding") {
-        agg[key] = pkg.devDependencies[key];
+        agg[key] = (pkg.devDependencies || {})[key];
       }
       return agg;
     }, {} as IDictionary<string>);

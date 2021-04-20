@@ -1,5 +1,5 @@
 import { OptionDefinition } from "command-line-usage";
-import chalk = require("chalk");
+import chalk from "chalk";
 
 export const options: OptionDefinition[] = [
   {
@@ -7,21 +7,21 @@ export const options: OptionDefinition[] = [
     type: String,
     typeLabel: "<profileName>",
     group: "ssm",
-    description: `set the AWS profile explicitly`,
+    description: "set the AWS profile explicitly",
   },
   {
     name: "region",
     type: String,
     typeLabel: "<region>",
     group: "ssm",
-    description: `set the AWS region explicitly`,
+    description: "set the AWS region explicitly",
   },
   {
     name: "stage",
     type: String,
     typeLabel: "<stage>",
     group: "ssm",
-    description: `set the stage explicitly`,
+    description: "set the stage explicitly",
   },
   {
     name: "nonStandardPath",
@@ -34,7 +34,7 @@ export const options: OptionDefinition[] = [
     name: "description",
     type: String,
     group: "ssm",
-    description: `sets the description of the SSM variable (only used in ADD)`,
+    description: "sets the description of the SSM variable (only used in ADD)",
   },
   {
     name: "force",

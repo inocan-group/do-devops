@@ -1,12 +1,12 @@
 import fg from "fast-glob";
-import * as path from "path";
+import path from "path";
 
 /**
  * Finds all typescript files in the `src/handlers`
  * directory which have a **handler** export.
  */
 export async function findAllHandlerFiles() {
-  const glob = path.join(process.env.PWD, "/src/handlers/**/*.ts");
+  const glob = path.join(process.env.PWD || "", "/src/handlers/**/*.ts");
   const files = fg.sync(glob);
   const handlers = [];
   console.log(files);

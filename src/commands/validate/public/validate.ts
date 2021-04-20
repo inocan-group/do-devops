@@ -1,12 +1,16 @@
 import { IDictionary } from "common-types";
 import { getCurrentGitBranch } from "../../../shared";
 import * as subCommands from "../private/subCommands/index";
-import chalk = require("chalk");
+import chalk from "chalk";
 import { includedIn } from "../private/index";
 
 export type ValidationAction = "none" | "warn" | "error";
 export interface IValidationHandler {
-  handler: (action: ValidationAction, currentBranch: string, options?: IDictionary) => Promise<0 | 1>;
+  handler: (
+    action: ValidationAction,
+    currentBranch: string,
+    options?: IDictionary
+  ) => Promise<0 | 1>;
 }
 
 /**
@@ -33,7 +37,9 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     : defaultAction;
 
   if (action !== "none") {
-    const cmdDefn = (subCommands[subCommand as keyof typeof subCommands] as unknown) as IValidationHandler;
+    const cmdDefn = (subCommands[
+      subCommand as keyof typeof subCommands
+    ] as unknown) as IValidationHandler;
     process.exit(await cmdDefn.handler(action, currentBranch, opts));
   }
 

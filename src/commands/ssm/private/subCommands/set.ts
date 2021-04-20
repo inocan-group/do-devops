@@ -1,22 +1,17 @@
-import { IDictionary } from "common-types";
-import {
-  determineProfile,
-  getAwsProfile,
-  determineRegion,
-  askForStage,
-  emoji,
-  getAwsIdentityFromProfile,
-} from "../../../../shared";
-import chalk = require("chalk");
+import { getAwsProfile, getAwsIdentityFromProfile } from "~/shared/aws";
+import chalk from "chalk";
 import { SSM } from "aws-ssm";
 import { completeSsmName } from "../index";
 import { ISsmOptions } from "../../public";
 import { toBase64 } from "native-dash";
+import { determineProfile, determineRegion } from "~/shared/observations";
+import { askForStage } from "~/shared/serverless";
+import { emoji } from "~/shared/ui";
 
 export async function execute(argv: string[], options: ISsmOptions) {
   if (argv.length < 2) {
     console.log(
-      chalk`The "do ssm set" command expects the variable name and value as parameters on the command line: {blue {bold do ssm set} <{italic name}> <{italic value}>}\n`
+      chalk`The "dd ssm set" command expects the variable name and value as parameters on the command line: {blue {bold do ssm set} <{italic name}> <{italic value}>}\n`
     );
     console.log(
       chalk`{grey {bold - Note:} you can include a {italic partial name} for the variable and things like the AWS profile, region, stage, and version number\n  will be filled in where possible}\n`
@@ -56,14 +51,14 @@ export async function execute(argv: string[], options: ISsmOptions) {
     console.log(
       chalk`\n- ${emoji.party} the {bold {yellow ${name}}} variable was set successfully to the {italic ${region}} region {dim [ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]}\n`
     );
-  } catch (e) {
+  } catch (error) {
     console.log();
-    if (e.code === "ParameterAlreadyExists") {
+    if (error.code === "ParameterAlreadyExists") {
       console.log(
         chalk`- {red {bold Paramater Already Exists!}} to overwrite a parameter which already exists you must add {blue --force} to the CLI command`
       );
     } else {
-      console.log(chalk`{red {bold Error:}} ${e.message}`);
+      console.log(chalk`{red {bold Error:}} ${error.message}`);
     }
 
     console.log();

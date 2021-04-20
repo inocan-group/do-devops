@@ -1,12 +1,18 @@
 import { ValidationAction } from "../../public";
-import { asyncExec, exec } from "async-shelljs";
+import { exec } from "async-shelljs";
 import { IDictionary } from "common-types";
-import chalk = require("chalk");
-import { emoji } from "../../../../shared";
+import chalk from "chalk";
+import { emoji } from "~/shared/ui";
 
-export async function handler(action: ValidationAction, currentBranch: string, options: IDictionary = {}) {
-  const target = options.target || "do test";
-  if (options.quiet) console.log(chalk`- ${emoji.run} running unit tests`);
+export async function handler(
+  action: ValidationAction,
+  _currentBranch: string,
+  options: IDictionary = {}
+) {
+  const target = options.target || "dd test";
+  if (options.quiet) {
+    console.log(chalk`- ${emoji.run} running unit tests`);
+  }
 
   const result = exec(`yarn ${target}`, { silent: options.quiet });
   if (options.quiet) {

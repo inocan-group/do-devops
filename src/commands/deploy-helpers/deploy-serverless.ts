@@ -1,14 +1,13 @@
 import chalk from "chalk";
-
-import { determineStage, getConfig, getLocalHandlerInfo, hasDevDependency } from "../../shared";
-
-import { IDictionary } from "common-types";
-import { IDoDeployServerless } from "../../@types";
 import { asyncExec } from "async-shelljs";
-import { emoji } from "../../shared/ui";
+import { IDictionary } from "common-types";
+import { IDoDeployServerless } from "~/@types";
+import { getLocalHandlerInfo, zipWebpackFiles } from "~/shared/serverless";
+import { emoji } from "~/shared/ui";
 import { isTranspileNeeded } from "./index";
-import { sandbox } from "../../shared/sandbox";
-import { zipWebpackFiles } from "../../shared/serverless/build/index";
+import { determineStage } from "~/shared/observations";
+import { hasDevDependency } from "~/shared/npm";
+import { getConfig } from "~/shared/do-config";
 
 export interface IServerlessDeployMeta {
   stage: string;
@@ -16,24 +15,8 @@ export interface IServerlessDeployMeta {
   opts: IDictionary;
 }
 
-/**
- * Manages the execution of a serverless deployment
- */
-export default async function serverlessDeploy(argv: string[], opts: IDictionary) {
-  const stage = await determineStage(opts);
-  const { deploy: config } = await getConfig();
-  const meta = { stage, config: config as IDoDeployServerless, opts };
-
-  // argv values indicate function deployment
-  if (argv.length > 0) {
-    await functionDeploy(argv, meta);
-  } else {
-    await fullDeploy(meta);
-  }
-}
-
 async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
-  const { stage, opts, config } = meta;
+  const { stage } = meta;
   console.log(
     chalk`- {bold serverless} deployment for {bold ${String(
       fns.length
@@ -49,16 +32,24 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   }
 
   console.log(
-    chalk`{grey - zipping up ${String(fns.length)} {bold Serverless} {italic handler} functions }`
+    chalk`{grey - zipping up ${String(
+      fns.length
+    )} {bold Serverless} {italic handler} functions }`
   );
   await zipWebpackFiles(fns);
-  console.log(chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`);
+  console.log(
+    chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`
+  );
 
-  console.log(chalk`- deploying {bold ${String(fns.length)} functions} to "${stage}" stage`);
-  const sandboxStage = stage === "dev" ? await sandbox(stage) : stage;
-  if (sandboxStage !== stage) {
+  console.log(
+    chalk`- deploying {bold ${String(fns.length)} functions} to "${stage}" stage`
+  );
+  // const sandboxStage = stage === "dev" ? await sandbox(stage) : stage;
+  // if (sandboxStage !== stage) {
+  // }
+  for (const fn of fns) {
+    console.log(chalk.grey(`    - ${fn}`));
   }
-  fns.forEach((fn) => console.log(chalk.grey(`    - ${fn}`)));
 
   const promises: any[] = [];
   try {
@@ -71,18 +62,22 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
     });
     await Promise.all(promises);
     console.log(
-      chalk`\n- all {bold ${String(fns.length)}} function(s) were deployed! ${emoji.rocket}\n`
+      chalk`\n- all {bold ${String(fns.length)}} function(s) were deployed! ${
+        emoji.rocket
+      }\n`
     );
-  } catch (e) {
+  } catch (error) {
     console.log(chalk`- {red {bold problems deploying functions!}} ${emoji.poop}`);
-    console.log(`- ${e.message}`);
-    console.log(chalk`- {dim ${e.stack}}`);
+    console.log(`- ${error.message}`);
+    console.log(chalk`- {dim ${error.stack}}`);
   }
 }
 
 async function fullDeploy(meta: IServerlessDeployMeta) {
-  const { stage, opts, config } = meta;
-  console.log(chalk`- Starting {bold FULL serverless} deployment for {italic ${stage}} stage`);
+  const { stage, config } = meta;
+  console.log(
+    chalk`- Starting {bold FULL serverless} deployment for {italic ${stage}} stage`
+  );
 
   if (!hasDevDependency("serverless-webpack")) {
     console.log(
@@ -102,7 +97,9 @@ async function fullDeploy(meta: IServerlessDeployMeta) {
     console.log(chalk`{grey - zipping up all ${String(fns.length)} Serverless handlers}`);
 
     await zipWebpackFiles(fns);
-    console.log(chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`);
+    console.log(
+      chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`
+    );
   }
 
   if (config.showUnderlyingCommands) {
@@ -112,11 +109,23 @@ async function fullDeploy(meta: IServerlessDeployMeta) {
     try {
       await asyncExec(`sls deploy --aws-s3-accelerate  --stage ${stage} --verbose`);
       console.log(chalk`\n- The full deploy was successful! ${emoji.rocket}\n`);
-    } catch (e) {
+    } catch {
       console.log(chalk`- {red Error running deploy!}`);
       console.log(
         chalk`- NOTE: {dim if the error appears related to running out of heap memory then you can try {bold {yellow export NODE_OPTIONS=--max_old_space_size=4096}}}\n`
       );
     }
   }
+}
+
+/**
+ * Manages the execution of a serverless deployment
+ */
+export default async function serverlessDeploy(argv: string[], opts: IDictionary) {
+  const stage = await determineStage(opts);
+  const { deploy: config } = await getConfig();
+  const meta = { stage, config: config as IDoDeployServerless, opts };
+
+  // argv values indicate function deployment
+  await (argv.length > 0 ? functionDeploy(argv, meta) : fullDeploy(meta));
 }

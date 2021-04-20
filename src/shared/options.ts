@@ -4,31 +4,6 @@ import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
 import { getCommandInterface } from "./getCommandInterface";
 
-/**
- * A list of all options from all commands (including global options)
- */
-export async function globalAndLocalOptions(optsSet: IDictionary, fn: string) {
-  let options: OptionDefinition[] = [];
-
-  const cmdDefn = fn ? getCommandInterface(fn) : ({} as IDictionary);
-  if (cmdDefn.options) {
-    const localOptions: OptionDefinition[] =
-      typeof cmdDefn.options === "object"
-        ? cmdDefn.options
-        : await cmdDefn.options(optsSet);
-    const localNames = localOptions.map((i) => i.name);
-
-    const nonInterferingGlobal = globalOptions.filter(
-      (i) => !localNames.includes(i.name)
-    );
-    options = localOptions.concat(nonInterferingGlobal);
-  } else {
-    options = globalOptions;
-  }
-
-  return options;
-}
-
 export interface IGlobalOptions {
   output?: string;
   quiet?: boolean;
@@ -67,3 +42,26 @@ export const globalOptions: OptionDefinition[] = [
     description: "shows help for given command",
   },
 ];
+
+/**
+ * A list of all options from all commands (including global options)
+ */
+export async function globalAndLocalOptions(optsSet: IDictionary, fn: string) {
+  let options: OptionDefinition[] = [];
+
+  const cmdDefn = fn ? getCommandInterface(fn) : ({} as IDictionary);
+  if (cmdDefn.options) {
+    const localOptions: OptionDefinition[] =
+      typeof cmdDefn.options === "object"
+        ? cmdDefn.options
+        : await cmdDefn.options(optsSet);
+    const localNames = new Set(localOptions.map((i) => i.name));
+
+    const nonInterferingGlobal = globalOptions.filter((i) => !localNames.has(i.name));
+    options = [...localOptions, ...nonInterferingGlobal];
+  } else {
+    options = globalOptions;
+  }
+
+  return options;
+}

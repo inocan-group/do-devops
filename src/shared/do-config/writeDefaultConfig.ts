@@ -1,4 +1,3 @@
-import { writeFileSync } from "fs";
 import { getDefaultConfig, getFullDefaultConfig } from "./getDefaultConfig";
 import { IDictionary } from "common-types";
 import { writeConfig, getConfig } from "./index";

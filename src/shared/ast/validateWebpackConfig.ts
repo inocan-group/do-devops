@@ -1,5 +1,5 @@
 // import { readFileSync } from "fs";
-import { join } from "path";
+import path from "path";
 import { parseFile } from "./index";
 
 /**
@@ -12,6 +12,6 @@ import { parseFile } from "./index";
  * @param filename optionally override the default webpack config filename
  */
 export function validateWebpackConfig(filename: string = "webpack.config.js") {
-  const config = parseFile(join(process.cwd(), filename));
+  const config = parseFile(path.posix.join(process.cwd(), filename));
   console.log(config.program.body);
 }

@@ -1,18 +1,20 @@
 import { OptionDefinition } from "command-line-usage";
-import chalk = require("chalk");
+import chalk from "chalk";
 
 export const options: OptionDefinition[] = [
   {
     name: "add",
     type: String,
     group: "autoindex",
-    description: `adds additional files to include as possible autoindex sources; you can comma delimit to add more than one`,
+    description:
+      "adds additional files to include as possible autoindex sources; you can comma delimit to add more than one",
   },
   {
     name: "glob",
     type: String,
     group: "autoindex",
-    description: `replaces the glob file matching pattern with your own (however "node_modules" still excluded)`,
+    description:
+      "replaces the glob file matching pattern with your own (however \"node_modules\" still excluded)",
   },
   {
     name: "sfc",
@@ -24,7 +26,8 @@ export const options: OptionDefinition[] = [
     name: "dir",
     type: String,
     group: "autoindex",
-    description: `by default will look for files in the "src" directory but you can redirect this to a different directory`,
+    description:
+      "by default will look for files in the \"src\" directory but you can redirect this to a different directory",
   },
   {
     name: "quiet",

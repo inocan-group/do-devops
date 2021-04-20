@@ -1,9 +1,9 @@
-import { emoji, getConfig, runHooks } from "../shared";
-
+import chalk from "chalk";
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
+
 import { detectTarget } from "./deploy-helpers";
-import chalk = require("chalk");
+import { emoji } from "~/shared/ui";
 
 export const defaultConfig = {
   preDeployHooks: ["clean"],
@@ -12,9 +12,9 @@ export const defaultConfig = {
   sandboxing: "user",
 };
 
-export async function description(opts: IDictionary) {
-  const base = `Deployment services that for {bold Serverless} or {bold NPM} publishing.\n\n`;
-  const { deploy: config } = await getConfig();
+export async function description(_opts: IDictionary) {
+  const base =
+    "Deployment services that for {bold Serverless} or {bold NPM} publishing.\n\n";
   const detect = await detectTarget();
 
   const possibleTargets = {
@@ -28,11 +28,11 @@ export async function description(opts: IDictionary) {
 }
 
 export const syntax =
-  "do deploy [fn1] [fn2] <options>\n\n{dim Note: {italic stating particular functions is {italic optional} and if excluded will result in a full deployment of all functions.}}";
+  "dd deploy [fn1] [fn2] <options>\n\n{dim Note: {italic stating particular functions is {italic optional} and if excluded will result in a full deployment of all functions.}}";
 
-export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
-  const { deploy: config } = await getConfig();
-  const target = opts.target || config.target;
+export async function options(_opts: IDictionary): Promise<OptionDefinition[]> {
+  // const { deploy: config } = await getConfig();
+  // const target = opts.target || config.target;
 
   return [
     {
@@ -40,7 +40,7 @@ export async function options(opts: IDictionary): Promise<OptionDefinition[]> {
       alias: "i",
       type: Boolean,
       group: "serverlessDeploy",
-      description: `allow interactive choices for the functions you want to deploy`,
+      description: "allow interactive choices for the functions you want to deploy",
     },
     {
       name: "target",

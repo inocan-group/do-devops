@@ -1,5 +1,5 @@
 import { getAwsProfileList } from "./index";
-import { DevopsError } from "../errors/index";
+import { DevopsError } from "~/errors/index";
 
 /**
  * Get a specific _named profile_ in the AWS `credentials` file;

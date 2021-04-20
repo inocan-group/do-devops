@@ -1,10 +1,10 @@
+import chalk from "chalk";
 import { existsSync, readFileSync } from "fs";
+import parse from "destr";
 
 import { IDictionary } from "common-types";
-import { emoji } from "../../private";
-import { join } from "path";
-
-import chalk = require("chalk");
+import { emoji } from "~/shared/ui";
+import path from "path";
 
 /**
  * returns the `.yo-rc.json` file combined with the
@@ -14,8 +14,8 @@ import chalk = require("chalk");
  * if it's an empty dictionary)
  */
 export function getYeomanConfig(scaffold = "generator-lambda-typescript") {
-  const yoFile = join(process.cwd(), ".yo-rc.json");
-  const transientFile = join(process.cwd(), ".yo-transient.json");
+  const yoFile = path.posix.join(process.cwd(), ".yo-rc.json");
+  const transientFile = path.posix.join(process.cwd(), ".yo-transient.json");
   const hasYo = existsSync(yoFile);
   const hasTransient = existsSync(transientFile);
 
@@ -24,9 +24,11 @@ export function getYeomanConfig(scaffold = "generator-lambda-typescript") {
 
   if (hasYo) {
     try {
-      yo = JSON.parse(readFileSync(yoFile, "utf-8"))[scaffold];
-    } catch (e) {
-      console.log(chalk`- there appears to {italic be} a yeoman config file but it could not be parsed ${emoji.poop}`);
+      yo = parse(readFileSync(yoFile, "utf-8"))[scaffold];
+    } catch {
+      console.log(
+        chalk`- there appears to {italic be} a yeoman config file but it could not be parsed ${emoji.poop}`
+      );
       console.log(
         chalk`{grey - Note: we are looking for the "${scaffold}" as a root property, other yeoman scaffoldings are not considered}`
       );
@@ -35,8 +37,8 @@ export function getYeomanConfig(scaffold = "generator-lambda-typescript") {
 
   if (hasTransient) {
     try {
-      transient = JSON.parse(readFileSync(transientFile, "utf-8"));
-    } catch (e) {
+      transient = parse(readFileSync(transientFile, "utf-8"));
+    } catch {
       console.log(
         chalk`- there appears to be a {italic transient} yeoman config file -- {blue .yo-transient.json} -- but it could not be parsed ${emoji.poop}`
       );
