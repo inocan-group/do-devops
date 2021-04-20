@@ -1,8 +1,9 @@
+/* eslint-disable quotes */
 import * as fs from "fs";
 import * as path from "path";
 
 import { IHandlerReference } from "../../../@types/index";
-import { IServerlessFunction, IServerlessFunctionHandler } from "common-types";
+import { IServerlessFunctionHandler } from "common-types";
 import { promisify } from "util";
 const writeFile = promisify(fs.writeFile);
 
@@ -26,9 +27,9 @@ export async function writeInlineFunctions(
     const localPath = handler.file
       .replace(/.*src\//, `${functionRoot}/`)
       .replace(".ts", "");
-    const functionName = handler.file.split("/").pop().replace(".ts", "");
+    const functionName = (handler.file.split("/").pop() || "").replace(".ts", "");
     fnNames.push(functionName);
-    let config: IServerlessFunctionHandler = {
+    const config: IServerlessFunctionHandler = {
       handler: `${localPath}.handler`,
     };
     // if (handler.ref.config) {

@@ -12,7 +12,7 @@ import * as path from "path";
 export function findInlineFunctionDefnFiles(basePath?: string) {
   const glob = basePath
     ? path.join(basePath, "/**/*.defn.ts")
-    : path.join(process.env.PWD, "/src/**/*.defn.ts");
+    : path.join(process.env.PWD || "", "/src/**/*.defn.ts");
 
   return fg.sync([glob]) as string[];
 }

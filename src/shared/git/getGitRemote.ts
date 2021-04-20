@@ -1,4 +1,3 @@
-import { asyncExec } from "async-shelljs";
 import { git } from "./git";
 
 /**
@@ -16,7 +15,7 @@ export async function getGitRemotes(baseDir?: string) {
     const remotes = await g.getRemotes(true);
 
     return remotes.length > 0 ? remotes : [];
-  } catch (e) {
+  } catch {
     return [];
   }
 }

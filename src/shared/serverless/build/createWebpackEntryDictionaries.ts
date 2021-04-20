@@ -1,6 +1,22 @@
-import * as path from "path";
+import path from "path";
 import { IDictionary } from "common-types";
-import { write } from "../../file/write";
+import { write } from "~/shared/file";
+
+export interface IEntryData {
+  fn: string;
+  tsPath: string;
+  jsPath: string;
+}
+
+export function useKey(key: "jsPath" | "tsPath") {
+  return (
+    agg: IDictionary<string>,
+    curr: { fn: string; tsPath: string; jsPath: string }
+  ) => {
+    agg[curr.fn] = curr[key];
+    return agg;
+  };
+}
 
 /**
  * Webpack can create named multiple entry points if the `entry` parameter
@@ -20,39 +36,18 @@ import { write } from "../../file/write";
  * are managing the webpack process yourself then the latter is likely more appropriate.
  */
 export async function createWebpackEntryDictionaries(handlerFns: string[]) {
-  const data = handlerFns.reduce((agg: IDictionary[], f: string) => {
-    const fn = f
-      .split("/")
-      .pop()
-      .replace(".ts", "");
+  const data = handlerFns.reduce((agg, f: string) => {
+    const fn = (f.split("/").pop() || "").replace(".ts", "");
     const tsPath = "./" + path.relative(process.cwd(), f);
-    const jsPath = tsPath
-      .split("/")
-      .pop()
+    const jsPath = (tsPath.split("/").pop() || "")
       .replace(/(.*)/, ".webpack/$1")
       .replace(".ts", ".js");
 
-    return agg.concat({ fn, tsPath, jsPath });
-  }, []);
+    return [...agg, { fn, tsPath, jsPath }];
+  }, [] as IEntryData[]);
 
   await Promise.all([
     write("webpack.ts-entry-points.json", data.reduce(useKey("tsPath"), {})),
-    write("webpack.js-entry-points.json", data.reduce(useKey("jsPath"), {}))
+    write("webpack.js-entry-points.json", data.reduce(useKey("jsPath"), {})),
   ]);
-}
-
-interface IEntryData {
-  fn: string;
-  tsPath: string;
-  jsPath: string;
-}
-
-export function useKey(key: "jsPath" | "tsPath") {
-  return (
-    agg: IDictionary<string>,
-    curr: { fn: string; tsPath: string; jsPath: string }
-  ) => {
-    agg[curr.fn] = curr[key];
-    return agg;
-  };
 }

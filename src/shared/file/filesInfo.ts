@@ -1,7 +1,6 @@
-import { statSync, readdirSync, Stats } from "fs";
-import { join } from "path";
-import { IDictionary } from "common-types";
-import { DevopsError } from "../errors";
+import { statSync, Stats } from "fs";
+import path from "path";
+import { DevopsError } from "~/errors";
 
 export interface IFileInfo {
   /** the file with the _path_ removed. */
@@ -26,31 +25,32 @@ export interface IFileInfo {
  * with a `/`.
  */
 export function filesInfo(...files: string[]): IFileInfo[] {
-  let rememberFile: string;
+  let rememberFile: string | undefined;
   try {
-    return files.reduce((agg: IFileInfo[], filePath: string) => {
+    return files.reduce((agg, filePath: string) => {
       rememberFile = filePath;
 
       const stats = statSync(
-        filePath.slice(0, 1) !== "/" ? join(process.cwd(), filePath) : filePath
+        filePath.slice(0, 1) !== "/" ? path.join(process.cwd(), filePath) : filePath
       );
 
       const pathParts = filePath.split("/");
-      const file = pathParts.pop();
-      const path = pathParts.slice(0, pathParts.length - 1).join("/");
+      const file = pathParts.pop() || "";
+      const filepath = pathParts.slice(0, -1).join("/");
 
       const nameParts = file.split(".");
-      const fileName = nameParts.slice(0, nameParts.length - 1).join(".");
-      const extension = nameParts.pop();
+      const fileName = nameParts.slice(0, -1).join(".");
+      const extension = nameParts.pop() || "";
 
-      return agg.concat({ filePath, path, fileName, file, extension, stats });
-    }, []);
-  } catch (e) {
+      agg.push({ filePath, fileName, file, path: filepath, extension, stats });
+      return agg;
+    }, [] as IFileInfo[]);
+  } catch (error) {
     throw new DevopsError(
-      `Attempt to get info/stat from the file "${rememberFile}" [ ${join(
+      `Attempt to get info/stat from the file "${rememberFile}" [ ${path.join(
         process.cwd(),
-        rememberFile
-      )} ] failed [ call included request for ${files.length} files ]: ${e.message}`,
+        rememberFile || ""
+      )} ] failed [ call included request for ${files.length} files ]: ${error.message}`,
       "do-devops/filesInfo"
     );
   }

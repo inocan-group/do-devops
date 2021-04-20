@@ -1,10 +1,9 @@
 import chalk from "chalk";
 import * as process from "process";
 
-import { askForStage, getServerlessYaml } from "./index";
+import { askForStage, getServerlessYaml } from "../serverless/index";
 
-import { IDetermineOptions } from "../../@types";
-import { IDictionary } from "common-types";
+import { IDetermineOptions } from "~/@types";
 import { emoji } from "../ui";
 import { get } from "lodash";
 

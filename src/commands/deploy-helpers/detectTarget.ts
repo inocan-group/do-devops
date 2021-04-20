@@ -1,6 +1,7 @@
 import { IDictionary } from "common-types";
-import { getConfig, isNpmPackage, isServerless } from "../../shared";
-import { IDoDeployConfig } from "../../@types";
+import { isNpmPackage } from "~/shared";
+import { IDoDeployConfig } from "~/@types";
+import { isServerless } from "~/shared/observations";
 
 export type IDetectedTarget = {
   detected: IDoDeployConfig["target"] | "both";
@@ -12,10 +13,7 @@ export type IDetectedTarget = {
  * Detects the target type and also looks to see if it has
  * been overriden by CLI params
  */
-export async function detectTarget(
-  opts?: IDictionary
-): Promise<IDetectedTarget> {
-  const { deploy: config } = await getConfig();
+export async function detectTarget(opts?: IDictionary): Promise<IDetectedTarget> {
   const override = opts ? opts.target : undefined;
   const serverless = await isServerless();
   const npm = await isNpmPackage();
@@ -31,6 +29,6 @@ export async function detectTarget(
   return {
     detected,
     override: override && override !== detected ? override : false,
-    target: override || detected
+    target: override || detected,
   };
 }

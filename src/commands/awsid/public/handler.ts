@@ -1,10 +1,7 @@
-import { emoji, getAwsIdentityFromProfile, getAwsProfileList } from "../../../shared";
-
+import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { askUser } from "../private/askUser";
-
-import chalk = require("chalk");
-import AWS = require("aws-sdk");
+import { emoji, getAwsIdentityFromProfile, getAwsProfileList } from "~/shared";
+import { askUser } from "../private";
 
 export async function handler(argv: string[], opts: IDictionary): Promise<void> {
   const profiles = await getAwsProfileList();
@@ -12,7 +9,9 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
   let chosen: string[] = [];
 
   if (!profiles) {
-    console.log(chalk`- ${emoji.robot} you do not have {italic any} AWS profiles in your credentials file!\n`);
+    console.log(
+      chalk`- ${emoji.robot} you do not have {italic any} AWS profiles in your credentials file!\n`
+    );
     process.exit();
   }
 
@@ -27,7 +26,9 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
       console.log(chalk`- valid profile names are: {blue ${profileNames.join(", ")}`);
     }
     if (chosen.length !== argv.length) {
-      console.log(chalk`- some profiles provided were not valid; valid ones are listed below`);
+      console.log(
+        chalk`- some profiles provided were not valid; valid ones are listed below`
+      );
     }
   }
 
@@ -37,13 +38,12 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
     try {
       results.push({ profile, ...(await getAwsIdentityFromProfile(profiles[profile])) });
       process.stdout.write(chalk`{green .}`);
-    } catch (e) {
-      errors.push({ ...e, profile });
+    } catch (error) {
+      errors.push({ ...error, profile });
       process.stdout.write(chalk`{red .}`);
     }
   }
   console.log();
-
   console.log(results);
 
   if (errors.length > 0) {
@@ -52,6 +52,8 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
         errors.length === 1 ? "" : "s"
       } which encountered errors trying to authenticate, the rest were fine.`
     );
-    errors.forEach((e) => console.log(chalk`- {bold {red ${e.profile}}}: {grey ${e.message}}`));
+    for (const e of errors) {
+      console.log(chalk`- {bold {red ${e.profile}}}: {grey ${e.message}}`);
+    }
   }
 }

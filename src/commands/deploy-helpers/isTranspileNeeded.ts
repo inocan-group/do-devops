@@ -1,11 +1,9 @@
 import chalk from "chalk";
-
-import { filesInfo, getAllFilesOfType } from "../../shared/file";
-
-import { IServerlessDeployMeta } from "./deploy-serverless";
-import { emoji } from "../../shared/ui";
 import { format } from "date-fns";
-import { getLocalHandlerInfo } from "../../shared/serverless/index";
+import { IServerlessDeployMeta } from "./deploy-serverless";
+import { filesInfo, getAllFilesOfType } from "~/shared/file";
+import { emoji } from "~/shared/ui";
+import { getLocalHandlerInfo } from "~/shared/serverless";
 
 /**
  * Tests whether webpack transpilation is needed
@@ -14,10 +12,12 @@ import { getLocalHandlerInfo } from "../../shared/serverless/index";
  * @param meta the meta information from CLI
  * @param fns optionally pass in a subset of functions which are being deployed
  */
-export function isTranspileNeeded(meta: IServerlessDeployMeta, fns?: string[]) {
+export function isTranspileNeeded(_meta: IServerlessDeployMeta, _fns?: string[]) {
   const handlerInfo = getLocalHandlerInfo();
 
-  const fnsNotTranspiled = handlerInfo.filter((i) => i.sourceModified > i.webpackModified);
+  const fnsNotTranspiled = handlerInfo.filter(
+    (i) => i.sourceModified > i.webpackModified
+  );
 
   if (fnsNotTranspiled.length > 0) {
     console.log(
@@ -33,9 +33,9 @@ export function isTranspileNeeded(meta: IServerlessDeployMeta, fns?: string[]) {
     );
   }
 
-  const handlerFns = handlerInfo.map((i) => i.source);
+  const handlerFns = new Set(handlerInfo.map((i) => i.source));
   const sharedFnInfo = filesInfo(
-    ...getAllFilesOfType("ts").filter((i: any) => !handlerFns.includes(i))
+    ...getAllFilesOfType("ts").filter((i: any) => !handlerFns.has(i))
   );
 
   const mostRecentShared = sharedFnInfo.reduce((agg: Date, fn) => {
@@ -59,7 +59,9 @@ export function isTranspileNeeded(meta: IServerlessDeployMeta, fns?: string[]) {
     );
   }
   const needsTranspilation = new Set<string>(fnsOlderThanShared.map((i) => i.source));
-  fnsNotTranspiled.forEach((i) => needsTranspilation.add(i.source));
+  for (const i of fnsNotTranspiled) {
+    needsTranspilation.add(i.source);
+  }
 
-  return Array.from(needsTranspilation);
+  return [...needsTranspilation];
 }

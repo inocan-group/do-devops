@@ -1,6 +1,6 @@
 import { asyncExec } from "async-shelljs";
 import { INpmInfo } from "common-types";
-import { DevopsError } from "../errors";
+import { DevopsError } from "~/errors";
 
 /**
  * Calls on the network to get `yarn info [xxx]`;
@@ -11,8 +11,7 @@ import { DevopsError } from "../errors";
 export async function getPackageInfo(pkg: string = "") {
   let npm: INpmInfo;
   try {
-    npm = JSON.parse(await asyncExec("yarn info --json", { silent: true }))
-      .data;
+    npm = JSON.parse(await asyncExec("yarn info --json", { silent: true })).data;
 
     return npm;
   } catch (e) {

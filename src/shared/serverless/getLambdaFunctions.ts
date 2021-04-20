@@ -1,25 +1,37 @@
 import { Lambda } from "aws-sdk";
-import { determineRegion } from "./determineRegion";
-import { IDictionary } from "common-types";
+import { AwsRegion } from "common-types";
 import { getAwsProfile, convertProfileToApiCredential } from "../aws";
-import { determineProfile } from "./determineProfile";
+import { determineRegion, determineProfile } from "~/shared/observations";
+
+export interface ILambdaFunctionsOptions {
+  /** explicitly state the region you are interested in */
+  region?: AwsRegion;
+  /** explicitly state the AWS profile to use */
+  profile?: string;
+}
 
 /**
- * Uses the AWS Lambda API to retrieve a list of functions for given
- * profile/region.
+ * **getLambdaFunctions**
+ *
+ * Returns an array of lambda functions for a given AWS _profile_ and
+ * _region_.
+ *
+ * The options hash allows you to state explicitly which profile/region but if you
+ * skip this then an attempt will be made to figure it out based on
+ * ENV variables and files in the working directory.
  */
-export async function getLambdaFunctions(opts: IDictionary = {}) {
-  const region = await determineRegion({ cliOptions: opts });
+export async function getLambdaFunctions(
+  opts: ILambdaFunctionsOptions = {}
+): Promise<Lambda.FunctionConfiguration[]> {
+  const region = opts.region ? opts.region : await determineRegion({ cliOptions: opts });
   const profileName = await determineProfile({ cliOptions: opts });
-  const profile = convertProfileToApiCredential(
-    await getAwsProfile(profileName)
-  );
+  const profile = convertProfileToApiCredential(await getAwsProfile(profileName));
   const lambda = new Lambda({
     apiVersion: "2015-03-31",
     region,
-    ...profile
+    ...profile,
   });
 
   const fns = await lambda.listFunctions().promise();
-  return fns.Functions;
+  return fns.Functions || [];
 }

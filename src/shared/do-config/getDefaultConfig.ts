@@ -1,7 +1,6 @@
 import * as config from "../../config/index";
-
-import { DevopsError } from "../index";
-import { IDoConfig } from "../../@types";
+import { IDoConfig } from "~/@types";
+import { DevopsError } from "~/errors";
 import { defaultConfigSections } from "../defaultConfigSections";
 
 /**
@@ -16,11 +15,13 @@ export function getDefaultConfig(command?: keyof IDoConfig) {
   if (!command) {
     const sections = defaultConfigSections();
 
-    let content: IDoConfig;
-    sections.forEach((section: keyof IDoConfig & keyof typeof sections) => {
-      const newContent = { [section]: getDefaultConfig(section) };
-      content = { ...content, ...newContent };
-    });
+    let content: IDoConfig | undefined;
+    for (const section of sections) {
+      const newContent = { [section]: getDefaultConfig(section as keyof IDoConfig) };
+      if (newContent) {
+        content = (content ? { ...content, ...newContent } : newContent) as IDoConfig;
+      }
+    }
 
     return content;
   }

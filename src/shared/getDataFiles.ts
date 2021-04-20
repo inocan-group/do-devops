@@ -1,6 +1,6 @@
 import fg from "fast-glob";
-import * as path from "path";
-import * as process from "process";
+import path from "path";
+import process from "process";
 
 export interface IDataFileOptions {
   /** allows filtering by a particular file type (aka, file extension) */
@@ -11,25 +11,10 @@ export interface IDataFileOptions {
   stripFileExtension?: boolean;
 }
 
-/**
- * Gets a list of data files from the
- * `test/data` directory.
- */
-export async function getDataFiles(opts: IDataFileOptions = {}) {
-  const glob = path.join(
-    process.cwd(),
-    "test/data",
-    opts.fileType ? `**/*.${opts.fileType}` : `**/*`
-  );
-  const results = await fg(glob);
-
-  return strip(opts)(results);
-}
-
 function strip(opts: IDataFileOptions) {
   return (results: string[]) => {
     if (opts.filterBy) {
-      results = results.filter((i) => i.includes(opts.filterBy));
+      results = results.filter((i) => i.includes(opts.filterBy as string));
     }
 
     if (opts.stripFileExtension) {
@@ -39,4 +24,19 @@ function strip(opts: IDataFileOptions) {
 
     return results.map((i) => i.replace(prefix, ""));
   };
+}
+
+/**
+ * Gets a list of data files from the
+ * `test/data` directory.
+ */
+export async function getDataFiles(opts: IDataFileOptions = {}) {
+  const glob = path.join(
+    process.cwd(),
+    "test/data",
+    opts.fileType ? `**/*.${opts.fileType}` : "**/*"
+  );
+  const results = await fg(glob);
+
+  return strip(opts)(results);
 }

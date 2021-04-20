@@ -1,4 +1,3 @@
-import { DevopsError } from "../errors/index";
 import { getAwsProfileList } from "./index";
 
 /**

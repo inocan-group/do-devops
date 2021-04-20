@@ -4,9 +4,6 @@
  */
 export function testName(testFile: string, pattern: string) {
   pattern = pattern.replace("**/*", "");
-  const name: string = testFile
-    .split("/")
-    .pop()
-    .replace(pattern, "");
+  const name: string = (testFile.split("/").pop() || "").replace(pattern, "");
   return name;
 }

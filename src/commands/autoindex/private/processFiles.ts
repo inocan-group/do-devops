@@ -1,4 +1,5 @@
-import { DevopsError, relativePath } from "../../../shared";
+import chalk from "chalk";
+
 import {
   END_REGION,
   ExportAction,
@@ -24,9 +25,9 @@ import { readFileSync, writeFileSync } from "fs";
 import { AUTOINDEX_INFO_MSG, ExportType } from "./reference";
 import { IDictionary } from "common-types";
 
-import chalk = require("chalk");
 import { removeAllExtensions, cleanOldBlockFormat } from "./util";
-import { highlightFilepath } from "../../../shared/ui";
+import { highlightFilepath } from "~/shared/ui";
+import { DevopsError } from "~/errors";
 
 /**
  * Reach into each file and look to see if it is a "autoindex" file; if it is
@@ -36,7 +37,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
   const results: IDictionary<string> = {};
   const defaultExclusions = ["index", "private"];
   const baseExclusions = opts.add
-    ? defaultExclusions.concat((opts.add as string).split(",").map((i) => i.trim()))
+    ? [...defaultExclusions, ...(opts.add as string).split(",").map((i) => i.trim())]
     : defaultExclusions;
 
   for await (const path of paths) {
@@ -56,8 +57,8 @@ export async function processFiles(paths: string[], opts: IDictionary) {
   } else {
     // iterate over each autoindex file
     for (const filePath of Object.keys(results)) {
-      let fileContent = results[filePath];
-      const excluded = exclusions(fileContent).concat(baseExclusions);
+      const fileContent = results[filePath];
+      const excluded = [...exclusions(fileContent), ...baseExclusions];
       const exportableSymbols = await exportable(filePath, excluded);
       const exportType = detectExportType(fileContent);
 
@@ -74,7 +75,10 @@ export async function processFiles(paths: string[], opts: IDictionary) {
           autoIndexContent = namedExports(exportableSymbols, opts);
           break;
         default:
-          throw new DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
+          throw new DevopsError(
+            `Unknown export type: ${exportType}!`,
+            "invalid-export-type"
+          );
       }
       /** content that defines the full region owned by autoindex */
       const blockContent = `${START_REGION}\n\n${timestamp()}\n${createMetaInfo(
@@ -86,7 +90,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
 
       const existingContentMeta = getExistingMetaInfo(fileContent);
 
-      let exportAction: ExportAction;
+      let exportAction: ExportAction | undefined;
       const bracketedMessages: string[] = [];
       if (exportType !== ExportType.named) {
         bracketedMessages.push(chalk`{grey using }{italic ${exportType}} {grey export}`);
@@ -96,9 +100,18 @@ export async function processFiles(paths: string[], opts: IDictionary) {
 
       if (autoIndexContent && alreadyHasAutoindexBlock(fileContent)) {
         if (
-          noDifference(existingContentMeta.files, removeAllExtensions(exportableSymbols.files)) &&
-          noDifference(existingContentMeta.dirs, removeAllExtensions(exportableSymbols.dirs)) &&
-          noDifference(existingContentMeta.sfcs, removeAllExtensions(exportableSymbols.sfcs)) &&
+          noDifference(
+            existingContentMeta.files,
+            removeAllExtensions(exportableSymbols.files)
+          ) &&
+          noDifference(
+            existingContentMeta.dirs,
+            removeAllExtensions(exportableSymbols.dirs)
+          ) &&
+          noDifference(
+            existingContentMeta.sfcs,
+            removeAllExtensions(exportableSymbols.sfcs)
+          ) &&
           exportType === existingContentMeta.exportType &&
           noDifference(existingContentMeta.exclusions, excluded)
         ) {
@@ -114,17 +127,23 @@ export async function processFiles(paths: string[], opts: IDictionary) {
       const warnings = unexpectedContent(nonBlockContent(fileContent));
       if (warnings) {
         bracketedMessages.push(
-          chalk` {red unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`
+          chalk` {red unexpected content: {italic {dim ${Object.keys(warnings).join(
+            ", "
+          )} }}}`
         );
       }
 
       const excludedWithoutBase = excluded.filter((i) => !baseExclusions.includes(i));
       if (excludedWithoutBase.length > 0) {
-        bracketedMessages.push(chalk`{italic excluding:} {grey ${excludedWithoutBase.join(", ")}}`);
+        bracketedMessages.push(
+          chalk`{italic excluding:} {grey ${excludedWithoutBase.join(", ")}}`
+        );
       }
 
       const bracketedMessage =
-        bracketedMessages.length > 0 ? chalk`{dim [ ${bracketedMessages.join(", ")} ]}` : "";
+        bracketedMessages.length > 0
+          ? chalk`{dim [ ${bracketedMessages.join(", ")} ]}`
+          : "";
 
       const changeMessage = chalk`- ${
         exportAction === ExportAction.added ? "added" : "updated"
@@ -147,7 +166,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
           cleanOldBlockFormat(
             existingContentMeta.hasExistingMeta
               ? replaceRegion(fileContent, blockContent)
-              : fileContent.concat("\n" + blockContent) + "\n"
+              : [...fileContent, ...("\n" + blockContent)] + "\n"
           )
         );
       } else {
@@ -157,7 +176,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
           cleanOldBlockFormat(
             existingContentMeta.hasExistingMeta
               ? replaceRegion(fileContent, blockContent)
-              : fileContent.concat("\n" + blockContent) + "\n"
+              : [...fileContent, ...("\n" + blockContent)] + "\n"
           )
         );
       }

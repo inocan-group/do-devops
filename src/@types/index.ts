@@ -4,6 +4,9 @@ export * from "./aws";
 // export * from "./bestzip";
 export * from "./build";
 export * from "./defaultConfig";
+export * from "./file-types";
+export * from "./serverless-types";
+export * from "./webpack";
 export * from "./general";
 export * from "./test";
 //#endregion

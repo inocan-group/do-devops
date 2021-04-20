@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { DevopsError } from "../errors/index";
+import { DevopsError } from "~/errors/index";
 import { getAwsProfileList } from "./index";
 import inquirer = require("inquirer");
 

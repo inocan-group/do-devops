@@ -4,12 +4,12 @@ import {
   buildLambdaTypescriptProject,
   consoleDimensions,
   getServerlessYaml,
-  isServerless,
 } from "../shared";
 
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
 import { table } from "table";
+import { isServerless } from "~/shared/observations";
 
 export function description() {
   return `Lists all serverless function handlers and basic meta about them`;
@@ -59,19 +59,21 @@ export async function handler(args: string[], opts: IDictionary) {
         chalk.bold.yellow("description"),
       ],
     ];
-    Object.keys(fns)
-      .filter(filterBy)
-      .forEach((key) => {
-        const events = fns[key].events || [];
-        tableData.push([
-          key,
-          events.map((i) => Object.keys(i)).join(", "),
-          String(fns[key].memorySize || chalk.grey("1024")),
-          String(fns[key].timeout || chalk.grey("3")),
-          fns[key].description,
-        ]);
-      });
-    const tableConfig = {
+    if (fns) {
+      Object.keys(fns)
+        .filter(filterBy)
+        .forEach((key) => {
+          const events = fns[key].events || [];
+          tableData.push([
+            key,
+            events.map((i) => Object.keys(i)).join(", "),
+            String(fns[key].memorySize || chalk.grey("1024")),
+            String(fns[key].timeout || chalk.grey("3")),
+            fns[key].description || "",
+          ]);
+        });
+    }
+    let tableConfig = {
       columns: {
         0: { width: 30, alignment: "left" },
         1: { width: 16, alignment: "left" },
@@ -101,14 +103,4 @@ export async function handler(args: string[], opts: IDictionary) {
     console.log(`- Error finding functions: ${e.message}\n`);
     process.exit();
   }
-  // const inlineFns = await findInlineFunctionDefnFiles();
-  // const configFiles = await findConfigFunctionDefnFiles();
-  // console.log(inlineFns);
-  // console.log(configFiles);
-  // for await (const fn of inlineFns) {
-  //   console.log(fn, fn.replace(process.env.PWD, ""));
-
-  //   const e = await getExportsFromFile(fn);
-  //   console.log(e);
-  // }
 }

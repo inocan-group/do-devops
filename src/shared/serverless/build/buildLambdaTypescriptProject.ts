@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import * as os from "os";
 
-import { IDictionary, IServerlessAccountInfo, IServerlessConfig } from "common-types";
+import { IDictionary, IServerlessAccountInfo, IServerlessYaml } from "common-types";
 import { asyncExec, rm } from "async-shelljs";
 import {
   createFunctionEnum,
@@ -33,14 +33,14 @@ const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
  */
 export async function buildLambdaTypescriptProject(
   opts: IDictionary = {},
-  config: IDoBuildConfig = {},
+  _config: IDoBuildConfig = {},
   /** modern scaffolding will pass in the config function to be managed here in this process */
-  configFn?: (c: IServerlessAccountInfo) => IServerlessConfig
+  configFn?: (c: IServerlessAccountInfo) => IServerlessYaml
 ) {
   const modern = getYeomanScaffolds().includes("generator-lambda-typescript");
   const accountInfo = await getServerlessBuildConfiguration();
   const hasWebpackPlugin = accountInfo?.devDependencies?.includes("serverless-webpack");
-  const buildSystem = config.buildTool;
+  // const buildSystem = config.buildTool;
 
   // force transpilation
   if (opts.force) {
@@ -58,7 +58,9 @@ export async function buildLambdaTypescriptProject(
 
   const handlerInfo = getLocalHandlerInfo();
   console.log(
-    chalk`{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`
+    chalk`{grey - handler functions [ {bold ${String(
+      handlerInfo.length
+    )}} ] have been identified}`
   );
 
   await createInlineExports(handlerInfo);
@@ -78,7 +80,10 @@ export async function buildLambdaTypescriptProject(
       chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
     );
   } else {
-    const exist = filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
+    const exist = filesExist(
+      "webpack.js-entry-points.json",
+      "webpack.js-entry-points.json"
+    );
     if (exist) {
       rm(...exist);
       console.log(
@@ -103,7 +108,9 @@ export async function buildLambdaTypescriptProject(
       },
     });
     rm(ACCOUNT_INFO_YAML);
-    console.log(chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`);
+    console.log(
+      chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`
+    );
   }
 
   console.log(

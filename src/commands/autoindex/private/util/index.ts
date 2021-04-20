@@ -12,7 +12,6 @@ export * from "./cleanOldBlockFormat";
 export * from "./communicateApi";
 export * from "./createMetaInfo";
 export * from "./detectExportType";
-export * from "./exportsHaveChanged";
 export * from "./getExistingMetaInfo";
 export * from "./isAutoindexFile";
 export * from "./isOrphanedIndexFile";

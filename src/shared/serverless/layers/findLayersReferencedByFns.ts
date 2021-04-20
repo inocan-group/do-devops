@@ -1,9 +1,10 @@
-import { getLambdaFunctions } from "../../../shared";
+// import { getLambdaFunctions } from "~/shared";
 
 /**
  * Introspects your current configuration (ts config) and finds all
  * references to AWS Layers
  */
 export function findLayersReferencedByFns() {
-  const fns = getLambdaFunctions();
+  // TODO: this either needs completing or be removed
+  // const fns = getLambdaFunctions();
 }

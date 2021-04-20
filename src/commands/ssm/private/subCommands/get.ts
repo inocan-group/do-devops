@@ -1,18 +1,13 @@
 import chalk from "chalk";
 
-import {
-  DevopsError,
-  consoleDimensions,
-  determineProfile,
-  getAwsProfile,
-  determineRegion,
-} from "../../../../shared";
+import { consoleDimensions, getAwsProfile } from "~/shared";
 import { fromBase64 } from "native-dash";
-
 import { SSM } from "aws-ssm";
 import { format } from "date-fns";
 import { table } from "table";
 import { ISsmOptions } from "../../public/ssm-types";
+import { determineProfile, determineRegion } from "~/shared/observations";
+import { DevopsError } from "~/errors";
 
 export async function execute(argv: string[], options: ISsmOptions) {
   const profile = await determineProfile({ cliOptions: options, interactive: true });
@@ -22,7 +17,7 @@ export async function execute(argv: string[], options: ISsmOptions) {
     profileInfo.region ||
     (await determineRegion({ cliOptions: options, interactive: true }));
   const secrets: string[] = argv;
-  const nonStandardPath: boolean = options.nonStandardPath;
+  const nonStandardPath = options.nonStandardPath || false;
   const { width } = await consoleDimensions();
 
   if (!region) {
@@ -58,7 +53,7 @@ export async function execute(argv: string[], options: ISsmOptions) {
   const ssm = new SSM({ profile, region });
 
   for await (const secret of secrets) {
-    let tableData = [
+    const tableData = [
       [
         chalk.yellow.bold("Path"),
         chalk.yellow.bold("ARN"),
@@ -83,17 +78,4 @@ export async function execute(argv: string[], options: ISsmOptions) {
       console.log(value);
     }
   }
-
-  // let content;
-  // if (width > 130) {
-  //   content = table(tableData, tableConfig as any);
-  // } else if (width > 115) {
-  //   delete tableConfig.columns["3"];
-  //   content = table(tableData.map(i => i.slice(0, 3)), tableConfig as any);
-  // } else {
-  //   delete tableConfig.columns["2"];
-  //   delete tableConfig.columns["3"];
-  //   content = table(tableData.map(i => i.slice(0, 2)), tableConfig as any);
-  // }
-  // console.log(content);
 }

@@ -1,17 +1,10 @@
-import { IDictionary } from "common-types";
-import {
-  determineProfile,
-  getAwsProfile,
-  determineRegion,
-  askForStage,
-  emoji,
-  getAwsIdentityFromProfile,
-} from "../../../../shared";
-import chalk = require("chalk");
+import { getAwsProfile, askForStage, emoji, getAwsIdentityFromProfile } from "~/shared";
+import chalk from "chalk";
 import { SSM } from "aws-ssm";
 import { completeSsmName } from "../index";
 import { ISsmOptions } from "../../public";
 import { toBase64 } from "native-dash";
+import { determineProfile, determineRegion } from "~/shared/observations";
 
 export async function execute(argv: string[], options: ISsmOptions) {
   if (argv.length < 2) {

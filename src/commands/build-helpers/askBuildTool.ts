@@ -1,10 +1,9 @@
 import chalk from "chalk";
+import inquirer from "inquirer";
 
-import { BuildTool, IBuildTool } from "../../@types";
-
-import { getPackageJson } from "../../shared/index";
+import { BuildTool, IBuildTool } from "~/@types";
+import { getPackageJson } from "~/shared";
 import { saveToolToRepoConfig } from "./index";
-import inquirer = require("inquirer");
 
 /**
  * Asks for the primary build tool the user wants to use
@@ -12,16 +11,16 @@ import inquirer = require("inquirer");
  * processing.
  */
 export async function askBuildTool(isServerless: boolean): Promise<IBuildTool> {
-  const packages = Object.keys(getPackageJson().devDependencies);
+  const packages = Object.keys(getPackageJson().devDependencies || {});
 
-  const findLikely = (exclude: IBuildTool = null) =>
-    packages.find((i) => i === "bili" && i !== exclude)
+  const findLikely = (exclude: IBuildTool | null = null) =>
+    packages.some((i) => i === "bili" && i !== exclude)
       ? "bili"
-      : packages.find((i) => i === "rollup" && i !== exclude)
+      : packages.some((i) => i === "rollup" && i !== exclude)
       ? "rollup"
-      : packages.find((i) => i === "webpack" && i !== exclude)
+      : packages.some((i) => i === "webpack" && i !== exclude)
       ? "webpack"
-      : packages.find((i) => i === "typescript" && i !== exclude)
+      : packages.some((i) => i === "typescript" && i !== exclude)
       ? "typescript"
       : undefined;
 
@@ -38,7 +37,9 @@ export async function askBuildTool(isServerless: boolean): Promise<IBuildTool> {
   }`;
 
   const message = chalk`Choose a build tool for this repo [ {grey {italic suggestion: }${
-    mostLikely ? [mostLikely, alternative].filter((i) => i).join(", ") : "[ {grey no suggestions"
+    mostLikely
+      ? [mostLikely, alternative].filter((i) => i).join(", ")
+      : "[ {grey no suggestions"
   }} ]${isServerless ? ifTypescriptMessage : ""}`;
   const choices = Object.keys(BuildTool);
 

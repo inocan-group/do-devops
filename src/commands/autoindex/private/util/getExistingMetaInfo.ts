@@ -1,4 +1,3 @@
-import { IDictionary } from "common-types";
 import { alreadyHasAutoindexBlock } from "./alreadyHasAutoindexBlock";
 
 export interface IExistingMetaInfo {
@@ -15,28 +14,13 @@ export interface IExistingMetaInfo {
   exclusions: string[];
 }
 
-/**
- * Gets all meta information about the prior state of the file contents
- */
-export function getExistingMetaInfo(fileContent: string): IExistingMetaInfo {
-  const hasExistingMeta = alreadyHasAutoindexBlock(fileContent);
-  const files = hasExistingMeta ? getFilesMeta(fileContent) : [];
-  const dirs = hasExistingMeta ? getDirsMeta(fileContent) : [];
-  const sfcs = hasExistingMeta ? getSFCsMeta(fileContent) : [];
-
-  const exportType = hasExistingMeta ? getExportType(fileContent) : "";
-  const exclusions = hasExistingMeta ? getExclusions(fileContent) : [];
-
-  return { hasExistingMeta, files, dirs, sfcs, exportType, exclusions };
-}
-
 function getExportType(content: string): string {
-  const matches = content.match(/\/\/ export: (.*)\;/);
+  const matches = content.match(/\/\/ export: (.*);/);
   return Array.isArray(matches) ? matches[1].trim() : "";
 }
 
 function getExclusions(content: string): string[] {
-  const matches = content.match(/\/\/ export: .*\; exclusions: (.*)\./);
+  const matches = content.match(/\/\/ export: .*; exclusions: (.*)\./);
   return Array.isArray(matches) ? matches[1].trim().split(", ") : [];
 }
 
@@ -53,4 +37,19 @@ function getDirsMeta(content: string): string[] {
 function getSFCsMeta(content: string): string[] {
   const matches = content.match(/\/\/ SFCs: (.*)\./);
   return Array.isArray(matches) ? matches[1].trim().split(", ") : [];
+}
+
+/**
+ * Gets all meta information about the prior state of the file contents
+ */
+export function getExistingMetaInfo(fileContent: string): IExistingMetaInfo {
+  const hasExistingMeta = alreadyHasAutoindexBlock(fileContent);
+  const files = hasExistingMeta ? getFilesMeta(fileContent) : [];
+  const dirs = hasExistingMeta ? getDirsMeta(fileContent) : [];
+  const sfcs = hasExistingMeta ? getSFCsMeta(fileContent) : [];
+
+  const exportType = hasExistingMeta ? getExportType(fileContent) : "";
+  const exclusions = hasExistingMeta ? getExclusions(fileContent) : [];
+
+  return { hasExistingMeta, files, dirs, sfcs, exportType, exclusions };
 }

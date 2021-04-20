@@ -7,7 +7,6 @@
 // files: checkTranspilationStatus, getTranspiledTimestamps.
 
 // local file exports
-export * from "./checkTranspilationStatus";
 export * from "./getTranspiledTimestamps";
 
 // Note:

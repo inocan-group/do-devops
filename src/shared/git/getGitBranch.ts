@@ -1,4 +1,3 @@
-import { asyncExec } from "async-shelljs";
 import { git } from "./git";
 
 /**

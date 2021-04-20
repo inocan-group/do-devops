@@ -1,8 +1,7 @@
 import { parseFile, namedExports } from "./index";
-import * as recast from "recast";
 
-const types = recast.types.namedTypes;
-const builders = recast.types.builders;
+// const types = recast.types.namedTypes;
+// const builders = recast.types.builders;
 
 /**
  * Given a file, it will look for the `handler` export
@@ -12,12 +11,10 @@ const builders = recast.types.builders;
  */
 export function findHandlerComments(filename: string) {
   const ast = parseFile(filename);
-  const fn = namedExports(ast).find(i => i.name === "fn");
-  const fnComments = fn ? fn.comments.filter(i => i.leading) : [];
-  const handler = namedExports(ast).find(i => i.name === "handler");
-  const handlerComments = handler
-    ? handler.comments.filter(i => i.leading)
-    : [];
+  const fn = namedExports(ast).find((i) => i.name === "fn");
+  const fnComments = fn ? fn.comments.filter((i) => i.leading) : [];
+  const handler = namedExports(ast).find((i) => i.name === "handler");
+  const handlerComments = handler ? handler.comments.filter((i) => i.leading) : [];
 
   return fnComments.length > 0
     ? fnComments

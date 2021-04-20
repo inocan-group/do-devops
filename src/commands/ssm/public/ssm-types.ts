@@ -1,4 +1,4 @@
-import { IGlobalOptions } from "../../../shared/options";
+import { IGlobalOptions } from "~/shared/options";
 
 export interface ISsmOptions extends IGlobalOptions {
   /** whether to encode/decode to base64 */

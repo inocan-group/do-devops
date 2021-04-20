@@ -1,15 +1,9 @@
-import chalk = require("chalk");
+import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { Stats } from "fs";
-import globby = require("globby");
-import { posix } from "path";
-import { existsSync } from "fs";
+import path from "path";
 import { processFiles } from "./processFiles";
-import { directoryFiles, highlightFilepath } from "../../../shared";
+import { directoryFiles, highlightFilepath } from "~/shared";
 import { isAutoindexFile } from "./util";
-import { watch } from "chokidar";
-
-type logging = (message?: any, ...optionalParams: any[]) => void;
 
 /** to avoid circular events, we need to allow certain files to be ignored */
 let filesToIgnore: string[] = [];
@@ -20,7 +14,7 @@ let filesToIgnore: string[] = [];
 export function watchHandler(dir: string, options: IDictionary = {}) {
   const log = console.log.bind(console);
   return (evtBeingWatched: string) => {
-    return (filepath: string, stats: Stats) => {
+    return (filepath: string) => {
       if (filesToIgnore.includes(filepath)) {
         // autoindex file has been changed due to the autoindex processing
         filesToIgnore = filesToIgnore.filter((i) => i !== filepath);
@@ -30,28 +24,29 @@ export function watchHandler(dir: string, options: IDictionary = {}) {
       /** files in event directory which are autoindex files */
       let indexFiles: string[];
 
-      const fileIsIndexFile = (fp: string) => /(index|private).[tj]s/.test(fp);
+      // eslint-disable-next-line unicorn/consistent-function-scoping
+      const fileIsIndexFile = (fp: string) => /(index|private).[jt]s/.test(fp);
 
       if (fileIsIndexFile(filepath)) {
         filesToIgnore.push(filepath);
         indexFiles = [filepath];
       } else {
         indexFiles = directoryFiles(dir)
-          .map((i) => posix.join(dir, i.file))
+          .map((i) => path.posix.join(dir, i.file))
           .filter((f) => isAutoindexFile(f));
-        indexFiles.forEach((i) => filesToIgnore.push(i));
+        for (const i of indexFiles) filesToIgnore.push(i);
       }
 
       const isMonoRepo = filepath.includes("packages/");
       const pkg = isMonoRepo ? Array.from(/.*packages\/(\S+?\/)/.exec(filepath))[1] : "";
-      const verbLookup: IDictionary = {
-        changed: "changed",
-        added: "added",
-        removed: "removed",
-      };
-      const verb = Object.keys(verbLookup).includes(evtBeingWatched)
-        ? verbLookup[evtBeingWatched]
-        : "unknown";
+      // const verbLookup: IDictionary = {
+      //   changed: "changed",
+      //   added: "added",
+      //   removed: "removed",
+      // };
+      // const verb = Object.keys(verbLookup).includes(evtBeingWatched)
+      //   ? verbLookup[evtBeingWatched]
+      //   : "unknown";
       const message = isMonoRepo
         ? chalk`- the file ${highlightFilepath(
             filepath

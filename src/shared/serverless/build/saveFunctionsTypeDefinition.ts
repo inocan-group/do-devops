@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import * as fs from "fs";
-import * as path from "path";
+import fs from "fs";
+import path from "path";
 
-import { IServerlessConfig } from "common-types";
+import { IServerlessYaml } from "common-types";
 import { ensureDirectory } from "../..";
 import { promisify } from "util";
 
@@ -20,7 +20,7 @@ const writeFile = promisify(fs.writeFile);
  * Note that errors encountered are trapped so as to not block
  * completion but a warning message will be sent to the console.
  */
-export async function saveFunctionsTypeDefinition(config: IServerlessConfig) {
+export async function saveFunctionsTypeDefinition(config: IServerlessYaml) {
   try {
     const functions = config.functions ? Object.keys(config.functions) : false;
     const stepFunctions =
@@ -31,14 +31,14 @@ export async function saveFunctionsTypeDefinition(config: IServerlessConfig) {
     let contents = "";
     if (functions) {
       contents += "export enum AvailableFunctions {";
-      functions.forEach((f, i) => {
-        const description = config.functions[f].description
+      for (const [i, f] of functions.entries()) {
+        const description = functions[f].description
           ? config.functions[f].description
           : false;
         contents += description ? `\n  /**\n   * ${description}\n   **/` : "";
         const comma = i === functions.length - 1 ? "" : ",";
         contents += `\n  ${f} = "${f}"${comma}`;
-      });
+      }
       contents += "\n};\n";
     }
 
@@ -50,10 +50,10 @@ export async function saveFunctionsTypeDefinition(config: IServerlessConfig) {
     const filename = path.join(dir, "build.ts");
     await ensureDirectory(dir);
     await writeFile(filename, contents, { encoding: "utf-8" });
-  } catch (e) {
+  } catch (error) {
     console.log(
       chalk`- Attempt to save {italic type definitions} for {bold functions} and {bold stepFunctions} failed; this will be ignored for now so build can continue.`
     );
-    console.log(chalk`- The actual error received was: {dim ${e.message}}`);
+    console.log(chalk`- The actual error received was: {dim ${error.message}}`);
   }
 }

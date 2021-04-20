@@ -1,16 +1,20 @@
 import inquirer = require("inquirer");
 
 import { IDictionary } from "common-types";
-import { getPackageJson } from "../../../shared";
+import { getPackageJson } from "~/shared";
 
 /**
  * Asks the user to choose an AWS profile
  */
 export async function askForUnitTestFramework(): Promise<IDictionary<string>> {
-  const devDeps = Object.keys(getPackageJson().devDependencies);
+  const devDeps = Object.keys(getPackageJson().devDependencies || {});
   const testFrameworks = ["mocha", "jest", "other"];
 
-  const defaultFramework = devDeps.includes("mocha") ? "mocha" : devDeps.includes("jest") ? "jest" : "other";
+  const defaultFramework = devDeps.includes("mocha")
+    ? "mocha"
+    : devDeps.includes("jest")
+    ? "jest"
+    : "other";
 
   const framework: inquirer.ListQuestion = {
     name: "unitTestFramework",

@@ -1,6 +1,6 @@
 # DevOps CLI
 
-Provides a handy CLI for DevOps functionality on Typescript based NodeJS projects.
+Provides a handy CLI for DevOps functionality on NodeJS projects (and AWS Serverless too).
 
 ## Commands
 

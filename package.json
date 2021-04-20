@@ -1,7 +1,7 @@
 {
   "name": "do-devops",
   "version": "0.7.0",
-  "description": "Devops commands for your nodejs projects",
+  "description": "Devops commands for your nodejs and serverless projects",
   "main": "./bin/index.js",
   "typings": "./bin/index.d.ts",
   "bin": {
@@ -34,7 +34,8 @@
   "keywords": [
     "devops",
     "nodejs",
-    "serverless"
+    "serverless",
+    "aws"
   ],
   "author": "Ken Snyder",
   "license": "MIT",
@@ -55,7 +56,7 @@
     "chokidar": "^3.5.1",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.1.1",
-    "common-types": "^1.20.4",
+    "common-types": "^1.22.3",
     "date-fns": "^2.21.0",
     "fast-glob": "^3.2.2",
     "globby": "^11.0.0",
@@ -64,7 +65,7 @@
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "matcher": "^4.0.0",
-    "native-dash": "^1.11.0",
+    "native-dash": "^1.12.0",
     "play-sound": "^1.1.3",
     "recast": "^0.20.4",
     "simple-git": "^2.12.0",
@@ -84,13 +85,22 @@
     "@types/mocha": "^8.2.2",
     "@types/node": "^14",
     "@types/webpack": "^4.41.27",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
     "chai": "^4.2.0",
+    "eslint": "^7.23.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-unicorn": "^29.0.0",
     "madge": "^4.0.2",
     "mocha": "^8.3.2",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "ts-node": "^9.1.1",
-    "tslint": "^6.1.3",
-    "typescript": "^4.2.2"
+    "ttypescript": "^1.5.12",
+    "typescript": "^4.2.2",
+    "typescript-transform-paths": "^2.2.3"
   }
 }

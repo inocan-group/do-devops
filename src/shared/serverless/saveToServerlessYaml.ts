@@ -1,16 +1,16 @@
 import chalk from "chalk";
-import * as fs from "fs";
-import * as path from "path";
+import fs from "fs";
+import path from "path";
 
 import { dump } from "js-yaml";
 
-import { IServerlessConfig } from "common-types";
+import { IServerlessYaml } from "common-types";
 import { emoji } from "../ui";
 import { promisify } from "util";
 
 const writeFile = promisify(fs.writeFile);
 
-export async function saveToServerlessYaml(data: IServerlessConfig) {
+export async function saveToServerlessYaml(data: IServerlessYaml) {
   try {
     const filename = path.join(process.cwd(), "serverless.yml");
     console.log({ filename, data });

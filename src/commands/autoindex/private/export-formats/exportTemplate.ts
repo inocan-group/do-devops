@@ -22,38 +22,42 @@ export function exportTemplate(
 ) {
   const contentLines: string[] = [];
   if (exportable.files.length > 0) {
-    contentLines.push(`\n// local file exports`);
+    contentLines.push("\n// local file exports");
 
     if (callbacks.file) {
-      exportable.files.forEach((file) => {
+      for (const file of exportable.files) {
         contentLines.push(callbacks.file(file));
-      });
+      }
     } else {
-      contentLines.push(`// the export strategy chosen does not write file exports`);
+      contentLines.push("// the export strategy chosen does not write file exports");
     }
   }
 
   // if the command line switch for Vue SFC's is turned on
   if (opts.sfc && exportable.sfcs.length > 0) {
-    contentLines.push(`\n// SFC components`);
-    exportable.sfcs.forEach((sfc) =>
-      contentLines.push(`export { default as ${removeExtension(sfc)} } from "./${sfc}";`)
-    );
+    contentLines.push("\n// SFC components");
+    for (const sfc of exportable.sfcs) {
+      contentLines.push(`export { default as ${removeExtension(sfc)} } from "./${sfc}";`);
+    }
   }
 
   if (exportable.dirs.length > 0) {
-    contentLines.push(`\n// directory exports`);
+    contentLines.push("\n// directory exports");
   }
   if (callbacks.dir) {
-    exportable.dirs.forEach((dir) => {
+    for (const dir of exportable.dirs) {
       contentLines.push(callbacks.dir(dir));
-    });
+    }
   } else {
-    contentLines.push(`// the export strategy chosen does not write directories to this file`);
+    contentLines.push(
+      "// the export strategy chosen does not write directories to this file"
+    );
   }
 
-  if (exportable.orphans.length > 0) {
-    contentLines.push(`\n// there were directories orphaned: ${exportable.orphans.join(", ")}`);
+  if ((exportable?.orphans || []).length > 0) {
+    contentLines.push(
+      `\n// there were directories orphaned: ${(exportable.orphans || []).join(", ")}`
+    );
   }
 
   return contentLines.join("\n");

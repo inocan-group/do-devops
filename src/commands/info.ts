@@ -1,6 +1,8 @@
 import chalk from "chalk";
-
 import { IDictionary, INpmInfo } from "common-types";
+import { format, parseISO } from "date-fns";
+import { asyncExec } from "async-shelljs";
+import { table } from "table";
 import {
   dim,
   getCurrentGitBranch,
@@ -9,10 +11,6 @@ import {
   getPackageJson,
   green,
 } from "../shared";
-import { format, parseISO } from "date-fns";
-
-import { asyncExec } from "async-shelljs";
-import { table } from "table";
 
 export const description = `Summarized information about the current repo`;
 export const options = [
@@ -30,18 +28,18 @@ export const options = [
  * Gets the `git` and `npm` version of a file as well as
  * whether the local copy is dirty.
  */
-export async function handler(argv: string[], opts: any) {
+export async function handler(_argv: string[], opts: any) {
   // const config = await getConfig();
-  let npm: INpmInfo;
+  let npm: INpmInfo | undefined;
   try {
     npm = await getPackageInfo();
-  } catch (e) {
+  } catch {
     // appears NOT to be a NPM package
   }
   const pkg = await getPackageJson();
   const priorVersions = npm
     ? npm.versions
-        .filter((i) => i !== npm.version)
+        .filter((i) => i !== npm?.version)
         .slice(0, 5)
         .join(", ")
     : "";
@@ -63,13 +61,18 @@ export async function handler(argv: string[], opts: any) {
         ? chalk`This repo was first published on {green ${format(
             parseISO(npm.time.created),
             dateFormat
-          )}} and last modified on {green ${format(parseISO(npm.time.modified), dateFormat)}}.\n\n`
+          )}} and last modified on {green ${format(
+            parseISO(npm.time.modified),
+            dateFormat
+          )}}.\n\n`
         : "",
     ],
     [
       false,
       npm
-        ? chalk`The latest published version is ${chalk.bold.green(npm.version)} [ ${format(
+        ? chalk`The latest published version is ${chalk.bold.green(
+            npm.version
+          )} [ ${format(
             parseISO(npm.time[npm.version]),
             dateFormat
           )} ].\nLocally in package.json, version is ${chalk.bold.green(pkg.version)}.`
@@ -83,27 +86,36 @@ export async function handler(argv: string[], opts: any) {
       npm && npm.author
         ? chalk`\n\nThe author of the repo is {green {bold ${
             typeof npm.author === "string" ? npm.author : npm.author.name
-          }${typeof npm.author === "object" && npm.author.email ? ` <${npm.author.email}>` : ""}}}`
+          }${
+            typeof npm.author === "object" && npm.author.email
+              ? ` <${npm.author.email}>`
+              : ""
+          }}}`
         : "",
     ],
   ];
-  const depsSummary = `There are ${green(Object.keys(pkg.dependencies).length)} dependencies${
+  const depsSummary = `There are ${green(
+    Object.keys(pkg?.dependencies || {}).length
+  )} dependencies${
     npm
-      ? chalk`, with a total of ${green(npm.dist.fileCount)} files\nand a unpacked size of ${green(
+      ? chalk`, with a total of ${green(
+          npm.dist.fileCount
+        )} files\nand a unpacked size of ${green(
           npm.dist.unpackedSize / 1000,
           chalk` {italic kb}`
         )}.`
       : "."
   }`;
   const depDetails = `${depsSummary}\n\nThe dependencies are:\n - ${dim(
-    Object.keys(pkg.dependencies).join("\n - ")
+    Object.keys(pkg?.dependencies || {}).join("\n - ")
   )}`;
-
-  const pkgJson = getPackageJson();
 
   console.log(`Info on package ${chalk.green.bold(pkg.name)}`);
   const data = [
-    ["Desc ", description ? pkg.description : chalk.bold.italic("no description provided!")],
+    [
+      "Desc ",
+      description ? pkg.description : chalk.bold.italic("no description provided!"),
+    ],
     [
       "NPM",
       npmInfo
@@ -121,7 +133,7 @@ export async function handler(argv: string[], opts: any) {
         : chalk.red(`The repository is ${chalk.bold("not")} stated!`),
     ],
     ["Tags ", pkg.keywords],
-    ["Scripts", Object.keys(pkg.scripts).join(", ")],
+    ["Scripts", Object.keys(pkg?.scripts || {}).join(", ")],
     [
       "GIT",
       `Latest commit ${green(gitLastCommit)} ${chalk.bold.italic("@ " + branch)}; ${green(
@@ -137,8 +149,4 @@ export async function handler(argv: string[], opts: any) {
   };
 
   console.log(table(data, tblConfig as any));
-}
-
-function stripCarraigeReturn(input: string) {
-  return input.replace(/\n/, "");
 }

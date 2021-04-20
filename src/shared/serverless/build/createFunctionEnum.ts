@@ -1,12 +1,12 @@
 import chalk from "chalk";
-import * as path from "path";
+import path from "path";
 
 import { existsSync, mkdirSync, writeFile } from "fs";
 
-import { IHandlerInfo } from "../getLocalHandlerInfo";
 import { emoji } from "../../ui";
 import { findHandlerConfig } from "../../ast/findHandlerConfig";
 import { promisify } from "util";
+import { IWebpackHandlerDates } from "~/@types";
 
 const write = promisify(writeFile);
 
@@ -14,7 +14,7 @@ const write = promisify(writeFile);
  * creates an enumeration with all of the _functions_ which have
  * been defined in the project
  */
-export async function createFunctionEnum(handlers: IHandlerInfo[]) {
+export async function createFunctionEnum(handlers: IWebpackHandlerDates[]) {
   const header = `export enum AvailableFunction {
 `;
   const footer = `
@@ -22,8 +22,8 @@ export async function createFunctionEnum(handlers: IHandlerInfo[]) {
   
 export type IAvailableFunction = keyof typeof AvailableFunction;
 `;
-  let body: string[] = [];
-  handlers.forEach((handler) => {
+  const body: string[] = [];
+  for (const handler of handlers) {
     const config = findHandlerConfig(handler.source);
     if (!config) {
       console.log(
@@ -33,7 +33,9 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
       );
     } else {
       const fn = handler.fn;
-      const comment = config.config.description ? config.config.description : `${fn} handler`;
+      const comment = config.config.description
+        ? config.config.description
+        : `${fn} handler`;
       body.push(
         `
   /**
@@ -42,15 +44,19 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
   ${fn} = "${fn}"`
       );
     }
-  });
+  }
 
   const fileText = `${header}${body.join(",")}${footer}`;
   if (!existsSync(path.join(process.cwd(), "/src/@types"))) {
     mkdirSync(path.join(process.cwd(), "/src/@types"));
   }
 
-  await write(path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")), fileText, {
-    encoding: "utf-8",
-  });
+  await write(
+    path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")),
+    fileText,
+    {
+      encoding: "utf-8",
+    }
+  );
   return fileText;
 }

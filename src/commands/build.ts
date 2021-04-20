@@ -1,13 +1,13 @@
 import chalk from "chalk";
-
-import { buildLambdaTypescriptProject, emoji, getConfig, isServerless } from "../shared";
-
-import { IBuildTool } from "../@types";
-import { IBuildToolingOptions } from "./build-helpers/tools/types";
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
+
+import { buildLambdaTypescriptProject, emoji, getConfig } from "~/shared";
+import { getValidServerlessHandlers } from "~/shared/ast";
+import { IBuildTool } from "~/@types";
+import { IBuildToolingOptions } from "./build-helpers/tools/types";
 import { askBuildTool } from "./build-helpers/index";
-import { getValidServerlessHandlers } from "../shared/ast";
+import { isServerless } from "~/shared/observations";
 
 export const defaultConfig = {
   preBuildHooks: ["clean"],
@@ -20,19 +20,19 @@ export const options: OptionDefinition[] = [
     name: "force",
     type: Boolean,
     group: "build",
-    description: `forces the transpiling of code when building a serverless project`,
+    description: "forces the transpiling of code when building a serverless project",
   },
   {
     name: "interactive",
     alias: "i",
     type: Boolean,
     group: "build",
-    description: `allows choosing the functions interactively`,
+    description: "allows choosing the functions interactively",
   },
 ];
 
 export function description() {
-  return `Efficient and clear build pipelines for serverless and/or NPM libraries`;
+  return "Efficient and clear build pipelines for serverless and/or NPM libraries";
 }
 
 export async function handler(argv: string[], opts: IDictionary) {

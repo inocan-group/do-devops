@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import fg from "fast-glob";
-import * as path from "path";
+import path from "path";
 
 import { parseFile } from "./parseFile";
 import { relativePath } from "../file";
@@ -10,7 +10,7 @@ import { relativePath } from "../file";
  * directory that have a `handlers` export.
  */
 export function getValidServerlessHandlers() {
-  const allFiles = fg.sync(path.join(process.env.PWD, "/src/handlers/**/*.ts"));
+  const allFiles = fg.sync(path.join(process.env.PWD || "", "/src/handlers/**/*.ts"));
   return allFiles.reduce((agg: string[], curr) => {
     let ast;
     let status = "starting";
@@ -32,7 +32,7 @@ export function getValidServerlessHandlers() {
       status = handler ? "handler-found" : "handler-missing";
       if (handler) {
         if (!Array.isArray(agg)) {
-          throw new Error(
+          throw new TypeError(
             `Found a handler but somehow the file aggregation is not an array! ${handler}`
           );
         }
@@ -40,9 +40,11 @@ export function getValidServerlessHandlers() {
       }
 
       return agg;
-    } catch (e) {
+    } catch (error) {
       console.log(
-        chalk`- Error processing  {red ${relativePath(curr)}} [s: ${status}]: {grey ${e.message}}`
+        chalk`- Error processing  {red ${relativePath(curr)}} [s: ${status}]: {grey ${
+          error.message
+        }}`
       );
       return agg;
     }

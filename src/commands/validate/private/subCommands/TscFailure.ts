@@ -1,13 +1,19 @@
-import chalk = require("chalk");
-import { emoji } from "../../../../shared";
+import chalk from "chalk";
+import { emoji } from "~/shared/ui";
 import { ValidationAction } from "../../public";
 import { IDictionary } from "common-types";
 import { exec } from "async-shelljs";
 
-export async function handler(action: ValidationAction, currentBranch: string, options: IDictionary = {}) {
-  console.log(chalk`- ${emoji.eyeballs} ensuring Typescript compiler reports no errors in transpilation`);
+export async function handler(
+  action: ValidationAction,
+  _currentBranch: string,
+  options: IDictionary = {}
+) {
+  console.log(
+    chalk`- ${emoji.eyeballs} ensuring Typescript compiler reports no errors in transpilation`
+  );
 
-  const result = exec(`yarn tsc`, { silent: options.quiet });
+  const result = exec("yarn tsc", { silent: options.quiet });
   if (result.code === 0) {
     console.log(chalk`- ${emoji.party} transpilation found no issues!`);
   }

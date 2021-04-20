@@ -103,24 +103,23 @@ export async function getExamples(opts: IDictionary, fn?: string) {
     const hasExamples = defn.examples ? true : false;
     const defnIsFunction = typeof defn.examples === "function";
 
-    if (hasExamples) {
-      if (!defnIsFunction && !Array.isArray(defn.examples)) {
-        throw new Error(
-          `Getting help on "${fn}" has failed because the examples section -- while configured -- is of the wrong format! Should be a function returning an array or an array of .`
-        );
-      }
-      const examples = defnIsFunction ? defn.examples(opts) : defn.examples;
+    if (hasExamples && !defnIsFunction && !Array.isArray(defn.examples)) {
+      throw new Error(
+        `Getting help on "${fn}" has failed because the examples section -- while configured -- is of the wrong format! Should be a function returning an array or an array of .`
+      );
     }
+    // const examples = defnIsFunction ? defn.examples(opts) : defn.examples;
 
     return hasExamples
       ? defnIsFunction
         ? await defn.description(opts)
         : defn.description
-      : ``;
+      : "";
   }
 }
 
 export async function getOptions(opts: IDictionary, fn?: string) {
+  return fn ? globalAndLocalOptions(opts, fn) : [];
   // let options: OptionDefinition[] = [];
   // if (fn) {
   //   const defn = await import(`../../commands/${fn}`);
@@ -131,5 +130,5 @@ export async function getOptions(opts: IDictionary, fn?: string) {
   // options = options.concat(globalOptions);
 
   // return options;
-  return globalAndLocalOptions(opts, fn);
+  // return globalAndLocalOptions(opts, fn);
 }

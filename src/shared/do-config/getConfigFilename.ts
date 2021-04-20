@@ -1,4 +1,3 @@
-import * as path from "path";
 import { homedir } from "os";
 /**
  * Gets the filename for the `do.config.js` file. You can state whether you
@@ -6,5 +5,7 @@ import { homedir } from "os";
  * instead the user's config file (in their home directory)
  */
 export function getConfigFilename(projectOrUser: "project" | "user" = "project") {
-  return projectOrUser === "project" ? `${process.cwd()}/do.config.js` : `${homedir()}/do.config.js`;
+  return projectOrUser === "project"
+    ? `${process.cwd()}/do.config.js`
+    : `${homedir()}/do.config.js`;
 }

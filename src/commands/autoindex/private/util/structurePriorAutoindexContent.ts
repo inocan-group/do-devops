@@ -1,6 +1,13 @@
-import { END_REGION, ExportAction, START_REGION } from "../index";
-
+import { END_REGION, START_REGION } from "../index";
 import { ExportType } from "../reference";
+
+function getType(exportLines: string[]) {
+  return exportLines[0].includes("* as ")
+    ? ExportType.namedOffset
+    : exportLines[0].includes("{ default as ")
+    ? ExportType.default
+    : ExportType.named;
+}
 
 export function structurePriorAutoindexContent(content: string) {
   // const timestamp = ``
@@ -14,12 +21,4 @@ export function structurePriorAutoindexContent(content: string) {
     .filter((i) => i.includes("// indexed at:"))
     .map((i) => i.replace(/(.*indexed at:\s*)(.*)$/, "$2"));
   return { exportType, symbols, quantity: symbols.length, timestamp };
-}
-
-function getType(exportLines: string[]) {
-  return exportLines[0].includes("* as ")
-    ? ExportType.namedOffset
-    : exportLines[0].includes("{ default as ")
-    ? ExportType.default
-    : ExportType.named;
 }

@@ -11,10 +11,11 @@ import {
 } from "./shared";
 
 import { OptionDefinition } from "command-line-args";
-import { getCommands } from "./shared/getCommands";
+import { getCommands } from "./shared/commands/getCommands";
 import { help } from "./commands/help";
 
 import commandLineArgs = require("command-line-args");
+import { isKnownCommand } from "./shared/commands";
 
 (async () => {
   const command: OptionDefinition[] = [
@@ -23,7 +24,6 @@ import commandLineArgs = require("command-line-args");
   ];
   const mainCommand = commandLineArgs(command, { stopAtFirstUnknown: true });
   const cmd = (mainCommand._all || {}).command;
-  let argv = mainCommand._unknown || [];
   let opts = mainCommand.global;
 
   console.log(
@@ -34,13 +34,13 @@ import commandLineArgs = require("command-line-args");
     await help(opts);
   }
 
-  if (getCommands().includes(cmd)) {
+  if (isKnownCommand(cmd)) {
     opts =
       commandLineArgs(await globalAndLocalOptions({}, cmd), {
         partial: true,
       }) || {};
 
-    let subModule = getCommandInterface(cmd);
+    const subModule = getCommandInterface(cmd);
     const subModuleArgv = opts._unknown.filter((i: any) => i !== cmd);
     const subModuleOpts = opts._all;
 
@@ -50,23 +50,25 @@ import commandLineArgs = require("command-line-args");
 
     try {
       await subModule.handler(subModuleArgv, subModuleOpts);
-    } catch (e) {
+    } catch (error) {
       console.log(
-        chalk`\n{red An Error has occurred while running: {italic {bold do ${cmd}}}}`
+        chalk`\n{red An Error has occurred while running: {italic {bold do-devops ${cmd}}}}`
       );
-      console.log(`- ${e.message}`);
-      console.log(chalk`{grey   ${e.stack}}\n`);
+      console.log(`- ${error.message}`);
+      console.log(chalk`{grey   ${error.stack}}\n`);
 
       process.exit();
     }
   } else {
     console.log(
-      `${chalk.bold.red("DO:")} "${cmd}" is an unknown command! \n\n` +
+      `${chalk.bold.red("Whoops! ")} ${chalk.italic.yellowBright(
+        cmd
+      )} is an unknown command! \n\n` +
         `- Valid command syntax is: ${chalk.bold(
           "dd [command] <options>"
         )}\n  where valid commands are: ${chalk.italic(
           getCommands().sort().join(", ")
-        )}\n` +
+        )}\n\n` +
         `- If you want more help use the ${inverted(" --help ")} option\n`
     );
   }

@@ -1,10 +1,8 @@
+import chalk from "chalk";
 import { APIGateway, ApiGatewayV2 } from "aws-sdk";
 import { convertProfileToApiCredential, getAwsProfile } from "./index";
-
 import { emoji } from "../ui";
 import { userHasAwsProfile } from "./userHasAwsProfile";
-
-import chalk = require("chalk");
 
 /**
  * Gets all API Gatway _endpoints_ defined in a given
@@ -25,9 +23,13 @@ export async function getApiGatewayEndpoints(profileName: string, region: string
     region,
   });
 
-  const apis = await gw.getRestApis().promise();
-  console.log(JSON.stringify(apis, null, 2));
+  const gw2 = new ApiGatewayV2({
+    ...credential,
+    region,
+  });
 
-  const detail = await gw.getRestApi({ restApiId: apis.items[0].apiKeySource });
-  return detail;
+  const httpApi = await gw2.getApis().promise();
+  const restApi = await gw.getRestApis().promise();
+  // const detail = await gw.getRestApi({ restApiId: apis.items[0].apiKeySource });
+  return { httpApi, restApi };
 }

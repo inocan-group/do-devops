@@ -1,5 +1,4 @@
 import { OptionDefinition } from "command-line-usage";
-import chalk = require("chalk");
 
 export const options: OptionDefinition[] = [
   // {

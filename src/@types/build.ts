@@ -1,4 +1,4 @@
-import { IServerlessConfig } from "common-types";
+import { IServerlessYaml } from "common-types";
 
 /**
  * Provides a file and `ref` object which contains the handler function
@@ -8,6 +8,6 @@ export interface IHandlerReference {
   file: string;
   ref: {
     handler: () => void;
-    config?: Omit<IServerlessConfig, "handler">;
+    config?: Omit<IServerlessYaml, "handler">;
   };
 }

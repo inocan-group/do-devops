@@ -1,4 +1,4 @@
-import { AUTOINDEX_INFO_MSG, END_REGION, START_REGION, timestamp } from "../index";
+import { END_REGION, START_REGION } from "../index";
 
 /** replace an existing region block with a new one */
 export function replaceRegion(fileContent: string, regionContent: string) {
