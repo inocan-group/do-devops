@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import * as fs from "fs";
-import * as path from "path";
+import path from "path";
 
 import { IHandlerReference } from "../../../@types/index";
 import { IServerlessFunctionHandler } from "common-types";

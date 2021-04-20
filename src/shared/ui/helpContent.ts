@@ -1,9 +1,28 @@
 import chalk from "chalk";
-
-import { getCommands, globalAndLocalOptions } from "../../shared/index";
-
-import { ICommandDescription } from "../../@types";
 import { IDictionary } from "common-types";
+import { getCommands, globalAndLocalOptions } from "~/shared";
+import { ICommandDescription } from "~/@types";
+
+/**
+ * Formats commands so that:
+ *
+ * 1. alternating white/dim per line item
+ * 2. multi-line descriptions are truncated to first line
+ */
+function formatCommands(cmds: ICommandDescription[]) {
+  let dim = false;
+
+  return cmds.map((cmd) => {
+    cmd.name = dim ? `{dim ${cmd.name}}` : cmd.name;
+    const summary = Array.isArray(cmd.summary) ? cmd.summary.split("\n")[0] : cmd.summary;
+    console.log(summary, cmd.summary);
+
+    cmd.summary = dim ? `{dim ${summary}}` : summary;
+    dim = !dim;
+
+    return cmd;
+  });
+}
 
 export async function getHelpCommands(fn?: string) {
   let meta: ICommandDescription[] = [];
@@ -28,27 +47,6 @@ export async function getHelpCommands(fn?: string) {
   }
 
   return formatCommands(meta);
-}
-
-/**
- * Formats commands so that:
- *
- * 1. alternating white/dim per line item
- * 2. multi-line descriptions are truncated to first line
- */
-function formatCommands(cmds: ICommandDescription[]) {
-  let dim = false;
-
-  return cmds.map((cmd) => {
-    cmd.name = dim ? `{dim ${cmd.name}}` : cmd.name;
-    const summary = Array.isArray(cmd.summary) ? cmd.summary.split("\n")[0] : cmd.summary;
-    console.log(summary, cmd.summary);
-
-    cmd.summary = dim ? `{dim ${summary}}` : summary;
-    dim = !dim;
-
-    return cmd;
-  });
 }
 
 /**

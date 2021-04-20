@@ -1,6 +1,5 @@
+import path from "path";
 import { existsSync, readdirSync } from "fs";
-
-import { join } from "path";
 
 /**
  * Gives back a list of packages in the monorepo. If the
@@ -9,7 +8,7 @@ import { join } from "path";
  * you'll just get an empty array.
  */
 export function getMonoRepoPackages(baseDir: string) {
-  const dir = join(baseDir, "packages");
+  const dir = path.posix.join(baseDir, "packages");
   if (!existsSync(dir)) {
     return false;
   }

@@ -1,4 +1,4 @@
-import chalk = require("chalk");
+import chalk from "chalk";
 const autoindex = chalk`{bgWhite {blackBright  autoindex }}`;
 
 export const description = async () =>

@@ -1,5 +1,5 @@
 import fg from "fast-glob";
-import * as path from "path";
+import path from "path";
 
 /**
  * **findInlineFunctionDefnFiles**

@@ -1,6 +1,6 @@
 import { existsSync } from "fs";
-import { join } from "path";
+import path from "path";
 
 export function serverlessYamlExists() {
-  return existsSync(join(process.cwd(), "serverless.yml"));
+  return existsSync(path.posix.join(process.cwd(), "serverless.yml"));
 }

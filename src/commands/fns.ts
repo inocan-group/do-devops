@@ -13,7 +13,7 @@ import { isServerless } from "~/shared/observations";
 import { omit } from "native-dash";
 
 export function description() {
-  return `Lists all serverless function handlers and basic meta about them`;
+  return "Lists all serverless function handlers and basic meta about them";
 }
 
 export const options: OptionDefinition[] = [
@@ -61,17 +61,17 @@ export async function handler(args: string[], opts: IDictionary) {
       ],
     ];
     if (fns) {
-      for (const key of Object.keys(fns)
-        .filter(filterBy)) {
-          const events = fns[key].events || [];
-          tableData.push([
-            key,
-            events.map((i) => Object.keys(i)).join(", "),
-            String(fns[key].memorySize || chalk.grey("1024")),
-            String(fns[key].timeout || chalk.grey("3")),
-            fns[key].description || "",
-          ]);
-        }
+      // eslint-disable-next-line unicorn/no-array-callback-reference
+      for (const key of Object.keys(fns).filter(filterBy)) {
+        const events = fns[key].events || [];
+        tableData.push([
+          key,
+          events.map((i) => Object.keys(i)).join(", "),
+          String(fns[key].memorySize || chalk.grey("1024")),
+          String(fns[key].timeout || chalk.grey("3")),
+          fns[key].description || "",
+        ]);
+      }
     }
     let tableConfig: { columns: IDictionary } = {
       columns: {

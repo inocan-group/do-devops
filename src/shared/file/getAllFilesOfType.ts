@@ -1,6 +1,5 @@
 import globby from "globby";
-
-import { join } from "path";
+import path from "path";
 
 /**
  * Returns a list of files of a particular type/extention. This list of files will
@@ -10,6 +9,6 @@ import { join } from "path";
  * @param dir the directory to look in; by default will look in `src` off the repo's roote
  */
 export function getAllFilesOfType(type: string, dir: string = "src") {
-  const directory = dir.slice(0, 1) === "/" ? dir : join(process.cwd(), dir);
+  const directory = dir.slice(0, 1) === "/" ? dir : path.posix.join(process.cwd(), dir);
   return globby.sync([`${directory}/**/*.${type}`]);
 }

@@ -2,14 +2,6 @@ import { ISandboxStrategy } from "./general";
 import { IDictionary } from "common-types";
 import { IDoTestConfig } from "./test";
 
-export interface IDoConfig {
-  global: IDoGlobalConfig;
-  deploy: IDoDeployConfig;
-  build: IDoBuildConfig;
-  test: IDoTestConfig;
-  pkg: IDoPkgConfig;
-}
-
 export interface IDoPkgConfig {
   preDeployHooks?: string[];
   /**
@@ -48,19 +40,6 @@ export interface IDoGlobalConfig extends IDictionary {
   defaultAwsRegion?: string;
 }
 
-export interface IDoBuildConfig {
-  preBuildHooks?: string[];
-
-  /**
-   * Which tool are you using for running your build pipeline?
-   */
-  buildTool?: IBuildTool;
-  /**
-   * If you are using a _bespoke_ build tool then you set it here
-   */
-  bespokeCommand?: string;
-}
-
 export enum BuildTool {
   typescript = "typescript",
   webpack = "webpack",
@@ -81,16 +60,24 @@ export enum BuildTool {
    * Note: this is quite common with Serverless projects which just use the
    * build process to rebuild the `serverless.yml` file.
    */
-  none = "bili"
+  none = "bili",
 }
 
 export type IBuildTool = keyof typeof BuildTool;
 
-export type IDoDeployConfig =
-  | IDoDeployServerless
-  | IDoDeployNpm
-  | IDoDeployBespoke
-  | IDoDeployUnknown;
+export interface IDoBuildConfig {
+  preBuildHooks?: string[];
+
+  /**
+   * Which tool are you using for running your build pipeline?
+   */
+  buildTool?: IBuildTool;
+  /**
+   * If you are using a _bespoke_ build tool then you set it here
+   */
+  bespokeCommand?: string;
+}
+
 export interface IDoDeployConfigBase {
   preDeployHooks?: string[];
   /**
@@ -128,4 +115,18 @@ export interface IDoDeployNpm extends IDoDeployConfigBase {
 
 export interface IDoDeployBespoke extends IDoDeployConfigBase {
   target: "bespoke";
+}
+
+export type IDoDeployConfig =
+  | IDoDeployServerless
+  | IDoDeployNpm
+  | IDoDeployBespoke
+  | IDoDeployUnknown;
+
+export interface IDoConfig {
+  global: IDoGlobalConfig;
+  deploy: IDoDeployConfig;
+  build: IDoBuildConfig;
+  test: IDoTestConfig;
+  pkg: IDoPkgConfig;
 }

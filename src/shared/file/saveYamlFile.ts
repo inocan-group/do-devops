@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import * as path from "path";
+import path from "path";
 
 import { IDictionary } from "common-types";
 import { emoji } from "../ui";

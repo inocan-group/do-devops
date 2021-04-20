@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { join } from "path";
+import path from "path";
 
 /**
  * Checks all the files to see if they exist in the file system.
@@ -12,7 +12,7 @@ export function filesExist(...files: string[]) {
   const exists: string[] = [];
   for (let f of files) {
     if (![".", "/"].includes(f.slice(0, 1))) {
-      f = join(process.cwd(), f);
+      f = path.posix.join(process.cwd(), f);
     }
     if (existsSync(f)) {
       exists.push(f);

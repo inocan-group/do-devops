@@ -1,4 +1,4 @@
-import chalk = require("chalk");
+import chalk from "chalk";
 
 export function communicateApi(paths: string[]) {
   console.log(

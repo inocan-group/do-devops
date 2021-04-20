@@ -1,8 +1,8 @@
 import chalk from "chalk";
+import path from "path";
 
 import { emoji } from "../../ui";
-import { join } from "path";
-import "../../../@polyfills/bestzip";
+import "~/@polyfills/bestzip";
 import zip = require("bestzip");
 /**
  * Zips up a number of
@@ -12,18 +12,17 @@ import zip = require("bestzip");
 export async function zipWebpackFiles(fns: string[]) {
   const promises: any[] = [];
   try {
-    const fnWithPath = (f: string) => join(".webpack", f);
+    const fnWithPath = (f: string) => path.posix.join(".webpack", f);
     for (const fn of fns) {
-promises.push(
+      promises.push(
         zip({
           source: `./${fnWithPath(fn)}.js`,
           destination: `./${fnWithPath(fn)}.zip`,
         }).catch((error: Error) => {
           throw error;
         })
-      )
-    ;
-}
+      );
+    }
 
     return Promise.all(promises);
   } catch (error) {

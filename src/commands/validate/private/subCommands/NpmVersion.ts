@@ -1,4 +1,4 @@
-import chalk = require("chalk");
+import chalk from "chalk";
 import { emoji, gitTags, getPackageJson } from "~/shared";
 import { ValidationAction } from "../../public";
 
@@ -16,10 +16,10 @@ export async function handler(action: ValidationAction, currentBranch: string) {
     chalk`- the semver value in {italic package.json} is {bold {yellow ${pkgVersion}}}`
   );
   if (releaseTag) {
-console.log(
+    console.log(
       chalk`- the {italic release} branch has a tag of {bold {yellow ${releaseTag}}}`
     );
-}
+  }
 
   if (releaseTag && releaseTag !== pkgVersion) {
     console.log(
