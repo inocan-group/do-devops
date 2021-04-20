@@ -166,7 +166,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
           cleanOldBlockFormat(
             existingContentMeta.hasExistingMeta
               ? replaceRegion(fileContent, blockContent)
-              : [...fileContent, ...("\n" + blockContent)] + "\n"
+              : `${fileContent}\n${blockContent}\n`
           )
         );
       } else {
@@ -176,7 +176,7 @@ export async function processFiles(paths: string[], opts: IDictionary) {
           cleanOldBlockFormat(
             existingContentMeta.hasExistingMeta
               ? replaceRegion(fileContent, blockContent)
-              : [...fileContent, ...("\n" + blockContent)] + "\n"
+              : `${fileContent}\n${blockContent}\n`
           )
         );
       }

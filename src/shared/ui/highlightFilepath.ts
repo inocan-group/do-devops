@@ -13,8 +13,8 @@ export type ForegroundColor = typeof ForegroundColor;
  */
 export function highlightFilepath(
   fp: string,
-  color: ModifiedForegroundColor | ForegroundColor = ["dim", "blue"],
-  highlight: ModifiedForegroundColor | ForegroundColor = ["bold", "blue"]
+  color: ModifiedForegroundColor | ForegroundColor = ["dim", "blueBright"],
+  highlight: ModifiedForegroundColor | ForegroundColor = ["bold", "blueBright"]
 ) {
   if (!Array.isArray(color)) {
     color = [undefined, color];
@@ -24,19 +24,19 @@ export function highlightFilepath(
   }
 
   const [modifier, foreground] = color;
-  const [highModifier, highForeground] = color;
+  const [highModifier, highForeground] = highlight;
 
   const parts = fp.split(/[/\\]/);
   const file = parts.pop();
   const path = parts.join("/").replace(/^(\S)/, "./$1");
 
-  const baseFormat = modifier
-    ? `{${modifier} {${foreground} ${path + "/"}}}`
-    : `{${foreground} ${path + "/"}}`;
+  const filePath = modifier
+    ? chalk`{${modifier} {${foreground} ${path + "/"}}}`
+    : chalk`{${foreground} ${path + "/"}}`;
 
-  const highlightFormat = highModifier
-    ? `{${highModifier} {${highForeground} ${file}}}`
-    : `{${highForeground} ${file}}`;
+  const fileName = highModifier
+    ? chalk`{${highModifier} {${highForeground} ${file}}}`
+    : chalk`{${highForeground} ${file}}`;
 
-  return chalk`${baseFormat}${highlightFormat}`;
+  return `${filePath}${fileName}`;
 }
