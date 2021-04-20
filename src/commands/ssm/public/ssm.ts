@@ -10,10 +10,6 @@ export interface ISubCommandHash {
 
 export async function handler(argv: string[], ssmOptions: IDictionary) {
   const subCommand = argv.shift() || "";
-  // const opts = commandLineArgs(options, {
-  //   argv: argv,
-  //   partial: true,
-  // });
 
   if (!Object.keys(subCommands).includes(subCommand)) {
     console.log(
@@ -35,7 +31,10 @@ export async function handler(argv: string[], ssmOptions: IDictionary) {
   }
 
   try {
-    await (subCommands as ISubCommandHash)[subCommand].execute(argv, ssmOptions);
+    await subCommands[subCommand as keyof typeof subCommands].execute(
+      argv,
+      ssmOptions as any
+    );
   } catch (error) {
     console.log(
       chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${error.message}\n`

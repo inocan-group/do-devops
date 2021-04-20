@@ -16,10 +16,10 @@ export async function globalAndLocalOptions(optsSet: IDictionary, fn: string) {
       typeof cmdDefn.options === "object"
         ? cmdDefn.options
         : await cmdDefn.options(optsSet);
-    const localNames = localOptions.map((i) => i.name);
+    const localNames = new Set(localOptions.map((i) => i.name));
 
     const nonInterferingGlobal = globalOptions.filter(
-      (i) => !localNames.includes(i.name)
+      (i) => !localNames.has(i.name)
     );
     options = localOptions.concat(nonInterferingGlobal);
   } else {

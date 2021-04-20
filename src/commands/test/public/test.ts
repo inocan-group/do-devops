@@ -28,8 +28,8 @@ export async function handler(args: string[], opt: IDictionary) {
     }
 
     await test(args);
-  } catch (e) {
-    console.log(`- Error finding functions: ${e.message}\n`);
+  } catch (error) {
+    console.log(`- Error finding functions: ${error.message}\n`);
     process.exit();
   }
 }

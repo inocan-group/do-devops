@@ -1,4 +1,4 @@
-import type { Stats } from "node:fs";
+import type { Stats } from "fs";
 
 export interface IFileWithStats {
   file: string;

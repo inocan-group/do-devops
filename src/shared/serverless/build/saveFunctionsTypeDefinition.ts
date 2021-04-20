@@ -22,22 +22,23 @@ const writeFile = promisify(fs.writeFile);
  */
 export async function saveFunctionsTypeDefinition(config: IServerlessYaml) {
   try {
-    const functions = config.functions ? Object.keys(config.functions) : false;
     const stepFunctions =
       config.stepFunctions && config.stepFunctions.stateMachines
         ? Object.keys(config.stepFunctions.stateMachines)
         : false;
 
+    const functions = config.functions ? Object.keys(config.functions) : [];
+
     let contents = "";
-    if (functions) {
+
+    // Functions
+    if (config.functions) {
       contents += "export enum AvailableFunctions {";
-      for (const [i, f] of functions.entries()) {
-        const description = functions[f].description
-          ? config.functions[f].description
-          : false;
-        contents += description ? `\n  /**\n   * ${description}\n   **/` : "";
-        const comma = i === functions.length - 1 ? "" : ",";
-        contents += `\n  ${f} = "${f}"${comma}`;
+      for (const key in functions) {
+        const fn = config.functions[key];
+        const isLast = key === functions.slice(-1).pop();
+        contents += fn.description ? `\n  /**\n   * ${fn.description}\n   **/` : "";
+        contents += `\n  ${fn} = "${fn}"${isLast ? "" : ","}`;
       }
       contents += "\n};\n";
     }

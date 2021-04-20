@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "fs";
-
-import { join } from "path";
+import parse from "destr";
+import path from "path";
 
 /**
  * Get's the name(s) of the scaffolding repo(s) used for the given project. The return
@@ -10,12 +10,12 @@ import { join } from "path";
  * highly unusual.
  */
 export function getYeomanScaffolds() {
-  const yoFile = join(process.cwd(), ".yo-rc.json");
+  const yoFile = path.posix.join(process.cwd(), ".yo-rc.json");
   const hasYo = existsSync(yoFile);
 
   if (!hasYo) {
     return [];
   }
 
-  return Object.keys(JSON.parse(readFileSync(yoFile, "utf-8")));
+  return Object.keys(parse(readFileSync(yoFile, "utf-8")));
 }

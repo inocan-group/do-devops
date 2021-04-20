@@ -1,1 +1,1 @@
-export const description = () => `Provides the latest semver tag in the current repo.`;
+export const description = () => "Provides the latest semver tag in the current repo.";

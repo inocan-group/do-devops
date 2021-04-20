@@ -8,7 +8,7 @@ export function communicateApi(paths: string[]) {
   );
   console.log(
     `${chalk.bold("  Note: ")}${chalk.dim.italic(
-      'to make an "index.ts" or "index.js" file an "autoindex file"'
+      "to make an \"index.ts\" or \"index.js\" file an \"autoindex file\""
     )}`
   );
   console.log(

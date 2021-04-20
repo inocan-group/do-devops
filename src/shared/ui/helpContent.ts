@@ -7,7 +7,7 @@ import { IDictionary } from "common-types";
 
 export async function getHelpCommands(fn?: string) {
   let meta: ICommandDescription[] = [];
-  let bold = false;
+  const bold = false;
   if (fn) {
     const defn = await import(`../../commands/${fn}`);
     meta = defn.commands ? defn.commands : [];

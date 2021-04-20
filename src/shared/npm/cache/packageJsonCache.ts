@@ -18,7 +18,7 @@ export function saveLocalPackageJson(pkgJson: IPackageJson) {
 /**
  * Allows caching of remote package.json repos
  */
-let remotePackageJsons: IDictionary<IPackageJson> = {};
+const remotePackageJsons: IDictionary<IPackageJson> = {};
 
 export function getRemotePackageJson(repo: string) {
   return remotePackageJsons[repo] ? remotePackageJsons[repo] : false;

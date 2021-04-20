@@ -49,14 +49,14 @@ export async function execute(argv: string[], options: ISsmOptions) {
     console.log(
       chalk`\n- ${emoji.party} the {bold {yellow ${name}}} variable was set successfully to the {italic ${region}} region {dim [ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]}\n`
     );
-  } catch (e) {
+  } catch (error) {
     console.log();
-    if (e.code === "ParameterAlreadyExists") {
+    if (error.code === "ParameterAlreadyExists") {
       console.log(
         chalk`- {red {bold Paramater Already Exists!}} to overwrite a parameter which already exists you must add {blue --force} to the CLI command`
       );
     } else {
-      console.log(chalk`{red {bold Error:}} ${e.message}`);
+      console.log(chalk`{red {bold Error:}} ${error.message}`);
     }
 
     console.log();

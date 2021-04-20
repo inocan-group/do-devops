@@ -5,6 +5,6 @@ export const options: OptionDefinition[] = [
     name: "onSourceChanged",
     type: Boolean,
     group: "test",
-    description: `only run tests if the source files in the repo are changed from what is in git`,
+    description: "only run tests if the source files in the repo are changed from what is in git",
   },
 ];

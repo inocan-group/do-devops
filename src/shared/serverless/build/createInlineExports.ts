@@ -7,7 +7,7 @@ import {
   IServerlessFunction,
   isServerlessFunctionHandler,
 } from "common-types";
-import { IWebpackHandlerDates } from "~/types";
+import { IWebpackHandlerDates } from "~/@types";
 import { relativePath } from "~/shared/file";
 import { emoji } from "~/shared/ui";
 import { findHandlerConfig } from "~/shared/ast";

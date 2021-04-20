@@ -12,7 +12,7 @@ import {
   green,
 } from "../shared";
 
-export const description = `Summarized information about the current repo`;
+export const description = "Summarized information about the current repo";
 export const options = [
   {
     name: "test",

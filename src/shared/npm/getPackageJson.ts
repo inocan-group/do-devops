@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import parse from "destr";
 import { IPackageJson } from "common-types";
 import { getLocalPackageJson } from "./cache/packageJsonCache";
 
@@ -17,5 +18,5 @@ export function getPackageJson(pathOverride?: string): IPackageJson {
     throw new Error(`The package.json file at "${filename}" does not exist!`);
   }
 
-  return JSON.parse(fs.readFileSync(filename, { encoding: "utf-8" })) as IPackageJson;
+  return parse(fs.readFileSync(filename, { encoding: "utf-8" })) as IPackageJson;
 }

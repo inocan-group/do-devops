@@ -10,6 +10,8 @@ export type DbObservation =
   | "sqlite"
   | "dynamodb";
 
+export type MonorepoObservation = "rushjs" | "lerna" | "yarn-workspaces";
+
 export type DoDevopObservation =
   | PackageManagerObservation
   | TestObservation

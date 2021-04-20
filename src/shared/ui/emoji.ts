@@ -1,28 +1,28 @@
 export const enum emoji {
   /** 🚀 */
-  rocket = "\ud83d\ude80",
+  rocket = "\uD83D\uDE80",
   /** 💩 */
-  poop = "\ud83d\udca9",
+  poop = "\uD83D\uDCA9",
   /** 😲 */
-  shocked = "\ud83d\ude32",
+  shocked = "\uD83D\uDE32",
   /** 👍 */
-  thumbsUp = "\ud83d\udc4d",
+  thumbsUp = "\uD83D\uDC4D",
   /** 😡 */
-  angry = "\ud83d\ude21",
+  angry = "\uD83D\uDE21",
   /** 🤖 */
-  robot = "\ud83e\udd16",
+  robot = "\uD83E\uDD16",
   /** 👁 */
-  eyeball = "\ud83d\udc41",
+  eyeball = "\uD83D\uDC41",
   /** 👀 */
-  eyeballs = "\ud83d\udc40",
+  eyeballs = "\uD83D\uDC40",
   /** 🎉 */
-  party = "\ud83c\udf89",
+  party = "\uD83C\uDF89",
   /** ✓ */
-  checkmark = "\ud83c\udf89",
+  checkmark = "\uD83C\uDF89",
   /** ○ */
-  circleEmpty = "\u25cb",
+  circleEmpty = "\u25CB",
   /** ◉  */
-  circleFilled = "\u25cb",
+  circleFilled = "\u25CB",
   /** 🏃‍♂️ */
-  run = "\ud83c\udfc3"
+  run = "\uD83C\uDFC3"
 }

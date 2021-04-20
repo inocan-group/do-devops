@@ -17,12 +17,12 @@ export async function saveToServerlessYaml(data: IServerlessYaml) {
     const yamlData = dump(data);
 
     await writeFile(filename, yamlData, { encoding: "utf-8" });
-  } catch (e) {
+  } catch (error) {
     console.log(
       chalk`- {red writing the {bold serverless.yml} file has failed!} ${emoji.poop}`
     );
-    console.log(e.message);
-    console.log(chalk`{dim ${e.stack}}`);
+    console.log(error.message);
+    console.log(chalk`{dim ${error.stack}}`);
     process.exit();
   }
 }

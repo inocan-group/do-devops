@@ -1,5 +1,6 @@
 import { asyncExec } from "async-shelljs";
 import { INpmInfo } from "common-types";
+import parse from "destr";
 import { DevopsError } from "~/errors";
 
 /**
@@ -11,16 +12,16 @@ import { DevopsError } from "~/errors";
 export async function getPackageInfo(pkg: string = "") {
   let npm: INpmInfo;
   try {
-    npm = JSON.parse(await asyncExec("yarn info --json", { silent: true })).data;
+    npm = parse(await asyncExec("yarn info --json", { silent: true })).data;
 
     return npm;
-  } catch (e) {
+  } catch {
     // appears NOT to be a NPM package
     throw new DevopsError(
       pkg
         ? `The package ${pkg} does not exist in NPM.`
-        : `The local package does not exist in NPM.`,
-      `devops/does-not-exist`
+        : "The local package does not exist in NPM.",
+      "devops/does-not-exist"
     );
   }
 }

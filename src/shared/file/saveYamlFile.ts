@@ -16,12 +16,12 @@ export async function saveYamlFile(filename: string, data: IDictionary) {
     const fqFilename = path.join(process.cwd(), filename);
     await write(fqFilename, yamlData, { encoding: "utf-8" });
     return;
-  } catch (e) {
+  } catch (error) {
     console.log(
       chalk`- {red writing the {bold {italic ${filename}} YAML file has failed!} ${emoji.poop}}`
     );
-    console.log(e.message);
-    console.log(chalk`{dim ${e.stack}}`);
+    console.log(error.message);
+    console.log(chalk`{dim ${error.stack}}`);
     process.exit();
   }
 }

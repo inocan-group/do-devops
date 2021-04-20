@@ -15,10 +15,11 @@ export async function handler(action: ValidationAction, currentBranch: string) {
   console.log(
     chalk`- the semver value in {italic package.json} is {bold {yellow ${pkgVersion}}}`
   );
-  if (releaseTag)
-    console.log(
+  if (releaseTag) {
+console.log(
       chalk`- the {italic release} branch has a tag of {bold {yellow ${releaseTag}}}`
     );
+}
 
   if (releaseTag && releaseTag !== pkgVersion) {
     console.log(

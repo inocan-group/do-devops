@@ -100,7 +100,7 @@ export async function buildLambdaTypescriptProject(
       chalk`- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`
     );
 
-    await asyncExec(`yarn ts-node serverless-config/build.ts --color=always`, {
+    await asyncExec("yarn ts-node serverless-config/build.ts --color=always", {
       env: {
         ...process.env,
         TERM: "xterm-color",

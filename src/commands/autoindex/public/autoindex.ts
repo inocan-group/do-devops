@@ -165,8 +165,7 @@ export async function handler(_argv: string[], opts: IDictionary): Promise<void>
     const watchedDirs: IDictionary<FSWatcher> = {};
     setupAutoIndexWatcher(watchedDirs, opts);
 
-    for (const d of autoIndexFiles.map((i) => path.posix.dirname(i)))
-      watchedDirs[d] = setupWatcherDir(d, [], opts);
+    for (const d of autoIndexFiles.map((i) => path.posix.dirname(i))) {watchedDirs[d] = setupWatcherDir(d, [], opts);}
 
     console.log(
       chalk`- watching {yellow {bold ${String(

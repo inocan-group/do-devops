@@ -9,9 +9,9 @@
  */
 export function includedIn(currentBranch: string, validBranches: string[]) {
   let flag: boolean = false;
-  validBranches.forEach((b) => {
-    if (currentBranch.includes(b)) flag = true;
-  });
+  for (const b of validBranches) {
+    if (currentBranch.includes(b)) {flag = true;}
+  }
 
   return flag;
 }

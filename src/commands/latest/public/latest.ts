@@ -12,7 +12,7 @@ export async function handler(_argv: string[], opts: IDictionary) {
 
   const aheadBehind =
     status.ahead === 0 && status.behind === 0
-      ? ``
+      ? ""
       : `\n- Your local repo is ${
           status.ahead > 0
             ? `ahead by ${status.ahead} commits`

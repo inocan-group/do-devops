@@ -22,8 +22,8 @@ export async function determineStage(opts: IDetermineOptions) {
 
     if (!stage) {
       try {
-        stage = get(await getServerlessYaml(), "provider.stage", undefined);
-      } catch (e) {}
+        stage = get(await getServerlessYaml(), "provider.stage");
+      } catch {}
     }
 
     if (opts.interactive) {
@@ -31,10 +31,10 @@ export async function determineStage(opts: IDetermineOptions) {
     }
 
     return stage;
-  } catch (e) {
+  } catch (error) {
     console.log(chalk`- attempts to get the desired "stage" have failed! ${emoji.poop}`);
-    console.log(chalk`- {red ${e.message}}`);
-    console.log(chalk`{dim ${e.stack}}`);
+    console.log(chalk`- {red ${error.message}}`);
+    console.log(chalk`{dim ${error.stack}}`);
     console.log();
 
     process.exit();

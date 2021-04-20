@@ -37,7 +37,7 @@ export async function writeInlineFunctions(
     // }
 
     contents += `const ${functionName}: IServerlessFunction = {\n`;
-    Object.keys(config).forEach((key) => {
+    for (const key of Object.keys(config)) {
       let value = config[key as keyof typeof config];
       if (typeof value === "string") {
         value = `"${value.replace(/"/g, '\\"')}"`;
@@ -46,7 +46,7 @@ export async function writeInlineFunctions(
         value = JSON.stringify(value);
       }
       contents += `  ${key}: ${value},\n`;
-    });
+    }
     contents += "}\n\n";
   }
   contents += `export default {\n  ${fnNames.join(",\n  ")}\n}`;

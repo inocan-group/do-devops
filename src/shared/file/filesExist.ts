@@ -10,14 +10,14 @@ import { join } from "path";
  */
 export function filesExist(...files: string[]) {
   const exists: string[] = [];
-  files.forEach(f => {
+  for (let f of files) {
     if (![".", "/"].includes(f.slice(0, 1))) {
       f = join(process.cwd(), f);
     }
     if (existsSync(f)) {
       exists.push(f);
     }
-  });
+  }
 
   return exists.length > 0 ? exists : false;
 }

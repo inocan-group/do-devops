@@ -14,7 +14,7 @@ export function truncate(
 ) {
   things = things.map(i => (typeof i === "string" ? i : String(i)));
   if (things.length > maxLength) {
-    things = things.slice(0, maxLength).concat("...");
+    things = [...things.slice(0, maxLength), "..."];
   }
 
   return things.join(separater);

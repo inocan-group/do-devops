@@ -17,6 +17,7 @@
 
     "baseUrl": ".",
     "declaration": true,
+    "declarationMap": true,
     "outDir": "bin",
     "typeRoots": ["src/@polyfills"],
 
