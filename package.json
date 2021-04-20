@@ -14,9 +14,9 @@
   "scripts": {
     "clean": "rimraf src/**/*.js && rimraf bin",
     "test": "mocha -r ts-node/register test/**/*-spec.ts",
-    "build": "tsc && chmod +x bin/dd.js",
+    "build": "ttsc && chmod +x bin/dd.js",
     "watch": "run-p watch:*",
-    "watch:build": "tsc -w",
+    "watch:build": "ttsc -w",
     "watch:autoindex": "yarn dd autoindex -w",
     "dd": "./bin/dd.js",
     "visualize": "yarn madge src --extensions ts -i /tmp/dep-ts-visualize.png && open /tmp/dep-ts-visualize.png",
@@ -102,6 +102,6 @@
     "ts-node": "^9.1.1",
     "ttypescript": "^1.5.12",
     "typescript": "^4.2.2",
-    "typescript-transform-paths": "^2.2.3"
+    "typescript-transform-paths": "2.2.1"
   }
 }

@@ -3,8 +3,9 @@ import globby from "globby";
 import path from "path";
 import { IDictionary } from "common-types";
 import { isAutoindexFile, processFiles, watchHandler } from "../private";
-import { getMonoRepoPackages, highlightFilepath } from "~/shared";
+import { getMonoRepoPackages } from "~/shared/file";
 import { FSWatcher, watch } from "chokidar";
+import { highlightFilepath } from "~/shared/ui";
 
 /**
  * Watches for changes in any file where an autoindex file resides
@@ -165,7 +166,9 @@ export async function handler(_argv: string[], opts: IDictionary): Promise<void>
     const watchedDirs: IDictionary<FSWatcher> = {};
     setupAutoIndexWatcher(watchedDirs, opts);
 
-    for (const d of autoIndexFiles.map((i) => path.posix.dirname(i))) {watchedDirs[d] = setupWatcherDir(d, [], opts);}
+    for (const d of autoIndexFiles.map((i) => path.posix.dirname(i))) {
+      watchedDirs[d] = setupWatcherDir(d, [], opts);
+    }
 
     console.log(
       chalk`- watching {yellow {bold ${String(

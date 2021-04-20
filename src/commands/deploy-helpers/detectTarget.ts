@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
-import { isNpmPackage } from "~/shared";
 import { IDoDeployConfig } from "~/@types";
+import { isNpmPackage } from "~/shared/npm";
 import { isServerless } from "~/shared/observations";
 
 export type IDetectedTarget = {

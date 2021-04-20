@@ -1,5 +1,7 @@
 import chalk from "chalk";
-import { emoji, gitTags, getPackageJson } from "~/shared";
+import { gitTags } from "~/shared/git";
+import { getPackageJson } from "~/shared/npm";
+import { emoji } from "~/shared/ui";
 import { ValidationAction } from "../../public";
 
 export async function handler(action: ValidationAction, currentBranch: string) {

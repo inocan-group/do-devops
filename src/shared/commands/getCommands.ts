@@ -5,5 +5,6 @@ import * as subCommands from "../../commands/index";
  */
 export function getCommands() {
   // TODO: add proper typing once stablized
-  return Object.keys(subCommands).filter((i: any) => typeof i === "object" && i.handler);
+
+  return Object.keys(subCommands);
 }

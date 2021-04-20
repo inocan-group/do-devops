@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { emoji, getAwsIdentityFromProfile, getAwsProfileList } from "~/shared";
+import { getAwsIdentityFromProfile, getAwsProfileList } from "~/shared/aws";
+import { emoji } from "~/shared/ui";
 import { askUser } from "../private";
 
 export async function handler(argv: string[], opts: IDictionary): Promise<void> {

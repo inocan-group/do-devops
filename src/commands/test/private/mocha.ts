@@ -3,10 +3,12 @@ import globby from "globby";
 import path from "path";
 
 import { SpecificTestReason, askForSpecificTests } from "./askForSpecificTests";
-import { emoji, getConfig, hasDevDependency } from "~/shared";
+import { emoji } from "~/shared/ui";
 
 import { asyncExec } from "async-shelljs";
 import { testName } from "./testName";
+import { hasDevDependency } from "~/shared/npm";
+import { getConfig } from "~/shared/do-config";
 
 /** runs the Mocha command to execute the tests */
 const tsExecution = async (fns: string[]) => {

@@ -1,10 +1,12 @@
-import { getAwsProfile, askForStage, emoji, getAwsIdentityFromProfile } from "~/shared";
+import { getAwsProfile, getAwsIdentityFromProfile } from "~/shared/aws";
 import chalk from "chalk";
 import { SSM } from "aws-ssm";
 import { completeSsmName } from "../index";
 import { ISsmOptions } from "../../public";
 import { toBase64 } from "native-dash";
 import { determineProfile, determineRegion } from "~/shared/observations";
+import { askForStage } from "~/shared/serverless";
+import { emoji } from "~/shared/ui";
 
 export async function execute(argv: string[], options: ISsmOptions) {
   if (argv.length < 2) {

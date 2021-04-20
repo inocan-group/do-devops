@@ -2,8 +2,9 @@ import chalk from "chalk";
 import { IDictionary } from "common-types";
 import path from "path";
 import { processFiles } from "./processFiles";
-import { directoryFiles, highlightFilepath } from "~/shared";
+import { directoryFiles } from "~/shared/file";
 import { isAutoindexFile } from "./util";
+import { highlightFilepath } from "~/shared/ui";
 
 /** to avoid circular events, we need to allow certain files to be ignored */
 let filesToIgnore: string[] = [];

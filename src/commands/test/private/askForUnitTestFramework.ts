@@ -1,7 +1,7 @@
 import inquirer = require("inquirer");
 
 import { IDictionary } from "common-types";
-import { getPackageJson } from "~/shared";
+import { getPackageJson } from "~/shared/npm";
 
 /**
  * Asks the user to choose an AWS profile

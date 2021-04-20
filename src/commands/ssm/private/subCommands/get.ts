@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { consoleDimensions, getAwsProfile } from "~/shared";
+import { getAwsProfile } from "~/shared/aws";
 import { fromBase64 } from "native-dash";
 import { SSM } from "aws-ssm";
 import { format } from "date-fns";
@@ -8,6 +8,7 @@ import { table } from "table";
 import { ISsmOptions } from "../../public/ssm-types";
 import { determineProfile, determineRegion } from "~/shared/observations";
 import { DevopsError } from "~/errors";
+import { consoleDimensions } from "~/shared/consoleDimensions";
 
 export async function execute(argv: string[], options: ISsmOptions) {
   const profile = await determineProfile({ cliOptions: options, interactive: true });

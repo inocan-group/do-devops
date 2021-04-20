@@ -1,5 +1,5 @@
 import path from "path";
-import { findInlineFunctionDefnFiles } from "~/shared";
+import { findInlineFunctionDefnFiles } from "~/shared/serverless";
 import { getFilePath, getNamespacedLookup, validateExports } from "./index";
 import { writeFileSync } from "fs";
 import { IServerlessFnDictionary } from "~/@types";

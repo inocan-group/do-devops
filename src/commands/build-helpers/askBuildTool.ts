@@ -2,7 +2,7 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 
 import { BuildTool, IBuildTool } from "~/@types";
-import { getPackageJson } from "~/shared";
+import { getPackageJson } from "~/shared/npm";
 import { saveToolToRepoConfig } from "./index";
 
 /**

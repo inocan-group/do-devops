@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { buildLambdaTypescriptProject } from "~/shared";
+import { buildLambdaTypescriptProject } from "~/shared/serverless";
 import { isServerless } from "~/shared/observations";
 import { subCommands } from "~/commands/ssm/private";
 

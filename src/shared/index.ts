@@ -2,10 +2,10 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 02:04 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 02:55 PM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: askForDataFile, consoleDimensions, defaultConfigSections, ensureDirectory, getCommandInterface, getDataFiles, getExportsFromFile, inverted, options, readDataFile, readFile, runHooks, sandbox.
-// directories: ast, aws, commands, do-config, errors, file, git, interactive, npm, serverless, sound, ui, yeoman.
+// directories: ast, aws, commands, do-config, file, git, interactive, npm, observations, serverless, sound, ui, yeoman.
 
 // local file exports
 export * from "./askForDataFile";
@@ -31,6 +31,7 @@ export * from "./file/index";
 export * from "./git/index";
 export * from "./interactive/index";
 export * from "./npm/index";
+export * from "./observations/index";
 export * from "./serverless/index";
 export * from "./sound/index";
 export * from "./ui/index";

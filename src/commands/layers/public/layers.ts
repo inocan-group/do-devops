@@ -1,5 +1,5 @@
 import { IDictionary } from "common-types";
-import { findLayersReferencedByFns, getLayersWithMeta } from "~/shared";
+import { findLayersReferencedByFns, getLayersWithMeta } from "~/shared/serverless";
 
 /** handler for the "layers" command */
 export async function handler(_args: string[], _opts: IDictionary) {

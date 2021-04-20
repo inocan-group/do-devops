@@ -1,14 +1,9 @@
 import chalk from "chalk";
 import fs from "fs";
 import path from "path";
-
 import { dump } from "js-yaml";
-
 import { IServerlessYaml } from "common-types";
 import { emoji } from "../ui";
-import { promisify } from "util";
-
-const writeFile = promisify(fs.writeFile);
 
 export async function saveToServerlessYaml(data: IServerlessYaml) {
   try {
@@ -16,7 +11,7 @@ export async function saveToServerlessYaml(data: IServerlessYaml) {
     console.log({ filename, data });
     const yamlData = dump(data);
 
-    await writeFile(filename, yamlData, { encoding: "utf-8" });
+    fs.writeFileSync(filename, yamlData, { encoding: "utf-8" });
   } catch (error) {
     console.log(
       chalk`- {red writing the {bold serverless.yml} file has failed!} ${emoji.poop}`

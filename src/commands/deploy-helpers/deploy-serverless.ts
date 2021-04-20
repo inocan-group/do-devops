@@ -2,11 +2,12 @@ import chalk from "chalk";
 import { asyncExec } from "async-shelljs";
 import { IDictionary } from "common-types";
 import { IDoDeployServerless } from "~/@types";
-import { getConfig, getLocalHandlerInfo, hasDevDependency } from "~/shared";
+import { getLocalHandlerInfo, zipWebpackFiles } from "~/shared/serverless";
 import { emoji } from "~/shared/ui";
-import { zipWebpackFiles } from "~/shared/serverless";
 import { isTranspileNeeded } from "./index";
 import { determineStage } from "~/shared/observations";
+import { hasDevDependency } from "~/shared/npm";
+import { getConfig } from "~/shared/do-config";
 
 export interface IServerlessDeployMeta {
   stage: string;

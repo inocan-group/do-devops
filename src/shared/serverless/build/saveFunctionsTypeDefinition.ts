@@ -4,9 +4,6 @@ import path from "path";
 
 import { IServerlessYaml } from "common-types";
 import { ensureDirectory } from "../..";
-import { promisify } from "util";
-
-const writeFile = promisify(fs.writeFile);
 
 /**
  * Once a build is complete, this function will review the
@@ -50,7 +47,7 @@ export async function saveFunctionsTypeDefinition(config: IServerlessYaml) {
     const dir = path.join(process.cwd(), "src/@types");
     const filename = path.join(dir, "build.ts");
     await ensureDirectory(dir);
-    await writeFile(filename, contents, { encoding: "utf-8" });
+    fs.writeFileSync(filename, contents, { encoding: "utf-8" });
   } catch (error) {
     console.log(
       chalk`- Attempt to save {italic type definitions} for {bold functions} and {bold stepFunctions} failed; this will be ignored for now so build can continue.`

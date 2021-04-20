@@ -2,12 +2,14 @@ import chalk from "chalk";
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
 
-import { buildLambdaTypescriptProject, emoji, getConfig } from "~/shared";
+import { emoji } from "~/shared/ui";
 import { getValidServerlessHandlers } from "~/shared/ast";
 import { IBuildTool } from "~/@types";
 import { IBuildToolingOptions } from "./build-helpers/tools/types";
 import { askBuildTool } from "./build-helpers/index";
 import { isServerless } from "~/shared/observations";
+import { getConfig } from "~/shared/do-config";
+import { buildLambdaTypescriptProject } from "~/shared/serverless/build";
 
 export const defaultConfig = {
   preBuildHooks: ["clean"],

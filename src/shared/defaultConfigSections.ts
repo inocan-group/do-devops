@@ -1,4 +1,4 @@
-import * as config from "~/config";
+import * as config from "../config";
 
 /**
  * returns a list of commands (or global scope) which have

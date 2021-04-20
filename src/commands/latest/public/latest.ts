@@ -1,7 +1,8 @@
 import chalk from "chalk";
-import { git } from "~/shared/git";
-import { getPackageJson, emoji } from "~/shared";
 import { IDictionary } from "common-types";
+import { git } from "~/shared/git";
+import { emoji } from "~/shared/ui";
+import { getPackageJson } from "~/shared/npm";
 
 export async function handler(_argv: string[], opts: IDictionary) {
   const g = git();

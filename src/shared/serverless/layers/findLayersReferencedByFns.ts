@@ -1,4 +1,4 @@
-// import { getLambdaFunctions } from "~/shared";
+// import { getLambdaFunctions } from "~/shared/functions";
 
 /**
  * Introspects your current configuration (ts config) and finds all

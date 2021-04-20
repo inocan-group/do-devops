@@ -5,7 +5,7 @@ import { CommandLineOptions } from "command-line-args";
 import { SSM } from "aws-ssm";
 import { format } from "date-fns";
 import { table } from "table";
-import { getAwsProfile } from "~/shared";
+import { getAwsProfile } from "~/shared/aws";
 import { determineProfile, determineRegion } from "~/shared/observations";
 
 export async function execute(argv: string[], options: CommandLineOptions) {
