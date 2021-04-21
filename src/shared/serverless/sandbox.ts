@@ -1,6 +1,6 @@
 import { asyncExec } from "async-shelljs";
-import { getCurrentGitBranch } from "./git/index";
-import { ISandboxStrategy } from "../@types";
+import { getCurrentGitBranch } from "~/shared/git";
+import { ISandboxStrategy } from "~/@types";
 
 /**
  * Determines the `stage` to replace "dev" with a more
@@ -10,7 +10,10 @@ import { ISandboxStrategy } from "../@types";
 export async function sandbox(strategy: ISandboxStrategy) {
   switch (strategy) {
     case "user":
-      const user = (await asyncExec("git config user.name")).replace(/ /g, "").replace(/-/g, "").toLowerCase();
+      const user = (await asyncExec("git config user.name"))
+        .replace(/ /g, "")
+        .replace(/-/g, "")
+        .toLowerCase();
       return user || "dev";
     case "branch":
       const branch = await getCurrentGitBranch();
@@ -18,7 +21,7 @@ export async function sandbox(strategy: ISandboxStrategy) {
         case "develop":
           return "dev";
         case "master":
-          throw new Error("You can not deploy stage \"dev\" to the master branch.");
+          throw new Error(`You can not deploy stage "dev" to the master branch.`);
         default:
           const isFeatureBranch = branch.includes("feature");
           return isFeatureBranch ? branch.replace(/.*\//, "").replace(/-/g, "") : "dev";

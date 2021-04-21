@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/no-array-callback-reference */
-import { IAwsProfile } from "../../@types";
+import { IAwsProfile } from "~/@types";
 import { IDictionary } from "common-types";
 import { hasAwsProfileCredentialsFile } from "../index";
-import { readFile } from "../readFile";
+import { readFile } from "~/shared/file/readFile";
 
 /**
  * Interogates the `~/.aws/credentials` file to get a hash of

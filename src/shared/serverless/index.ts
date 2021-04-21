@@ -2,9 +2,9 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 02:55 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 05:14 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: askAboutLogForwarding, askForFunction, askForStage, findAllHandlerFiles, findConfigFunctionDefnFiles, findInlineFunctionDefnFiles, getAccountInfoFromServerlessYaml, getAwsProfileFromServerless, getLambdaFunctions, getLocalHandlerInfo, getLocalServerlessFunctionsFromServerlessYaml, getMicroserviceConfig, getServerlessBuildConfiguration, getServerlessYaml, saveToServerlessYaml, serverlessYamlExists.
+// files: askAboutLogForwarding, askForFunction, askForStage, findAllHandlerFiles, findConfigFunctionDefnFiles, findInlineFunctionDefnFiles, getAccountInfoFromServerlessYaml, getAwsProfileFromServerless, getLambdaFunctions, getLocalHandlerInfo, getLocalServerlessFunctionsFromServerlessYaml, getMicroserviceConfig, getServerlessBuildConfiguration, getServerlessYaml, sandbox, saveToServerlessYaml, serverlessYamlExists.
 // directories: accountInfo, build, functions, layers, webpack.
 
 // local file exports
@@ -22,6 +22,7 @@ export * from "./getLocalServerlessFunctionsFromServerlessYaml";
 export * from "./getMicroserviceConfig";
 export * from "./getServerlessBuildConfiguration";
 export * from "./getServerlessYaml";
+export * from "./sandbox";
 export * from "./saveToServerlessYaml";
 export * from "./serverlessYamlExists";
 

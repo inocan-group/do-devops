@@ -1,7 +1,7 @@
 import * as config from "../../config/index";
 import { IDoConfig } from "~/@types";
 import { DevopsError } from "~/errors";
-import { defaultConfigSections } from "../defaultConfigSections";
+import { defaultConfigSections } from "./defaultConfigSections";
 
 /**
  * **getDefaultConfig**

@@ -14,7 +14,7 @@
   "rules": {
     "prefer-const": "error",
     "semi": ["error", "always"],
-    "quotes": ["warn", "double"],
+    "quotes": ["warn", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "no-unused-vars": "off",
     "curly": "error",
     "brace-style": ["error", "1tbs", { "allowSingleLine": true }],

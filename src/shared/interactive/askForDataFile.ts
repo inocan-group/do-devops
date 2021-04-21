@@ -1,5 +1,5 @@
 import inquirer = require("inquirer");
-import { getDataFiles } from "./index";
+import { getDataFiles } from "~/shared/file";
 
 /**
  * Asks the user to choose an AWS region
@@ -11,7 +11,7 @@ export async function askForDataFile(listOfFiles?: string[]): Promise<string> {
     name: "file",
     message: "What data file would you like?",
     default: files[0],
-    choices: files
+    choices: files,
   };
   const answer = await inquirer.prompt(question);
   return answer.file;

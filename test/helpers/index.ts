@@ -1,5 +1,5 @@
 import "./test-console"; // TS declaration
-
+import parse from "destr";
 import { first, last } from "lodash";
 import { stderr, stdout } from "test-console";
 
@@ -12,7 +12,10 @@ interface Console {
   _restored: boolean;
   // Console: typeof NodeJS.Console;
   assert(value: any, message?: string, ...optionalParams: any[]): void;
-  dir(obj: any, options?: { showHidden?: boolean; depth?: number; colors?: boolean }): void;
+  dir(
+    obj: any,
+    options?: { showHidden?: boolean; depth?: number; colors?: boolean }
+  ): void;
   error(message?: any, ...optionalParams: any[]): void;
   info(message?: any, ...optionalParams: any[]): void;
   log(message?: any, ...optionalParams: any[]): void;
@@ -38,15 +41,19 @@ export function setupEnv() {
   if (!process.env.AWS_STAGE) {
     process.env.AWS_STAGE = "test";
   }
-  const current = process.env;
-  const yamlConfig: IDictionary = yaml.safeLoad(fs.readFileSync(ENV_FILE, "utf8"));
+  const envFile = process.env.ENV_FILE || ".env";
+  const yamlConfig: IDictionary = parse(
+    yaml.load(fs.readFileSync(envFile, "utf8"))
+  ) as {};
   const combined: IDictionary = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env,
   };
 
   console.log(`Loading ENV for "${process.env.AWS_STAGE}"`);
-  Object.keys(combined).forEach((key) => (process.env[key] = combined[key]));
+  for (const key of Object.keys(combined)) {
+    process.env[key] = combined[key];
+  }
   return combined;
 }
 

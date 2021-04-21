@@ -1,6 +1,6 @@
 {
   "name": "do-devops",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Devops commands for your nodejs and serverless projects",
   "main": "./bin/index.js",
   "typings": "./bin/index.d.ts",
@@ -15,6 +15,10 @@
     "clean": "rimraf src/**/*.js && rimraf bin",
     "test": "mocha -r ts-node/register test/**/*-spec.ts",
     "build": "ttsc && chmod +x bin/dd.js",
+    "lint": "run-s lint:*",
+    "lint:src": "eslint src/**/*.ts --fix ",
+    "lint:test": "eslint test/**/*.ts --fix",
+    "lint:tsc": "yarn tsc --noEmit",
     "watch": "run-p watch:*",
     "watch:build": "ttsc -w",
     "watch:autoindex": "yarn dd autoindex -w",

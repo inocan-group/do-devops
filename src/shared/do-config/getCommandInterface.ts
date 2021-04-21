@@ -1,4 +1,4 @@
-import * as commands from "../commands/index";
+import * as commands from "~/commands/index";
 
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
@@ -14,7 +14,9 @@ export interface ICommandInterface {
 }
 
 export function getCommandInterface(cmd: string) {
-  const cmdDefn: ICommandInterface = commands[cmd as keyof typeof commands] as ICommandInterface;
+  const cmdDefn: ICommandInterface = commands[
+    cmd as keyof typeof commands
+  ] as ICommandInterface;
   if (!cmdDefn.handler) {
     throw new Error(`The command "${cmd}" is not known`);
   }
