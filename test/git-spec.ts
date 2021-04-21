@@ -9,9 +9,12 @@ describe("git shared functions", () => {
 
   it("getGitRemotes() returns proper details", async () => {
     const remotes = (await getGitRemotes()).pop();
-    expect(remotes.name).to.equal("origin");
-    expect(remotes.refs.fetch).includes("do-devops");
-    expect(remotes.refs.push).includes("do-devops");
+    expect(remotes).to.not.be.undefined;
+    if (remotes) {
+      expect(remotes.name).to.equal("origin");
+      expect(remotes.refs.fetch).includes("do-devops");
+      expect(remotes.refs.push).includes("do-devops");
+    }
   });
 
   it("findOrgFromGitRemote() returns github organisation name", async () => {

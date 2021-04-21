@@ -1,4 +1,8 @@
-import { getAwsProfile, getAwsProfileList, hasAwsProfileCredentialsFile } from "../src/shared";
+import {
+  getAwsProfile,
+  getAwsProfileList,
+  hasAwsProfileCredentialsFile,
+} from "../src/shared";
 
 import { expect } from "chai";
 
@@ -14,7 +18,7 @@ describe("AWS Credentials => ", () => {
       expect(profiles).not.equal(false);
       if (profiles) {
         expect(profiles).to.be.an("object");
-        const firstKey = Object.keys(profiles).pop();
+        const firstKey = Object.keys(profiles).pop() as string;
         expect(profiles[firstKey]).to.be.an("object");
         expect(Object.keys(profiles[firstKey])).to.include("aws_access_key_id");
         expect(Object.keys(profiles[firstKey])).to.include("aws_secret_access_key");
@@ -32,11 +36,11 @@ describe("AWS Credentials => ", () => {
     } else {
       const profiles = await getAwsProfileList();
       expect(profiles).to.be.an("object");
-      Object.keys(profiles).forEach((p) => {
-        let profile = profiles[p as keyof typeof profiles];
+      for (const p of Object.keys(profiles)) {
+        const profile = profiles[p as keyof typeof profiles];
         expect(Object.keys(profile)).to.include("aws_access_key_id");
         expect(Object.keys(profile)).to.include("aws_secret_access_key");
-      });
+      }
     }
   });
 
@@ -51,8 +55,8 @@ describe("AWS Credentials => ", () => {
         console.log(profile);
 
         throw new Error("should have thrown error before getting here!");
-      } catch (e) {
-        expect(e.code).to.equal("not-ready");
+      } catch (error) {
+        expect(error.code).to.equal("not-ready");
       }
     }
   });

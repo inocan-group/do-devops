@@ -27,7 +27,7 @@ import { isKnownCommand } from "./shared/commands";
   let opts = mainCommand.global;
 
   console.log(
-    chalk.bold.white(`do ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
+    chalk.bold.white(`\ndo-devops ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
   );
 
   if (!cmd) {

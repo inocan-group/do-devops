@@ -1,7 +1,5 @@
 import "mocha";
 
-import { expect } from "chai";
-
 describe("autoindex => ", () => {
   it("indexing work with named exports", async () => {
     // helpers.captureStdout();

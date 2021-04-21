@@ -9,9 +9,8 @@ import { asyncExec } from "async-shelljs";
 import { getLocalServerlessFunctionsFromServerlessYaml } from "../shared/serverless/getLocalServerlessFunctionsFromServerlessYaml";
 import { isServerless } from "~/shared/observations";
 import { askForFunction } from "~/shared/serverless";
-import { readDataFile } from "~/shared/readDataFile";
-import { getDataFiles } from "~/shared/getDataFiles";
-import { askForDataFile } from "~/shared/askForDataFile";
+import { getDataFiles, readDataFile } from "~/shared/file";
+import { askForDataFile } from "~/shared/interactive";
 
 export function description() {
   return "invoke serverless functions locally, leveraging test data where desired";

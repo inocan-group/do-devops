@@ -1,5 +1,4 @@
-// #autoindex:named
-
+// #autoindex:offset
 
 // #region autoindexed files
 
@@ -8,8 +7,8 @@
 // files: recurseBar, recurseFoo.
 
 // local file exports
-export * from "./recurseBar";
-export * from "./recurseFoo";
+export * as recurseBar from "./recurseBar";
+export * as recurseFoo from "./recurseFoo";
 
 // Note:
 // -----

@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
 
@@ -13,27 +12,13 @@ export const defaultConfig = {
 };
 
 export async function description(_opts: IDictionary) {
-  const base =
-    "Deployment services that for {bold Serverless} or {bold NPM} publishing.\n\n";
-  const detect = await detectTarget();
-
-  const possibleTargets = {
-    serverless: chalk`This project was detected to be a {bold Serverless} project. Unless you state explicitly that you want to use {bold NPM} targetting it will use Serverless.`,
-    npm: chalk`This project was detected to be a {bold NPM} project. Unless you state explicitly that you want to use "serverless" targetting it will use NPM. `,
-    both: chalk`This project was detected to have both {bold Serverless} functions {italic and} be an {bold NPM} library. By default the deploy command will assume you want to use {bold Serverless} deployment but the {italic options} listed below allow for both targets.`,
-    bespoke: "not implemented yet",
-  };
-
-  return base + possibleTargets[detect.target as keyof typeof possibleTargets];
+  return "Deployment services for {bold Serverless}";
 }
 
 export const syntax =
   "dd deploy [fn1] [fn2] <options>\n\n{dim Note: {italic stating particular functions is {italic optional} and if excluded will result in a full deployment of all functions.}}";
 
 export async function options(_opts: IDictionary): Promise<OptionDefinition[]> {
-  // const { deploy: config } = await getConfig();
-  // const target = opts.target || config.target;
-
   return [
     {
       name: "interactive",

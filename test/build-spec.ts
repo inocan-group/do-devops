@@ -1,6 +1,6 @@
 import chai from "chai";
 import { existsSync } from "fs";
-import { rm, asyncExec } from "async-shelljs";
+import { rm } from "async-shelljs";
 
 const expect = chai.expect;
 
@@ -9,10 +9,7 @@ describe("build command => ", () => {
     const filename = `${process.env.PWD}/do.config.ts`;
     try {
       rm(filename);
-    } catch (e) {
-      //
-    }
+    } catch {}
     expect(existsSync(filename)).to.equal(false);
-    asyncExec("");
   });
 });

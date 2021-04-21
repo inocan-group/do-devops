@@ -14,7 +14,7 @@
   "scripts": {
     "clean": "rimraf src/**/*.js && rimraf bin",
     "test": "mocha -r ts-node/register test/**/*-spec.ts",
-    "build": "ttsc && chmod +x bin/dd.js",
+    "build": "yarn clean && ttsc && chmod +x bin/dd.js",
     "lint": "run-s lint:*",
     "lint:src": "eslint src/**/*.ts --fix ",
     "lint:test": "eslint test/**/*.ts --fix",
