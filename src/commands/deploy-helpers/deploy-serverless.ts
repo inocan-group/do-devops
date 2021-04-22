@@ -7,7 +7,7 @@ import { emoji } from "~/shared/ui";
 import { isTranspileNeeded } from "./index";
 import { determineStage } from "~/shared/observations";
 import { hasDevDependency } from "~/shared/npm";
-import { getConfig } from "~/shared/do-config";
+import { getConfig } from "~/shared/core";
 
 export interface IServerlessDeployMeta {
   stage: string;

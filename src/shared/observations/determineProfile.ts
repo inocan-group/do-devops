@@ -3,7 +3,7 @@ import { get } from "lodash";
 import { getServerlessYaml } from "~/shared/serverless";
 import { IDetermineOptions, IDoConfig } from "~/@types";
 import { DevopsError } from "~/errors";
-import { getConfig } from "~/shared/do-config";
+import { getConfig } from "~/shared/core";
 import { askForAwsProfile } from "~/shared/aws";
 
 /** ensure that during one CLI operation we cache this value */

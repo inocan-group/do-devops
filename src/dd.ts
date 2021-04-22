@@ -1,15 +1,17 @@
 #!/usr/bin/env node
-
 import chalk from "chalk";
 import * as process from "process";
 
-import { getCommandInterface, globalAndLocalOptions, inverted } from "./shared";
-
-import { getCommands } from "./shared/commands/getCommands";
+import {
+  getCommandInterface,
+  getCommands,
+  globalAndLocalOptions,
+  isKnownCommand,
+} from "~/shared/core";
 import { help } from "./commands/help";
 
 import commandLineArgs = require("command-line-args");
-import { isKnownCommand } from "./shared/commands";
+import { inverted } from "./shared/ui";
 
 (async () => {
   // pull off the command and stop there

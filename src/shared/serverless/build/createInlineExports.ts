@@ -12,7 +12,7 @@ import { toRelativePath } from "~/shared/file";
 import { emoji } from "~/shared/ui";
 import { findHandlerConfig } from "~/shared/ast";
 import { hasDevDependency } from "~/shared/npm";
-import { getConfig } from "../../do-config";
+import { getConfig } from "../../core";
 
 export interface IInlineExportConfig {
   interface: string;

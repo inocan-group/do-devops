@@ -8,7 +8,7 @@ import { emoji } from "~/shared/ui";
 import { asyncExec } from "async-shelljs";
 import { testName } from "./testName";
 import { hasDevDependency } from "~/shared/npm";
-import { getConfig } from "~/shared/do-config";
+import { getConfig } from "~/shared/core";
 
 /** runs the Mocha command to execute the tests */
 const tsExecution = async (fns: string[]) => {

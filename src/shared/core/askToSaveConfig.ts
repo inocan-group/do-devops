@@ -1,5 +1,5 @@
 import inquirer = require("inquirer");
-import { saveToConfig } from "../../shared";
+import { saveToConfig } from "..";
 
 enum SaveChoice {
   project = "save to project's config (avail to all repo users)",

@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { globalAndLocalOptions } from "~/shared/do-config/options";
+import { globalAndLocalOptions } from "~/shared/core/options";
 import { ICommandDescription } from "~/@types";
-import { getCommands } from "../commands";
+import { getCommands } from "../core";
 
 /**
  * Formats commands so that:

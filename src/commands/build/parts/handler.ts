@@ -6,7 +6,7 @@ import { IBuildTool } from "~/@types";
 import { IBuildToolingOptions } from "../../build-helpers/tools/types";
 import { askBuildTool } from "../../build-helpers/index";
 import { isServerless } from "~/shared/observations";
-import { getConfig } from "~/shared/do-config";
+import { getConfig } from "~/shared/core";
 
 export const defaultConfig = {
   preBuildHooks: ["clean"],

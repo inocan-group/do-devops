@@ -1,4 +1,4 @@
-import { IGlobalOptions } from "~/shared/do-config/options";
+import { IGlobalOptions } from "~/shared/core/options";
 
 export interface ISsmOptions extends IGlobalOptions {
   /** whether to encode/decode to base64 */

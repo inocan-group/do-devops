@@ -1,4 +1,4 @@
-import { getCommands } from "./index";
+import { getCommands } from "./getCommands";
 
 /**
  * Uses `getCommands()` to get a list of valid commands

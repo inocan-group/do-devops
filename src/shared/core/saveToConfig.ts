@@ -1,5 +1,5 @@
 import set = require("lodash.set");
-import { getConfig, writeConfig } from "~/shared/do-config";
+import { getConfig, writeConfig } from "~/shared/core";
 
 /**
  * saves a value to the configuration file

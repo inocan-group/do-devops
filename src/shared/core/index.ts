@@ -2,18 +2,20 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 05:11 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 07:47 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: askToSaveConfig, defaultConfigSections, getCommandInterface, getConfig, getConfigFilename, getConfigSections, getDefaultConfig, options, saveToConfig, writeConfig, writeDefaultConfig.
+// files: askToSaveConfig, defaultConfigSections, getCommandInterface, getCommands, getConfig, getConfigFilename, getConfigSections, getDefaultConfig, isKnownCommand, options, saveToConfig, writeConfig, writeDefaultConfig.
 
 // local file exports
 export * from "./askToSaveConfig";
 export * from "./defaultConfigSections";
 export * from "./getCommandInterface";
+export * from "./getCommands";
 export * from "./getConfig";
 export * from "./getConfigFilename";
 export * from "./getConfigSections";
 export * from "./getDefaultConfig";
+export * from "./isKnownCommand";
 export * from "./options";
 export * from "./saveToConfig";
 export * from "./writeConfig";
