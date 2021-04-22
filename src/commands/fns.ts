@@ -1,16 +1,12 @@
 import chalk from "chalk";
-
-import {
-  buildLambdaTypescriptProject,
-  consoleDimensions,
-  getServerlessYaml,
-} from "../shared";
-
+import { omit } from "native-dash";
 import { IDictionary } from "common-types";
 import { OptionDefinition } from "command-line-usage";
 import { table } from "table";
+
 import { isServerless } from "~/shared/observations";
-import { omit } from "native-dash";
+import { consoleDimensions } from "~/shared/ui";
+import { buildLambdaTypescriptProject, getServerlessYaml } from "~/shared/serverless";
 
 export function description() {
   return "Lists all serverless function handlers and basic meta about them";

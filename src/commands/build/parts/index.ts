@@ -1,13 +1,15 @@
-//#autoindex:named-offset
+// #autoindex
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 08:42 AM ( GMT-7 )
-// export: namedOffset; exclusions: index, private.
-// files: InvalidateCache.
+// index last changed at: 4th Apr, 2021, 07:01 AM ( GMT-7 )
+// export: named; exclusions: index, private.
+// files: description, handler, options.
 
 // local file exports
-export * as InvalidateCache from "./InvalidateCache";
+export * from "./description";
+export * from "./handler";
+export * from "./options";
 
 // Note:
 // -----

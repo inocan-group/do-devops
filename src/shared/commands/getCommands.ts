@@ -1,4 +1,4 @@
-import * as subCommands from "../../commands/index";
+import * as subCommands from "~/commands/index";
 
 /**
  * returns a list of commands (e.g., ssm, info, etc.) supported by `do-devops`

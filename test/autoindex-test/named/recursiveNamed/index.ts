@@ -2,8 +2,8 @@
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 09:14 AM ( GMT-7 )
-// export: named; exclusions: index, private.
+// index last changed at: 4th Apr, 2021, 07:00 AM ( GMT-7 )
+// export: namedOffset; exclusions: index, private.
 // files: recurseBar, recurseFoo.
 
 // local file exports
@@ -12,7 +12,7 @@ export * as recurseFoo from "./recurseFoo";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

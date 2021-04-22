@@ -1,5 +1,5 @@
 import chalk from "chalk";
-const autoindex = chalk`{bgWhite {blackBright  autoindex }}`;
+const autoindex = chalk`{bgWhite {black autoindex }}`;
 
 export const description = async () =>
   chalk`Automates the building of {italic index} files; if you include a comment starting with {bold {yellow // #autoindex}} in a index file it will be auto-indexed when calling {blue do autoindex}.

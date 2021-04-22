@@ -2,14 +2,15 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 02:55 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 07:00 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: determineProfile, determineRegion, determineStage, isServerless, isTypescriptMicroserviceProject.
+// files: determineProfile, determineRegion, determineStage, hasServerlessTsFile, isServerless, isTypescriptMicroserviceProject.
 
 // local file exports
 export * from "./determineProfile";
 export * from "./determineRegion";
 export * from "./determineStage";
+export * from "./hasServerlessTsFile";
 export * from "./isServerless";
 export * from "./isTypescriptMicroserviceProject";
 

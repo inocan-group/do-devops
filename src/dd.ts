@@ -3,14 +3,8 @@
 import chalk from "chalk";
 import * as process from "process";
 
-import {
-  getCommandInterface,
-  globalAndLocalOptions,
-  globalOptions,
-  inverted,
-} from "./shared";
+import { getCommandInterface, globalAndLocalOptions, inverted } from "./shared";
 
-import { OptionDefinition } from "command-line-args";
 import { getCommands } from "./shared/commands/getCommands";
 import { help } from "./commands/help";
 
@@ -18,12 +12,14 @@ import commandLineArgs = require("command-line-args");
 import { isKnownCommand } from "./shared/commands";
 
 (async () => {
-  const command: OptionDefinition[] = [
-    { name: "command", defaultOption: true },
-    ...globalOptions,
-  ];
-  const mainCommand = commandLineArgs(command, { stopAtFirstUnknown: true });
+  // pull off the command and stop there
+  const mainCommand = commandLineArgs(
+    [{ name: "command", defaultOption: true, type: String }],
+    { stopAtFirstUnknown: true }
+  );
+
   const cmd = (mainCommand._all || {}).command;
+
   let opts = mainCommand.global;
 
   console.log(

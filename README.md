@@ -43,6 +43,8 @@ In situations such as this, the CLI will detect which package manager is being u
 - `tt outdated` - runs `yarn outdated`, `npm outdated`, or `pnpm outdated` based on the repo
 - `tt update` - runs `yarn update`, `npm update`, or `pnpm update` based on the repo
 
+> By "hidden" we mean that these commands will not be listed when you enter just `dd` to the console. You can force their visibility with `dd --showHidden`.
+
 ### The Rest of Us
 
 Ok the remaining commands are a little less attached to the idea of AWS and Serverless but some are still connected. Here are a few examples:

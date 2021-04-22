@@ -2,13 +2,12 @@
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 08:45 AM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 07:00 AM ( GMT-7 )
 // export: namedOffset; exclusions: build-helpers, deploy-helpers, index, private.
-// files: build, deploy, endpoints, fns, global, help, info, invoke, pkg.
-// directories: autoindex, awsid, bitbucket, latest, layers, ssm, test, validate.
+// files: deploy, endpoints, fns, global, help, info, invoke, pkg.
+// directories: autoindex, awsid, build, latest, layers, ssm, test, validate.
 
 // local file exports
-export * as build from "./build";
 export * as deploy from "./deploy";
 export * as endpoints from "./endpoints";
 export * as fns from "./fns";
@@ -21,7 +20,7 @@ export * as pkg from "./pkg";
 // directory exports
 export * as autoindex from "./autoindex/index";
 export * as awsid from "./awsid/index";
-export * as bitbucket from "./bitbucket/index";
+export * as build from "./build/index";
 export * as latest from "./latest/index";
 export * as layers from "./layers/index";
 export * as ssm from "./ssm/index";
