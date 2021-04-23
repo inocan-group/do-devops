@@ -1,13 +1,18 @@
-import { IServerlessYaml } from "common-types";
 import { get } from "lodash";
 import { getServerlessYaml } from "~/shared/serverless";
-import { IDetermineOptions, IDoConfig } from "~/@types";
+import { IDoConfig } from "~/@types";
 import { DevopsError } from "~/errors";
-import { getConfig } from "~/shared/core";
+import { getConfig, IGlobalOptions } from "~/shared/core";
 import { askForAwsProfile } from "~/shared/aws";
+import { DoDevopObservation } from "~/@types/observations";
 
 /** ensure that during one CLI operation we cache this value */
 let profile: string;
+
+export interface IProfileOptions extends IGlobalOptions {
+  profile?: string;
+  interactive?: boolean;
+}
 
 /**
  * Based on CLI, serverless info, and config files, determine which
@@ -20,21 +25,24 @@ let profile: string;
  * - look at the global default for the `user configuration`
  * - if "interactive", then ask user for profile name from available options
  */
-export async function determineProfile(opts: IDetermineOptions): Promise<string> {
-  if (opts.cliOptions && opts.cliOptions.profile) {
-    return opts.cliOptions.profile;
+export async function determineProfile(
+  opts: IProfileOptions,
+  observations: DoDevopObservation[] = []
+): Promise<string> {
+  if (opts.profile) {
+    return opts.profile;
   }
 
-  let serverlessYaml: IServerlessYaml;
-  try {
-    serverlessYaml = await getServerlessYaml();
-    if (get(serverlessYaml, "provider.profile")) {
-      profile = serverlessYaml.provider.profile as string;
-      return profile;
-    }
-  } catch {
-    // nothing to do
+  if (observations.includes("serverlessYml")) {
+    try {
+      const serverlessYaml = await getServerlessYaml();
+      if (get(serverlessYaml, "provider.profile")) {
+        profile = serverlessYaml.provider.profile as string;
+        return profile;
+      }
+    } catch {}
   }
+
   let doConfig: IDoConfig;
   try {
     doConfig = await getConfig("both");

@@ -1,4 +1,4 @@
-import { ValidationAction } from "../../public";
+import { ValidationAction } from "../../parts";
 import { exec } from "async-shelljs";
 import { IDictionary } from "common-types";
 import chalk from "chalk";

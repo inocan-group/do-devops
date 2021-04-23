@@ -6,16 +6,16 @@ import { format } from "date-fns";
 import { table } from "table";
 import { getAwsProfile } from "~/shared/aws";
 import { determineProfile, determineRegion } from "~/shared/observations";
-import { ISsmOptions } from "../../public";
+import { ISsmOptions } from "../../parts";
 import { IGlobalOptions } from "~/shared";
 
 export async function execute(argv: string[], options: ISsmOptions & IGlobalOptions) {
-  const profile = await determineProfile({ cliOptions: options, interactive: true });
+  const profile = await determineProfile({ ...options, interactive: true });
   const profileInfo = await getAwsProfile(profile);
   const region =
     options.region ||
     profileInfo.region ||
-    (await determineRegion({ cliOptions: options, interactive: true }));
+    (await determineRegion({ ...options, interactive: true }));
   const filterBy = argv.length > 0 ? argv[0] : undefined;
 
   if (!profile || !region) {

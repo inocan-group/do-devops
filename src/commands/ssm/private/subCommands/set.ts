@@ -2,7 +2,7 @@ import { getAwsProfile, getAwsIdentityFromProfile } from "~/shared/aws";
 import chalk from "chalk";
 import { SSM } from "aws-ssm";
 import { completeSsmName } from "../index";
-import { ISsmOptions } from "../../public";
+import { ISsmOptions } from "../../parts";
 import { toBase64 } from "native-dash";
 import { determineProfile, determineRegion } from "~/shared/observations";
 import { askForStage } from "~/shared/serverless";
@@ -22,13 +22,10 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
   }
 
   let [name, value] = argv;
-  const profile = await determineProfile({ cliOptions: options, interactive: true });
+  const profile = await determineProfile({ ...options, interactive: true });
   const profileInfo = await getAwsProfile(profile);
   const identity = await getAwsIdentityFromProfile(profileInfo);
-  const region =
-    options.region ||
-    profileInfo.region ||
-    (await determineRegion({ cliOptions: options }));
+  const region = options.region || profileInfo.region || (await determineRegion(options));
   const stage =
     options.stage ||
     process.env.AWS_STAGE ||

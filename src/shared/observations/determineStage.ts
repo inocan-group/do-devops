@@ -3,9 +3,14 @@ import * as process from "process";
 
 import { askForStage, getServerlessYaml } from "../serverless/index";
 
-import { IDetermineOptions } from "~/@types";
 import { emoji } from "../ui";
 import { get } from "lodash";
+
+export interface IStageOptions {
+  interactive?: boolean;
+  stage?: string;
+  profile?: string;
+}
 
 /**
  * Uses various methods to determine which _stage_
@@ -16,7 +21,7 @@ import { get } from "lodash";
  * @param opts the CLI options hash (which includes stage as
  * a possible parameter)
  */
-export async function determineStage(opts: IDetermineOptions) {
+export async function determineStage(opts: IStageOptions) {
   try {
     let stage = get(opts, "stage") || process.env.NODE_ENV || process.env.AWS_STAGE;
 

@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { emoji } from "~/shared/ui";
-import { ValidationAction } from "../../public";
+import { ValidationAction } from "../../parts";
 import { IDictionary } from "common-types";
 import { exec } from "async-shelljs";
 

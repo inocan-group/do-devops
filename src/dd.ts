@@ -3,8 +3,14 @@ import chalk from "chalk";
 import commandLineArgs from "command-line-args";
 import * as process from "process";
 
-import { getCommand, getCommands, isKnownCommand, parseCmdArgs } from "~/shared/core";
-import { help } from "./commands/help";
+import {
+  getCommand,
+  getCommands,
+  globalOptions,
+  isKnownCommand,
+  parseCmdArgs,
+} from "~/shared/core";
+import { help } from "./shared/core/help";
 import { inverted } from "./shared/ui";
 import { getObservations } from "./shared/observations/getObserverations";
 
@@ -16,18 +22,16 @@ import { getObservations } from "./shared/observations/getObserverations";
   );
   /** the primary command */
   const cmd = mainCommand.command as string | undefined;
-  /** remaining items for the subcommand */
-  const remaining = mainCommand._unknown;
 
   console.log(
     chalk.bold.white(`\ndo-devops ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
   );
   const observations = getObservations();
-  console.log({ mainCommand, cmd, remaining, observations });
+  console.log({ mainCommand, observations });
 
-  // if (!cmd) {
-  //   await help(globalOptions);
-  // }
+  if (!cmd) {
+    await help(globalOptions);
+  }
 
   if (isKnownCommand(cmd)) {
     const subCommand = getCommand(cmd);

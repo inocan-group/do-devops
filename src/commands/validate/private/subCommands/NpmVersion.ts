@@ -3,7 +3,7 @@ import { DevopsError } from "~/errors";
 import { gitTags } from "~/shared/git";
 import { getPackageJson } from "~/shared/npm";
 import { emoji } from "~/shared/ui";
-import { ValidationAction } from "../../public";
+import { ValidationAction } from "../../parts";
 
 export async function handler(action: ValidationAction, currentBranch: string) {
   console.log(

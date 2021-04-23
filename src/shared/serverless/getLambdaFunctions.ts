@@ -23,8 +23,8 @@ export interface ILambdaFunctionsOptions {
 export async function getLambdaFunctions(
   opts: ILambdaFunctionsOptions = {}
 ): Promise<Lambda.FunctionConfiguration[]> {
-  const region = opts.region ? opts.region : await determineRegion({ cliOptions: opts });
-  const profileName = await determineProfile({ cliOptions: opts });
+  const region = opts.region ? opts.region : await determineRegion(opts);
+  const profileName = await determineProfile(opts);
   const profile = convertProfileToApiCredential(await getAwsProfile(profileName));
   const lambda = new Lambda({
     apiVersion: "2015-03-31",

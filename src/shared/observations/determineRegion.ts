@@ -1,53 +1,62 @@
 /* eslint-disable unicorn/no-useless-undefined */
 import chalk from "chalk";
 import { get } from "lodash";
-import { IDetermineOptions } from "../../@types";
 import { determineProfile } from "./determineProfile";
 import { emoji } from "../ui";
 import { getAwsProfile } from "../aws";
-import { getConfig } from "../index";
+import { getConfig, IGlobalOptions } from "../index";
 import { getServerlessYaml } from "../serverless/getServerlessYaml";
+import { DoDevopObservation } from "~/@types/observations";
+
+export interface IRegionOptions extends IGlobalOptions {
+  interactive?: boolean;
+  region?: string;
+  profile?: string;
+}
 
 /**
  * Determines the appropriate `region` to point at based on CLI switches/options,
  * the Serverless configuration, and the global `do` config defaults.
  */
-export async function determineRegion(opts?: IDetermineOptions) {
+export async function determineRegion(
+  opts: IRegionOptions = {},
+  observations: DoDevopObservation[] = []
+) {
   const config = await getConfig();
-  const cliRegion = get(opts, "cliOptions.region");
-  let outcome = cliRegion || process.env.AWS_REGION;
+  let region = opts.region || process.env.AWS_REGION;
 
-  if (!outcome) {
+  if (!region && observations.includes("serverlessYml")) {
     try {
-      outcome = get(await getServerlessYaml(), "provider.region", undefined);
+      region = get(await getServerlessYaml(), "provider.region", undefined);
     } catch {}
   }
-  if (!outcome) {
-    outcome = get(config, "global.defaultAwsRegion", undefined);
+
+  if (!region) {
+    region = get(config, "global.defaultAwsRegion", undefined);
   }
 
-  if (!outcome) {
+  if (!region) {
     try {
       const profileName = await determineProfile(opts || {});
       const profile = await getAwsProfile(profileName);
       if (profile && profile.region) {
-        outcome = profile.region;
+        region = profile.region;
       }
     } catch {}
   }
 
   // USER Config is last resort
-  if (!outcome) {
+  if (!region) {
     const userConfig = await getConfig("user");
     if (userConfig && userConfig.global.defaultAwsRegion) {
-      if (opts?.cliOptions && !opts.cliOptions.quiet) {
+      if (!opts.quiet) {
         console.log(
           chalk`{bold - AWS region has been resolved using the User's config ${emoji.eyeballs}}. This is the source of "last resort" but may be intended.`
         );
       }
-      outcome = userConfig.global.defaultAwsRegion;
+      region = userConfig.global.defaultAwsRegion;
     }
   }
 
-  return outcome;
+  return region;
 }

@@ -2,9 +2,9 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 05:11 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 03:52 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: ask, askForDataFile, checkboxQuestion, confirmQuestion, inputQuestion, listQuestion.
+// files: ask, askForDataFile, checkboxQuestion, confirmQuestion, confirmQuestionNow, inputQuestion, listQuestion, listQuestionNow.
 
 // local file exports
 export * from "./ask";

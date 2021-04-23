@@ -8,16 +8,16 @@ import { table } from "table";
 import { determineProfile, determineRegion } from "~/shared/observations";
 import { DevopsError } from "~/errors";
 import { consoleDimensions } from "~/shared/ui";
-import { ISsmOptions } from "../../public";
+import { ISsmOptions } from "../../parts";
 import { IGlobalOptions } from "~/shared/core";
 
 export async function execute(argv: string[], options: ISsmOptions & IGlobalOptions) {
-  const profile = await determineProfile({ cliOptions: options, interactive: true });
+  const profile = await determineProfile({ ...options, interactive: true });
   const profileInfo = await getAwsProfile(profile);
-  const region: string =
+  const region =
     options.region ||
     profileInfo.region ||
-    (await determineRegion({ cliOptions: options, interactive: true }));
+    (await determineRegion({ ...options, interactive: true }));
   const secrets: string[] = argv;
   const nonStandardPath = options.nonStandardPath || false;
   const { width } = await consoleDimensions();

@@ -2,30 +2,25 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 07:00 AM ( GMT-7 )
-// export: namedOffset; exclusions: build-helpers, deploy-helpers, index, private.
-// files: deploy, endpoints, fns, global, help, info, invoke, pkg.
-// directories: autoindex, awsid, build, latest, layers, ssm, test, validate.
-
-// local file exports
-export * as deploy from "./deploy";
-export * as endpoints from "./endpoints";
-export { default as fns } from "./fns";
-export * as global from "./global";
-export * as help from "./help";
-export * as info from "./info";
-export * as invoke from "./invoke";
-export * as pkg from "./pkg";
+// index last changed at: 4th Apr, 2021, 04:47 PM ( GMT-7 )
+// export: default; exclusions: build-helpers, deploy-helpers, index, private.
+// directories: autoindex, awsid, build, deploy, endpoints, fns, info, invoke, latest, layers, pkg, ssm, test, validate.
 
 // directory exports
-export * as autoindex from "./autoindex/index";
-export * as awsid from "./awsid/index";
-export * as build from "./build/index";
-export * as latest from "./latest/index";
-export * as layers from "./layers/index";
-export * as ssm from "./ssm/index";
-export * as test from "./test/index";
-export * as validate from "./validate/index";
+export { default as autoindex } from "./autoindex/index";
+export { default as awsid } from "./awsid/index";
+export { default as build } from "./build/index";
+export { default as deploy } from "./deploy/index";
+export { default as endpoints } from "./endpoints/index";
+export { default as fns } from "./fns/index";
+export { default as info } from "./info/index";
+export { default as invoke } from "./invoke/index";
+export { default as latest } from "./latest/index";
+export { default as layers } from "./layers/index";
+export { default as pkg } from "./pkg/index";
+export { default as ssm } from "./ssm/index";
+export { default as test } from "./test/index";
+export { default as validate } from "./validate/index";
 
 // Note:
 // -----

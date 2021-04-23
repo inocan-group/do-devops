@@ -1,7 +1,7 @@
 import commandLineArgs from "command-line-args";
 import { ICommandInput, IDoDevopsCommand } from "~/@types/command";
 import { IOptionDefinition } from "~/@types/option-types";
-import { convertOptionsToArray, globalOptions } from "..";
+import { convertOptionsToArray, globalOptions } from "./index";
 
 /**
  * Given a known command to the CLI, this function will
@@ -25,6 +25,12 @@ export function parseCmdArgs(cmd: IDoDevopsCommand) {
     ? { ...globalOptions, ...argvOpt, ...cmd.options }
     : { ...globalOptions, ...argvOpt };
 
+  console.log({
+    optDefn,
+    cla: typeof commandLineArgs,
+    cota: typeof convertOptionsToArray,
+  });
+
   // the options will be parsed into `local`, `global`, and `argv` categories
   // in a few cases there may also be `l2` and then anything which is not
   // known about will be dropped into `_unknown`.
@@ -39,7 +45,7 @@ export function parseCmdArgs(cmd: IDoDevopsCommand) {
 
   // TODO: try to derive the generic type to get better results for commands
   return {
-    argv: argv.args,
+    argv: argv?.args || [],
     opts,
     unknown: _unknown,
   } as Omit<ICommandInput<typeof opts>, "observations">;
