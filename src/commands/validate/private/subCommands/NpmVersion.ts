@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { DevopsError } from "~/errors";
 import { gitTags } from "~/shared/git";
 import { getPackageJson } from "~/shared/npm";
 import { emoji } from "~/shared/ui";
@@ -9,7 +10,14 @@ export async function handler(action: ValidationAction, currentBranch: string) {
     chalk`- ${emoji.eyeballs} ensuring that all {italic semver} versions are ready for an {bold {yellow npm}} release`
   );
   const latest = (await gitTags()).latest;
-  const pkgVersion = getPackageJson().version;
+  const pkg = getPackageJson();
+  if (!pkg) {
+    throw new DevopsError(
+      `Attempt to get the NPM version failed as the package.json wasn't present!`,
+      "not-ready/missing-package-json"
+    );
+  }
+  const pkgVersion = pkg.version;
   const releaseTag = currentBranch.includes("release/")
     ? currentBranch.split("/")[1]
     : undefined;

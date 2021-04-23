@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { globalAndLocalOptions } from "~/shared/core/options";
 import { ICommandDescription } from "~/@types";
-import { getCommands } from "../core";
+import { convertOptionsToArray, getCommands } from "../core";
+import { IOptionDefinition } from "~/@types/option-types";
 
 /**
  * Formats commands so that:
@@ -117,8 +117,8 @@ export async function getExamples(opts: IDictionary, fn?: string) {
   }
 }
 
-export async function getOptions(opts: IDictionary, fn?: string) {
-  return fn ? globalAndLocalOptions(opts, fn) : [];
+export async function getOptions(opts: IOptionDefinition, _fn?: string) {
+  return convertOptionsToArray(opts);
   // let options: OptionDefinition[] = [];
   // if (fn) {
   //   const defn = await import(`../../commands/${fn}`);

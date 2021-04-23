@@ -1,7 +1,8 @@
-import { OptionDefinition } from "command-line-usage";
 import { IDictionary } from "common-types";
+import { IGlobalOptions } from "~/shared";
 import { ICommandDescription } from "./general";
 import { DoDevopObservation } from "./observations";
+import { IOptionDefinition } from "./option-types";
 
 /**
  * The set of registered commands recognized by `do-devops`
@@ -12,6 +13,7 @@ export type KnownCommand<E extends string = never> =
   | "bitbucket"
   | "build"
   | "deploy"
+  | "fns"
   | "latest"
   | "layers"
   | "ssm"
@@ -23,12 +25,25 @@ export type KnownCommand<E extends string = never> =
   | E;
 
 /**
+ * When a command is kicked off by `do-devops` it is provided the following
+ * inputs to its task.
+ */
+export interface ICommandInput<T extends object = {}> {
+  argv: string[];
+  opts: Partial<T> & IGlobalOptions;
+  observations: DoDevopObservation[];
+  unknown?: string[];
+}
+
+/**
  * **IDoDevopsHandler**
  *
  * Every recognized **command** in `do-devops` must provide an
  * ansynchronous _handler_ function that matches this format.
  */
-export type DoDevopsHandler = (argv: string[], opts: IDictionary) => Promise<void>;
+export type DoDevopsHandler<T extends object = {}> = (
+  input: ICommandInput<T>
+) => Promise<any>;
 
 /**
  * Defines a function callback mechanism intended for defining a
@@ -63,7 +78,7 @@ export interface IDoDevopsCommand {
    */
   description: string | DynamicCommandDefinition<string>;
   commands?: ICommandDescription[];
-  options?: OptionDefinition[];
+  options?: IOptionDefinition;
   examples?: string[];
   /**
    * If turned on that this command will not show up in the command

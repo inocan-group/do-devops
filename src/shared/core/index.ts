@@ -8,8 +8,9 @@
 
 // local file exports
 export * from "./askToSaveConfig";
+export * from "./convertOptionsToArray";
 export * from "./defaultConfigSections";
-export * from "./getCommandInterface";
+export * from "./getCommand";
 export * from "./getCommands";
 export * from "./getConfig";
 export * from "./getConfigFilename";
@@ -17,6 +18,7 @@ export * from "./getConfigSections";
 export * from "./getDefaultConfig";
 export * from "./isKnownCommand";
 export * from "./options";
+export * from "./parseCmdArgs";
 export * from "./saveToConfig";
 export * from "./writeConfig";
 export * from "./writeDefaultConfig";

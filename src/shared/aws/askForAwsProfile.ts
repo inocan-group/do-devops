@@ -1,8 +1,6 @@
-import chalk from "chalk";
-
-import { DevopsError } from "~/errors/index";
-import { getAwsProfileList } from "./index";
-import inquirer = require("inquirer");
+import inquirer from "inquirer";
+import { confirmQuestionNow } from "../interactive/confirmQuestionNow";
+import { getAwsProfileDictionary } from "./index";
 
 export interface IAskForProfileOptions {
   /**
@@ -22,23 +20,21 @@ export interface IAskForProfileOptions {
  */
 export async function askForAwsProfile(opts?: IAskForProfileOptions): Promise<string> {
   opts = opts ? { exitOnError: false, ...opts } : { exitOnError: false };
-  const profiles = await getAwsProfileList();
-  const profileNames = Object.keys(profiles);
-  if (!profiles) {
-    const message = "Attempt to \"ask\" for the AWS profile assumes there is at least one defined AWS profile in the credentials file but that could not be found.";
+  const profiles = await getAwsProfileDictionary();
 
-    if (opts.exitOnError) {
-      console.log(chalk`{red - Missing AWS credentials file}`);
-      console.log(message + "\n");
+  if (!profiles) {
+    const cont = confirmQuestionNow(
+      `Currently you don't have any AWS profiles (aka, profiles in ~/.aws/credentials).\nWould you like to create one now?`
+    );
+    if (!cont) {
+      console.log(`- no problem, try this command again when you're ready.\n`);
       process.exit();
     }
-
-    throw new DevopsError(message, "devops/not-allowed");
   }
 
   const defaultProfile = opts.defaultProfile
-    ? profiles[opts.defaultProfile] || profiles[profileNames[0]]
-    : profiles[profileNames[0]];
+    ? profiles[opts.defaultProfile]
+    : profiles[0];
 
   const question: inquirer.ListQuestion = {
     name: "profile",

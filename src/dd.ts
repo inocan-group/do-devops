@@ -1,17 +1,12 @@
 #!/usr/bin/env node
 import chalk from "chalk";
+import commandLineArgs from "command-line-args";
 import * as process from "process";
 
-import {
-  getCommandInterface,
-  getCommands,
-  globalAndLocalOptions,
-  isKnownCommand,
-} from "~/shared/core";
+import { getCommand, getCommands, isKnownCommand, parseCmdArgs } from "~/shared/core";
 import { help } from "./commands/help";
-
-import commandLineArgs = require("command-line-args");
 import { inverted } from "./shared/ui";
+import { getObservations } from "./shared/observations/getObserverations";
 
 (async () => {
   // pull off the command and stop there
@@ -19,35 +14,46 @@ import { inverted } from "./shared/ui";
     [{ name: "command", defaultOption: true, type: String }],
     { stopAtFirstUnknown: true }
   );
-
-  const cmd = (mainCommand._all || {}).command;
-
-  let opts = mainCommand.global;
+  /** the primary command */
+  const cmd = mainCommand.command as string | undefined;
+  /** remaining items for the subcommand */
+  const remaining = mainCommand._unknown;
 
   console.log(
     chalk.bold.white(`\ndo-devops ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
   );
+  const observations = getObservations();
+  console.log({ mainCommand, cmd, remaining, observations });
 
-  if (!cmd) {
-    await help(opts);
-  }
+  // if (!cmd) {
+  //   await help(globalOptions);
+  // }
 
   if (isKnownCommand(cmd)) {
-    opts =
-      commandLineArgs(await globalAndLocalOptions({}, cmd), {
-        partial: true,
-      }) || {};
+    const subCommand = getCommand(cmd);
+    const cmdInput = { ...parseCmdArgs(subCommand), observations };
 
-    const subModule = getCommandInterface(cmd);
-    const subModuleArgv = opts._unknown.filter((i: any) => i !== cmd);
-    const subModuleOpts = opts._all;
-
-    if (subModuleOpts.help) {
-      await help(subModuleOpts, cmd);
+    console.log({ cmdInput });
+    if (cmdInput.opts.help) {
+      await help(cmdInput.opts);
     }
 
     try {
-      await subModule.handler(subModuleArgv, subModuleOpts);
+      await subCommand.handler(cmdInput);
+      if (cmdInput.unknown) {
+        if (cmdInput.unknown.length > 1) {
+          console.log(
+            chalk`- Note: there were ${cmdInput.unknown.length} parameters received which were {italic unknown} and therefore ignored.`
+          );
+          console.log(
+            chalk`{gray - these parameters were: ${cmdInput.unknown.join(", ")}}`
+          );
+        } else {
+          console.log(
+            chalk`- Note: the argument {inverse ${cmdInput.unknown[0]}} was unknown and therefore ignored.`
+          );
+        }
+      }
     } catch (error) {
       console.log(
         chalk`\n{red An Error has occurred while running: {italic {bold do-devops ${cmd}}}}`

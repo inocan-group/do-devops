@@ -1,15 +1,29 @@
 import chalk from "chalk";
-import { IDictionary } from "common-types";
 import { git } from "~/shared/git";
 import { emoji } from "~/shared/ui";
 import { getPackageJson } from "~/shared/npm";
+import { DoDevopsHandler } from "~/@types/command";
 
-export async function handler(_argv: string[], opts: IDictionary) {
+export const handler: DoDevopsHandler = async ({ opts }) => {
   const g = git();
 
   const latest = (await g.tags()).latest;
   const status = await g.status();
-  const pkgVersion = getPackageJson().version;
+  const pkg = getPackageJson();
+  if (!pkg) {
+    console.log(
+      `- the "latest" command provides you with the latest version of the repo in the {italic current} directory`
+    );
+    console.log(
+      `   however it appears you're in directory without a package.json file! ${emoji.shocked}\n`
+    );
+    console.log(
+      chalk`- please move to a new directory or pass in the optional '--repo [repo]' parameter to name a repo`
+    );
+
+    process.exit();
+  }
+  const pkgVersion = pkg.version;
 
   const aheadBehind =
     status.ahead === 0 && status.behind === 0
@@ -46,4 +60,4 @@ export async function handler(_argv: string[], opts: IDictionary) {
     console.log(latest);
   }
   return latest;
-}
+};

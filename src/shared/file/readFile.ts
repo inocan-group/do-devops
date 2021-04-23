@@ -1,13 +1,11 @@
-import * as fs from "fs";
-import { promisify } from "util";
-const read = promisify(fs.readFile);
+import { readFileSync } from "fs";
+import { filesExist } from "./filesExist";
 
 /**
- * Reads a file in a file and returns the contens as
- * a string.
+ * Reads a file from the filesystem and returns as a string.
+ *
+ * Note: if the file doesn't exist it will return `false`
  */
-export async function readFile(filename: string) {
-  const contents = await read(filename, { encoding: "utf-8" });
-
-  return contents;
+export function readFile(filename: string) {
+  return filesExist(filename) ? readFileSync(filename, { encoding: "utf-8" }) : false;
 }

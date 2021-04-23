@@ -11,8 +11,10 @@ export * from "./ask";
 export * from "./askForDataFile";
 export * from "./checkboxQuestion";
 export * from "./confirmQuestion";
+export * from "./confirmQuestionNow";
 export * from "./inputQuestion";
 export * from "./listQuestion";
+export * from "./listQuestionNow";
 
 // Note:
 // -----

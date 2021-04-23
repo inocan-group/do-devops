@@ -1,8 +1,7 @@
-import { IDictionary } from "common-types";
-import { OptionDefinition } from "command-line-usage";
-
 import { detectTarget } from "./deploy-helpers";
 import { emoji } from "~/shared/ui";
+import { DoDevopsHandler } from "~/@types/command";
+import { IOptionDefinition } from "~/@types/option-types";
 
 export const defaultConfig = {
   preDeployHooks: ["clean"],
@@ -11,47 +10,48 @@ export const defaultConfig = {
   sandboxing: "user",
 };
 
-export async function description(_opts: IDictionary) {
+export async function description() {
   return "Deployment services for {bold Serverless}";
 }
 
 export const syntax =
   "dd deploy [fn1] [fn2] <options>\n\n{dim Note: {italic stating particular functions is {italic optional} and if excluded will result in a full deployment of all functions.}}";
 
-export async function options(_opts: IDictionary): Promise<OptionDefinition[]> {
-  return [
-    {
-      name: "interactive",
-      alias: "i",
-      type: Boolean,
-      group: "serverlessDeploy",
-      description: "allow interactive choices for the functions you want to deploy",
-    },
-    {
-      name: "target",
-      alias: "t",
-      typeLabel: "<target>",
-      type: String,
-      group: "deploy",
-      description: "manually override the project target (serverless, npm)",
-    },
-    {
-      name: "stage",
-      alias: "s",
-      typeLabel: "<stage>",
-      type: String,
-      group: "serverlessDeploy",
-      description: "manually override the stage you're deploying to",
-    },
-    {
-      name: "region",
-      alias: "r",
-      typeLabel: "<region>",
-      type: String,
-      group: "serverlessDeploy",
-      description: "explicitly state the region you're deploying to",
-    },
-  ];
+export const options: IOptionDefinition = {
+  interactive: {
+    alias: "i",
+    type: Boolean,
+    group: "local",
+    description: "allow interactive choices for the functions you want to deploy",
+  },
+  target: {
+    alias: "t",
+    typeLabel: "<target>",
+    type: String,
+    group: "local",
+    description: "manually override the project target (serverless, npm)",
+  },
+  stage: {
+    alias: "s",
+    typeLabel: "<stage>",
+    type: String,
+    group: "local",
+    description: "manually override the stage you're deploying to",
+  },
+  region: {
+    alias: "r",
+    typeLabel: "<region>",
+    type: String,
+    group: "local",
+    description: "explicitly state the region you're deploying to",
+  },
+};
+
+export interface IDeployOptions {
+  interactive: boolean;
+  target: string;
+  stage: string;
+  region: string;
 }
 
 /**
@@ -67,7 +67,7 @@ export async function options(_opts: IDictionary): Promise<OptionDefinition[]> {
  *
  * Over time we may add other targets for deployment.
  */
-export async function handler(argv: string[], opts: any) {
+export const handler: DoDevopsHandler<IDeployOptions> = async ({ argv, opts }) => {
   // const { deploy, global } = await getConfig();
   let { target } = await detectTarget(opts);
   if (target === "both") {
@@ -86,4 +86,4 @@ export async function handler(argv: string[], opts: any) {
   // await runHooks(deploy.preDeployHooks);
   const helper = (await import(`./deploy-helpers/deploy-${target}`)).default;
   await helper(argv, opts);
-}
+};

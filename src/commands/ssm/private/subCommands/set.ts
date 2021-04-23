@@ -7,8 +7,9 @@ import { toBase64 } from "native-dash";
 import { determineProfile, determineRegion } from "~/shared/observations";
 import { askForStage } from "~/shared/serverless";
 import { emoji } from "~/shared/ui";
+import { IGlobalOptions } from "~/shared/core";
 
-export async function execute(argv: string[], options: ISsmOptions) {
+export async function execute(argv: string[], options: ISsmOptions & IGlobalOptions) {
   if (argv.length < 2) {
     console.log(
       chalk`The "dd ssm set" command expects the variable name and value as parameters on the command line: {blue {bold do ssm set} <{italic name}> <{italic value}>}\n`

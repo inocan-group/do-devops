@@ -1,11 +1,12 @@
 import chalk from "chalk";
-import { IDictionary } from "common-types";
-import { getAwsIdentityFromProfile, getAwsProfileList } from "~/shared/aws";
+
+import { DoDevopsHandler } from "~/@types/command";
+import { getAwsIdentityFromProfile, getAwsProfileDictionary } from "~/shared/aws";
 import { emoji } from "~/shared/ui";
 import { askUser } from "../private";
 
-export async function handler(argv: string[], opts: IDictionary): Promise<void> {
-  const profiles = await getAwsProfileList();
+export const handler: DoDevopsHandler<{ all: boolean }> = async ({ argv, opts }) => {
+  const profiles = await getAwsProfileDictionary();
   const profileNames = Object.keys(profiles);
   let chosen: string[] = [];
 
@@ -57,4 +58,4 @@ export async function handler(argv: string[], opts: IDictionary): Promise<void> 
       console.log(chalk`- {bold {red ${e.profile}}}: {grey ${e.message}}`);
     }
   }
-}
+};

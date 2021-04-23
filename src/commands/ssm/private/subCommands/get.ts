@@ -5,12 +5,13 @@ import { fromBase64 } from "native-dash";
 import { SSM } from "aws-ssm";
 import { format } from "date-fns";
 import { table } from "table";
-import { ISsmOptions } from "../../public/ssm-types";
 import { determineProfile, determineRegion } from "~/shared/observations";
 import { DevopsError } from "~/errors";
 import { consoleDimensions } from "~/shared/ui";
+import { ISsmOptions } from "../../public";
+import { IGlobalOptions } from "~/shared/core";
 
-export async function execute(argv: string[], options: ISsmOptions) {
+export async function execute(argv: string[], options: ISsmOptions & IGlobalOptions) {
   const profile = await determineProfile({ cliOptions: options, interactive: true });
   const profileInfo = await getAwsProfile(profile);
   const region: string =

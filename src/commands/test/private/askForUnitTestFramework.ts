@@ -2,12 +2,20 @@ import inquirer = require("inquirer");
 
 import { IDictionary } from "common-types";
 import { getPackageJson } from "~/shared/npm";
+import { DevopsError } from "~/errors";
 
 /**
  * Asks the user to choose an AWS profile
  */
 export async function askForUnitTestFramework(): Promise<IDictionary<string>> {
-  const devDeps = Object.keys(getPackageJson().devDependencies || {});
+  const pkg = getPackageJson();
+  if (!pkg) {
+    throw new DevopsError(
+      `Asking about which unit testing framework to use pre-supposes that the current directory has a package.json but it was not found!`,
+      "not-ready/missing-package-json"
+    );
+  }
+  const devDeps = Object.keys(pkg.devDependencies || {});
   const testFrameworks = ["mocha", "jest", "other"];
 
   const defaultFramework = devDeps.includes("mocha")

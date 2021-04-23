@@ -9,6 +9,7 @@
 // local file exports
 export * from "./description";
 export * from "./latest";
+export * from "./options";
 
 // Note:
 // -----

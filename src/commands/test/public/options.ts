@@ -1,10 +1,10 @@
-import { OptionDefinition } from "command-line-usage";
+import { IOptionDefinition } from "~/@types/option-types";
 
-export const options: OptionDefinition[] = [
-  {
-    name: "onSourceChanged",
+export const options: IOptionDefinition = {
+  onSourceChanged: {
     type: Boolean,
-    group: "test",
-    description: "only run tests if the source files in the repo are changed from what is in git",
+    group: "local",
+    description:
+      "only run tests if the source files in the repo are changed from what is in git",
   },
-];
+};

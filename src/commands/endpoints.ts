@@ -1,24 +1,24 @@
 import chalk from "chalk";
 
-import { IDictionary } from "common-types";
-import { OptionDefinition } from "command-line-usage";
 import { getApiGatewayEndpoints } from "~/shared/aws";
 import { determineProfile, determineRegion } from "~/shared/observations";
+import { IOptionDefinition } from "~/@types/option-types";
+import { ICommandInput } from "~/@types/command";
 
 export const description =
   "Lists out all the endpoints defined in a given AWS profile/account.";
 
-export const options: OptionDefinition[] = [
-  {
-    name: "profile",
+export const options: IOptionDefinition = {
+  profile: {
     type: String,
     typeLabel: "<profileName>",
-    group: "endpoints",
+    group: "local",
     description: "set the AWS profile explicitly",
   },
-];
+};
 
-export async function handler(_args: string[], opts: IDictionary) {
+export async function handler(input: ICommandInput<{ profile: string }>) {
+  const { opts } = input;
   const profileName = await determineProfile({ cliOptions: opts });
   const region = await determineRegion({ cliOptions: opts });
   try {

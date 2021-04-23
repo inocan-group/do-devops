@@ -1,14 +1,15 @@
 import chalk from "chalk";
 import * as process from "process";
 
-import { CommandLineOptions } from "command-line-args";
 import { SSM } from "aws-ssm";
 import { format } from "date-fns";
 import { table } from "table";
 import { getAwsProfile } from "~/shared/aws";
 import { determineProfile, determineRegion } from "~/shared/observations";
+import { ISsmOptions } from "../../public";
+import { IGlobalOptions } from "~/shared";
 
-export async function execute(argv: string[], options: CommandLineOptions) {
+export async function execute(argv: string[], options: ISsmOptions & IGlobalOptions) {
   const profile = await determineProfile({ cliOptions: options, interactive: true });
   const profileInfo = await getAwsProfile(profile);
   const region =

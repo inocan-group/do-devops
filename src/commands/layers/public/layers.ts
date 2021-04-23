@@ -1,15 +1,14 @@
 import chalk from "chalk";
 import { table, TableUserConfig } from "table";
-import { IDictionary } from "common-types";
 import { toTable } from "~/shared/ui";
 import { getLayersFromPackageJson } from "~/shared/serverless";
-import { isServerless } from "~/shared/observations";
+import { DoDevopsHandler } from "~/@types/command";
 
 const META_LINK_MSG = chalk`{dim - the results rely on meta-data tagging; check out this link for more info:\n      {blueBright https://github.com/inocan-group/do-devops/docs/layer-meta.md}}\n`;
 
 /** handler for the "layers" command */
-export async function handler(_args: string[], _opts: IDictionary) {
-  if (isServerless()) {
+export const handler: DoDevopsHandler = async ({ observations }) => {
+  if (observations.includes("serverlessFramework")) {
     const layers = getLayersFromPackageJson();
     if (layers.length > 0) {
       const data = toTable(
@@ -44,4 +43,4 @@ export async function handler(_args: string[], _opts: IDictionary) {
   } else {
     console.log(chalk`- the current directory is not a Serverless repo\n`);
   }
-}
+};

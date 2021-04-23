@@ -6,6 +6,8 @@ import { isAutoindexFile, processFiles, watchHandler } from "../private";
 import { getMonoRepoPackages } from "~/shared/file";
 import { FSWatcher, watch } from "chokidar";
 import { highlightFilepath } from "~/shared/ui";
+import { DoDevopsHandler } from "~/@types/command";
+import { IAutoindexOptions } from "./options";
 
 /**
  * Watches for changes in any file where an autoindex file resides
@@ -124,7 +126,7 @@ async function setupAutoIndexWatcher(watched: IDictionary<FSWatcher>, opts: IDic
  * signature. If found then it _rebuilds_ thes file based on files in
  * the file's current directory
  */
-export async function handler(_argv: string[], opts: IDictionary): Promise<void> {
+export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts }) => {
   const monoRepoPackages: false | string[] = getMonoRepoPackages(process.cwd());
   if (monoRepoPackages && !opts.quiet) {
     console.log(
@@ -176,4 +178,4 @@ export async function handler(_argv: string[], opts: IDictionary): Promise<void>
       )}}} directories for autoindex changes`
     );
   }
-}
+};

@@ -8,8 +8,10 @@
 
 // local file exports
 export * from "./determineProfile";
+export * from "./determinePackageManager";
 export * from "./determineRegion";
 export * from "./determineStage";
+export * from "./determineLinter";
 export * from "./hasServerlessTsFile";
 export * from "./isServerless";
 export * from "./isTypescriptMicroserviceProject";

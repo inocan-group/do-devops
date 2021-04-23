@@ -1,4 +1,4 @@
-// #autoindex:named-offset, exclude:  build-helpers, deploy-helpers
+// #autoindex:default, exclude:  build-helpers, deploy-helpers
 
 // #region autoindexed files
 
@@ -10,7 +10,7 @@
 // local file exports
 export * as deploy from "./deploy";
 export * as endpoints from "./endpoints";
-export * as fns from "./fns";
+export { default as fns } from "./fns";
 export * as global from "./global";
 export * as help from "./help";
 export * as info from "./info";

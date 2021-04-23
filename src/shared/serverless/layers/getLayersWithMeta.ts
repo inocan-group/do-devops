@@ -2,6 +2,7 @@ import { IAwsLayerMeta, IDictionary } from "common-types";
 
 import { getPackageJson } from "../..";
 import path from "path";
+import { DevopsError } from "~/errors";
 
 export type ILayerMetaLookups = IDictionary<IAwsLayerMeta>;
 
@@ -14,10 +15,24 @@ export type ILayerMetaLookups = IDictionary<IAwsLayerMeta>;
  * not tagged appropriately in `package.json`.
  */
 export function getLayersFromPackageJson(): IAwsLayerMeta[] {
-  const devDeps = Object.keys(getPackageJson().devDependencies || {});
+  const pkg = getPackageJson();
+  if (!pkg) {
+    throw new DevopsError(
+      `Attempt to read layers from package.json but file is missing!`,
+      "not-ready/missing-package-json"
+    );
+  }
+  const devDeps = Object.keys(pkg.devDependencies || {});
   // get deps with appropriate tagging
   const pkgJsonFiles = devDeps.filter((d) => {
-    const keywords = getPackageJson(path.join(process.cwd(), "node_modules", d)).keywords;
+    const foreignPkg = getPackageJson(path.join(process.cwd(), "node_modules", d));
+    if (!foreignPkg) {
+      throw new DevopsError(
+        `Attempt to get info on package info on "" requires that it be installed in the repo. Make sure to install deps before running this command.`,
+        "not-ready/missing-dep"
+      );
+    }
+    const keywords = foreignPkg.keywords;
     return keywords
       ? keywords.includes("aws-layer-meta") || keywords.includes("aws-layer")
       : false;

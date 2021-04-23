@@ -15,6 +15,7 @@ export * from "./convertProfileToApiCredential";
 export * from "./getApiGatewayEndpoints";
 export * from "./getAwsIdentityFromProfile";
 export * from "./getAwsProfile";
+export * from "./getAwsProfileDictionary";
 export * from "./getAwsProfileList";
 export * from "./getAwsUserProfile";
 export * from "./hasAwsCredentialsFile";

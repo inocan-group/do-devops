@@ -1,14 +1,19 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
 import { buildLambdaTypescriptProject } from "~/shared/serverless";
-import { isServerless } from "~/shared/observations";
 import { subCommands } from "~/commands/ssm/private";
+import { DoDevopsHandler } from "~/@types/command";
+import { ISsmOptions } from "./options";
 
 export interface ISubCommandHash {
   [cmd: string]: { execute: (argv: string[], opts: IDictionary) => Promise<void> };
 }
 
-export async function handler(argv: string[], ssmOptions: IDictionary) {
+export const handler: DoDevopsHandler<ISsmOptions> = async ({
+  argv,
+  opts,
+  observations,
+}) => {
   const subCommand = argv.shift() || "";
 
   if (!Object.keys(subCommands).includes(subCommand)) {
@@ -21,20 +26,14 @@ export async function handler(argv: string[], ssmOptions: IDictionary) {
     process.exit();
   }
 
-  const serverless = await isServerless();
-  if (
-    serverless &&
-    serverless.isUsingTypescriptMicroserviceTemplate &&
-    !serverless.hasServerlessConfig
-  ) {
+  const serverless =
+    observations.includes("serverlessFramework") && observations.includes("serverlessTs");
+  if (serverless) {
     await buildLambdaTypescriptProject();
   }
 
   try {
-    await subCommands[subCommand as keyof typeof subCommands].execute(
-      argv,
-      ssmOptions as any
-    );
+    await subCommands[subCommand as keyof typeof subCommands].execute(argv, opts as any);
   } catch (error) {
     console.log(
       chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${error.message}\n`
@@ -43,4 +42,4 @@ export async function handler(argv: string[], ssmOptions: IDictionary) {
 
     process.exit(1);
   }
-}
+};

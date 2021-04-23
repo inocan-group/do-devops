@@ -8,7 +8,7 @@
 
 // local file exports
 export * from "./description";
-export * from "./handler";
+export * from "./build";
 export * from "./options";
 
 // Note:

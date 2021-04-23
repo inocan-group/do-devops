@@ -1,60 +1,55 @@
-import { OptionDefinition } from "command-line-usage";
 import chalk from "chalk";
+import { IOptionDefinition } from "~/@types/option-types";
 
-export const options: OptionDefinition[] = [
-  {
-    name: "profile",
+export const options: IOptionDefinition = {
+  profile: {
     type: String,
     typeLabel: "<profileName>",
-    group: "ssm",
+    group: "local",
     description: "set the AWS profile explicitly",
   },
-  {
-    name: "region",
+  region: {
     type: String,
     typeLabel: "<region>",
-    group: "ssm",
+    group: "local",
     description: "set the AWS region explicitly",
   },
-  {
-    name: "stage",
+  stage: {
     type: String,
     typeLabel: "<stage>",
-    group: "ssm",
+    group: "local",
     description: "set the stage explicitly",
   },
-  {
-    name: "nonStandardPath",
+  nonStandardPath: {
     type: Boolean,
-    group: "ssm",
+    group: "local",
     description:
       "allows the naming convention for SSM paths to be ignored for a given operation",
   },
-  {
-    name: "description",
+  description: {
     type: String,
-    group: "ssm",
+    group: "local",
     description: "sets the description of the SSM variable (only used in ADD)",
   },
-  {
-    name: "force",
+  force: {
     alias: "f",
     type: Boolean,
-    group: "ssm",
+    group: "local",
     description: chalk`force a {italic set} operation to complete even when the variable being set alread exists`,
   },
-  {
-    name: "base64",
+  base64: {
     type: Boolean,
-    group: "ssm",
+    group: "local",
     description: chalk`adding this flag will encode with base64 when adding and decode from base64 to utf-8 when getting`,
   },
-  {
-    name: "quiet",
-    alias: "q",
-    type: Boolean,
-    group: "ssm",
-    description:
-      "allows the naming convention for SSM paths to be ignored for a given operation",
-  },
-];
+};
+
+export interface ISsmOptions {
+  profile: string;
+  region: string;
+  stage: string;
+  nonStandardPath: boolean;
+  description: string;
+  force: boolean;
+  base64: boolean;
+}

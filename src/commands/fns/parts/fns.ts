@@ -1,34 +1,24 @@
 import chalk from "chalk";
 import { omit } from "native-dash";
 import { IDictionary } from "common-types";
-import { OptionDefinition } from "command-line-usage";
 import { table } from "table";
 
-import { isServerless } from "~/shared/observations";
 import { consoleDimensions } from "~/shared/ui";
 import { buildLambdaTypescriptProject, getServerlessYaml } from "~/shared/serverless";
+import { DoDevopsHandler } from "~/@types/command";
 
-export function description() {
-  return "Lists all serverless function handlers and basic meta about them";
-}
-
-export const options: OptionDefinition[] = [
-  {
-    name: "forceBuild",
-    alias: "f",
-    type: Boolean,
-    description: chalk`by default functions will be derived from {italic serverless.yml} but if you are in a {italic typescript-microservice} project you can force a rebuild prior to listing the functions`,
-  },
-];
-
-export async function handler(args: string[], opts: IDictionary) {
-  const filterBy = args.length > 0 ? (fn: string) => fn.includes(args[0]) : () => true;
-  const status = await isServerless();
+export const handler: DoDevopsHandler<{ forceBuild: boolean }> = async ({
+  argv,
+  opts,
+  observations,
+}) => {
+  const filterBy = argv.length > 0 ? (fn: string) => fn.includes(argv[0]) : () => true;
+  const status = observations.includes("serverlessFramework");
 
   if (!status) {
     console.log("- this project does not appear to be a Serverless project!\n");
     process.exit();
-  } else if (status.isUsingTypescriptMicroserviceTemplate) {
+  } else if (observations.includes("serverlessTs")) {
     if (opts.forceBuild) {
       console.log(
         `- detected use of the ${chalk.blue(
@@ -98,4 +88,4 @@ export async function handler(args: string[], opts: IDictionary) {
     console.log(`- Error finding functions: ${error.message}\n`);
     process.exit();
   }
-}
+};

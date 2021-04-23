@@ -1,17 +1,20 @@
-import { OptionDefinition } from "command-line-usage";
+import { IOptionDefinition } from "~/@types/option-types";
 
-export const options: OptionDefinition[] = [
-  {
-    name: "force",
+export interface IBuildOptions {
+  force: boolean;
+  alias: boolean;
+}
+
+export const options: IOptionDefinition = {
+  force: {
     type: Boolean,
-    group: "build",
+    group: "local",
     description: "forces the transpiling of code when building a serverless project",
   },
-  {
-    name: "interactive",
+  interactive: {
     alias: "i",
     type: Boolean,
-    group: "build",
+    group: "local",
     description: "allows choosing the functions interactively",
   },
-];
+};

@@ -1,4 +1,4 @@
-import { getAwsProfileList } from "./index";
+import { getAwsProfileDictionary } from "./index";
 import { DevopsError } from "~/errors/index";
 
 /**
@@ -6,7 +6,7 @@ import { DevopsError } from "~/errors/index";
  * throws `devops/not-ready` if error.
  */
 export async function getAwsProfile(profileName: string) {
-  const profile = await getAwsProfileList();
+  const profile = await getAwsProfileDictionary();
   if (!profile) {
     throw new DevopsError(
       `Attempt to get the AWS profile "${profileName}" failed because the AWS credentials file does not exist!`,
