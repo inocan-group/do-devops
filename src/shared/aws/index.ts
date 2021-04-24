@@ -2,9 +2,9 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 03:52 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 08:26 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: addAwsProfile, askForAwsProfile, askForAwsRegion, checkIfAwsInstalled, convertProfileToApiCredential, getApiGatewayEndpoints, getAwsIdentityFromProfile, getAwsProfile, getAwsProfileDictionary, getAwsProfileList, getAwsUserProfile, hasAwsCredentialsFile, userHasAwsProfile.
+// files: addAwsProfile, askForAwsProfile, askForAwsRegion, checkIfAwsInstalled, convertProfileToApiCredential, getApiGatewayEndpoints, getAwsDefaultRegion, getAwsIdentityFromProfile, getAwsLambdaFunctions, getAwsLambdaLayers, getAwsProfile, getAwsProfileDictionary, getAwsProfileList, getAwsUserProfile, hasAwsCredentialsFile, userHasAwsProfile.
 
 // local file exports
 export * from "./addAwsProfile";
@@ -13,7 +13,10 @@ export * from "./askForAwsRegion";
 export * from "./checkIfAwsInstalled";
 export * from "./convertProfileToApiCredential";
 export * from "./getApiGatewayEndpoints";
+export * from "./getAwsDefaultRegion";
 export * from "./getAwsIdentityFromProfile";
+export * from "./getAwsLambdaFunctions";
+export * from "./getAwsLambdaLayers";
 export * from "./getAwsProfile";
 export * from "./getAwsProfileDictionary";
 export * from "./getAwsProfileList";

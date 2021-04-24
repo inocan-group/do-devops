@@ -27,7 +27,6 @@ import { getObservations } from "./shared/observations/getObserverations";
     chalk.bold.white(`\ndo-devops ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
   );
   const observations = getObservations();
-  console.log({ mainCommand, observations });
 
   if (!cmd) {
     await help(globalOptions);
@@ -37,7 +36,6 @@ import { getObservations } from "./shared/observations/getObserverations";
     const subCommand = getCommand(cmd);
     const cmdInput = { ...parseCmdArgs(subCommand), observations };
 
-    console.log({ cmdInput });
     if (cmdInput.opts.help) {
       await help(cmdInput.opts);
     }

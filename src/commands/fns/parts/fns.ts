@@ -1,22 +1,74 @@
 import chalk from "chalk";
 import { omit } from "native-dash";
 import { IDictionary } from "common-types";
-import { table } from "table";
+import { table, TableUserConfig } from "table";
 
-import { consoleDimensions } from "~/shared/ui";
+import { consoleDimensions, toTable } from "~/shared/ui";
 import { buildLambdaTypescriptProject, getServerlessYaml } from "~/shared/serverless";
 import { DoDevopsHandler } from "~/@types/command";
+import { IFnsOptions } from "./options";
+import { determineRegion, getAwsLambdaFunctions } from "~/shared";
+import type { FunctionConfiguration } from "aws-sdk/clients/lambda";
 
-export const handler: DoDevopsHandler<{ forceBuild: boolean }> = async ({
+export const handler: DoDevopsHandler<IFnsOptions> = async ({
   argv,
   opts,
   observations,
 }) => {
   const filterBy = argv.length > 0 ? (fn: string) => fn.includes(argv[0]) : () => true;
-  const status = observations.includes("serverlessFramework");
+  const isServerlessProject = observations.includes("serverlessFramework");
 
-  if (!status) {
-    console.log("- this project does not appear to be a Serverless project!\n");
+  if (!isServerlessProject) {
+    if (opts.profile) {
+      const fns = (await getAwsLambdaFunctions(opts)).Functions;
+      const region = opts.region ? opts.region : await determineRegion(opts);
+      const tblConfig: TableUserConfig = {
+        columns: [
+          { width: 45, alignment: "left" },
+          { width: 8, alignment: "center" },
+          { width: 12, alignment: "right" },
+          { width: 8, alignment: "right" },
+          { width: 42, alignment: "left", wrapWord: true },
+        ],
+      };
+
+      if (fns) {
+        console.log(
+          chalk`- AWS functions found using profile {yellow {bold ${opts.profile}} {dim [ ${region} ]}}\n`
+        );
+
+        console.log(
+          table(
+            [
+              [
+                chalk.bold.yellow("Name"),
+                chalk.bold.yellow("Memory"),
+                chalk.bold.yellow("Code Size"),
+                chalk.bold.yellow("Timeout"),
+                chalk.bold.yellow("Description"),
+              ],
+              ...toTable<FunctionConfiguration>(
+                fns,
+                "FunctionName",
+                "MemorySize",
+                [
+                  "CodeSize",
+                  (cs) => chalk`${Math.floor(Number(cs) / 10000) * 10} {italic kb}`,
+                ],
+                ["Timeout", (t) => `${t}s`],
+                "Description"
+              ),
+            ],
+            tblConfig
+          )
+        );
+      }
+    } else {
+      console.log("- this project does not appear to be a Serverless project!");
+      console.log(
+        chalk`{gray - if you want a list of functions, you can still get this by stating an AWS profile with the "--profile" option}\n`
+      );
+    }
     process.exit();
   } else if (observations.includes("serverlessTs")) {
     if (opts.forceBuild) {

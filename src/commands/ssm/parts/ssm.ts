@@ -12,8 +12,11 @@ export interface ISubCommandHash {
 export const handler: DoDevopsHandler<ISsmOptions> = async ({
   argv,
   opts,
+  unknown,
   observations,
 }) => {
+  console.log({ argv, opts, unknown });
+
   const subCommand = argv.shift() || "";
 
   if (!Object.keys(subCommands).includes(subCommand)) {

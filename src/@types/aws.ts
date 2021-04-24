@@ -25,3 +25,9 @@ export type ICredentialOptions = {
    */
   sessionToken?: string;
 };
+
+export interface IAwsOptions {
+  region?: string;
+  profile?: string;
+  interactive?: boolean;
+}

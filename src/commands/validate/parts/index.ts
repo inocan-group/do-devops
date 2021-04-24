@@ -2,9 +2,9 @@
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 09:14 AM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 08:19 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: description, options, validate.
+// files: validate-meta, validate.
 
 // local file exports
 export * from "./validate-meta";

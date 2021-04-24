@@ -5,7 +5,7 @@
  * and return them back in a form which can be brought into the `table`
  * library as data.
  */
-export function toTable<T extends object, K extends keyof T>(
+export function toTable<T extends object, K extends keyof T = keyof T>(
   data: T[],
   ...columns: Array<K | [K, (prop: T[K]) => unknown]>
 ): unknown[][] {

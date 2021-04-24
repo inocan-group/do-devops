@@ -23,6 +23,15 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
 
   let [name, value] = argv;
   const profile = await determineProfile({ ...options, interactive: true });
+  if (!profile) {
+    console.log(
+      chalk`- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
+    );
+    console.log(
+      chalk`- alternatively use the {inverse --interactive } option to have the CLI interactively let you select`
+    );
+    process.exit();
+  }
   const profileInfo = await getAwsProfile(profile);
   const identity = await getAwsIdentityFromProfile(profileInfo);
   const region = options.region || profileInfo.region || (await determineRegion(options));

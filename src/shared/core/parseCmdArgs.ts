@@ -25,12 +25,6 @@ export function parseCmdArgs(cmd: IDoDevopsCommand) {
     ? { ...globalOptions, ...argvOpt, ...cmd.options }
     : { ...globalOptions, ...argvOpt };
 
-  console.log({
-    optDefn,
-    cla: typeof commandLineArgs,
-    cota: typeof convertOptionsToArray,
-  });
-
   // the options will be parsed into `local`, `global`, and `argv` categories
   // in a few cases there may also be `l2` and then anything which is not
   // known about will be dropped into `_unknown`.

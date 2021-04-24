@@ -1,7 +1,6 @@
 import { get } from "lodash";
 import { getServerlessYaml } from "~/shared/serverless";
 import { IDoConfig } from "~/@types";
-import { DevopsError } from "~/errors";
 import { getConfig, IGlobalOptions } from "~/shared/core";
 import { askForAwsProfile } from "~/shared/aws";
 import { DoDevopObservation } from "~/@types/observations";
@@ -28,9 +27,13 @@ export interface IProfileOptions extends IGlobalOptions {
 export async function determineProfile(
   opts: IProfileOptions,
   observations: DoDevopObservation[] = []
-): Promise<string> {
+): Promise<string | false> {
   if (opts.profile) {
     return opts.profile;
+  }
+
+  if (observations.includes("serverlessTs")) {
+    // TODO : transpile to JS and import
   }
 
   if (observations.includes("serverlessYml")) {
@@ -60,12 +63,5 @@ export async function determineProfile(
     } catch {}
   }
 
-  if (!profile) {
-    throw new DevopsError(
-      `Could not determine the AWS profile! [ ${JSON.stringify(opts)}]`,
-      "devops/not-ready"
-    );
-  }
-
-  return profile;
+  return profile ? profile : false;
 }

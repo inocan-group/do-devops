@@ -8,4 +8,20 @@ export const options: IOptionDefinition = {
     group: "local",
     description: chalk`by default functions will be derived from {italic serverless.yml} but if you are in a {italic typescript-microservice} project you can force a rebuild prior to listing the functions`,
   },
+  profile: {
+    type: String,
+    group: "local",
+    description: "allows you to explicitly state the AWS profile to use for this command",
+  },
+  region: {
+    type: String,
+    group: "local",
+    description: "allows you to explicitly state the AWS region to use for this command",
+  },
 };
+
+export interface IFnsOptions {
+  forceBuild: boolean;
+  profile: string;
+  region: string;
+}

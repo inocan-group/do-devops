@@ -2,6 +2,12 @@ import chalk from "chalk";
 import { IOptionDefinition } from "~/@types/option-types";
 
 export const options: IOptionDefinition = {
+  subCommand: {
+    type: String,
+    defaultValue: true,
+    group: "local",
+    description: "The SSM command -- list, get, set -- which you want to execute",
+  },
   profile: {
     type: String,
     typeLabel: "<profileName>",

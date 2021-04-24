@@ -4,9 +4,9 @@ import { get } from "lodash";
 import { determineProfile } from "./determineProfile";
 import { emoji } from "../ui";
 import { getAwsProfile } from "../aws";
-import { getConfig, IGlobalOptions } from "../index";
 import { getServerlessYaml } from "../serverless/getServerlessYaml";
 import { DoDevopObservation } from "~/@types/observations";
+import { getConfig, IGlobalOptions } from "../core";
 
 export interface IRegionOptions extends IGlobalOptions {
   interactive?: boolean;
@@ -35,14 +35,15 @@ export async function determineRegion(
     region = get(config, "global.defaultAwsRegion", undefined);
   }
 
+  // attempt to find it in the credentials file for the given profile
   if (!region) {
-    try {
-      const profileName = await determineProfile(opts || {});
+    const profileName = await determineProfile(opts || {});
+    if (profileName) {
       const profile = await getAwsProfile(profileName);
       if (profile && profile.region) {
         region = profile.region;
       }
-    } catch {}
+    }
   }
 
   // USER Config is last resort
