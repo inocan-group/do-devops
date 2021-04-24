@@ -18,10 +18,17 @@ export const options: IOptionDefinition = {
     group: "local",
     description: "allows you to explicitly state the AWS region to use for this command",
   },
+  stage: {
+    type: String,
+    group: "local",
+    description:
+      "allows the results to be filtered down to only those functions associated with a given stage",
+  },
 };
 
 export interface IFnsOptions {
   forceBuild: boolean;
   profile: string;
   region: string;
+  stage: string;
 }

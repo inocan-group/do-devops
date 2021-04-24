@@ -20,7 +20,10 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
 
   if (!isServerlessProject) {
     if (opts.profile) {
-      const fns = (await getAwsLambdaFunctions(opts)).Functions;
+      const filter = opts.stage
+        ? (f: FunctionConfiguration) => f.FunctionName?.includes(`-${opts.stage}-`)
+        : () => true;
+      const fns = (await getAwsLambdaFunctions(opts)).Functions?.filter(filter);
       const region = opts.region ? opts.region : await determineRegion(opts);
       const tblConfig: TableUserConfig = {
         columns: [
@@ -51,7 +54,14 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
               ],
               ...toTable<FunctionConfiguration>(
                 fns,
-                "FunctionName",
+                [
+                  "FunctionName",
+                  (f) =>
+                    chalk`{dim ${String(f)
+                      .split("-")
+                      .slice(0, -1)
+                      .join("-")}-}{bold ${String(f).split("-").slice(-1)}}`,
+                ],
                 "MemorySize",
                 [
                   "CodeSize",
