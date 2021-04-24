@@ -29,8 +29,7 @@ export async function getApiGatewayEndpoints(profileName: string, region: string
   });
 
   const restApi = await gw.getRestApis().promise();
-  const deployments = await gw2.getDeployments().promise();
   const httpApi = await gw2.getApis().promise();
   // const detail = await gw.getRestApi({ restApiId: apis.items[0].apiKeySource });
-  return { httpApi, restApi, deployments };
+  return { httpApi, restApi };
 }
