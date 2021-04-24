@@ -28,6 +28,7 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
           { width: 8, alignment: "center" },
           { width: 12, alignment: "right" },
           { width: 8, alignment: "right" },
+          { width: 20, alignment: "center" },
           { width: 42, alignment: "left", wrapWord: true },
         ],
       };
@@ -45,6 +46,7 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
                 chalk.bold.yellow("Memory"),
                 chalk.bold.yellow("Code Size"),
                 chalk.bold.yellow("Timeout"),
+                chalk.bold.yellow("Layers"),
                 chalk.bold.yellow("Description"),
               ],
               ...toTable<FunctionConfiguration>(
@@ -56,6 +58,15 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
                   (cs) => chalk`${Math.floor(Number(cs) / 10000) * 10} {italic kb}`,
                 ],
                 ["Timeout", (t) => `${t}s`],
+                [
+                  "Layers",
+                  (i) =>
+                    Array.isArray(i)
+                      ? i
+                          .map((i: any) => i?.Arn.split(":").slice(-2).join(":") || "")
+                          .join("\n")
+                      : "",
+                ],
                 "Description"
               ),
             ],
