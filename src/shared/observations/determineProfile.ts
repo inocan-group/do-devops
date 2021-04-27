@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import { getServerlessYaml } from "~/shared/serverless";
-import { IDoConfig } from "~/@types";
-import { getConfig, IGlobalOptions } from "~/shared/core";
+import { configIsReady, IIntegratedConfig, IProjectConfig, IUserConfig } from "~/@types";
+import { getIntegratedConfig, IGlobalOptions } from "~/shared/core";
 import { askForAwsProfile } from "~/shared/aws";
 import { DoDevopObservation } from "~/@types/observations";
 
@@ -46,11 +46,11 @@ export async function determineProfile(
     } catch {}
   }
 
-  let doConfig: IDoConfig;
+  let doConfig: IIntegratedConfig | IProjectConfig | IUserConfig;
   try {
-    doConfig = await getConfig("both");
+    doConfig = await getIntegratedConfig();
 
-    if (doConfig && doConfig.general.defaultAwsProfile) {
+    if (configIsReady(doConfig) && doConfig.general?.defaultAwsProfile) {
       profile = doConfig.general.defaultAwsProfile;
     }
   } catch {}

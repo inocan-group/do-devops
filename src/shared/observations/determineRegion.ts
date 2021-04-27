@@ -1,12 +1,13 @@
 /* eslint-disable unicorn/no-useless-undefined */
 import chalk from "chalk";
 import { get } from "lodash";
-import { determineProfile } from "./determineProfile";
-import { emoji } from "../ui";
-import { getAwsProfile } from "../aws";
-import { getServerlessYaml } from "../serverless/getServerlessYaml";
+import { determineProfile } from "./index";
+import { emoji } from "~/shared/ui";
+import { getAwsProfile } from "~/shared/aws";
+import { getServerlessYaml } from "~/shared/serverless";
 import { DoDevopObservation } from "~/@types/observations";
-import { getConfig, IGlobalOptions } from "../core";
+import { getIntegratedConfig, getUserConfig, IGlobalOptions } from "~/shared/core";
+import { configIsReady } from "~/@types";
 
 export interface IRegionOptions extends IGlobalOptions {
   interactive?: boolean;
@@ -24,7 +25,7 @@ export async function determineRegion(
   opts: IRegionOptions = {},
   observations: DoDevopObservation[] = []
 ) {
-  const config = await getConfig();
+  const config = getIntegratedConfig();
   let region = opts.region || process.env.AWS_REGION;
 
   if (!region && observations.includes("serverlessYml")) {
@@ -50,8 +51,8 @@ export async function determineRegion(
 
   // USER Config is last resort
   if (!region) {
-    const userConfig = await getConfig("user");
-    if (userConfig && userConfig.general.defaultAwsRegion) {
+    const userConfig = getUserConfig();
+    if (configIsReady(userConfig) && userConfig.general?.defaultAwsRegion) {
       if (!opts.quiet) {
         console.log(
           chalk`{bold - AWS region has been resolved using the User's config ${emoji.eyeballs}}. This is the source of "last resort" but may be intended.`

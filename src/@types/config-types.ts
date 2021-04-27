@@ -1,4 +1,5 @@
-import { AwsRegion } from "common-types";
+import { AwsRegion, IDictionary } from "common-types";
+import { NotDefined } from "./general";
 import { PackageManagerObservation, TestObservation } from "./observations";
 
 export interface IGeneralConfig {
@@ -50,7 +51,11 @@ export type IProjectConfigFilled = {
 } & ICommandConfig &
   IGeneralConfig;
 
-export type IProjectConfigUnfilled = { kind: "project"; projectConfig: false };
+export type IProjectConfigUnfilled = {
+  kind: "project";
+  projectConfig: false;
+} & NotDefined<ICommandConfig> &
+  NotDefined<IGeneralConfig>;
 
 export type IProjectConfig = IProjectConfigFilled | IProjectConfigUnfilled;
 
@@ -61,15 +66,30 @@ export type IUserConfigFilled = {
 } & ICommandConfig &
   IGeneralConfig;
 
-export type IUserConfigUnfilled = { kind: "user"; userConfig: false };
-
-export type IIntegratedConfig = {
-  kind: "integrated";
-  userConfig: boolean;
-  projectConfig: boolean;
-} & ICommandConfig &
-  IGeneralConfig;
-
+export type IUserConfigUnfilled = {
+  kind: "user";
+  userConfig: false;
+} & NotDefined<ICommandConfig> &
+  NotDefined<IGeneralConfig>;
 export type IUserConfig = IUserConfigFilled | IUserConfigUnfilled;
 
+export type IIntegratedConfig = { kind: "integrated"; ready: boolean } & Omit<
+  IUserConfig,
+  "kind"
+> &
+  Omit<IProjectConfig, "kind">;
+
 export type IDoConfig = IUserConfigFilled | IProjectConfigFilled | IIntegratedConfig;
+
+export function configIsReady(config: unknown): config is IDoConfig {
+  return (
+    (typeof config === "object" &&
+      config !== null &&
+      (config as IDictionary).kind === "integrated" &&
+      (config as IDictionary).ready) ||
+    ((config as IDoConfig).kind === "project" &&
+      (config as IProjectConfigFilled).projectConfig === true) ||
+    ((config as IDoConfig).kind === "user" &&
+      (config as IUserConfigFilled).userConfig === true)
+  );
+}

@@ -7,7 +7,7 @@ import { emoji } from "~/shared/ui";
 import { isTranspileNeeded } from "./index";
 import { determineStage } from "~/shared/observations";
 import { hasDevDependency } from "~/shared/npm";
-import { getConfig } from "~/shared/core";
+import { getIntegratedConfig } from "~/shared/core";
 
 export interface IServerlessDeployMeta {
   stage: string;
@@ -128,7 +128,7 @@ export default async function serverlessDeploy(argv: string[], opts: IDictionary
     process.exit();
   }
 
-  const { deploy: config } = await getConfig();
+  const { deploy: config } = await getIntegratedConfig();
   const meta: IServerlessDeployMeta = {
     stage,
     config: config as IDoDeployServerless,

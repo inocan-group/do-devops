@@ -6,6 +6,8 @@ export interface IDoHandler {
 
 export type arn = string;
 
+export type NotDefined<T> = { [P in keyof T]?: undefined };
+
 export interface IServerlessAccountInfo {
   name?: string;
   accountId?: string;
