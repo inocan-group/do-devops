@@ -1,8 +1,6 @@
-import { getConfigFilename } from "./index";
-
-import { IDoConfig } from "~/@types";
-import { existsSync } from "fs";
-import { DevopsError } from "~/errors";
+import merge from "deepmerge";
+import { IIntegratedConfig, IProjectConfig, IUserConfig } from "~/@types";
+import { getProjectConfig, getUserConfig } from "~/shared/core";
 
 export interface IGetConfigOptions {
   exitIfNotFound: boolean;
@@ -14,48 +12,25 @@ export interface IGetConfigOptions {
  * Gets the current configuration based on the `do.config.js` file.
  *
  * By default the configuration that will be loaded is the project's
- * configuration but you can state to instead use the `user` config
+ * configuration but you can override to use the `user` config
  * or `both`. In the case of `both`, the two config's will be merged
- * and the project config will take precedence.
+ * and the project config taking precedence.
+ *
+ * The lack of a configuration file will not be treated as an error
+ * but will instead resolve to an empty object.
  */
 export async function getConfig(
-  userOrProject: "user" | "project" | "both" = "both"
-): Promise<IDoConfig> {
-  const userFilename = getConfigFilename("user");
-  const projectFilename = getConfigFilename("project");
-  const userConfig = existsSync(userFilename) ? (await import(userFilename)).config : {};
-  const projectConfig = existsSync(projectFilename) ? await import(projectFilename) : {};
+  source: "user" | "project" | "both" = "both"
+): Promise<IIntegratedConfig | IProjectConfig | IUserConfig> {
+  const userConfig = getUserConfig();
+  const projectConfig = getProjectConfig();
 
-  if (!projectConfig && userOrProject === "project") {
-    throw new DevopsError(
-      `Project configuration [${projectFilename}] for do-devops not found!`,
-      "no-config"
-    );
-  }
-  if (!userConfig && userOrProject === "user") {
-    throw new DevopsError("User configuration for do-devops not found!", "no-config");
-  }
-  if (!userConfig && !projectConfig && userOrProject === "both") {
-    throw new DevopsError(
-      "Neither user nor project configuration for do-devops was found!",
-      "no-config"
-    );
-  }
-
-  switch (userOrProject) {
+  switch (source) {
     case "both":
-      return {
-        ...(userConfig ? userConfig : {}),
-        ...(projectConfig ? projectConfig : {}),
-      };
+      return merge(userConfig, projectConfig);
     case "project":
       return projectConfig;
     case "user":
       return userConfig;
-    default:
-      throw new DevopsError(
-        `Unknown configuration type "${userOrProject}" passed in!`,
-        "invalid-config-type"
-      );
   }
 }

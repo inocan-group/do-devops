@@ -5,7 +5,8 @@ export type BaseObservations =
   | "typescriptTransformPaths";
 export type BundlerObservation = "webpack" | "rollup" | "vite" | "esbuild";
 export type PackageManagerObservation = "yarn" | "npm" | "pnpm";
-export type TestObservation = "mocha" | "jest" | "uvu";
+export type TestObservation = "mocha" | "jest" | "uvu" | "ava" | "jasmine" | "qunit";
+export type ExportObservation = "cjs" | "esm" | "typings";
 export type LintObservation =
   | "eslint"
   | "tslint"
@@ -39,6 +40,7 @@ export type MonorepoObservation = "rushjs" | "lerna" | "yarnWorkspaces";
 export type DoDevopObservation =
   | BaseObservations
   | BundlerObservation
+  | ExportObservation
   | LintObservation
   | PackageManagerObservation
   | TestObservation

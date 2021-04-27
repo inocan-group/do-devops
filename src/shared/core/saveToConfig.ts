@@ -1,21 +1,48 @@
-import set = require("lodash.set");
-import { getConfig, writeConfig } from "~/shared/core";
+import { IDoConfig } from "~/@types";
+import { writeConfig, getProjectConfig, getUserConfig } from "~/shared/core";
+import merge from "deepmerge";
 
 /**
- * saves a value to the configuration file
+ * **saveToUserConfig**
  *
- * @param path the path in the config to write to
- * @param value the value to set
- * @param projectOrUser 'project' or 'user'
+ * updates the configuration to a _section_ which is either a command or to
+ * the `general` section for shared meta-data. The value passed in is
+ * deep copied with the current value to ensure it is non-destructive.
  */
-export async function saveToConfig(
-  path: string,
-  value: any,
-  projectOrUser: "project" | "user"
+export async function saveToUserConfig<T extends keyof IDoConfig>(
+  section: T,
+  updatedProps: Partial<IDoConfig[T]>
 ) {
-  // TODO: remove?
-  // const filename = getConfigFilename(projectOrUser);
-  const config = set(await getConfig(projectOrUser), path, value);
+  let config = getUserConfig();
+  if (!config.userConfig) {
+    config = { kind: "user", userConfig: true, general: {} };
+  }
 
-  writeConfig(config, projectOrUser);
+  const current: Partial<IDoConfig[T]> = config[section] || {};
+  const merged = merge(current, updatedProps);
+  const newConfig = { ...config, [section]: merged };
+
+  writeConfig(newConfig, "user");
+}
+
+/**
+ * **saveToUserConfig**
+ *
+ * updates the configuration to a _section_ which is either a command or to
+ * the `general` section for shared meta-data. The value passed in is
+ * deep copied with the current value to ensure it is non-destructive.
+ */
+export async function saveToProjectConfig<T extends keyof IDoConfig>(
+  section: T,
+  updatedProps: Partial<IDoConfig[T]>
+) {
+  let config = getProjectConfig();
+  if (!config.projectConfig) {
+    config = { kind: "project", projectConfig: true, general: {} };
+  }
+  const current: Partial<IDoConfig[T]> = config[section] || {};
+  const merged = merge(current, updatedProps);
+  const newConfig = { ...config, [section]: merged };
+
+  writeConfig(newConfig, "project");
 }

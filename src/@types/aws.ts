@@ -11,7 +11,7 @@ export interface IAwsProfile {
  * Parameters used in the `aws-sdk` which credentialize
  * the API request.
  */
-export type ICredentialOptions = {
+export type IAwsCredentials = {
   /**
    * AWS access key ID.
    */

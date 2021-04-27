@@ -50,8 +50,8 @@ export async function determineProfile(
   try {
     doConfig = await getConfig("both");
 
-    if (doConfig && doConfig.global.defaultAwsProfile) {
-      profile = doConfig.global.defaultAwsProfile;
+    if (doConfig && doConfig.general.defaultAwsProfile) {
+      profile = doConfig.general.defaultAwsProfile;
     }
   } catch {}
 
@@ -59,7 +59,7 @@ export async function determineProfile(
     try {
       profile = await askForAwsProfile({ exitOnError: false });
       // TODO: what should be done with this?
-      // const _saveForNextTime = await askToSaveConfig("global.defaultAwsProfile", profile);
+      // const _saveForNextTime = await askToSaveConfig("general.defaultAwsProfile", profile);
     } catch {}
   }
 

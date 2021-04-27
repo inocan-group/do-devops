@@ -2,12 +2,11 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 04:47 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 05:37 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: askToSaveConfig, convertOptionsToArray, defaultConfigSections, getCommand, getCommands, getConfig, getConfigFilename, getConfigSections, getDefaultConfig, help, isKnownCommand, options, parseCmdArgs, saveToConfig, writeConfig, writeDefaultConfig.
+// files: convertOptionsToArray, defaultConfigSections, getCommand, getCommands, getConfig, getConfigFilename, getConfigSections, getDefaultConfig, getProjectConfig, getUserConfig, help, isKnownCommand, options, parseCmdArgs, proxyToPackageManager, saveToConfig, writeConfig.
 
 // local file exports
-export * from "./askToSaveConfig";
 export * from "./convertOptionsToArray";
 export * from "./defaultConfigSections";
 export * from "./getCommand";
@@ -16,13 +15,15 @@ export * from "./getConfig";
 export * from "./getConfigFilename";
 export * from "./getConfigSections";
 export * from "./getDefaultConfig";
+export * from "./getProjectConfig";
+export * from "./getUserConfig";
 export * from "./help";
 export * from "./isKnownCommand";
 export * from "./options";
 export * from "./parseCmdArgs";
+export * from "./proxyToPackageManager";
 export * from "./saveToConfig";
 export * from "./writeConfig";
-export * from "./writeDefaultConfig";
 
 // Note:
 // -----

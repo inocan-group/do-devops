@@ -1,6 +1,7 @@
 import { writeFileSync } from "fs";
-import { IDoConfig } from "../../@types";
-import { getConfigFilename } from "..";
+import { IProjectConfigFilled, IUserConfigFilled } from "~/@types";
+import { write } from "~/shared/file";
+import { getConfigFilename } from "./index";
 
 /**
  * **writeConfig**
@@ -9,7 +10,7 @@ import { getConfigFilename } from "..";
  * or User's **home directory**.
  */
 export function writeConfig(
-  content: IDoConfig,
+  content: IProjectConfigFilled | IUserConfigFilled,
   projectOrUserConfig: "user" | "project" = "project"
 ) {
   const filename = getConfigFilename(projectOrUserConfig);
@@ -20,4 +21,8 @@ export function writeConfig(
       encoding: "utf-8",
     }
   );
+}
+
+export function writeProjectConfig(content: IProjectConfigFilled) {
+  write(JSON.stringify(content), "./.do-devops.json");
 }

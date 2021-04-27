@@ -25,10 +25,10 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
 
   const transpile = isTranspileNeeded(meta);
   if (transpile.length > 0) {
-    const build = (await import("../../commands/build/util/tools/webpack")).default({
-      opts: { fns: transpile },
-    }).build;
-    await build();
+    // const build = (await import("../../commands/build/util/tools/webpack")).default({
+    //   opts: { fns: transpile },
+    // }).build;
+    // await build();
   }
 
   console.log(
@@ -83,14 +83,14 @@ async function fullDeploy(meta: IServerlessDeployMeta) {
     console.log(
       chalk`{grey - checking timestamps to determine what {bold webpack} transpilation is needed}`
     );
-    const transpile = isTranspileNeeded(meta);
+    // const transpile = isTranspileNeeded(meta);
 
-    if (transpile.length > 0) {
-      const build = (await import("../../commands/build/util/tools/webpack")).default({
-        opts: { fns: transpile },
-      }).build;
-      await build();
-    }
+    // if (transpile.length > 0) {
+    //   const build = (await import("../../commands/build/util/tools/webpack")).default({
+    //     opts: { fns: transpile },
+    //   }).build;
+    //   await build();
+    // }
 
     const fns = getLocalHandlerInfo().map((i) => i.fn);
 

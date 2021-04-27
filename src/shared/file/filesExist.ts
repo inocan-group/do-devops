@@ -1,9 +1,13 @@
 import { existsSync } from "fs";
+import { homedir } from "os";
 import path from "path";
 
 export function fileExists(file: string) {
-  if (![".", "/"].includes(file.slice(0, 1))) {
+  if (![".", "/", "~"].includes(file.slice(0, 1))) {
     file = path.posix.join(process.cwd(), file);
+  }
+  if (file.slice(0, 1) === "~") {
+    file = path.posix.join(homedir(), file.slice(1));
   }
 
   return existsSync(file);
@@ -19,8 +23,11 @@ export function fileExists(file: string) {
 export function filesExist(...files: string[]) {
   const exists: string[] = [];
   for (let f of files) {
-    if (![".", "/"].includes(f.slice(0, 1))) {
+    if (![".", "/", "~"].includes(f.slice(0, 1))) {
       f = path.posix.join(process.cwd(), f);
+    }
+    if (f.slice(0, 1) === "~") {
+      f = path.posix.join(homedir(), f.slice(1));
     }
     if (existsSync(f)) {
       exists.push(f);

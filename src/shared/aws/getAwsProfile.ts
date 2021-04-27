@@ -1,16 +1,20 @@
 import { getAwsProfileDictionary } from "./index";
 import { DevopsError } from "~/errors/index";
+import { IAwsProfile } from "~/@types";
 
 /**
- * Get a specific _named profile_ in the AWS `credentials` file;
- * throws `devops/not-ready` if error.
+ * Get a specific AWS _profile_ in the AWS _credentials_ file.
+ *
+ * Possible errors:
+ *   - `do-devops/invalid-profile-name`
+ *   - `do-devops/no-credentials-file`
  */
-export async function getAwsProfile(profileName: string) {
+export async function getAwsProfile(profileName: string): Promise<IAwsProfile> {
   const profile = await getAwsProfileDictionary();
   if (!profile) {
     throw new DevopsError(
       `Attempt to get the AWS profile "${profileName}" failed because the AWS credentials file does not exist!`,
-      "devops/not-ready"
+      "do-devops/no-credentials-file"
     );
   }
   if (!profile[profileName]) {
@@ -18,7 +22,7 @@ export async function getAwsProfile(profileName: string) {
       `The AWS profile "${profileName}" does not exist in the AWS credentials file! Valid profile names are: ${Object.keys(
         profile
       ).join(", ")}`,
-      "devops/not-ready"
+      "do-devops/invalid-profile-name"
     );
   }
   return profile[profileName];

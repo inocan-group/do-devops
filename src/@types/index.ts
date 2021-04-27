@@ -3,8 +3,10 @@
 export * from "./aws";
 // export * from "./bestzip";
 export * from "./build";
+export * from "./config-types";
 export * from "./defaultConfig";
 export * from "./file-types";
+export * from "./observations";
 export * from "./serverless-types";
 export * from "./webpack";
 export * from "./general";

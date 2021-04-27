@@ -24,7 +24,7 @@ import { getObservations } from "./shared/observations/getObserverations";
   const cmd = mainCommand.command as string | undefined;
 
   console.log(
-    chalk.bold.white(`\ndo-devops ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
+    chalk.bold(`\ndo-devops ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
   );
   const observations = getObservations();
 

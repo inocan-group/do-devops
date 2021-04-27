@@ -1,14 +1,15 @@
 import chalk from "chalk";
 import { omit } from "native-dash";
 import { IDictionary } from "common-types";
-import { table, TableUserConfig } from "table";
+import { table } from "table";
 
-import { consoleDimensions, toTable } from "~/shared/ui";
+import { consoleDimensions } from "~/shared/ui";
 import { buildLambdaTypescriptProject, getServerlessYaml } from "~/shared/serverless";
 import { DoDevopsHandler } from "~/@types/command";
 import { IFnsOptions } from "./options";
-import { determineRegion, getAwsLambdaFunctions } from "~/shared";
+import { determineRegion, getAwsLambdaFunctions, write } from "~/shared";
 import type { FunctionConfiguration } from "aws-sdk/clients/lambda";
+import { functionsApiTable } from "./tables";
 
 export const handler: DoDevopsHandler<IFnsOptions> = async ({
   argv,
@@ -17,6 +18,10 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
 }) => {
   const filterBy = argv.length > 0 ? (fn: string) => fn.includes(argv[0]) : () => true;
   const isServerlessProject = observations.includes("serverlessFramework");
+  const region = opts.region ? opts.region : await determineRegion(opts);
+  const stageFilterMsg = opts.stage
+    ? chalk`, filtered down to only those in the {bold ${opts.stage.toUpperCase()}} stage.`
+    : "";
 
   if (!isServerlessProject) {
     if (opts.profile) {
@@ -24,66 +29,26 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
         ? (f: FunctionConfiguration) => f.FunctionName?.includes(`-${opts.stage}-`)
         : () => true;
       const fns = (await getAwsLambdaFunctions(opts)).Functions?.filter(filter);
-      const region = opts.region ? opts.region : await determineRegion(opts);
-      const tblConfig: TableUserConfig = {
-        columns: [
-          { width: 45, alignment: "left" },
-          { width: 8, alignment: "center" },
-          { width: 12, alignment: "right" },
-          { width: 8, alignment: "right" },
-          { width: 20, alignment: "center" },
-          { width: 42, alignment: "left", wrapWord: true },
-        ],
-      };
 
       if (fns) {
         console.log(
-          chalk`- AWS functions found using profile {yellow {bold ${opts.profile}} {dim [ ${region} ]}}\n`
+          chalk`- AWS functions found using {blue {bold ${opts.profile}}} profile {dim [ ${region} ]}${stageFilterMsg}\n`
         );
-
-        console.log(
-          table(
-            [
-              [
-                chalk.bold.yellow("Name"),
-                chalk.bold.yellow("Memory"),
-                chalk.bold.yellow("Code Size"),
-                chalk.bold.yellow("Timeout"),
-                chalk.bold.yellow("Layers"),
-                chalk.bold.yellow("Description"),
-              ],
-              ...toTable<FunctionConfiguration>(
-                fns,
-                [
-                  "FunctionName",
-                  (f) =>
-                    chalk`{dim ${String(f)
-                      .split("-")
-                      .slice(0, -1)
-                      .join("-")}-}{bold ${String(f).split("-").slice(-1)}}`,
-                ],
-                "MemorySize",
-                [
-                  "CodeSize",
-                  (cs) => chalk`${Math.floor(Number(cs) / 10000) * 10} {italic kb}`,
-                ],
-                ["Timeout", (t) => `${t}s`],
-                [
-                  "Layers",
-                  (i) =>
-                    Array.isArray(i)
-                      ? i
-                          .map((i: any) => i?.Arn.split(":").slice(-2).join(":") || "")
-                          .join("\n")
-                      : "",
-                ],
-                "Description"
-              ),
-            ],
-            tblConfig
-          )
-        );
+        if (opts.json) {
+          console.log(
+            chalk`{gray - using {inverse  json } output directly from AWS api instead of a table}`
+          );
+          console.log(fns);
+        } else {
+          console.log(functionsApiTable(fns));
+        }
+        if (opts.output) {
+          write(opts.output, fns, { allowOverwrite: true });
+        }
       }
+      console.log(
+        chalk`{gray - the AWS CLI provides access to data like this with} {bold aws lambda list-functions --profile ${opts.profile}}`
+      );
     } else {
       console.log("- this project does not appear to be a Serverless project!");
       console.log(
@@ -120,7 +85,6 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
       ],
     ];
     if (fns) {
-      // eslint-disable-next-line unicorn/no-array-callback-reference
       for (const key of Object.keys(fns).filter(filterBy)) {
         const events = fns[key].events || [];
         tableData.push([

@@ -24,6 +24,17 @@ export const options: IOptionDefinition = {
     description:
       "allows the results to be filtered down to only those functions associated with a given stage",
   },
+  json: {
+    type: Boolean,
+    group: "local",
+    description: "display results as JSON instead of tables",
+  },
+  output: {
+    type: String,
+    typeLabel: "<filename>",
+    group: "local",
+    description: "output the AWS API as a JSON file in the local filesystem",
+  },
 };
 
 export interface IFnsOptions {
@@ -31,4 +42,6 @@ export interface IFnsOptions {
   profile: string;
   region: string;
   stage: string;
+  json: boolean;
+  output: string;
 }

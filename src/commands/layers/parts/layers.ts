@@ -1,5 +1,4 @@
 import chalk from "chalk";
-import { table, TableUserConfig } from "table";
 import { toTable } from "~/shared/ui";
 import { getLayersFromPackageJson } from "~/shared/serverless";
 import { DoDevopsHandler } from "~/@types/command";
@@ -11,28 +10,20 @@ export const handler: DoDevopsHandler = async ({ observations }) => {
   if (observations.includes("serverlessFramework")) {
     const layers = getLayersFromPackageJson();
     if (layers.length > 0) {
-      const data = toTable(
-        layers,
-        "name",
-        [
-          "versions",
-          (v) => (Array.isArray(v) ? v.pop()?.version || "unknown" : v || "unknown"),
-        ],
-        "description"
+      console.log(
+        toTable(
+          layers,
+          { col: "name", format: { width: 30, alignment: "left" } },
+          {
+            col: "versions",
+            formula: (v) =>
+              Array.isArray(v) ? v.pop()?.version || "unknown" : v || "unknown",
+            format: { width: 7, alignment: "center" },
+          },
+          { col: "description", format: { width: 64, alignment: "left", wrapWord: true } }
+        )
       );
 
-      const config: TableUserConfig = {
-        columns: {
-          // name
-          0: { width: 30, alignment: "left" },
-          // version
-          1: { width: 7, alignment: "center" },
-          // description
-          2: { width: 64, alignment: "left", wrapWord: true },
-        },
-      };
-
-      console.log(table([["Name", "Version", "Description"], ...data], config));
       console.log(META_LINK_MSG);
     } else {
       console.log(

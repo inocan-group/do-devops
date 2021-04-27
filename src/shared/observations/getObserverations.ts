@@ -1,6 +1,13 @@
 import { DoDevopObservation } from "~/@types/observations";
 import { fileExists } from "../file";
-import { getPackageJson, hasDependency, hasDevDependency } from "../npm";
+import {
+  getPackageJson,
+  hasDependency,
+  hasDevDependency,
+  hasMainExport,
+  hasModuleExport,
+  hasTypingsExport,
+} from "../npm";
 import { determineLinter } from "./index";
 
 /**
@@ -84,6 +91,16 @@ export function getObservations() {
     }
     if (fileExists("package-lock.json")) {
       observations.push("npm");
+    }
+
+    if (hasMainExport()) {
+      observations.push("cjs");
+    }
+    if (hasModuleExport()) {
+      observations.push("esm");
+    }
+    if (hasTypingsExport()) {
+      observations.push("typings");
     }
 
     // linters

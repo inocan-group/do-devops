@@ -29,6 +29,9 @@
     "no-nested-ternary": "off",
     // doesn't play well with prettier
     "unicorn/no-nested-ternary": "off",
+    // this is kind of nice sometimes
+    "unicorn/no-array-callback-reference": "off",
+    // only because this is a CLI
     "unicorn/no-process-exit": "off",
 
     // we need exceptions to be only "warn" because

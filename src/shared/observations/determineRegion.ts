@@ -15,8 +15,10 @@ export interface IRegionOptions extends IGlobalOptions {
 }
 
 /**
- * Determines the appropriate `region` to point at based on CLI switches/options,
+ * Determines the appropriate AWS `region` to point at based on CLI switches/options,
  * the Serverless configuration, and the global `do` config defaults.
+ *
+ * If an appropriate region can't be determined this function will return `false`.
  */
 export async function determineRegion(
   opts: IRegionOptions = {},
@@ -49,13 +51,13 @@ export async function determineRegion(
   // USER Config is last resort
   if (!region) {
     const userConfig = await getConfig("user");
-    if (userConfig && userConfig.global.defaultAwsRegion) {
+    if (userConfig && userConfig.general.defaultAwsRegion) {
       if (!opts.quiet) {
         console.log(
           chalk`{bold - AWS region has been resolved using the User's config ${emoji.eyeballs}}. This is the source of "last resort" but may be intended.`
         );
       }
-      region = userConfig.global.defaultAwsRegion;
+      region = userConfig.general.defaultAwsRegion;
     }
   }
 
