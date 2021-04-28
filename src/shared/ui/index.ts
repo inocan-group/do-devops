@@ -2,7 +2,7 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 11:59 AM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 12:02 PM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: consoleDimensions, emoji, highlightFilepath, inverted, styles, toTable, truncate.
 
