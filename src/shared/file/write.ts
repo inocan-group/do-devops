@@ -1,46 +1,37 @@
-import { IDictionary } from "common-types";
-import path from "path";
-import { writeFile } from "fs";
-import { promisify } from "util";
-import { DevopsError } from "~/errors";
-import { filesExist } from "./filesExist";
-
-const w = promisify(writeFile);
-
-export interface IWriteOptions {
-  spacing?: number;
-  /**
-   * if set to `true` it will add a numeric offset to the filename to avoid collisions
-   */
-  offsetIfExists?: boolean;
-}
+import { writeFileSync } from "fs";
+import { DevopsError, isClassification } from "~/errors";
+import { fileExists } from "./filesExist";
+import { IWriteOptions } from "~/@types";
+import { interpolateFilePath } from "./interpolateFilepath";
 
 /**
  * **write**
  *
- * Writes a file to the filesystem; favoring files which are based off the repo's
- * root
+ * Writes a file to the filesystem.
  *
- * @param filename the filename to be written; if filename doesn't start with either a '.' or '/' then it will be joined with the projects current working directory
- * @param data the data to be written
+ * **Errors:**
+ * - `do-devops/file-exists`
+ * - `do-devops/file-write-error`
+ *
+ * **Note:** _if the filename is prefixed with a_ `.`, `~`, _or_ `/` _then it will be considered a
+ * full file path but in other cases it will always be offset from the current working
+ * directory._
  */
-export async function write(
-  filename: string,
-  data: string | IDictionary,
-  options: IWriteOptions = {}
-) {
+export function write(filename: string, data: any, options: IWriteOptions = {}) {
   try {
-    if (typeof data !== "string") {
-      data =
-        options.spacing && options.spacing > 0
-          ? JSON.stringify(data, null, options.spacing)
-          : JSON.stringify(data);
-    }
-    if (![".", "/"].includes(filename.slice(0, 1))) {
-      filename = path.join(process.cwd(), filename);
-    }
+    // get data into a string form
+    const content =
+      typeof data !== "string"
+        ? options.pretty
+          ? JSON.stringify(data, null, 2)
+          : JSON.stringify(data)
+        : data;
+
+    filename = interpolateFilePath(filename);
+
+    // avoid collisions if offset avoidence is enabled
     let offset: number | undefined;
-    while (options.offsetIfExists && filesExist(filename)) {
+    while (options.offsetIfExists && fileExists(filename)) {
       const before = new RegExp(`-${offset}.(.*)$`);
       filename = offset ? filename.replace(before, ".$1") : filename;
       offset = !offset ? 1 : offset++;
@@ -48,15 +39,26 @@ export async function write(
       const parts = filename.split(".");
       filename = parts.slice(0, -1).join(".") + `-${offset}.` + parts.slice(-1);
     }
-    await w(filename, data, {
+
+    if (!options.offsetIfExists && !options.allowOverwrite && fileExists(filename)) {
+      throw new DevopsError(
+        `The file "${filename}" already exists and the {italic overwrite} flag was not set. Write was not allowed.`,
+        "do-devops/file-exists"
+      );
+    }
+
+    writeFileSync(filename, content, {
       encoding: "utf-8",
     });
 
     return { filename, data };
   } catch (error) {
+    if (isClassification(error, "do-devops/file-exists")) {
+      throw error;
+    }
     throw new DevopsError(
       `Problem writing file "${filename}": ${error.message}`,
-      "do-devops/can-not-write"
+      "do-devops/file-write-error"
     );
   }
 }

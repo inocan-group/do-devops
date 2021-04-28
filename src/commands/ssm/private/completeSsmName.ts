@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { DevopsError } from "~/errors";
-import { ask, confirmQuestion } from "~/shared/interactive";
+import { confirmQuestionNow } from "~/shared/interactive";
 
 export interface ISsmNameHints {
   stage?: string;
@@ -28,8 +28,8 @@ export async function completeSsmName(name: string, hints: ISsmNameHints = {}) {
         parts
       )} with your permission.\n`
     );
-    const answer = await ask(confirmQuestion({ name: "continue", message: "Continue?" }));
-    if (!answer.continue) {
+    const cont = await confirmQuestionNow("Continue?");
+    if (!cont) {
       console.log();
       process.exit();
     }

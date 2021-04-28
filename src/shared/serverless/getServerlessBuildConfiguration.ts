@@ -1,12 +1,9 @@
 import { IDictionary, IServerlessAccountInfo } from "common-types";
 import { TypedMapper } from "typed-mapper";
-import {
-  askForAccountInfo,
-  getAccountInfoFromServerlessYaml,
-  getPackageJson,
-  getYeomanConfig,
-  getYeomanScaffolds,
-} from "../../shared";
+import { DevopsError } from "~/errors";
+import { askForAccountInfo, getAccountInfoFromServerlessYaml } from "~/shared/serverless";
+import { getPackageJson } from "../npm";
+import { getYeomanConfig, getYeomanScaffolds } from "../yeoman";
 
 function transformYeomanFormat(input: IDictionary) {
   return TypedMapper.map<IDictionary, IServerlessAccountInfo>({
@@ -31,12 +28,19 @@ function transformYeomanFormat(input: IDictionary) {
  */
 export async function getServerlessBuildConfiguration(): Promise<IServerlessAccountInfo> {
   const modern = getYeomanScaffolds().includes("generator-lambda-typescript");
+  const pkg = getPackageJson();
+  if (!pkg) {
+    throw new DevopsError(
+      `Attempt to build Serverless configuration failed as there is no package.json the current working directory!`,
+      "not-ready/missing-package-json"
+    );
+  }
   const knownAccountInfo: Partial<IServerlessAccountInfo> = {
     ...(modern
       ? transformYeomanFormat(getYeomanConfig())
       : await getAccountInfoFromServerlessYaml()),
-    devDependencies: Object.keys(getPackageJson().devDependencies || {}),
-    pluginsInstalled: Object.keys(getPackageJson().devDependencies || {}).filter((i) =>
+    devDependencies: Object.keys(pkg.devDependencies || {}),
+    pluginsInstalled: Object.keys(pkg.devDependencies || {}).filter((i) =>
       i.startsWith("serverless-")
     ),
   };

@@ -1,55 +1,56 @@
 #!/usr/bin/env node
-
 import chalk from "chalk";
+import commandLineArgs from "command-line-args";
 import * as process from "process";
 
-import {
-  getCommandInterface,
-  globalAndLocalOptions,
-  globalOptions,
-  inverted,
-} from "./shared";
-
-import { OptionDefinition } from "command-line-args";
-import { getCommands } from "./shared/commands/getCommands";
-import { help } from "./commands/help";
-
-import commandLineArgs = require("command-line-args");
-import { isKnownCommand } from "./shared/commands";
+import { getCommand, getAllCommands, isKnownCommand, parseCmdArgs } from "~/shared/core";
+import { help } from "./shared/core/help";
+import { inverted } from "./shared/ui";
+import { getObservations } from "./shared/observations/getObserverations";
 
 (async () => {
-  const command: OptionDefinition[] = [
-    { name: "command", defaultOption: true },
-    ...globalOptions,
-  ];
-  const mainCommand = commandLineArgs(command, { stopAtFirstUnknown: true });
-  const cmd = (mainCommand._all || {}).command;
-  let opts = mainCommand.global;
+  // pull off the command and stop there
+  const mainCommand = commandLineArgs([{ name: "command", defaultOption: true, type: String }], {
+    stopAtFirstUnknown: true,
+  });
+  const remaining = mainCommand._unknown || [];
 
-  console.log(
-    chalk.bold.white(`do ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`)
-  );
+  /** the primary command */
+  const cmd = mainCommand.command as string | undefined;
+  const observations = getObservations();
 
   if (!cmd) {
-    await help(opts);
+    help({}, observations);
   }
 
   if (isKnownCommand(cmd)) {
-    opts =
-      commandLineArgs(await globalAndLocalOptions({}, cmd), {
-        partial: true,
-      }) || {};
+    const subCommand = getCommand(cmd);
+    const cmdInput = { ...parseCmdArgs(subCommand, remaining), observations };
+    console.log(
+      chalk.bold(
+        `\ndo-devops ${chalk.green.italic.bold(
+          cmd ? cmd + `${cmdInput.subCommand ? ` ${cmdInput.subCommand}` : ""} ` : "Help"
+        )}\n`
+      )
+    );
 
-    const subModule = getCommandInterface(cmd);
-    const subModuleArgv = opts._unknown.filter((i: any) => i !== cmd);
-    const subModuleOpts = opts._all;
-
-    if (subModuleOpts.help) {
-      await help(subModuleOpts, cmd);
+    if (cmdInput.opts.help) {
+      help(cmdInput.opts, observations, cmd);
     }
 
     try {
-      await subModule.handler(subModuleArgv, subModuleOpts);
+      await subCommand.handler(cmdInput);
+      if (cmdInput.unknown && cmdInput.unknown.filter((i) => i).length > 0) {
+        const plural = cmdInput.unknown.length === 1 ? false : true;
+        const preposition = cmdInput.unknown.length === 1 ? "was" : "were";
+        console.log(
+          chalk`- Note: {italic there ${preposition} ${
+            cmdInput.unknown.length
+          } {italic unknown} parameter${
+            plural ? "s" : ""
+          } received (and ignored): {gray ${cmdInput.unknown.join(", ")}}}`
+        );
+      }
     } catch (error) {
       console.log(
         chalk`\n{red An Error has occurred while running: {italic {bold do-devops ${cmd}}}}`
@@ -64,12 +65,17 @@ import { isKnownCommand } from "./shared/commands";
       `${chalk.bold.red("Whoops! ")} ${chalk.italic.yellowBright(
         cmd
       )} is an unknown command! \n\n` +
-        `- Valid command syntax is: ${chalk.bold(
-          "dd [command] <options>"
+        `- Valid command syntax is: ${chalk.bold.inverse(
+          " dd [command] <options> "
         )}\n  where valid commands are: ${chalk.italic(
-          getCommands().sort().join(", ")
+          getAllCommands()
+            .map((i) => i.kind)
+            .sort()
+            .join(", ")
         )}\n\n` +
-        `- If you want more help use the ${inverted(" --help ")} option\n`
+        chalk`{dim - If you want more help with a specific command, use} ${inverted(
+          " dd [cmd] --help "
+        )}\n`
     );
   }
 })();

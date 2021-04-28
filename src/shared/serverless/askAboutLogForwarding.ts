@@ -6,6 +6,7 @@ import { getLambdaFunctions } from "./index";
 import { determineStage } from "~/shared/observations";
 import { getPackageJson, hasDevDependency, writePackageJson } from "../npm";
 import inquirer = require("inquirer");
+import { DevopsError } from "~/errors";
 /**
  * Checks whether the existing configuration has `logForwarding`
  * turned on in the **custom** section. If it _does_ then it just
@@ -98,6 +99,12 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
     }
   } else if (answers.action === Action.remove) {
     const pkg = getPackageJson();
+    if (!pkg) {
+      throw new DevopsError(
+        `No package.json file found while trying to query about log forwarding`,
+        "not-ready/missing-package-json"
+      );
+    }
     pkg.devDependencies = Object.keys(pkg.devDependencies || {}).reduce((agg, key) => {
       if (key !== "serverless-log-forwarding") {
         agg[key] = (pkg.devDependencies || {})[key];

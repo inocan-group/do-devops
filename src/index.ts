@@ -1,2 +1,2 @@
 export * from "./@types/index";
-export * from "./shared";
+export * from "./shared/exports";

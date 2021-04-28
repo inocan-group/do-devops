@@ -7,11 +7,11 @@ import { IPackageJson, IDictionary } from "common-types";
  */
 let packageJson: IPackageJson;
 
-export function getLocalPackageJson() {
+export function getPackageJsonfromCache() {
   return packageJson ? packageJson : false;
 }
 
-export function saveLocalPackageJson(pkgJson: IPackageJson) {
+export function cacheLocalPackageJson(pkgJson: IPackageJson) {
   packageJson = pkgJson;
 }
 
@@ -24,6 +24,6 @@ export function getRemotePackageJson(repo: string) {
   return remotePackageJsons[repo] ? remotePackageJsons[repo] : false;
 }
 
-export function saveRemotePackageJson(repo: string, pkgJson: IPackageJson) {
+export function cacheRemotePackageJson(repo: string, pkgJson: IPackageJson) {
   remotePackageJsons[repo] = pkgJson;
 }

@@ -5,21 +5,30 @@ import { fromBase64 } from "native-dash";
 import { SSM } from "aws-ssm";
 import { format } from "date-fns";
 import { table } from "table";
-import { ISsmOptions } from "../../public/ssm-types";
 import { determineProfile, determineRegion } from "~/shared/observations";
 import { DevopsError } from "~/errors";
-import { consoleDimensions } from "~/shared/consoleDimensions";
+import { consoleDimensions } from "~/shared/ui";
+import { ISsmOptions } from "../../parts";
+import { DoDevopsHandler } from "~/@types";
 
-export async function execute(argv: string[], options: ISsmOptions) {
-  const profile = await determineProfile({ cliOptions: options, interactive: true });
+export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown }) => {
+  const profile = await determineProfile({ ...opts, interactive: true });
+  if (!profile) {
+    console.log(
+      chalk`- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
+    );
+    console.log(
+      chalk`- alternatively use the {inverse --interactive } option to have the CLI interactively let you select`
+    );
+    process.exit();
+  }
+
   const profileInfo = await getAwsProfile(profile);
-  const region: string =
-    options.region ||
-    profileInfo.region ||
-    (await determineRegion({ cliOptions: options, interactive: true }));
-  const secrets: string[] = argv;
-  const nonStandardPath = options.nonStandardPath || false;
-  const { width } = await consoleDimensions();
+  const region =
+    opts.region || profileInfo.region || (await determineRegion({ ...opts, interactive: true }));
+  const secrets: string[] = unknown;
+  const nonStandardPath = opts.nonStandardPath || false;
+  const { width } = consoleDimensions();
 
   if (!region) {
     throw new DevopsError(
@@ -37,10 +46,8 @@ export async function execute(argv: string[], options: ISsmOptions) {
     );
   }
 
-  if (!options.quiet) {
-    console.log(
-      `- Getting SSM details for: ${chalk.italic.grey.bold(secrets.join(", "))}\n`
-    );
+  if (!opts.quiet) {
+    console.log(`- Getting SSM details for: ${chalk.italic.grey.bold(secrets.join(", "))}\n`);
   }
 
   const tableConfig = {
@@ -69,8 +76,8 @@ export async function execute(argv: string[], options: ISsmOptions) {
       String(data.version),
       format(data.lastUpdated, "dd MMM, yyyy"),
     ]);
-    const value = options.base64 ? fromBase64(String(data.value)) : String(data.value);
-    if (!options.quiet) {
+    const value = opts.base64 ? fromBase64(String(data.value)) : String(data.value);
+    if (!opts.quiet) {
       console.log(table(tableData, tableConfig as any));
       console.log(chalk.yellow.bold("VALUE:\n"));
       console.log(value);
@@ -79,4 +86,4 @@ export async function execute(argv: string[], options: ISsmOptions) {
       console.log(value);
     }
   }
-}
+};
