@@ -9,8 +9,12 @@ import { determineProfile, determineRegion } from "~/shared/observations";
 import { DoDevopsHandler } from "~/@types";
 import { ISsmOptions } from "../../parts";
 
-export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: argv }) => {
-  const profile = await determineProfile({ ...opts, interactive: true });
+export const execute: DoDevopsHandler<ISsmOptions> = async ({
+  opts,
+  observations,
+  unknown: argv,
+}) => {
+  const profile = await determineProfile({ ...opts, interactive: true }, observations);
   if (!profile) {
     console.log(
       chalk`- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`

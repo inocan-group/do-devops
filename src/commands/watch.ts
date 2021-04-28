@@ -31,7 +31,7 @@ const command: IDoDevopsCommand = {
     await proxyToPackageManager("watch", observations, raw);
     process.exit();
   },
-  description: "proxies your package manager's 'why' command",
+  description: "proxies your package manager's 'watch' command",
 };
 
 export default command;

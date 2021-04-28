@@ -1,4 +1,3 @@
-import { get } from "lodash";
 import { getServerlessYaml } from "~/shared/serverless";
 import { configIsReady, IIntegratedConfig, IProjectConfig, IUserConfig } from "~/@types";
 import { getIntegratedConfig, IGlobalOptions } from "~/shared/core";
@@ -37,13 +36,14 @@ export async function determineProfile(
   }
 
   if (observations.includes("serverlessYml")) {
-    try {
-      const serverlessYaml = await getServerlessYaml();
-      if (get(serverlessYaml, "provider.profile")) {
-        profile = serverlessYaml.provider.profile as string;
-        return profile;
-      }
-    } catch {}
+    console.log("has yaml");
+
+    const serverlessYaml = await getServerlessYaml();
+    if (serverlessYaml.provider.profile) {
+      return serverlessYaml.provider.profile;
+    }
+  } else {
+    console.log({ observations });
   }
 
   let doConfig: IIntegratedConfig | IProjectConfig | IUserConfig;

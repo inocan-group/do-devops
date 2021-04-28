@@ -78,6 +78,12 @@ export function getObservations() {
     if (hasDevDependency("serverless")) {
       observations.push("serverlessFramework");
     }
+    if (fileExists("./serverless.yml")) {
+      observations.push("serverlessYml");
+    }
+    if (fileExists("./serverless.ts")) {
+      observations.push("serverlessTs");
+    }
     if (hasDevDependency("webpack-plugin")) {
       observations.push("serverlessWebpackPlugin");
     }
