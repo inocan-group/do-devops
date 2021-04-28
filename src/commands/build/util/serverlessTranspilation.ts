@@ -2,15 +2,16 @@ import chalk from "chalk";
 import matcher from "matcher";
 import { IDictionary } from "common-types";
 
-import { askForFunctions, hasDevDependency } from "~/shared/index";
-import { getLocalServerlessFunctionsFromServerlessYaml } from "~/shared/serverless";
+import { hasDevDependency } from "~/shared/npm";
+import {
+  askForFunctions,
+  getLocalServerlessFunctionsFromServerlessYaml,
+} from "~/shared/serverless";
 import { getValidServerlessHandlers } from "~/shared/ast";
 import { DevopsError } from "~/errors";
 
 async function filterOutInvalidFunction(fns: string[]) {
-  const validFns = Object.keys(
-    (await getLocalServerlessFunctionsFromServerlessYaml()) || {}
-  );
+  const validFns = Object.keys((await getLocalServerlessFunctionsFromServerlessYaml()) || {});
   const results: {
     valid: string[];
     invalid: string[];

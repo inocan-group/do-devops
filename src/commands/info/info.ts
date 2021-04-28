@@ -3,16 +3,11 @@ import { IDictionary, INpmInfo } from "common-types";
 import { format, parseISO } from "date-fns";
 import { asyncExec } from "async-shelljs";
 import { table } from "table";
-import {
-  dim,
-  getCurrentGitBranch,
-  getGitLastCommit,
-  getPackageInfo,
-  getPackageJson,
-  green,
-} from "../../shared";
+import { getPackageInfo, getPackageJson } from "~/shared/npm";
 import { DoDevopsHandler } from "~/@types/command";
 import { IOptionDefinition } from "~/@types/option-types";
+import { getCurrentGitBranch, getGitLastCommit } from "~/shared/git";
+import { dim, green } from "~/shared/ui";
 
 export const description = "Summarized information about the current repo";
 export const options: IOptionDefinition = {
@@ -62,18 +57,13 @@ export const handler: DoDevopsHandler<{ test: string }> = async ({ opts }) => {
         ? chalk`This repo was first published on {green ${format(
             parseISO(npm.time.created),
             dateFormat
-          )}} and last modified on {green ${format(
-            parseISO(npm.time.modified),
-            dateFormat
-          )}}.\n\n`
+          )}} and last modified on {green ${format(parseISO(npm.time.modified), dateFormat)}}.\n\n`
         : "",
     ],
     [
       false,
       npm
-        ? chalk`The latest published version is ${chalk.bold.green(
-            npm.version
-          )} [ ${format(
+        ? chalk`The latest published version is ${chalk.bold.green(npm.version)} [ ${format(
             parseISO(npm.time[npm.version]),
             dateFormat
           )} ].\nLocally in package.json, version is ${chalk.bold.green(pkg.version)}.`
@@ -87,11 +77,7 @@ export const handler: DoDevopsHandler<{ test: string }> = async ({ opts }) => {
       npm && npm.author
         ? chalk`\n\nThe author of the repo is {green {bold ${
             typeof npm.author === "string" ? npm.author : npm.author.name
-          }${
-            typeof npm.author === "object" && npm.author.email
-              ? ` <${npm.author.email}>`
-              : ""
-          }}}`
+          }${typeof npm.author === "object" && npm.author.email ? ` <${npm.author.email}>` : ""}}}`
         : "",
     ],
   ];
@@ -99,9 +85,7 @@ export const handler: DoDevopsHandler<{ test: string }> = async ({ opts }) => {
     Object.keys(pkg?.dependencies || {}).length
   )} dependencies${
     npm
-      ? chalk`, with a total of ${green(
-          npm.dist.fileCount
-        )} files\nand a unpacked size of ${green(
+      ? chalk`, with a total of ${green(npm.dist.fileCount)} files\nand a unpacked size of ${green(
           npm.dist.unpackedSize / 1000,
           chalk` {italic kb}`
         )}.`
@@ -113,10 +97,7 @@ export const handler: DoDevopsHandler<{ test: string }> = async ({ opts }) => {
 
   console.log(`Info on package ${chalk.green.bold(pkg.name)}`);
   const data = [
-    [
-      "Desc ",
-      description ? pkg.description : chalk.bold.italic("no description provided!"),
-    ],
+    ["Desc ", description ? pkg.description : chalk.bold.italic("no description provided!")],
     [
       "NPM",
       npmInfo

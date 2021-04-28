@@ -7,16 +7,15 @@ import {
   createFunctionEnum,
   createInlineExports,
   createWebpackEntryDictionaries,
-  emoji,
-  filesExist,
   getLocalHandlerInfo,
   getServerlessBuildConfiguration,
-  getYeomanScaffolds,
   saveToServerlessYaml,
-  saveYamlFile,
-} from "../../../shared";
+} from "~/shared/serverless";
 
-import { IDoBuildConfig } from "../../../@types";
+import { IDoBuildConfig } from "~/@types";
+import { getYeomanScaffolds } from "~/shared/yeoman";
+import { filesExist, saveYamlFile } from "~/shared/file";
+import { emoji } from "~/shared/ui";
 
 const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 
@@ -58,9 +57,7 @@ export async function buildLambdaTypescriptProject(
 
   const handlerInfo = getLocalHandlerInfo();
   console.log(
-    chalk`{grey - handler functions [ {bold ${String(
-      handlerInfo.length
-    )}} ] have been identified}`
+    chalk`{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`
   );
 
   await createInlineExports(handlerInfo);
@@ -80,10 +77,7 @@ export async function buildLambdaTypescriptProject(
       chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
     );
   } else {
-    const exist = filesExist(
-      "webpack.js-entry-points.json",
-      "webpack.js-entry-points.json"
-    );
+    const exist = filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
     if (exist) {
       rm(...exist);
       console.log(
@@ -108,9 +102,7 @@ export async function buildLambdaTypescriptProject(
       },
     });
     rm(ACCOUNT_INFO_YAML);
-    console.log(
-      chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`
-    );
+    console.log(chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`);
   }
 
   console.log(

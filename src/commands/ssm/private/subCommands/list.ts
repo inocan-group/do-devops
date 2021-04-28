@@ -1,13 +1,13 @@
 import chalk from "chalk";
 import * as process from "process";
-
-import { SSM } from "aws-ssm";
 import { format } from "date-fns";
 import { table } from "table";
+import { SSM } from "aws-ssm";
+
 import { getAwsProfile } from "~/shared/aws";
 import { determineProfile, determineRegion } from "~/shared/observations";
-import { ISsmOptions } from "../../parts";
-import { IGlobalOptions } from "~/shared";
+import { ISsmOptions } from "~/commands/ssm/parts";
+import { IGlobalOptions } from "~/shared/core";
 
 export async function execute(argv: string[], options: ISsmOptions & IGlobalOptions) {
   const profile = await determineProfile({ ...options, interactive: true });
@@ -45,9 +45,7 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
       `- Listing SSM parameters in profile "${chalk.bold(profile)}", region "${chalk.bold(
         region
       )}"${
-        filterBy
-          ? `; results reduced to those with "${chalk.bold(filterBy)}" in the name.`
-          : ""
+        filterBy ? `; results reduced to those with "${chalk.bold(filterBy)}" in the name.` : ""
       }`
     );
     console.log();

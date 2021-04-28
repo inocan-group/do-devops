@@ -1,5 +1,7 @@
-import { IDictionary } from "common-types";
-import { IGlobalOptions } from "~/shared";
+/* eslint-disable no-use-before-define */
+
+import { IDictionary, isNonNullObject } from "common-types";
+import { IGlobalOptions } from "~/shared/core";
 import { ICommandDescription } from "./general";
 import { DoDevopObservation } from "./observations";
 import { IOptionDefinition } from "./option-types";
@@ -44,16 +46,49 @@ export interface ICommandInput<T extends object = {}> {
  * Every recognized **command** in `do-devops` must provide an
  * ansynchronous _handler_ function that matches this format.
  */
-export type DoDevopsHandler<T extends object = {}> = (
-  input: ICommandInput<T>
-) => Promise<any>;
+export type DoDevopsHandler<T extends object = {}> = (input: ICommandInput<T>) => Promise<any>;
 
 /**
- * Defines a function callback mechanism intended for defining a
- * command's meta information my dynamically to the environment
- * in which is being executed.
+ * This two property descriptor allows a command to have a succinct description displayed
+ * when looking at the the global help (which lists all commands) but then a longer, more
+ * complete description when looking at help for just that command.
  */
-export type DynamicCommandDefinition<T> = (observations: DoDevopObservation[]) => T;
+export type ICommandDescriptor = { short: string; complete: string };
+
+/**
+ * Type guard which tests whether the input is a `ICommandDescriptor` dictionary
+ */
+export function isCommandDescriptor(desc: unknown): desc is ICommandDescriptor {
+  return isNonNullObject(desc) &&
+    (desc as ICommandDescriptor).short &&
+    (desc as ICommandDescriptor).complete
+    ? true
+    : false;
+}
+
+/**
+ * A callback signature used for meta-properties of a **command** in `do-devops`.
+ *
+ * > _this allows "observations" to be passed into the command to help it adjust it's
+ * > output_
+ */
+export type DynamicCommandDefinition<T> = (
+  observations: DoDevopObservation[],
+  options?: IDictionary
+) => T;
+
+/**
+ * **isDynamicCommandDefinition**
+ *
+ * Tests whether one of the command's meta properties is defined by a
+ * `DynamicCommandDefinition` and needs to be _run_ before resolving to
+ * it's final value.
+ */
+export function isDynamicCommandDefinition<T extends unknown | DynamicCommandDefinition<unknown>>(
+  defn: T
+): defn is Extract<T, Function> {
+  return typeof defn === "function";
+}
 
 /**
  * **IDoDevopsCommand**
@@ -69,6 +104,7 @@ export interface IDoDevopsCommand {
    * The handler function which handles the command's execution
    */
   handler: DoDevopsHandler;
+  syntax?: string;
   /**
    * A description of the command.
    *
@@ -79,8 +115,11 @@ export interface IDoDevopsCommand {
    * In both cases, you can statically return the string or be passed an array
    * of _observations_ to adjust the text.
    */
-  description: string | DynamicCommandDefinition<string>;
-  commands?: ICommandDescription[];
+  description: string | ICommandDescriptor | DynamicCommandDefinition<string | ICommandDescriptor>;
+  /**
+   * The sub-commands which a given commands offers
+   */
+  subCommands?: ICommandDescription[] | DynamicCommandDefinition<ICommandDescription[]>;
   options?: IOptionDefinition;
   examples?: string[];
   /**
@@ -88,9 +127,16 @@ export interface IDoDevopsCommand {
    * list unless the user explicitly requests it with `dd --showHidden`
    */
   hiddenCommand?: boolean;
-
-  excludeOptions?: DynamicCommandDefinition<string> | string[];
 }
+
+export type Finalized<T extends IDoDevopsCommand> = Omit<
+  T,
+  "syntax" | "description" | "subCommand"
+> & {
+  syntax: string;
+  description: string;
+  subCommands: ICommandDescription[] | undefined;
+};
 
 /**
  * a type guard which detects a valid shape for the `do-devops` command definition

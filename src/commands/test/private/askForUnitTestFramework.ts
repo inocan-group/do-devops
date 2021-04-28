@@ -2,7 +2,7 @@ import chalk from "chalk";
 
 import { TestObservation } from "~/@types";
 import { TEST_FRAMEWORKS } from "~/constants";
-import { ask, confirmQuestion, listQuestion } from "~/shared";
+import { ask, confirmQuestion, listQuestion } from "~/shared/interactive";
 
 export interface ITestFrameworkAnswer {
   /** the test framework */
@@ -36,10 +36,7 @@ export async function askForUnitTestFramework(): Promise<ITestFrameworkAnswer | 
     "jest"
   );
 
-  const install = confirmQuestion(
-    "installed",
-    "Would you like us to install that for you now?"
-  );
+  const install = confirmQuestion("installed", "Would you like us to install that for you now?");
 
   const wallaby = confirmQuestion(
     "useWallaby",
@@ -61,12 +58,7 @@ export async function askForUnitTestFramework(): Promise<ITestFrameworkAnswer | 
     "**/*[-.]spec.ts"
   );
 
-  const { fw, installed, useWallaby } = await ask([
-    framework,
-    install,
-    wallaby,
-    testPatterns,
-  ]);
+  const { fw, installed, useWallaby } = await ask([framework, install, wallaby, testPatterns]);
 
   return {
     fw: fw !== "skip" ? fw : false,

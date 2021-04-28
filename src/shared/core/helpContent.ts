@@ -1,54 +1,27 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { ICommandDescription } from "~/@types";
-import { convertOptionsToArray, getCommands } from "../core";
-import { IOptionDefinition } from "~/@types/option-types";
+import { IOptionDefinition } from "~/@types";
+import { convertOptionsToArray } from "~/shared/core";
 
-/**
- * Formats commands so that:
- *
- * 1. alternating white/dim per line item
- * 2. multi-line descriptions are truncated to first line
- */
-function formatCommands(cmds: ICommandDescription[]) {
-  let dim = false;
+// /**
+//  * Formats commands so that:
+//  *
+//  * 1. alternating white/dim per line item
+//  * 2. multi-line descriptions are truncated to first line
+//  */
+// function formatCommands(cmds: ICommandDescription[]) {
+//   let dim = false;
 
-  return cmds.map((cmd) => {
-    cmd.name = dim ? `{dim ${cmd.name}}` : cmd.name;
-    const summary = Array.isArray(cmd.summary) ? cmd.summary.split("\n")[0] : cmd.summary;
-    console.log(summary, cmd.summary);
+//   return cmds.map((cmd) => {
+//     const summary = Array.isArray(cmd.summary) ? cmd.summary.split("\n")[0] : cmd.summary;
 
-    cmd.summary = dim ? `{dim ${summary}}` : summary;
-    dim = !dim;
+//     cmd.name = dim ? `{dim ${cmd.name}}` : cmd.name;
+//     cmd.summary = dim ? `{dim ${summary}}` : summary;
+//     dim = !dim;
 
-    return cmd;
-  });
-}
-
-export async function getHelpCommands(fn?: string) {
-  let meta: ICommandDescription[] = [];
-  const bold = false;
-  if (fn) {
-    const defn = await import(`../../commands/${fn}`);
-    meta = defn.commands ? defn.commands : [];
-  } else {
-    for (const cmd of getCommands()) {
-      const ref = await import(`../../commands/${cmd}`);
-      meta.push({
-        name: cmd,
-        summary: bold
-          ? chalk.bold(ref.description ? ref.description() : "")
-          : ref.description
-          ? typeof ref.description === "function"
-            ? await ref.description()
-            : ref.description
-          : "",
-      });
-    }
-  }
-
-  return formatCommands(meta);
-}
+//     return cmd;
+//   });
+// }
 
 /**
  * Gets the syntax for the help system for both "global help"
@@ -61,12 +34,10 @@ export async function getSyntax(fn?: string): Promise<string> {
     return "dd [command] <options>";
   }
 
-  const defn = await import(`../../commands/${fn}`);
+  const defn = await import(`~/commands/${fn}`);
   const hasSubCommands = defn.subCommands ? true : false;
 
-  return defn.syntax
-    ? defn.syntax
-    : `do ${fn} ${hasSubCommands ? "[command] " : ""}<options>`;
+  return defn.syntax ? defn.syntax : `do ${fn} ${hasSubCommands ? "[command] " : ""}<options>`;
 }
 
 /**
@@ -109,11 +80,7 @@ export async function getExamples(opts: IDictionary, fn?: string) {
     }
     // const examples = defnIsFunction ? defn.examples(opts) : defn.examples;
 
-    return hasExamples
-      ? defnIsFunction
-        ? await defn.description(opts)
-        : defn.description
-      : "";
+    return hasExamples ? (defnIsFunction ? await defn.description(opts) : defn.description) : "";
   }
 }
 

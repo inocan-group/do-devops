@@ -1,37 +1,25 @@
 import chalk from "chalk";
 import commandLineUsage from "command-line-usage";
 import { IDictionary } from "common-types";
-
-import { emoji, getDescription, getHelpCommands, getOptions, getSyntax } from "../ui";
-
-/**
- * Gets meta information about the specific funcctions syntax, commands, description, and options
- */
-async function getHelpMeta(opts: IDictionary, fn?: string) {
-  try {
-    const syntax = await getSyntax(fn);
-    const commands = await getHelpCommands(fn);
-    const options = await getOptions(opts, fn);
-    const description = await getDescription(opts, fn);
-
-    return { commands, options, syntax, description };
-  } catch (error) {
-    console.log(
-      `  - ${emoji.poop}  ${chalk.red.bold("Problem getting help meta:")} ${
-        error.message
-      }\n`
-    );
-    console.log(chalk.grey(error.stack));
-    process.exit();
-  }
-}
+import { DoDevopObservation, Finalized, IDoDevopsCommand, KnownCommand } from "~/@types";
+import { emoji } from "~/shared/ui";
+import { globalOptions, convertOptionsToArray } from "./index";
+import { formatCommandsSection, getCommandMeta, globalCommandDescriptions } from "./util";
 
 /**
  * Provide help on **do-devops**, either in a global sense or for a
  * particular function.
  */
-export async function help(opts: IDictionary, fn?: string) {
-  const { commands, description, syntax, options } = await getHelpMeta(opts, fn);
+export function help(opts: IDictionary, observations: DoDevopObservation[], cmd?: KnownCommand) {
+  const { subCommands, description, syntax, options } = cmd
+    ? getCommandMeta(cmd, observations, opts)
+    : ({
+        subCommands: globalCommandDescriptions(observations),
+        description:
+          "do-devops is a set of utility functions designed to make DevOps more fun in less time",
+        syntax: "dd [cmd] [options]",
+        options: globalOptions,
+      } as Finalized<IDoDevopsCommand>);
 
   const sections: commandLineUsage.Section[] = [
     {
@@ -44,26 +32,21 @@ export async function help(opts: IDictionary, fn?: string) {
     },
   ];
 
-  if (commands && commands.length > 0) {
-    sections.push({
-      header: fn ? `${fn.toUpperCase()} Sub-Commands` : "Commands",
-      content: commands,
-    });
+  if (subCommands) {
+    sections.push(formatCommandsSection(subCommands, cmd));
   }
 
-  if (fn) {
+  if (cmd) {
     sections.push({
       header: "Options",
-      optionList: options,
+      optionList: convertOptionsToArray(options || {}),
     });
   }
 
   try {
     console.log(commandLineUsage(sections));
   } catch (error) {
-    console.log(
-      `  - ${emoji.poop}  ${chalk.red("Problem displaying help:")} ${error.message}\n`
-    );
+    console.log(`  - ${emoji.poop}  ${chalk.red("Problem displaying help:")} ${error.message}\n`);
     console.log(chalk.grey(error.stack));
   }
   console.log();

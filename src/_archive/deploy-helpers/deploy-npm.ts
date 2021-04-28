@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { emoji } from "../../shared";
+import { emoji } from "~/shared/ui";
 
 /**
  * Manages the execution of a NPM deployment

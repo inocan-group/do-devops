@@ -1,14 +1,11 @@
 import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
 import { DoDevopObservation, PackageManagerObservation } from "~/@types/observations";
-import { saveToProjectConfig } from "..";
-import { listQuestionNow } from "../interactive";
-import { determinePackageManager } from "../observations";
+import { saveToProjectConfig } from "~/shared/core";
+import { listQuestionNow } from "~/shared/interactive";
+import { determinePackageManager } from "~/shared/observations";
 
-export async function proxyToPackageManager(
-  cmd: string,
-  observations: DoDevopObservation[]
-) {
+export async function proxyToPackageManager(cmd: string, observations: DoDevopObservation[]) {
   const pkgManager = await determinePackageManager(observations, true);
   if (pkgManager) {
     let pkgCmd: string;
@@ -40,9 +37,7 @@ export async function proxyToPackageManager(
       console.log(
         `- The "${cmd}" command will be used in Serverless projects but otherwise proxies the command to your package manager of choice. `
       );
-      console.log(
-        chalk`- we can not currently tell {italic which} package manager you're using.`
-      );
+      console.log(chalk`- we can not currently tell {italic which} package manager you're using.`);
       const answer:
         | PackageManagerObservation
         | "not now, thanks" = await listQuestionNow(

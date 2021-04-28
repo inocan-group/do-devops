@@ -1,6 +1,6 @@
 import path from "path";
 import * as process from "process";
-import { readFile } from "../index";
+import { readFile } from "~/shared/file";
 
 /**
  * Reads a file from the `test/data` directory

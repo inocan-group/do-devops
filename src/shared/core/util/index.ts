@@ -1,24 +1,15 @@
-// #autoindex:named
+// #autoindex
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 07:50 AM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 04:57 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// directories: ast, aws, core, file, git, interactive, npm, observations, serverless, sound, ui, yeoman.
+// files: formatCommandsSection, getCommandMeta, globalCommandDescriptions.
 
-// directory exports
-export * from "./ast/index";
-export * from "./aws/index";
-export * from "./core/index";
-export * from "./file/index";
-export * from "./git/index";
-export * from "./interactive/index";
-export * from "./npm/index";
-export * from "./observations/index";
-export * from "./serverless/index";
-export * from "./sound/index";
-export * from "./ui/index";
-export * from "./yeoman/index";
+// local file exports
+export * from "./formatCommandsSection";
+export * from "./getCommandMeta";
+export * from "./globalCommandDescriptions";
 
 // Note:
 // -----

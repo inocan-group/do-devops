@@ -1,13 +1,9 @@
 import { IDictionary, IServerlessAccountInfo } from "common-types";
 import { TypedMapper } from "typed-mapper";
 import { DevopsError } from "~/errors";
-import {
-  askForAccountInfo,
-  getAccountInfoFromServerlessYaml,
-  getPackageJson,
-  getYeomanConfig,
-  getYeomanScaffolds,
-} from "../../shared";
+import { askForAccountInfo, getAccountInfoFromServerlessYaml } from "~/shared/serverless";
+import { getPackageJson } from "../npm";
+import { getYeomanConfig, getYeomanScaffolds } from "../yeoman";
 
 function transformYeomanFormat(input: IDictionary) {
   return TypedMapper.map<IDictionary, IServerlessAccountInfo>({

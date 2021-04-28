@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { getCurrentGitBranch } from "../../../shared";
+import { getCurrentGitBranch } from "~/shared/git";
 import * as subCommands from "../private/subCommands/index";
 import { includedIn } from "../private/index";
 import { DoDevopsHandler } from "~/@types/command";

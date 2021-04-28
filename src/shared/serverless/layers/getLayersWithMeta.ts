@@ -1,6 +1,6 @@
 import { IAwsLayerMeta, IDictionary } from "common-types";
 
-import { getPackageJson } from "../..";
+import { getPackageJson } from "~/shared/npm";
 import path from "path";
 import { DevopsError } from "~/errors";
 
@@ -33,16 +33,13 @@ export function getLayersFromPackageJson(): IAwsLayerMeta[] {
       );
     }
     const keywords = foreignPkg.keywords;
-    return keywords
-      ? keywords.includes("aws-layer-meta") || keywords.includes("aws-layer")
-      : false;
+    return keywords ? keywords.includes("aws-layer-meta") || keywords.includes("aws-layer") : false;
   });
 
   return pkgJsonFiles
     .filter((i) => i)
     .reduce((agg, d) => {
-      const meta = require(path.join(process.cwd(), "node_modules", d))
-        .meta as IAwsLayerMeta;
+      const meta = require(path.join(process.cwd(), "node_modules", d)).meta as IAwsLayerMeta;
       const info: IAwsLayerMeta = meta
         ? { ...meta, name: meta.name }
         : { name: d, namespace: "unknown", versions: [] };

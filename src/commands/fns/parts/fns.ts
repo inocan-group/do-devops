@@ -7,15 +7,13 @@ import { consoleDimensions } from "~/shared/ui";
 import { buildLambdaTypescriptProject, getServerlessYaml } from "~/shared/serverless";
 import { DoDevopsHandler } from "~/@types/command";
 import { IFnsOptions } from "./options";
-import { determineRegion, getAwsLambdaFunctions, write } from "~/shared";
+import { getAwsLambdaFunctions } from "~/shared/aws";
 import type { FunctionConfiguration } from "aws-sdk/clients/lambda";
+import { determineRegion } from "~/shared/observations";
 import { functionsApiTable } from "./tables";
+import { write } from "~/shared/file";
 
-export const handler: DoDevopsHandler<IFnsOptions> = async ({
-  argv,
-  opts,
-  observations,
-}) => {
+export const handler: DoDevopsHandler<IFnsOptions> = async ({ argv, opts, observations }) => {
   const filterBy = argv.length > 0 ? (fn: string) => fn.includes(argv[0]) : () => true;
   const isServerlessProject = observations.includes("serverlessFramework");
   const region = opts.region ? opts.region : await determineRegion(opts);
@@ -72,7 +70,7 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
   }
 
   try {
-    const { width } = await consoleDimensions();
+    const { width } = consoleDimensions();
     const fns = (await getServerlessYaml()).functions;
 
     const tableData = [

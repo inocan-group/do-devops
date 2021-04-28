@@ -1,33 +1,24 @@
-//#autoindex
+// #autoindex:named, exclude: core
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 12:32 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 07:50 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: convertOptionsToArray, defaultConfigSections, getConfig, getConfigFilename, getConfigSections, getDefaultConfig, getProjectConfig, getUserConfig, help, helpContent, isKnownCommand, options, parseCmdArgs, proxyToPackageManager, saveToConfig, writeConfig.
-// directories: commands, util.
-
-// local file exports
-export * from "./convertOptionsToArray";
-export * from "./defaultConfigSections";
-export * from "./getConfig";
-export * from "./getConfigFilename";
-export * from "./getConfigSections";
-export * from "./getDefaultConfig";
-export * from "./getProjectConfig";
-export * from "./getUserConfig";
-export * from "./help";
-export * from "./helpContent";
-export * from "./isKnownCommand";
-export * from "./options";
-export * from "./parseCmdArgs";
-export * from "./proxyToPackageManager";
-export * from "./saveToConfig";
-export * from "./writeConfig";
+// directories: ast, aws, core, file, git, interactive, npm, observations, serverless, sound, ui, yeoman.
 
 // directory exports
-export * from "./commands/index";
-export * from "./util/index";
+export * from "./ast/index";
+export * from "./aws/index";
+export * from "./core/index";
+export * from "./file/index";
+export * from "./git/index";
+export * from "./interactive/index";
+export * from "./npm/index";
+export * from "./observations/index";
+export * from "./serverless/index";
+export * from "./sound/index";
+export * from "./ui/index";
+export * from "./yeoman/index";
 
 // Note:
 // -----

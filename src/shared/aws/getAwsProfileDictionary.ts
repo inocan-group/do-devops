@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/no-array-callback-reference */
 import { IAwsProfile } from "~/@types";
 import { IDictionary } from "common-types";
-import { hasAwsProfileCredentialsFile } from "../index";
+import { hasAwsProfileCredentialsFile } from "~/shared/aws";
 import { readFile } from "~/shared/file/readFile";
 
 /**

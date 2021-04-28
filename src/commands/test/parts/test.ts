@@ -3,7 +3,7 @@ import { askForUnitTestFramework } from "../private";
 import { DoDevopsHandler } from "~/@types/command";
 import { ITestOptions } from "./options";
 import { determineTestingFramework } from "~/shared/observations";
-import { hasScript } from "~/shared";
+import { hasScript } from "~/shared/npm";
 import { proxyToPackageManager } from "~/shared/core/proxyToPackageManager";
 
 export const handler: DoDevopsHandler<ITestOptions> = async ({ observations }) => {
