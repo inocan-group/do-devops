@@ -1,11 +1,12 @@
 import { IDoDevopsCommand } from "~/@types/command";
-import { handler, description, options } from "./parts";
+import { handler, description, options, subCommands } from "./parts";
 
 const command: IDoDevopsCommand = {
-  kind: "fns",
+  kind: "ssm",
   handler,
   description,
   options,
+  subCommands,
 };
 
 export default command;

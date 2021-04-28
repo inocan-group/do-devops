@@ -8,7 +8,7 @@ import { OptionDefinition } from "command-line-usage";
  * > The `args` group name is to peel off the argv parameters going to
  * > a local command.
  */
-export type IDoDevopsOptionGroup = "global" | "local" | "l2" | "args";
+export type IDoDevopsOptionGroup = "global" | "local" | "l2" | "subCommand";
 
 export type OptionDefinitionHash = Omit<OptionDefinition, "name" | "group"> & {
   group: IDoDevopsOptionGroup;

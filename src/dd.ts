@@ -13,6 +13,9 @@ import { getObservations } from "./shared/observations/getObserverations";
   const mainCommand = commandLineArgs([{ name: "command", defaultOption: true, type: String }], {
     stopAtFirstUnknown: true,
   });
+  const remaining = mainCommand._unknown || [];
+  console.log({ remaining, mainCommand });
+
   /** the primary command */
   const cmd = mainCommand.command as string | undefined;
 
@@ -25,8 +28,7 @@ import { getObservations } from "./shared/observations/getObserverations";
 
   if (isKnownCommand(cmd)) {
     const subCommand = getCommand(cmd);
-    const cmdInput = { ...parseCmdArgs(subCommand), observations };
-    console.log({ cmd, subCommand, cmdInput });
+    const cmdInput = { ...parseCmdArgs(subCommand, remaining), observations };
 
     if (cmdInput.opts.help) {
       help(cmdInput, observations, cmd);
@@ -60,10 +62,17 @@ import { getObservations } from "./shared/observations/getObserverations";
       `${chalk.bold.red("Whoops! ")} ${chalk.italic.yellowBright(
         cmd
       )} is an unknown command! \n\n` +
-        `- Valid command syntax is: ${chalk.bold(
-          "dd [command] <options>"
-        )}\n  where valid commands are: ${chalk.italic(getAllCommands().sort().join(", "))}\n\n` +
-        `- If you want more help use the ${inverted(" --help ")} option\n`
+        `- Valid command syntax is: ${chalk.bold.inverse(
+          " dd [command] <options> "
+        )}\n  where valid commands are: ${chalk.italic(
+          getAllCommands()
+            .map((i) => i.kind)
+            .sort()
+            .join(", ")
+        )}\n\n` +
+        chalk`{dim - If you want more help with a specific command, use} ${inverted(
+          " dd [cmd] --help "
+        )}\n`
     );
   }
 })();

@@ -6,11 +6,11 @@ import { SSM } from "aws-ssm";
 
 import { getAwsProfile } from "~/shared/aws";
 import { determineProfile, determineRegion } from "~/shared/observations";
-import { ISsmOptions } from "~/commands/ssm/parts";
-import { IGlobalOptions } from "~/shared/core";
+import { DoDevopsHandler } from "~/@types";
+import { ISsmOptions } from "../../parts";
 
-export async function execute(argv: string[], options: ISsmOptions & IGlobalOptions) {
-  const profile = await determineProfile({ ...options, interactive: true });
+export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: argv }) => {
+  const profile = await determineProfile({ ...opts, interactive: true });
   if (!profile) {
     console.log(
       chalk`- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
@@ -23,9 +23,7 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
 
   const profileInfo = await getAwsProfile(profile);
   const region =
-    options.region ||
-    profileInfo.region ||
-    (await determineRegion({ ...options, interactive: true }));
+    opts.region || profileInfo.region || (await determineRegion({ ...opts, interactive: true }));
   const filterBy = argv.length > 0 ? argv[0] : undefined;
 
   if (!profile || !region) {
@@ -40,7 +38,7 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
     process.exit();
   }
 
-  if (!options.quiet) {
+  if (!opts.quiet) {
     console.log(
       `- Listing SSM parameters in profile "${chalk.bold(profile)}", region "${chalk.bold(
         region
@@ -87,4 +85,4 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
     },
   };
   console.log(table(tableData, tableConfig as any));
-}
+};

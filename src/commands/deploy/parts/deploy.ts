@@ -67,7 +67,7 @@ export interface IDeployOptions {
  * Over time we may add other targets for deployment.
  */
 export const handler: DoDevopsHandler<IDeployOptions> = async ({
-  argv,
+  unknown: argv,
   opts,
   observations,
 }) => {

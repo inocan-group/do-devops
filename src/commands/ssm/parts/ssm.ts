@@ -1,25 +1,27 @@
 import chalk from "chalk";
-import { IDictionary } from "common-types";
 import { buildLambdaTypescriptProject } from "~/shared/serverless";
 import { subCommands } from "~/commands/ssm/private";
 import { DoDevopsHandler } from "~/@types/command";
 import { ISsmOptions } from "./options";
 
-export interface ISubCommandHash {
-  [cmd: string]: { execute: (argv: string[], opts: IDictionary) => Promise<void> };
-}
-
 export const handler: DoDevopsHandler<ISsmOptions> = async ({
-  argv,
+  subCommand,
   opts,
-  unknown,
   observations,
+  unknown,
 }) => {
-  console.log({ argv, opts, unknown });
+  const validSubCommands = ["list", "get", "set"];
 
-  const subCommand = argv.shift() || "";
+  if (!subCommand) {
+    console.log(
+      `- the SSM command requires you pick a valid {italic sub-command}; choose from: ${validSubCommands.join(
+        ", "
+      )}`
+    );
+    process.exit();
+  }
 
-  if (!Object.keys(subCommands).includes(subCommand)) {
+  if (!validSubCommands.includes(subCommand)) {
     console.log(
       `- please choose a ${chalk.italic("valid")} ${chalk.bold.yellow(
         "SSM"
@@ -36,7 +38,11 @@ export const handler: DoDevopsHandler<ISsmOptions> = async ({
   }
 
   try {
-    await subCommands[subCommand as keyof typeof subCommands].execute(argv, opts as any);
+    await subCommands[subCommand as keyof typeof subCommands].execute({
+      opts,
+      observations,
+      unknown,
+    });
   } catch (error) {
     console.log(
       chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${error.message}\n`

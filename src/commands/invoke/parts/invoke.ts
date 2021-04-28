@@ -2,17 +2,14 @@
 import chalk from "chalk";
 import { emoji } from "~/shared/ui";
 import { asyncExec } from "async-shelljs";
-import {
-  getLocalServerlessFunctionsFromServerlessYaml,
-  askForFunction,
-} from "~/shared/serverless";
+import { getLocalServerlessFunctionsFromServerlessYaml, askForFunction } from "~/shared/serverless";
 import { isServerless } from "~/shared/observations";
 import { getDataFiles, readDataFile } from "~/shared/file";
 import { askForDataFile } from "~/shared/interactive";
 import { DoDevopsHandler } from "~/@types/command";
 import { IInvokeOptions } from "./invoke-meta";
 
-export const handler: DoDevopsHandler<IInvokeOptions> = async ({ argv, opts }) => {
+export const handler: DoDevopsHandler<IInvokeOptions> = async ({ opts, unknown: argv }) => {
   try {
     const sls = await isServerless();
     if (!sls) {
@@ -23,12 +20,8 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({ argv, opts }) =
       process.exit();
     }
     if (argv.length > 1) {
-      console.log(
-        chalk`{dim - you have stated more than one function to {italic invoke}.}`
-      );
-      console.log(
-        chalk`{dim - this command only executes one at a time; the rest are ignored.}`
-      );
+      console.log(chalk`{dim - you have stated more than one function to {italic invoke}.}`);
+      console.log(chalk`{dim - this command only executes one at a time; the rest are ignored.}`);
     }
     let fn: string;
     if (argv.length === 0) {

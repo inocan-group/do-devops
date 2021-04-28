@@ -2,7 +2,7 @@ import { IDoDevopsCommand } from "~/@types/command";
 import { handler, description, options } from "./parts";
 
 const command: IDoDevopsCommand = {
-  kind: "fns",
+  kind: "endpoints",
   handler,
   description,
   options,

@@ -2,14 +2,14 @@ import { getAwsProfile, getAwsIdentityFromProfile } from "~/shared/aws";
 import chalk from "chalk";
 import { SSM } from "aws-ssm";
 import { completeSsmName } from "../index";
-import { ISsmOptions } from "../../parts";
 import { toBase64 } from "native-dash";
 import { determineProfile, determineRegion } from "~/shared/observations";
 import { askForStage } from "~/shared/serverless";
 import { emoji } from "~/shared/ui";
-import { IGlobalOptions } from "~/shared/core";
+import { DoDevopsHandler } from "~/@types";
+import { ISsmOptions } from "../../parts";
 
-export async function execute(argv: string[], options: ISsmOptions & IGlobalOptions) {
+export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: argv }) => {
   if (argv.length < 2) {
     console.log(
       chalk`The "dd ssm set" command expects the variable name and value as parameters on the command line: {blue {bold do ssm set} <{italic name}> <{italic value}>}\n`
@@ -22,7 +22,7 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
   }
 
   let [name, value] = argv;
-  const profile = await determineProfile({ ...options, interactive: true });
+  const profile = await determineProfile({ ...opts, interactive: true });
   if (!profile) {
     console.log(
       chalk`- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
@@ -34,9 +34,9 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
   }
   const profileInfo = await getAwsProfile(profile);
   const identity = await getAwsIdentityFromProfile(profileInfo);
-  const region = options.region || profileInfo.region || (await determineRegion(options));
+  const region = opts.region || profileInfo.region || (await determineRegion(opts));
   const stage =
-    options.stage ||
+    opts.stage ||
     process.env.AWS_STAGE ||
     process.env.NODE_ENV ||
     (await askForStage(
@@ -45,15 +45,15 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
 
   const ssm = new SSM({ profile, region });
   name = await completeSsmName(name, { stage });
-  if (options.base64) {
+  if (opts.base64) {
     value = toBase64(value);
   }
   process.env.AWS_STAGE = stage;
 
   try {
     await ssm.put(name, value, {
-      description: options.description,
-      override: options.force,
+      description: opts.description,
+      override: opts.force,
     });
     console.log(
       chalk`\n- ${emoji.party} the {bold {yellow ${name}}} variable was set successfully to the {italic ${region}} region {dim [ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]}\n`
@@ -71,4 +71,4 @@ export async function execute(argv: string[], options: ISsmOptions & IGlobalOpti
     console.log();
     process.exit(1);
   }
-}
+};

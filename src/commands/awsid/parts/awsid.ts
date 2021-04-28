@@ -5,7 +5,7 @@ import { getAwsIdentityFromProfile, getAwsProfileDictionary } from "~/shared/aws
 import { emoji } from "~/shared/ui";
 import { askUser } from "../private";
 
-export const handler: DoDevopsHandler<{ all: boolean }> = async ({ argv, opts }) => {
+export const handler: DoDevopsHandler<{ all: boolean }> = async ({ unknown: argv, opts }) => {
   const profiles = await getAwsProfileDictionary();
   const profileNames = Object.keys(profiles);
   let chosen: string[] = [];
@@ -28,9 +28,7 @@ export const handler: DoDevopsHandler<{ all: boolean }> = async ({ argv, opts })
       console.log(chalk`- valid profile names are: {blue ${profileNames.join(", ")}`);
     }
     if (chosen.length !== argv.length) {
-      console.log(
-        chalk`- some profiles provided were not valid; valid ones are listed below`
-      );
+      console.log(chalk`- some profiles provided were not valid; valid ones are listed below`);
     }
   }
 

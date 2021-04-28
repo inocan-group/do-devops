@@ -2,12 +2,6 @@ import chalk from "chalk";
 import { IOptionDefinition } from "~/@types/option-types";
 
 export const options: IOptionDefinition = {
-  subCommand: {
-    type: String,
-    defaultValue: true,
-    group: "local",
-    description: "The SSM command -- list, get, set -- which you want to execute",
-  },
   profile: {
     type: String,
     typeLabel: "<profileName>",
@@ -29,8 +23,7 @@ export const options: IOptionDefinition = {
   nonStandardPath: {
     type: Boolean,
     group: "local",
-    description:
-      "allows the naming convention for SSM paths to be ignored for a given operation",
+    description: "allows the naming convention for SSM paths to be ignored for a given operation",
   },
   description: {
     type: String,

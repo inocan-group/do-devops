@@ -13,7 +13,11 @@ import { determineRegion } from "~/shared/observations";
 import { functionsApiTable } from "./tables";
 import { write } from "~/shared/file";
 
-export const handler: DoDevopsHandler<IFnsOptions> = async ({ argv, opts, observations }) => {
+export const handler: DoDevopsHandler<IFnsOptions> = async ({
+  unknown: argv,
+  opts,
+  observations,
+}) => {
   const filterBy = argv.length > 0 ? (fn: string) => fn.includes(argv[0]) : () => true;
   const isServerlessProject = observations.includes("serverlessFramework");
   const region = opts.region ? opts.region : await determineRegion(opts);

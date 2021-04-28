@@ -11,4 +11,3 @@ export { default as layers } from "./layers/index";
 export { default as pkg } from "./pkg/index";
 export { default as ssm } from "./ssm/index";
 export { default as test } from "./test/index";
-export { default as validate } from "./validate/index";

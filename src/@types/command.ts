@@ -15,11 +15,13 @@ export type KnownCommand<E extends string = never> =
   | "bitbucket"
   | "build"
   | "deploy"
+  | "endpoints"
   | "fns"
   | "info"
   | "invoke"
   | "latest"
   | "layers"
+  | "pkg"
   | "ssm"
   | "test"
   | "validate"
@@ -34,10 +36,10 @@ export type KnownCommand<E extends string = never> =
  * inputs to its task.
  */
 export interface ICommandInput<T extends object = {}> {
-  argv: string[];
+  subCommand?: string;
   opts: Partial<T> & IGlobalOptions;
   observations: DoDevopObservation[];
-  unknown?: string[];
+  unknown: string[];
 }
 
 /**

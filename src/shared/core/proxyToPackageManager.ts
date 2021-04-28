@@ -18,7 +18,7 @@ export async function proxyToPackageManager(cmd: string, observations: DoDevopOb
         pkgCmd = `${pkgManager} ${cmd}`;
         break;
       default:
-        pkgCmd = `${pkgManager === "yarn" ? "yarn" : `${pkgManager} run`}`;
+        pkgCmd = `${pkgManager === "yarn" ? `yarn ${cmd}` : `${pkgManager} run ${cmd}`}`;
     }
 
     console.log(
