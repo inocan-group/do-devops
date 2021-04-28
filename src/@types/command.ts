@@ -29,6 +29,8 @@ export type KnownCommand<E extends string = never> =
   | "update"
   | "upgrade"
   | "outdated"
+  | "watch"
+  | "why"
   | E;
 
 /**
@@ -36,8 +38,30 @@ export type KnownCommand<E extends string = never> =
  * inputs to its task.
  */
 export interface ICommandInput<T extends object = {}> {
+  /**
+   * If the command declares _sub-commands_ then the first element from the CLI
+   * will be pulled off and added as the `subCommand` (note: the user may have put
+   * nothing in here and command's are responsible for addressing that possibility)
+   */
   subCommand?: string;
+  /**
+   * By default just an empty array but if the commands declares itself "greedy"
+   * it will be filled with all initial string based arguments to the CLI
+   */
+  argv: string[];
+  /**
+   * Provides the unparsed array of tokens that the CLI received (minus the "command")
+   */
+  raw: string[];
+  /**
+   * All command line options defined locally by the command and/or globally defined
+   * options.
+   */
   opts: Partial<T> & IGlobalOptions;
+  /**
+   * An array of observations about the environment that the user is running the
+   * command in.
+   */
   observations: DoDevopObservation[];
   unknown: string[];
 }
@@ -122,6 +146,16 @@ export interface IDoDevopsCommand {
    * The sub-commands which a given commands offers
    */
   subCommands?: ICommandDescription[] | DynamicCommandDefinition<ICommandDescription[]>;
+  /**
+   * If a command states that it's _greedy_ then an `argv` string array will be passed into
+   * the handler (by default it is passed an empty array).
+   *
+   * > Note: there is an important interaction between subCommands and this option as they both
+   * are wanting to pull params as the `defaultOption`. All you need to know, however, is that
+   * if you turn on greedy _and_ you have sub-commands then the `subCommand` will be pulled off
+   * first and the remaining will be sent to `argv`
+   */
+  greedy?: boolean;
   options?: IOptionDefinition;
   examples?: string[];
   /**

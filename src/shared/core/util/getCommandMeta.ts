@@ -45,7 +45,7 @@ export function getCommandMeta(
     syntax: c.syntax || `dd ${cmd} [options]`,
     description,
     subCommands,
-    options: globalOptions,
+    options: { ...c.options, ...globalOptions },
     hiddenCommand: false,
   };
 }

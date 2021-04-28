@@ -1,3 +1,4 @@
+import { IPackageJson } from "common-types";
 import { DoDevopObservation } from "~/@types/observations";
 import { fileExists } from "../file";
 import {
@@ -15,7 +16,10 @@ import { determineLinter } from "./index";
  */
 export function getObservations() {
   let observations: DoDevopObservation[] = [];
-  const pkgJson = getPackageJson();
+  let pkgJson: IPackageJson | undefined;
+  try {
+    pkgJson = getPackageJson();
+  } catch {}
 
   if (pkgJson) {
     observations.push("packageJson");

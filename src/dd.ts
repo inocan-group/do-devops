@@ -14,12 +14,9 @@ import { getObservations } from "./shared/observations/getObserverations";
     stopAtFirstUnknown: true,
   });
   const remaining = mainCommand._unknown || [];
-  console.log({ remaining, mainCommand });
 
   /** the primary command */
   const cmd = mainCommand.command as string | undefined;
-
-  console.log(chalk.bold(`\ndo-devops ${chalk.green.italic.bold(cmd ? cmd + " " : "Help")}\n`));
   const observations = getObservations();
 
   if (!cmd) {
@@ -29,24 +26,30 @@ import { getObservations } from "./shared/observations/getObserverations";
   if (isKnownCommand(cmd)) {
     const subCommand = getCommand(cmd);
     const cmdInput = { ...parseCmdArgs(subCommand, remaining), observations };
+    console.log(
+      chalk.bold(
+        `\ndo-devops ${chalk.green.italic.bold(
+          cmd ? cmd + `${cmdInput.subCommand ? ` ${cmdInput.subCommand}` : ""} ` : "Help"
+        )}\n`
+      )
+    );
 
     if (cmdInput.opts.help) {
-      help(cmdInput, observations, cmd);
+      help(cmdInput.opts, observations, cmd);
     }
 
     try {
       await subCommand.handler(cmdInput);
-      if (cmdInput.unknown) {
-        if (cmdInput.unknown.length > 1) {
-          console.log(
-            chalk`- Note: there were ${cmdInput.unknown.length} parameters received which were {italic unknown} and therefore ignored.`
-          );
-          console.log(chalk`{gray - these parameters were: ${cmdInput.unknown.join(", ")}}`);
-        } else {
-          console.log(
-            chalk`- Note: the argument {inverse ${cmdInput.unknown[0]}} was unknown and therefore ignored.`
-          );
-        }
+      if (cmdInput.unknown && cmdInput.unknown.filter((i) => i).length > 0) {
+        const plural = cmdInput.unknown.length === 1 ? false : true;
+        const preposition = cmdInput.unknown.length === 1 ? "was" : "were";
+        console.log(
+          chalk`- Note: {italic there ${preposition} ${
+            cmdInput.unknown.length
+          } {italic unknown} parameter${
+            plural ? "s" : ""
+          } received (and ignored): {gray ${cmdInput.unknown.join(", ")}}}`
+        );
       }
     } catch (error) {
       console.log(

@@ -10,7 +10,7 @@ export const defaultConfig = {
   buildTool: "tsc",
 };
 
-export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations }) => {
+export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, raw }) => {
   const serverless = observations.includes("serverlessFramework");
 
   if (serverless) {
@@ -18,7 +18,7 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations }) 
 
     // await buildLambdaTypescriptProject(opts, config);
   } else {
-    await proxyToPackageManager("build", observations);
+    await proxyToPackageManager("build", observations, raw);
   }
 
   process.exit();

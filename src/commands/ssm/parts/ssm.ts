@@ -4,19 +4,15 @@ import { subCommands } from "~/commands/ssm/private";
 import { DoDevopsHandler } from "~/@types/command";
 import { ISsmOptions } from "./options";
 
-export const handler: DoDevopsHandler<ISsmOptions> = async ({
-  subCommand,
-  opts,
-  observations,
-  unknown,
-}) => {
+export const handler: DoDevopsHandler<ISsmOptions> = async (input) => {
+  const { subCommand, observations } = input;
   const validSubCommands = ["list", "get", "set"];
 
   if (!subCommand) {
     console.log(
-      `- the SSM command requires you pick a valid {italic sub-command}; choose from: ${validSubCommands.join(
+      chalk`- the SSM command requires you pick a valid sub-command; choose from: {italic ${validSubCommands.join(
         ", "
-      )}`
+      )}}`
     );
     process.exit();
   }
@@ -38,11 +34,7 @@ export const handler: DoDevopsHandler<ISsmOptions> = async ({
   }
 
   try {
-    await subCommands[subCommand as keyof typeof subCommands].execute({
-      opts,
-      observations,
-      unknown,
-    });
+    await subCommands[subCommand as keyof typeof subCommands].execute(input);
   } catch (error) {
     console.log(
       chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${error.message}\n`

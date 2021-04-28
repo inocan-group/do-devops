@@ -6,6 +6,7 @@ const command: IDoDevopsCommand = {
   handler,
   description,
   options,
+  greedy: true,
 };
 
 export default command;

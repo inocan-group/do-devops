@@ -6,7 +6,7 @@ import { determineTestingFramework } from "~/shared/observations";
 import { hasScript } from "~/shared/npm";
 import { proxyToPackageManager } from "~/shared/core/proxyToPackageManager";
 
-export const handler: DoDevopsHandler<ITestOptions> = async ({ observations }) => {
+export const handler: DoDevopsHandler<ITestOptions> = async ({ raw, observations }) => {
   const config = getProjectConfig();
   let unitTestFramework = determineTestingFramework(observations, config);
 
@@ -21,6 +21,6 @@ export const handler: DoDevopsHandler<ITestOptions> = async ({ observations }) =
   }
 
   if (hasScript("test")) {
-    proxyToPackageManager("test", observations);
+    proxyToPackageManager("test", observations, raw);
   }
 };

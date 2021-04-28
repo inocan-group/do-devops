@@ -8,8 +8,18 @@ import { getDataFiles, readDataFile } from "~/shared/file";
 import { askForDataFile } from "~/shared/interactive";
 import { DoDevopsHandler } from "~/@types/command";
 import { IInvokeOptions } from "./invoke-meta";
+import { proxyToPackageManager } from "~/shared/core";
 
-export const handler: DoDevopsHandler<IInvokeOptions> = async ({ opts, unknown: argv }) => {
+export const handler: DoDevopsHandler<IInvokeOptions> = async ({
+  observations,
+  opts,
+  unknown: argv,
+  raw,
+}) => {
+  if (!observations.includes("serverlessFramework")) {
+    await proxyToPackageManager("invoke", observations, raw);
+    process.exit();
+  }
   try {
     const sls = await isServerless();
     if (!sls) {
