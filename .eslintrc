@@ -1,9 +1,5 @@
 {
-  "extends": [
-    "plugin:import/warnings",
-    "plugin:import/typescript",
-    "plugin:unicorn/recommended"
-  ],
+  "extends": ["plugin:import/warnings", "plugin:import/typescript", "plugin:unicorn/recommended"],
   "plugins": ["@typescript-eslint", "import", "promise", "unicorn"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -33,6 +29,7 @@
     "unicorn/no-array-callback-reference": "off",
     // only because this is a CLI
     "unicorn/no-process-exit": "off",
+    "unicorn/prefer-node-protocol": "off",
 
     // we need exceptions to be only "warn" because
     // there are valid use cases for generic variables being
