@@ -8,11 +8,9 @@ import {
   isServerlessFunctionHandler,
 } from "common-types";
 import { IWebpackHandlerDates } from "~/@types";
-import { relativePath } from "~/shared/file";
+import { toRelativePath } from "~/shared/file";
 import { emoji } from "~/shared/ui";
 import { findHandlerConfig } from "~/shared/ast";
-import { hasDevDependency } from "~/shared/npm";
-import { getConfig } from "../../do-config";
 
 export interface IInlineExportConfig {
   interface: string;
@@ -65,21 +63,21 @@ function warnAboutMissingTyping(config: IInlineExportConfig[]) {
  * an `package: { artifact: fn.zip }`
  */
 export async function createInlineExports(handlers: IWebpackHandlerDates[]) {
-  const bespokeWebpack =
-    (await getConfig()).build.buildTool === "webpack" &&
-    !hasDevDependency("serverless-webpack");
+  // const bespokeWebpack =
+  //   (await getConfig()).build.buildTool === "webpack" &&
+  //   !hasDevDependency("serverless-webpack");
 
   const header = 'import { IServerlessFunction } from "common-types";\n';
   const body: string[] = [];
   const config: IInlineExportConfig[] = [];
   for (const handler of handlers) {
     // const comments = findHandlerComments(handler);
-    const handlerConfig = findHandlerConfig(handler.source, bespokeWebpack);
+    const handlerConfig = findHandlerConfig(handler.source, /** bespokeWebpack*/ false);
     if (handlerConfig && handlerConfig.interface) {
       config.push(handlerConfig as IInlineExportConfig);
     } else {
       console.log(
-        chalk`- ${emoji.poop} the {red ${relativePath(
+        chalk`- ${emoji.poop} the {red ${toRelativePath(
           handler.source
         )}} file will be ignored as a handler as it has no CONFIG section defined. This is probably a mistake!`
       );

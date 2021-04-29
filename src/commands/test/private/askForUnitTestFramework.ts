@@ -1,72 +1,68 @@
-import inquirer = require("inquirer");
+import chalk from "chalk";
 
-import { IDictionary } from "common-types";
-import { getPackageJson } from "~/shared/npm";
+import { TestObservation } from "~/@types";
+import { TEST_FRAMEWORKS } from "~/constants";
+import { ask, confirmQuestion, listQuestion } from "~/shared/interactive";
+
+export interface ITestFrameworkAnswer {
+  /** the test framework */
+  fw: TestObservation;
+  installed: boolean;
+  /** using wallaby or not */
+  useWallaby: false;
+}
 
 /**
- * Asks the user to choose an AWS profile
+ * A user ends up here if:
+ *
+ * - they've run `dd build` but never run the command before in the repo
+ * - they do they have _hints_ in terms of dev dependencies about what tool is being used
+ * - basically we can assume that the user has a pretty clean slate wrt to testing
+ * but that they _do_ have a package.json file.
  */
-export async function askForUnitTestFramework(): Promise<IDictionary<string>> {
-  const devDeps = Object.keys(getPackageJson().devDependencies || {});
-  const testFrameworks = ["mocha", "jest", "other"];
+export async function askForUnitTestFramework(): Promise<ITestFrameworkAnswer | false> {
+  // const pkg = getPackageJson();
+  // const devDeps = Object.keys(pkg.devDependencies || {});
+  const fwChoices: Array<TestObservation | "quit"> = [...TEST_FRAMEWORKS, "quit"];
 
-  const defaultFramework = devDeps.includes("mocha")
-    ? "mocha"
-    : devDeps.includes("jest")
-    ? "jest"
-    : "other";
+  console.log(
+    chalk`- we have not been able to determine which {italic unit testing} framework you're using.`
+  );
 
-  const framework: inquirer.ListQuestion = {
-    name: "unitTestFramework",
-    type: "list",
-    choices: testFrameworks,
-    message: "choose the unit testing framework you are using",
-    default: defaultFramework,
-    when: () => true,
-  };
+  const framework = listQuestion(
+    "fw",
+    "Choose the framework you'd like to use (or 'quit')",
+    fwChoices,
+    "jest"
+  );
 
-  const testLocations = ["test", "tests", "other"];
+  const install = confirmQuestion("installed", "Would you like us to install that for you now?");
 
-  const testLocation: inquirer.ListQuestion = {
-    name: "testDirectory",
-    type: "list",
-    choices: testLocations,
-    message: "choose the unit testing framework you are using",
-    default: "test",
-    when: () => true,
-  };
+  const wallaby = confirmQuestion(
+    "useWallaby",
+    "Would you like us to add a WallabyJS config file so you can use it as a test runner in this repo?"
+  );
 
-  const testPatterns = [
-    "**/*-spec.ts",
-    "**/*.spec.ts",
-    "**/*-test.ts",
-    "**/*.test.ts",
-    "**/*-spec.js",
-    "**/*.spec.js",
-    "**/*-test.js",
-    "**/*.test.js",
+  const patterns = [
+    "**/*[-.]spec.ts",
+    "**/*[-.]test.ts",
+    "**/*[-.](test|spec).ts",
+    "test/**/*.ts",
+    "tests/**/*.ts",
   ];
 
-  const testPattern: inquirer.ListQuestion = {
-    name: "testPattern",
-    type: "list",
-    choices: testPatterns,
-    message: "what pattern should identify a test file versus just a normal file",
-    default: "**/*-spec.ts",
-    when: () => true,
+  const testPatterns = listQuestion(
+    "testPattern",
+    "Unit test runners use a regular expression to identify what files are tests; which one do you prefer?",
+    ["SKIP FOR NOW", ...patterns],
+    "**/*[-.]spec.ts"
+  );
+
+  const { fw, installed, useWallaby } = await ask([framework, install, wallaby, testPatterns]);
+
+  return {
+    fw: fw !== "skip" ? fw : false,
+    installed,
+    useWallaby,
   };
-
-  let answer = await inquirer.prompt([framework, testLocation, testPattern]);
-
-  if (answer.testLocation === "other") {
-    const freeformLocation: inquirer.InputQuestion = {
-      name: "testDirectory",
-      type: "input",
-      message: "What is the path to your tests?",
-    };
-
-    answer = { ...answer, ...(await inquirer.prompt(freeformLocation)) };
-  }
-
-  return answer;
 }

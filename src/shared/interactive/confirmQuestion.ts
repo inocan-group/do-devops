@@ -1,27 +1,23 @@
 import { ConfirmQuestion } from "inquirer";
-import { Omit } from "common-types";
-
-export interface IConfirmQuestion {
-  (q: Omit<ConfirmQuestion, "type">): ConfirmQuestion;
-}
 
 /**
- * A helpful low-level primative that returns a valid "confirm" based question
- * that may then be asked using the **Inquirer** npm package.
+ * Builds a composable boolean/confirm based question. For example:
  *
- * This primitive can be combined with the generic `ask` function like so:
- *
- * ```typescript
- * const answer = ask(confirmQuestion({name: 'continue', message: 'should we continue?' }));
- * if(answer.continue) { ... }
+ * ```ts
+ * const questions = {
+ *    ...confirmQuestion('continue', 'are you sure?');
+ * }
  * ```
  *
- * @param q the question parameters for a confirm question. Typically you'll want to set
- * at least the `name` and maybe the `message`.
+ * **Note:** use this function when you're composing several questions
+ * together and are intending to just define the question with the _ask_
+ * coming later. If you want to just immediately ask the question then
+ * use the `confirmQuestionNow()` instead.
  */
-export const confirmQuestion: IConfirmQuestion = (q) => {
+export const confirmQuestion = (name: string, question: string): ConfirmQuestion => {
   return {
-    ...q,
     type: "confirm",
+    name,
+    message: question,
   };
 };

@@ -2,6 +2,7 @@ import { Lambda } from "aws-sdk";
 import { AwsRegion } from "common-types";
 import { getAwsProfile, convertProfileToApiCredential } from "../aws";
 import { determineRegion, determineProfile } from "~/shared/observations";
+import { DevopsError } from "~/errors";
 
 export interface ILambdaFunctionsOptions {
   /** explicitly state the region you are interested in */
@@ -23,8 +24,15 @@ export interface ILambdaFunctionsOptions {
 export async function getLambdaFunctions(
   opts: ILambdaFunctionsOptions = {}
 ): Promise<Lambda.FunctionConfiguration[]> {
-  const region = opts.region ? opts.region : await determineRegion({ cliOptions: opts });
-  const profileName = await determineProfile({ cliOptions: opts });
+  const region = opts.region ? opts.region : await determineRegion(opts);
+  const profileName = await determineProfile(opts);
+  if (!profileName) {
+    throw new DevopsError(
+      "Could not determine the AWS Profile to use!",
+      "not-ready/missing-profile"
+    );
+  }
+
   const profile = convertProfileToApiCredential(await getAwsProfile(profileName));
   const lambda = new Lambda({
     apiVersion: "2015-03-31",

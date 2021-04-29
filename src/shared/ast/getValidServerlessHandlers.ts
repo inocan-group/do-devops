@@ -3,7 +3,7 @@ import fg from "fast-glob";
 import path from "path";
 
 import { parseFile } from "./parseFile";
-import { relativePath } from "../file";
+import { toRelativePath } from "../file";
 
 /**
  * Gets a list of all typescript files under the `src/handlers`
@@ -19,7 +19,7 @@ export function getValidServerlessHandlers() {
       status = "file-parsed";
       if (!ast.program.body[0].source) {
         console.log(
-          chalk`{grey - the file {blue ${relativePath(
+          chalk`{grey - the file {blue ${toRelativePath(
             curr
           )}} has no source content; will be ignored}`
         );
@@ -42,7 +42,7 @@ export function getValidServerlessHandlers() {
       return agg;
     } catch (error) {
       console.log(
-        chalk`- Error processing  {red ${relativePath(curr)}} [s: ${status}]: {grey ${
+        chalk`- Error processing  {red ${toRelativePath(curr)}} [s: ${status}]: {grey ${
           error.message
         }}`
       );

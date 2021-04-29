@@ -1,3 +1,4 @@
+import { DevopsError } from "~/errors";
 import { getPackageJson } from "./index";
 
 /**
@@ -11,5 +12,12 @@ import { getPackageJson } from "./index";
  * looking to test for.
  */
 export function exportsAsEsm() {
-  return getPackageJson().type === "module";
+  const pkg = getPackageJson();
+  if (!pkg) {
+    throw new DevopsError(
+      `While checking package.json for the "type" of module, the package.json was not found!`,
+      "not-ready/missing-package-json"
+    );
+  }
+  return pkg.type === "module";
 }

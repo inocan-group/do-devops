@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 import { IServerlessYaml } from "common-types";
-import { ensureDirectory } from "../..";
+import { ensureDirectory } from "~/shared/file";
 
 /**
  * Once a build is complete, this function will review the

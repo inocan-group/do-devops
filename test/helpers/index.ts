@@ -1,18 +1,20 @@
 import "./test-console"; // TS declaration
-
-import { first, last } from "lodash";
+import parse from "destr";
 import { stderr, stdout } from "test-console";
 
 import { IDictionary } from "common-types";
-import fs from "fs";
-import process from "process";
+import fs from "node:fs";
+import process from "node:process";
 import yaml from "js-yaml";
 
 interface Console {
   _restored: boolean;
   // Console: typeof NodeJS.Console;
   assert(value: any, message?: string, ...optionalParams: any[]): void;
-  dir(obj: any, options?: { showHidden?: boolean; depth?: number; colors?: boolean }): void;
+  dir(
+    obj: any,
+    options?: { showHidden?: boolean; depth?: number; colors?: boolean }
+  ): void;
   error(message?: any, ...optionalParams: any[]): void;
   info(message?: any, ...optionalParams: any[]): void;
   log(message?: any, ...optionalParams: any[]): void;
@@ -38,15 +40,19 @@ export function setupEnv() {
   if (!process.env.AWS_STAGE) {
     process.env.AWS_STAGE = "test";
   }
-  const current = process.env;
-  const yamlConfig: IDictionary = yaml.safeLoad(fs.readFileSync(ENV_FILE, "utf8"));
+  const envFile = process.env.ENV_FILE || ".env";
+  const yamlConfig: IDictionary = parse(
+    yaml.load(fs.readFileSync(envFile, "utf8"))
+  ) as {};
   const combined: IDictionary = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env,
   };
 
   console.log(`Loading ENV for "${process.env.AWS_STAGE}"`);
-  Object.keys(combined).forEach((key) => (process.env[key] = combined[key]));
+  for (const key of Object.keys(combined)) {
+    process.env[key] = combined[key];
+  }
   return combined;
 }
 
@@ -104,34 +110,6 @@ export function ignoreBoth() {
   return restore;
 }
 
-/**
- * The first key in a Hash/Dictionary
- */
-export function firstKey<T = any>(dictionary: IDictionary<T>) {
-  return first(Object.keys(dictionary));
-}
-
-/**
- * The first record in a Hash/Dictionary of records
- */
-export function firstRecord<T = any>(dictionary: IDictionary<T>) {
-  return dictionary[this.firstKey(dictionary)];
-}
-
-/**
- * The last key in a Hash/Dictionary
- */
-export function lastKey<T = any>(listOf: IDictionary<T>) {
-  return last(Object.keys(listOf));
-}
-
-/**
- * The last record in a Hash/Dictionary of records
- */
-export function lastRecord<T = any>(dictionary: IDictionary<T>) {
-  return dictionary[this.lastKey(dictionary)];
-}
-
 export function valuesOf<T = any>(listOf: IDictionary<T>, property: string) {
   const keys: any[] = Object.keys(listOf);
   return keys.map((key: any) => {
@@ -154,10 +132,4 @@ export async function loadData(file: string) {
       }
     });
   });
-}
-
-export async function loadTemplate(file: string, replacements: IDictionary = {}) {
-  const text = await loadData(file);
-  const template = Handlebars.compile(text);
-  return template(replacements);
 }

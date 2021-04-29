@@ -13,8 +13,8 @@ export async function getAwsUserProfile(awsProfile: IAwsProfile | string) {
   }
 
   const up = new IAM({
-    accessKeyId: awsProfile.aws_access_key_id,
-    secretAccessKey: awsProfile.aws_secret_access_key
+    accessKeyId: (awsProfile as IAwsProfile).aws_access_key_id,
+    secretAccessKey: (awsProfile as IAwsProfile).aws_secret_access_key,
   })
     .getUser()
     .promise();

@@ -1,20 +1,33 @@
 import chalk from "chalk";
-import * as process from "process";
-
-import { CommandLineOptions } from "command-line-args";
-import { SSM } from "aws-ssm";
+import process from "process";
 import { format } from "date-fns";
 import { table } from "table";
+import { SSM } from "aws-ssm";
+
 import { getAwsProfile } from "~/shared/aws";
 import { determineProfile, determineRegion } from "~/shared/observations";
+import { DoDevopsHandler } from "~/@types";
+import { ISsmOptions } from "../../parts";
 
-export async function execute(argv: string[], options: CommandLineOptions) {
-  const profile = await determineProfile({ cliOptions: options, interactive: true });
+export const execute: DoDevopsHandler<ISsmOptions> = async ({
+  opts,
+  observations,
+  unknown: argv,
+}) => {
+  const profile = await determineProfile({ ...opts, interactive: true }, observations);
+  if (!profile) {
+    console.log(
+      chalk`- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
+    );
+    console.log(
+      chalk`- alternatively use the {inverse --interactive } option to have the CLI interactively let you select`
+    );
+    process.exit();
+  }
+
   const profileInfo = await getAwsProfile(profile);
   const region =
-    options.region ||
-    profileInfo.region ||
-    (await determineRegion({ cliOptions: options, interactive: true }));
+    opts.region || profileInfo.region || (await determineRegion({ ...opts, interactive: true }));
   const filterBy = argv.length > 0 ? argv[0] : undefined;
 
   if (!profile || !region) {
@@ -29,14 +42,12 @@ export async function execute(argv: string[], options: CommandLineOptions) {
     process.exit();
   }
 
-  if (!options.quiet) {
+  if (!opts.quiet) {
     console.log(
       `- Listing SSM parameters in profile "${chalk.bold(profile)}", region "${chalk.bold(
         region
       )}"${
-        filterBy
-          ? `; results reduced to those with "${chalk.bold(filterBy)}" in the name.`
-          : ""
+        filterBy ? `; results reduced to those with "${chalk.bold(filterBy)}" in the name.` : ""
       }`
     );
     console.log();
@@ -78,4 +89,4 @@ export async function execute(argv: string[], options: CommandLineOptions) {
     },
   };
   console.log(table(tableData, tableConfig as any));
-}
+};

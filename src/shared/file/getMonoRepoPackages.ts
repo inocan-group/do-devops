@@ -2,7 +2,7 @@ import path from "path";
 import { existsSync, readdirSync } from "fs";
 
 /**
- * Gives back a list of packages in the monorepo. If the
+ * Gives back a list of packages in the **Lerna** monorepo. If the
  * "packages" directory does not exist then it will return
  * `false`, if there _is_ a packages directory but no sub-directories
  * you'll just get an empty array.

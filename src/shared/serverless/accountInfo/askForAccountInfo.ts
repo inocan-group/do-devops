@@ -1,16 +1,16 @@
-import { AWS_REGIONS, IServerlessAccountInfo } from "common-types";
-import {
-  emoji,
-  getAwsIdentityFromProfile,
-  getAwsProfile,
-  getAwsProfileList,
-  getPackageJson,
-  getServerlessYaml,
-  userHasAwsProfile,
-} from "../../../shared";
+import { AWS_REGIONS, IPackageJson, IServerlessAccountInfo } from "common-types";
 
 import inquirer from "inquirer";
 import chalk from "chalk";
+import {
+  getAwsIdentityFromProfile,
+  getAwsProfile,
+  getAwsProfileDictionary,
+  userHasAwsProfile,
+} from "~/shared/aws";
+import { emoji } from "~/shared/ui";
+import { getServerlessYaml } from "~/shared/serverless";
+import { getPackageJson } from "~/shared/npm";
 
 /**
  * Allows the properties not yet defined in the configuration to be
@@ -22,7 +22,7 @@ export async function askForAccountInfo(
   config: Partial<IServerlessAccountInfo> = {}
 ): Promise<IServerlessAccountInfo> {
   const pkgJson = getPackageJson();
-  const profiles = await getAwsProfileList();
+  const profiles = await getAwsProfileDictionary();
 
   if (
     config.profile &&
@@ -31,7 +31,10 @@ export async function askForAccountInfo(
     config.region &&
     config.pluginsInstalled &&
     (config.logForwarding ||
-      !Object.keys(pkgJson.devDependencies || {}).includes("serverless-log-forwarding"))
+      (pkgJson &&
+        !Object.keys(pkgJson.devDependencies || {}).includes(
+          "serverless-log-forwarding"
+        )))
   ) {
     return config as IServerlessAccountInfo;
   }
@@ -57,7 +60,7 @@ export async function askForAccountInfo(
       type: "input",
       name: "name",
       message: "What is the Service Name for this repo?",
-      default: config.name || pkgJson.name,
+      default: config.name || pkgJson ? (pkgJson as IPackageJson).name : undefined,
       when: () => !config.name,
     },
     profileQuestion,

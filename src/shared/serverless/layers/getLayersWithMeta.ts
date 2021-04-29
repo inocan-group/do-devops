@@ -1,38 +1,50 @@
 import { IAwsLayerMeta, IDictionary } from "common-types";
 
-import { getPackageJson } from "../..";
+import { getPackageJson } from "~/shared/npm";
 import path from "path";
+import { DevopsError } from "~/errors";
 
-export interface ILayerMetaLookups {
-  byName: IDictionary<IAwsLayerMeta>;
-  byArn: IDictionary<IAwsLayerMeta>;
-}
+export type ILayerMetaLookups = IDictionary<IAwsLayerMeta>;
 
 /**
- * Introspects your dev dependencies for those which have `aws-layer-meta`
- * indicated as a **keyword** and then returns two dictionaries: `byMeta`
- * and `byArn` which serve as handy lookup services.
+ * Introspects your dev dependencies for those which have `aws-layer`
+ * or `aws-layer-meta` indicated as a **keyword**. From that it
+ * constructs the meta information defined in `IAwsLayerMeta`.
+ *
+ * Note: this is a quick lookup method but will miss layers which were
+ * not tagged appropriately in `package.json`.
  */
-export function getLayersWithMeta(): ILayerMetaLookups {
-  const devDeps = Object.keys(getPackageJson().devDependencies || {});
+export function getLayersFromPackageJson(): IAwsLayerMeta[] {
+  const pkg = getPackageJson();
+  if (!pkg) {
+    throw new DevopsError(
+      `Attempt to read layers from package.json but file is missing!`,
+      "not-ready/missing-package-json"
+    );
+  }
+  const devDeps = Object.keys(pkg.devDependencies || {});
+  // get deps with appropriate tagging
   const pkgJsonFiles = devDeps.filter((d) => {
-    const keywords = getPackageJson(path.join(process.cwd(), "node_modules", d)).keywords;
-    return keywords ? keywords.includes("aws-layer-meta") : false;
+    const foreignPkg = getPackageJson(path.join(process.cwd(), "node_modules", d));
+    if (!foreignPkg) {
+      throw new DevopsError(
+        `Attempt to get info on package info on "" requires that it be installed in the repo. Make sure to install deps before running this command.`,
+        "not-ready/missing-dep"
+      );
+    }
+    const keywords = foreignPkg.keywords;
+    return keywords ? keywords.includes("aws-layer-meta") || keywords.includes("aws-layer") : false;
   });
-  const byName = pkgJsonFiles.reduce((agg: IDictionary, d) => {
-    const meta = require(path.join(process.cwd(), "node_modules", d)).meta;
-    if (meta) {
-      agg[meta.name] = meta as IAwsLayerMeta;
-    }
-    return agg;
-  }, {});
-  const byArn = pkgJsonFiles.reduce((agg: IDictionary, d) => {
-    const meta = require(path.join(process.cwd(), "node_modules", d)).meta;
-    if (meta && meta.arn) {
-      agg[meta.arn] = meta as IAwsLayerMeta;
-    }
-    return agg;
-  }, {});
 
-  return { byName, byArn };
+  return pkgJsonFiles
+    .filter((i) => i)
+    .reduce((agg, d) => {
+      const meta = require(path.join(process.cwd(), "node_modules", d)).meta as IAwsLayerMeta;
+      const info: IAwsLayerMeta = meta
+        ? { ...meta, name: meta.name }
+        : { name: d, namespace: "unknown", versions: [] };
+
+      agg.push(info);
+      return agg;
+    }, [] as IAwsLayerMeta[]);
 }
