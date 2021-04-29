@@ -11,11 +11,11 @@ const NON_PROXY = new Set(["install", "outdated", "update", "why"]);
 
 export async function proxyToPackageManager(
   cmd: string,
-  observations: DoDevopObservation[],
+  observations: Set<DoDevopObservation>,
   argv?: string[]
 ) {
   // can't continue without package.json
-  if (!observations.includes("packageJson")) {
+  if (!observations.has("packageJson")) {
     console.log(
       chalk`- ${emoji.shocked} the {green ${cmd}} command is only meant to used in the root of NodeJS which has a {blue package.json} file in it.\n`
     );

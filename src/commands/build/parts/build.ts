@@ -11,7 +11,7 @@ export const defaultConfig = {
 };
 
 export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, raw }) => {
-  const serverless = observations.includes("serverlessFramework");
+  const serverless = observations.has("serverlessFramework");
 
   if (serverless) {
     console.log(chalk`{bold {yellow - Starting SERVERLESS build process}}\n`);

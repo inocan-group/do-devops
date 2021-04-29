@@ -62,7 +62,7 @@ export interface ICommandInput<T extends object = {}> {
    * An array of observations about the environment that the user is running the
    * command in.
    */
-  observations: DoDevopObservation[];
+  observations: Set<DoDevopObservation>;
   unknown: string[];
 }
 
@@ -99,7 +99,7 @@ export function isCommandDescriptor(desc: unknown): desc is ICommandDescriptor {
  * > output_
  */
 export type DynamicCommandDefinition<T> = (
-  observations: DoDevopObservation[],
+  observations: Set<DoDevopObservation>,
   options?: IDictionary
 ) => T;
 

@@ -13,7 +13,7 @@ import {
  * Provide help on **do-devops**, either in a global sense or for a
  * particular function.
  */
-export function help(observations: DoDevopObservation[], cmdDefn?: IDoDevopsCommand) {
+export function help(observations: Set<DoDevopObservation>, cmdDefn?: IDoDevopsCommand) {
   const { kind, subCommands, description, syntax, options } = cmdDefn
     ? finalizeCommandDefinition(cmdDefn, observations)
     : ({

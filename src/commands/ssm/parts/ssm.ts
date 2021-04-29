@@ -27,8 +27,7 @@ export const handler: DoDevopsHandler<ISsmOptions> = async (input) => {
     process.exit();
   }
 
-  const serverless =
-    observations.includes("serverlessFramework") && observations.includes("serverlessTs");
+  const serverless = observations.has("serverlessFramework") && observations.has("serverlessTs");
   if (serverless) {
     await buildLambdaTypescriptProject();
   }

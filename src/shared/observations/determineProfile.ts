@@ -25,17 +25,17 @@ export interface IProfileOptions extends IGlobalOptions {
  */
 export async function determineProfile(
   opts: IProfileOptions,
-  observations: DoDevopObservation[] = []
+  observations: Set<DoDevopObservation> = new Set<DoDevopObservation>()
 ): Promise<string | false> {
   if (opts.profile) {
     return opts.profile;
   }
 
-  if (observations.includes("serverlessTs")) {
+  if (observations.has("serverlessTs")) {
     // TODO : transpile to JS and import
   }
 
-  if (observations.includes("serverlessYml")) {
+  if (observations.has("serverlessYml")) {
     const serverlessYaml = await getServerlessYaml();
     if (serverlessYaml.provider.profile) {
       return serverlessYaml.provider.profile;

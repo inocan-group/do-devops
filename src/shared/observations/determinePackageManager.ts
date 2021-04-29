@@ -12,23 +12,23 @@ import { listQuestionNow } from "../interactive";
  * Note: if there's no `package.json` in current directory it will throw an error.
  */
 export async function determinePackageManager(
-  observations: DoDevopObservation[],
+  observations: Set<DoDevopObservation>,
   interactive: boolean = false
 ): Promise<false | PackageManagerObservation> {
-  if (!observations.includes("packageJson")) {
+  if (!observations.has("packageJson")) {
     throw new DevopsError(
       `Can not determine the default package manager in a directory that has no package.json file!`,
       "not-ready/missing-package-json"
     );
   }
 
-  if (observations.includes("yarn")) {
+  if (observations.has("yarn")) {
     return "yarn";
   }
-  if (observations.includes("npm")) {
+  if (observations.has("npm")) {
     return "npm";
   }
-  if (observations.includes("pnpm")) {
+  if (observations.has("pnpm")) {
     return "pnpm";
   }
 

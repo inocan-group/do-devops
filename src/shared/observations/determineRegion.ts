@@ -23,12 +23,12 @@ export interface IRegionOptions extends IGlobalOptions {
  */
 export async function determineRegion(
   opts: IRegionOptions = {},
-  observations: DoDevopObservation[] = []
+  observations: Set<DoDevopObservation> = new Set<DoDevopObservation>()
 ) {
   const config = getIntegratedConfig();
   let region = opts.region || process.env.AWS_REGION;
 
-  if (!region && observations.includes("serverlessYml")) {
+  if (!region && observations.has("serverlessYml")) {
     try {
       region = get(await getServerlessYaml(), "provider.region", undefined);
     } catch {}

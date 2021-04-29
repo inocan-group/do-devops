@@ -16,7 +16,7 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
   unknown: argv,
   raw,
 }) => {
-  if (!observations.includes("serverlessFramework")) {
+  if (!observations.has("serverlessFramework")) {
     await proxyToPackageManager("invoke", observations, raw);
     process.exit();
   }

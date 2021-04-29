@@ -72,7 +72,7 @@ export const handler: DoDevopsHandler<IDeployOptions> = async ({
   observations,
 }) => {
   // const { deploy, global } = await getConfig();
-  if (observations.includes("serverlessFramework")) {
+  if (observations.has("serverlessFramework")) {
     let { target } = await detectTarget(opts);
     if (target === "both") {
       const ask = (await import(`./deploy-helpers/deploy-${target}`)).default;

@@ -5,12 +5,12 @@ import { IProjectConfig, DoDevopObservation, TestObservation } from "~/@types";
  * working directory. If it can not determine then it will return `false`.
  */
 export function determineTestingFramework(
-  observations: DoDevopObservation[],
+  observations: Set<DoDevopObservation>,
   config?: IProjectConfig
 ): TestObservation | false {
   const known: TestObservation[] = ["ava", "jasmine", "jest", "mocha", "qunit", "uvu"];
   for (const fw of known) {
-    if (observations.includes(fw)) {
+    if (observations.has(fw)) {
       return fw;
     }
   }

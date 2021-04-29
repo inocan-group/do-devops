@@ -16,7 +16,7 @@ import { globalOptions } from "~/shared/core";
 export function finalizeCommandDefinition(
   cmdDefn: IDoDevopsCommand,
   /** all known observations available at this time */
-  observations: DoDevopObservation[],
+  observations: Set<DoDevopObservation>,
   /** any/all parsed options available at this time */
   options: IDictionary = {}
 ): Finalized<IDoDevopsCommand> {
