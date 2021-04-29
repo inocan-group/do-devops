@@ -2,7 +2,7 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 06:31 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 06:34 PM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: addAwsProfile, askForAwsProfile, askForAwsRegion, aws-type-guards, checkIfAwsInstalled, convertProfileToApiCredential, getApiGatewayEndpoints, getAwsDefaultRegion, getAwsIdentityFromProfile, getAwsLambdaFunctions, getAwsLambdaLayers, getAwsProfile, getAwsProfileDictionary, getAwsProfileList, getAwsUserProfile, hasAwsCredentialsFile, userHasAwsProfile.
 

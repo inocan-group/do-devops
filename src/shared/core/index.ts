@@ -2,7 +2,7 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 06:31 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 06:34 PM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: convertOptionsToArray, defaultConfigSections, getConfig, getConfigFilename, getConfigSections, getDefaultConfig, getProjectConfig, getUserConfig, help, helpContent, isKnownCommand, options, parseCmdArgs, proxyToPackageManager, saveToConfig, writeConfig.
 // directories: commands, util.

@@ -2,7 +2,7 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 06:31 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 06:34 PM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: convertDepDictionaryToArray, exportsAsEsm, getPackageInfo, getPackageJson, hasDependency, hasDevDependency, hasMainExport, hasModuleExport, hasScript, hasTypings, isNpmPackage, pkgDepsInTable, writePackageJson.
 
