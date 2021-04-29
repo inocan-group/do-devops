@@ -1,4 +1,4 @@
-import type { Stats } from "fs";
+import type { Stats } from "node:fs";
 
 /**
  * Optional configuration for the `file/write()` function

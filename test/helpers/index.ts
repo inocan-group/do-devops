@@ -3,8 +3,8 @@ import parse from "destr";
 import { stderr, stdout } from "test-console";
 
 import { IDictionary } from "common-types";
-import fs from "fs";
-import process from "process";
+import fs from "node:fs";
+import process from "node:process";
 import yaml from "js-yaml";
 
 interface Console {

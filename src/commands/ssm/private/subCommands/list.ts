@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import * as process from "process";
+import process from "process";
 import { format } from "date-fns";
 import { table } from "table";
 import { SSM } from "aws-ssm";
