@@ -13,7 +13,9 @@ export function defaultExports(exportable: IExportableSymbols, opts: IDictionary
     }";`;
 
   const dir = (dir: string) =>
-    `export * from "./${dir}/index${opts.preserveExtension ? ".js" : ""}";`;
+    `export {  default as ${removeExtension(dir)} } from "./${dir}/index${
+      opts.preserveExtension ? ".js" : ""
+    }";`;
 
   return exportTemplate(exportable, opts, { file, dir });
 }
