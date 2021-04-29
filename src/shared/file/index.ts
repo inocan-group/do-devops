@@ -2,9 +2,9 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 06:34 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 11:30 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: directoryFiles, ensureDirectory, filesExist, filesInfo, getAllFilesOfType, getDataFiles, getExportsFromFile, getFileFromHomeDirectory, getMonoRepoPackages, interpolateFilepath, readDataFile, readFile, relativePath, saveFileToHomeDirectory, saveYamlFile, stripFileExtension, write.
+// files: directoryFiles, ensureDirectory, filesExist, filesInfo, getAllFilesOfType, getDataFiles, getExportsFromFile, getFileFromHomeDirectory, getMonoRepoPackages, interpolateFilepath, libraryDirectory, readDataFile, readFile, relativePath, saveFileToHomeDirectory, saveYamlFile, stripFileExtension, write.
 
 // local file exports
 export * from "./directoryFiles";
@@ -17,6 +17,7 @@ export * from "./getExportsFromFile";
 export * from "./getFileFromHomeDirectory";
 export * from "./getMonoRepoPackages";
 export * from "./interpolateFilepath";
+export * from "./libraryDirectory";
 export * from "./readDataFile";
 export * from "./readFile";
 export * from "./relativePath";

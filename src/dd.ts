@@ -7,6 +7,7 @@ import { getCommand, getAllCommands, isKnownCommand, parseCmdArgs } from "~/shar
 import { help } from "./shared/core/help";
 import { inverted } from "./shared/ui";
 import { getObservations } from "./shared/observations/getObserverations";
+import { doDevopsVersion, commandAnnouncement } from "./shared/core/util";
 
 (async () => {
   // pull off the command and stop there
@@ -16,30 +17,33 @@ import { getObservations } from "./shared/observations/getObserverations";
   const remaining = mainCommand._unknown || [];
 
   /** the primary command */
-  const cmd = mainCommand.command as string | undefined;
+  const cmdName = mainCommand.command as string | undefined;
+  if (!cmdName && mainCommand._unknown?.includes("--version")) {
+    console.log(doDevopsVersion());
+    process.exit();
+  }
   const observations = getObservations();
 
-  if (!cmd) {
-    help({}, observations);
+  if (!cmdName) {
+    commandAnnouncement(undefined, undefined, true);
+    help(observations);
+    process.exit();
   }
 
-  if (isKnownCommand(cmd)) {
-    const subCommand = getCommand(cmd);
-    const cmdInput = { ...parseCmdArgs(subCommand, remaining), observations };
-    console.log(
-      chalk.bold(
-        `\ndo-devops ${chalk.green.italic.bold(
-          cmd ? cmd + `${cmdInput.subCommand ? ` ${cmdInput.subCommand}` : ""} ` : "Help"
-        )}\n`
-      )
-    );
+  if (isKnownCommand(cmdName)) {
+    const cmdDefn = getCommand(cmdName);
+    const cmdInput = { ...parseCmdArgs(cmdDefn, remaining), observations };
 
     if (cmdInput.opts.help) {
-      help(cmdInput.opts, observations, cmd);
+      commandAnnouncement(cmdDefn, cmdInput.subCommand, true);
+      help(observations, cmdDefn);
+      process.exit();
     }
 
+    commandAnnouncement(cmdDefn, cmdInput.subCommand);
+
     try {
-      await subCommand.handler(cmdInput);
+      await cmdDefn.handler(cmdInput);
       if (cmdInput.unknown && cmdInput.unknown.filter((i) => i).length > 0) {
         const plural = cmdInput.unknown.length === 1 ? false : true;
         const preposition = cmdInput.unknown.length === 1 ? "was" : "were";
@@ -53,7 +57,7 @@ import { getObservations } from "./shared/observations/getObserverations";
       }
     } catch (error) {
       console.log(
-        chalk`\n{red An Error has occurred while running: {italic {bold do-devops ${cmd}}}}`
+        chalk`\n{red An Error has occurred while running: {italic {bold do-devops ${cmdName}}}}`
       );
       console.log(`- ${error.message}`);
       console.log(chalk`{grey   ${error.stack}}\n`);
@@ -63,7 +67,7 @@ import { getObservations } from "./shared/observations/getObserverations";
   } else {
     console.log(
       `${chalk.bold.red("Whoops! ")} ${chalk.italic.yellowBright(
-        cmd
+        cmdName
       )} is an unknown command! \n\n` +
         `- Valid command syntax is: ${chalk.bold.inverse(
           " dd [command] <options> "

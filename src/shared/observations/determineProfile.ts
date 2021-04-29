@@ -36,8 +36,6 @@ export async function determineProfile(
   }
 
   if (observations.includes("serverlessYml")) {
-    console.log("has yaml");
-
     const serverlessYaml = await getServerlessYaml();
     if (serverlessYaml.provider.profile) {
       return serverlessYaml.provider.profile;

@@ -22,7 +22,10 @@ export function getPackageJson(pathOverride?: string): IPackageJson {
     const p = getPackageJsonfromCache();
     return p as IPackageJson;
   }
-  const filename = path.join(pathOverride || process.cwd(), "package.json");
+  const filename = path.join(
+    pathOverride?.replace("package.json", "") || process.cwd(),
+    "package.json"
+  );
 
   if (!fs.existsSync(filename)) {
     throw new DevopsError(

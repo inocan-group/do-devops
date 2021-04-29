@@ -1,5 +1,4 @@
 import { IExportableSymbols, removeExtension, exportTemplate } from "../index";
-
 import { IDictionary } from "common-types";
 
 /**

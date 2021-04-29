@@ -2,7 +2,7 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 06:34 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 09:15 AM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: determineCredentials, determineLinter, determinePackageManager, determineProfile, determineRegion, determineStage, determineTestFramework, getObserverations, hasServerlessTsFile, isServerless, isTypescriptMicroserviceProject.
 
