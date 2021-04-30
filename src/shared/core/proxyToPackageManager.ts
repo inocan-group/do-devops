@@ -7,7 +7,7 @@ import { determinePackageManager } from "~/shared/observations";
 import { hasScript } from "../npm";
 import { emoji } from "../ui";
 
-const NON_PROXY = new Set(["install", "outdated", "update", "why"]);
+const NON_PROXY = new Set(["install", "outdated", "update", "why", "ls"]);
 
 export async function proxyToPackageManager(
   cmd: string,
@@ -39,11 +39,17 @@ export async function proxyToPackageManager(
       case "why":
         pkgCmd = `${pkgManager} ${cmd}${argv ? " " + argv.join(" ") : ""}`;
         break;
+      case "ls":
+        pkgCmd =
+          pkgManager === "yarn"
+            ? `yarn list --pattern "${argv?.pop()}"`
+            : `${pkgManager} ls ${argv?.pop()}`;
+        break;
       default:
         isScriptCmd = true;
         pkgCmd = `${
           pkgManager === "yarn"
-            ? `yarn ${cmd}${argv ? "" + argv.join(" ") : ""}`
+            ? `yarn ${cmd}${argv ? " " + argv.join(" ") : ""}`
             : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""}`
         }`;
     }

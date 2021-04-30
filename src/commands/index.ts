@@ -15,3 +15,4 @@ export { default as ssm } from "./ssm/index";
 export { default as test } from "./test/index";
 export { default as why } from "./why/index";
 export { default as watch } from "./watch";
+export { default as ls } from "./ls";

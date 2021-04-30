@@ -2,25 +2,23 @@ import { ListQuestion } from "inquirer";
 import { ask } from "./ask";
 
 /**
- * **listQuestionNow**
+ * **askListQuestion**
  *
  * Utility function to ask a list based question to a
- * user immediately.
+ * user immediately:
  *
  * ```ts
- * const answer = listQuestionNow(
- *    "myQuestion",
- *    "What is your fav color?",
- *    ["red", "blue", "green"]
+ * const answer = askListQuestion<T>(
+ *    "What is your fav color?", ["red", "blue", "green"], "red"
  * );
  * ```
  *
- * Note: if you want to compose the question with others,
- * use `listQuestion()` instead.
+ * Alternatively, if you pass an array of _hashes_ where the hash
+ * can have `name`, `value` and `disabled` properties.
  */
 export async function askListQuestion<T extends any = any>(
   question: string,
-  choices: ListQuestion["choices"] & T[],
+  choices: (ListQuestion["choices"] & T[]) | (ListQuestion["choices"] & { value: T }[]),
   defaultValue?: ListQuestion["default"]
 ) {
   const q: ListQuestion = {
@@ -31,5 +29,6 @@ export async function askListQuestion<T extends any = any>(
     default: defaultValue,
   };
   const answer = await ask(q);
+
   return answer.listValue as T;
 }

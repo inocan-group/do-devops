@@ -1,8 +1,7 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { toTable } from "../ui";
-import { convertDepDictionaryToArray } from "./convertDepDictionaryToArray";
-import { getPackageJson } from "./index";
+import { toTable } from "~/shared/ui";
+import { getPackageJson, convertDepDictionaryToArray } from "~/shared/npm";
 
 function formatDependencies(deps: Array<{ name: string; version: string }>) {
   return deps.map((dep) => chalk`{bold ${dep.name}} [{dim ${dep.version} }]`);

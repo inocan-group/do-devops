@@ -2,11 +2,12 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 06:23 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 08:50 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: resolvePackageManagerConflict.
+// files: askForDependency, resolvePackageManagerConflict.
 
 // local file exports
+export * from "./askForDependency";
 export * from "./resolvePackageManagerConflict";
 
 // Note:

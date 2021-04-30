@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { IDictionary, INpmInfo, isNpmInfoRepository } from "common-types";
 import { DoDevopObservation, IGlobalOptions, INpmInfoTable } from "~/@types";
 import { convertGitUrlToHttp } from "~/shared";
-import { getPackageInfo } from "~/shared/npm";
+import { getExternalPackageJson } from "~/shared/npm";
 import { consoleDimensions, toTable } from "~/shared/ui";
 
 async function getNpmInfo(pkgs: string[], _opts: IDictionary) {
@@ -11,7 +11,7 @@ async function getNpmInfo(pkgs: string[], _opts: IDictionary) {
 
   for (const pkg of pkgs) {
     try {
-      const info = await getPackageInfo(pkg);
+      const info = await getExternalPackageJson(pkg);
       successful.push({ name: pkg, value: info });
     } catch (error) {
       failed.push({ name: pkg, error: error.message });

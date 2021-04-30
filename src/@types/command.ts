@@ -21,6 +21,7 @@ export type KnownCommand<E extends string = never> =
   | "invoke"
   | "latest"
   | "layers"
+  | "ls"
   | "pkg"
   | "ssm"
   | "test"
@@ -123,7 +124,7 @@ export function isDynamicCommandDefinition<T extends unknown | DynamicCommandDef
  * up by the `getCommmands()` function where the structure will
  * tested as an interface definition.
  */
-export interface IDoDevopsCommand <T extends {} = {}>{
+export interface IDoDevopsCommand<T extends {} = {}> {
   /** a unique type alias assigned to each command */
   kind: KnownCommand;
   /**

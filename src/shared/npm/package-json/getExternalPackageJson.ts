@@ -8,7 +8,7 @@ import { DevopsError } from "~/errors";
  * looks for the local package and throws an error
  * if not found
  */
-export async function getPackageInfo(pkg: string = "") {
+export async function getExternalPackageJson(pkg: string = "") {
   try {
     return parse(await asyncExec(`npm info ${pkg} --json`, { silent: true }));
   } catch {

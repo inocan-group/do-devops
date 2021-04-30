@@ -9,7 +9,7 @@ import { getObservations } from "~/shared/observations";
 import { currentDirectory, symlinks } from "~/shared/file";
 import { convertGitUrlToHttp, getCurrentGitBranch, getGitLastCommit } from "~/shared/git";
 import { askConfirmQuestion, resolvePackageManagerConflict } from "~/shared/interactive";
-import { getPackageInfo, getPackageJson } from "~/shared/npm";
+import { getExternalPackageJson, getPackageJson } from "~/shared/npm";
 import { dim, emoji, green } from "~/shared/ui";
 
 /**
@@ -19,7 +19,7 @@ export async function thisRepo(opts: IGlobalOptions, observations: Set<DoDevopOb
   // const config = await getConfig();
   let npm: INpmInfo | undefined;
   try {
-    npm = await getPackageInfo();
+    npm = await getExternalPackageJson();
   } catch {
     // appears NOT to be a NPM package
   }
