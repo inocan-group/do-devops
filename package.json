@@ -1,6 +1,6 @@
 {
   "name": "do-devops",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",
@@ -57,7 +57,7 @@
     "chokidar": "^3.5.1",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.1.1",
-    "common-types": "^1.24.0",
+    "common-types": "^1.24.5",
     "date-fns": "^2.21.0",
     "deepmerge": "^4.2.2",
     "destr": "^1.1.0",

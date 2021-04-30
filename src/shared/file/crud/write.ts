@@ -1,8 +1,8 @@
 import { writeFileSync } from "fs";
 import { DevopsError, isClassification } from "~/errors";
-import { fileExists } from "./filesExist";
+import { fileExists } from "../existance";
 import { IWriteOptions } from "~/@types";
-import { interpolateFilePath } from "./interpolateFilepath";
+import { interpolateFilePath } from "~/shared/file/helpers";
 
 /**
  * **write**

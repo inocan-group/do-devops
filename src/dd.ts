@@ -18,11 +18,19 @@ import { doDevopsVersion, commandAnnouncement } from "./shared/core/util";
 
   /** the primary command */
   const cmdName = mainCommand.command as string | undefined;
+  // undocumented version switch
   if (!cmdName && mainCommand._unknown?.includes("--version")) {
     console.log(doDevopsVersion());
     process.exit();
   }
+
   const observations = getObservations();
+
+  // undocumented observations switch
+  if (!cmdName && mainCommand._unknown?.includes("--observations")) {
+    console.log(`Observations:`, [...observations].map((i) => chalk`{inverse  ${i} }`).join(" "));
+    process.exit();
+  }
 
   if (!cmdName) {
     commandAnnouncement(undefined, undefined, true);
@@ -40,9 +48,8 @@ import { doDevopsVersion, commandAnnouncement } from "./shared/core/util";
       process.exit();
     }
 
-    commandAnnouncement(cmdDefn, cmdInput.subCommand);
-
     try {
+      commandAnnouncement(cmdDefn, cmdInput.subCommand);
       await cmdDefn.handler(cmdInput);
       if (cmdInput.unknown && cmdInput.unknown.filter((i) => i).length > 0) {
         const plural = cmdInput.unknown.length === 1 ? false : true;

@@ -35,7 +35,7 @@ export function finalizeCommandDefinition(
   return {
     kind: cmdDefn.kind,
     handler: cmdDefn.handler,
-    syntax: cmdDefn.syntax || `dd ${cmdDefn} [options]`,
+    syntax: cmdDefn.syntax || `dd ${cmdDefn.kind}${cmdDefn.subCommands ? " <cmd>" : ""} [options]`,
     description,
     subCommands,
     options: { ...cmdDefn.options, ...globalOptions },

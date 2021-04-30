@@ -7,7 +7,7 @@ import path from "path";
  * directory path from current working directory.
  */
 export function interpolateFilePath(filename: string) {
-  if (filename.slice(0, 1) === "~") {
+  if (filename.slice(0, 2) === "~/") {
     filename = path.posix.join(homedir(), filename.slice(1));
   }
   if (filename.slice(0, 2) === "./") {

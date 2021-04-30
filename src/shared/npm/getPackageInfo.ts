@@ -1,5 +1,4 @@
 import { asyncExec } from "async-shelljs";
-import { INpmInfo } from "common-types";
 import parse from "destr";
 import { DevopsError } from "~/errors";
 
@@ -10,11 +9,8 @@ import { DevopsError } from "~/errors";
  * if not found
  */
 export async function getPackageInfo(pkg: string = "") {
-  let npm: INpmInfo;
   try {
-    npm = parse(await asyncExec("yarn info --json", { silent: true })).data;
-
-    return npm;
+    return parse(await asyncExec(`npm info ${pkg} --json`, { silent: true }));
   } catch {
     // appears NOT to be a NPM package
     throw new DevopsError(

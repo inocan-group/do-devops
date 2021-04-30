@@ -1,6 +1,12 @@
 import { getServerlessYaml } from "~/shared/serverless";
-import { configIsReady, IIntegratedConfig, IProjectConfig, IUserConfig } from "~/@types";
-import { getIntegratedConfig, IGlobalOptions } from "~/shared/core";
+import {
+  configIsReady,
+  IGlobalOptions,
+  IIntegratedConfig,
+  IProjectConfig,
+  IUserConfig,
+} from "~/@types";
+import { getIntegratedConfig } from "~/shared/core";
 import { askForAwsProfile } from "~/shared/aws";
 import { DoDevopObservation } from "~/@types/observations";
 

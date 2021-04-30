@@ -14,7 +14,7 @@ import { ask } from "./ask";
  * If you want to compose functions into an array of questions and then ask,
  * use `confirmQuestion()` instead.
  */
-export const confirmQuestionNow = async (question: string): Promise<boolean> => {
+export const askConfirmQuestion = async (question: string): Promise<boolean> => {
   const q: ConfirmQuestion = {
     type: "confirm",
     name: "yesOrNo",

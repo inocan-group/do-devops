@@ -1,6 +1,10 @@
 import { PackageManagerObservation, DoDevopObservation } from "~/@types/observations";
 import { DevopsError } from "~/errors";
-import { listQuestionNow } from "../interactive";
+import { askListQuestion } from "../interactive";
+import { emoji } from "~/shared/ui";
+import { saveToProjectConfig } from "~/shared/core";
+import { removeOtherLockFiles } from "~/shared/npm";
+import chalk from "chalk";
 
 /**
  * Based on all observations made at startup, this function will try to
@@ -22,6 +26,24 @@ export async function determinePackageManager(
     );
   }
 
+  if (observations.has("packageManagerConflict")) {
+    console.log(
+      `- ${emoji.warn}} there are indications of {italic more} than one package manager being used!`
+    );
+    const pkgManager = await askListQuestion<
+      Exclude<PackageManagerObservation, "packageManagerConflict">
+    >(
+      "Which package manager do you expect to use in this repo?",
+      ["npm", "pnpm", "yarn"],
+      observations.has("pnpm") ? "pnpm" : observations.has("yarn") ? "yarn" : "npm"
+    );
+    await saveToProjectConfig("general", { pkgManager });
+    const removed = await removeOtherLockFiles(pkgManager);
+    if (removed.length > 0) {
+      console.log(chalk`- removed `);
+    }
+  }
+
   if (observations.has("yarn")) {
     return "yarn";
   }
@@ -33,7 +55,7 @@ export async function determinePackageManager(
   }
 
   if (interactive) {
-    const answer = await listQuestionNow(
+    const answer = await askListQuestion<PackageManagerObservation | "none">(
       "We couldn't determine your default package manager, please choose from the list.",
       ["npm", "pnpm", "yarn", "none"],
       "npm"

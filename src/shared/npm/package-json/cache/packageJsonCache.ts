@@ -6,13 +6,22 @@ import { IPackageJson, IDictionary } from "common-types";
  * to reload it in a single execution
  */
 let packageJson: IPackageJson;
+const pathBasedPackageJson: IDictionary<IPackageJson> = {};
 
-export function getPackageJsonfromCache() {
-  return packageJson ? packageJson : false;
+export function getPackageJsonfromCache(overridePath?: string) {
+  return overridePath
+    ? pathBasedPackageJson[overridePath] || false
+    : packageJson
+    ? packageJson
+    : false;
 }
 
-export function cacheLocalPackageJson(pkgJson: IPackageJson) {
-  packageJson = pkgJson;
+export function cacheLocalPackageJson(pkgJson: IPackageJson, pathOverride?: string) {
+  if (pathOverride) {
+    pathBasedPackageJson[pathOverride] = pkgJson;
+  } else {
+    packageJson = pkgJson;
+  }
 }
 
 /**

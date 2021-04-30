@@ -6,8 +6,8 @@ import { emoji } from "~/shared/ui";
 import { getAwsProfile } from "~/shared/aws";
 import { getServerlessYaml } from "~/shared/serverless";
 import { DoDevopObservation } from "~/@types/observations";
-import { getIntegratedConfig, getUserConfig, IGlobalOptions } from "~/shared/core";
-import { configIsReady } from "~/@types";
+import { getIntegratedConfig, getUserConfig } from "~/shared/core";
+import { configIsReady, IGlobalOptions } from "~/@types";
 
 export interface IRegionOptions extends IGlobalOptions {
   interactive?: boolean;

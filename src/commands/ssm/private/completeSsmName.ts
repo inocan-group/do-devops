@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { DevopsError } from "~/errors";
-import { confirmQuestionNow } from "~/shared/interactive";
+import { askConfirmQuestion } from "~/shared/interactive";
 
 export interface ISsmNameHints {
   stage?: string;
@@ -28,7 +28,7 @@ export async function completeSsmName(name: string, hints: ISsmNameHints = {}) {
         parts
       )} with your permission.\n`
     );
-    const cont = await confirmQuestionNow("Continue?");
+    const cont = await askConfirmQuestion("Continue?");
     if (!cont) {
       console.log();
       process.exit();
@@ -45,9 +45,7 @@ export async function completeSsmName(name: string, hints: ISsmNameHints = {}) {
       console.log(
         chalk`\nThe SSM variable {italic name} does not appear to be correctly formatted. The format\nshould be:\n`
       );
-      console.log(
-        chalk`/{dim [stage]}/{dim [version]}/{dim [moduleName]}/{dim [VAR NAME]}\n`
-      );
+      console.log(chalk`/{dim [stage]}/{dim [version]}/{dim [moduleName]}/{dim [VAR NAME]}\n`);
       console.log(
         chalk`In most cases the best strategy is just to state the module name and final\nvariable name and let the autocomplete do the rest.`
       );

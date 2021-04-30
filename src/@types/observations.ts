@@ -2,9 +2,10 @@ export type BaseObservations =
   | "packageJson"
   | "typescript"
   | "ttypescript"
+  | "tsNode"
   | "typescriptTransformPaths";
 export type BundlerObservation = "webpack" | "rollup" | "vite" | "esbuild";
-export type PackageManagerObservation = "yarn" | "npm" | "pnpm";
+export type PackageManagerObservation = "yarn" | "npm" | "pnpm" | "packageManagerConflict";
 export type TestObservation = "mocha" | "jest" | "uvu" | "ava" | "jasmine" | "qunit";
 export type ExportObservation = "cjs" | "esm" | "typings";
 export type LintObservation =

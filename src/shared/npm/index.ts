@@ -2,24 +2,29 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 09:15 AM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 09:28 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: convertDepDictionaryToArray, exportsAsEsm, getPackageInfo, getPackageJson, hasDependency, hasDevDependency, hasMainExport, hasModuleExport, hasScript, hasTypings, isNpmPackage, pkgDepsInTable, writePackageJson.
+// files: convertDepDictionaryToArray, exportsAsEsm, getPackageInfo, hasDependency, hasDevDependency, hasMainExport, hasModuleExport, hasScript, hasTypings, installDevDep, isNpmPackage, pkgDepsInTable, writePackageJson.
+// directories: package-json, package-manager.
 
 // local file exports
 export * from "./convertDepDictionaryToArray";
 export * from "./exportsAsEsm";
 export * from "./getPackageInfo";
-export * from "./getPackageJson";
 export * from "./hasDependency";
 export * from "./hasDevDependency";
 export * from "./hasMainExport";
 export * from "./hasModuleExport";
 export * from "./hasScript";
 export * from "./hasTypings";
+export * from "./installDevDep";
 export * from "./isNpmPackage";
 export * from "./pkgDepsInTable";
 export * from "./writePackageJson";
+
+// directory exports
+export * from "./package-json/index";
+export * from "./package-manager/index";
 
 // Note:
 // -----

@@ -2,7 +2,7 @@
 import { IAwsProfile } from "~/@types";
 import { IDictionary } from "common-types";
 import { hasAwsProfileCredentialsFile } from "~/shared/aws";
-import { readFile } from "~/shared/file/readFile";
+import { readFile } from "~/shared/file";
 
 /**
  * **getAwsProfileDictionary**

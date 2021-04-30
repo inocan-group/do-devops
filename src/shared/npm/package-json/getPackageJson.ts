@@ -4,6 +4,7 @@ import parse from "destr";
 import { IPackageJson } from "common-types";
 import { getPackageJsonfromCache, cacheLocalPackageJson } from "./cache/packageJsonCache";
 import { DevopsError } from "~/errors";
+import { fileExists } from "~/shared/file";
 
 /**
  * **getPackageJson**
@@ -18,8 +19,8 @@ import { DevopsError } from "~/errors";
  */
 export function getPackageJson(pathOverride?: string): IPackageJson {
   // look in cache first
-  if (getPackageJsonfromCache()) {
-    const p = getPackageJsonfromCache();
+  const p = getPackageJsonfromCache(pathOverride);
+  if (p) {
     return p as IPackageJson;
   }
   const filename = path.join(
@@ -27,7 +28,7 @@ export function getPackageJson(pathOverride?: string): IPackageJson {
     "package.json"
   );
 
-  if (!fs.existsSync(filename)) {
+  if (!fileExists(filename)) {
     throw new DevopsError(
       `Attempt to get package.json [${filename}] file failed`,
       "not-ready/missing-package-json"
@@ -35,6 +36,6 @@ export function getPackageJson(pathOverride?: string): IPackageJson {
   }
 
   const pj = parse(fs.readFileSync(filename, { encoding: "utf-8" })) as IPackageJson;
-  cacheLocalPackageJson(pj);
+  cacheLocalPackageJson(pj, pathOverride);
   return pj;
 }

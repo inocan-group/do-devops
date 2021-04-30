@@ -24,5 +24,9 @@ export const enum emoji {
   /** ◉  */
   circleFilled = "\u25CB",
   /** 🏃‍♂️ */
-  run = "\uD83C\uDFC3"
+  run = "\uD83C\uDFC3",
+  /** ⚠️ */
+  warn = "\u26A0\uFE0F",
+  /** ☢️ */
+  hazzard = "\u2622\uFE0F",
 }

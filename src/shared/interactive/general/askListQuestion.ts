@@ -18,9 +18,9 @@ import { ask } from "./ask";
  * Note: if you want to compose the question with others,
  * use `listQuestion()` instead.
  */
-export async function listQuestionNow(
+export async function askListQuestion<T extends any = any>(
   question: string,
-  choices: ListQuestion["choices"],
+  choices: ListQuestion["choices"] & T[],
   defaultValue?: ListQuestion["default"]
 ) {
   const q: ListQuestion = {
@@ -31,5 +31,5 @@ export async function listQuestionNow(
     default: defaultValue,
   };
   const answer = await ask(q);
-  return answer.listValue;
+  return answer.listValue as T;
 }

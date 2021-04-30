@@ -2,7 +2,7 @@ import { exec } from "async-shelljs";
 import chalk from "chalk";
 import { DoDevopObservation, PackageManagerObservation } from "~/@types/observations";
 import { saveToProjectConfig } from "~/shared/core";
-import { listQuestionNow } from "~/shared/interactive";
+import { askListQuestion } from "~/shared/interactive";
 import { determinePackageManager } from "~/shared/observations";
 import { hasScript } from "../npm";
 import { emoji } from "../ui";
@@ -81,7 +81,7 @@ export async function proxyToPackageManager(
     console.log(chalk`- we can not currently tell {italic which} package manager you're using.`);
     const answer:
       | PackageManagerObservation
-      | "not now, thanks" = await listQuestionNow(
+      | "not now, thanks" = await askListQuestion(
       "Would you like save the package manager to this repo in a config file?",
       ["not now, thanks", "npm", "pnpm", "yarn"]
     );

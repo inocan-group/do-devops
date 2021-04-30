@@ -1,4 +1,4 @@
-import { getPackageJson } from "./getPackageJson";
+import { getPackageJson } from "~/shared/npm";
 
 /**
  * Tests whether the package.json has a particular `script` name.

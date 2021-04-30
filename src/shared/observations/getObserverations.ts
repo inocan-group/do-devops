@@ -8,6 +8,7 @@ import {
   hasMainExport,
   hasModuleExport,
   hasTypingsExport,
+  PKG_MGR_LOCK_FILE_LOOKUP,
 } from "../npm";
 import { determineLinter } from "./index";
 
@@ -92,15 +93,27 @@ export function getObservations() {
       observations.add("serverlessSamPlugin");
     }
 
+    // needed for serverless devops handoffs
+    if (hasDevDependency("ts-node")) {
+      observations.add("tsNode");
+    }
+
     // package manager
-    if (fileExists("yarn.lock")) {
+    let pm = 0;
+    if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.yarn)) {
+      pm++;
       observations.add("yarn");
     }
-    if (fileExists("pnpm-lock.yaml")) {
+    if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.pnpm)) {
+      pm++;
       observations.add("pnpm");
     }
-    if (fileExists("package-lock.json")) {
+    if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.npm)) {
+      pm++;
       observations.add("npm");
+    }
+    if (pm > 1) {
+      observations.add("packageManagerConflict");
     }
 
     if (hasMainExport()) {

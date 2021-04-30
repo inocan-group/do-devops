@@ -2,17 +2,6 @@ import { existsSync } from "fs";
 import { homedir } from "os";
 import path from "path";
 
-export function fileExists(file: string) {
-  if (![".", "/", "~"].includes(file.slice(0, 1))) {
-    file = path.posix.join(process.cwd(), file);
-  }
-  if (file.slice(0, 1) === "~") {
-    file = path.posix.join(homedir(), file.slice(1));
-  }
-
-  return existsSync(file);
-}
-
 /**
  * Checks all the files to see if they exist in the file system.
  * If none do then it returns false, if some do then it returns
