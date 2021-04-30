@@ -6,7 +6,7 @@ import {
   IProjectConfig,
   IUserConfig,
 } from "~/@types";
-import { getIntegratedConfig } from "~/shared/core";
+import { getIntegratedConfig } from "~/shared/config";
 import { askForAwsProfile } from "~/shared/aws";
 import { DoDevopObservation } from "~/@types/observations";
 
@@ -52,10 +52,10 @@ export async function determineProfile(
 
   let doConfig: IIntegratedConfig | IProjectConfig | IUserConfig;
   try {
-    doConfig = await getIntegratedConfig();
+    doConfig = getIntegratedConfig();
 
-    if (configIsReady(doConfig) && doConfig.general?.defaultAwsProfile) {
-      profile = doConfig.general.defaultAwsProfile;
+    if (configIsReady(doConfig) && doConfig.aws?.defaultProfile) {
+      profile = doConfig.aws?.defaultProfile;
     }
   } catch {}
 

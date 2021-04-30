@@ -1,6 +1,6 @@
 import { DoDevopObservation, PackageManagerObservation } from "~/@types";
 import { askListQuestion } from "~/shared/interactive";
-import { saveToProjectConfig } from "~/shared/core";
+import { saveProjectConfig } from "~/shared/config";
 import { removeOtherLockFiles } from "~/shared/npm";
 import chalk from "chalk";
 
@@ -12,7 +12,7 @@ export async function resolvePackageManagerConflict(observations: Set<DoDevopObs
     ["npm", "pnpm", "yarn"],
     observations.has("pnpm") ? "pnpm" : observations.has("yarn") ? "yarn" : "npm"
   );
-  await saveToProjectConfig("general", { pkgManager });
+  await saveProjectConfig({ general: { pkgManager } });
   const removed = await removeOtherLockFiles(pkgManager);
   if (removed.length > 0) {
     console.log(

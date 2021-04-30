@@ -1,7 +1,7 @@
 import { exec } from "async-shelljs";
 import chalk from "chalk";
 import { DoDevopObservation, PackageManagerObservation } from "~/@types/observations";
-import { saveToProjectConfig } from "~/shared/core";
+import { saveProjectConfig } from "~/shared/config";
 import { askListQuestion } from "~/shared/interactive";
 import { determinePackageManager } from "~/shared/observations";
 import { hasScript } from "../npm";
@@ -76,7 +76,7 @@ export async function proxyToPackageManager(
 
     exec(pkgCmd, {
       env: { ...process.env, TERM: "xterm-256color", FORCE_COLOR: "true" },
-      timeout: 5000,
+      timeout: 0,
     });
   } else {
     if (!NON_PROXY.has(cmd)) {
@@ -92,7 +92,7 @@ export async function proxyToPackageManager(
       ["not now, thanks", "npm", "pnpm", "yarn"]
     );
     if (answer !== "not now, thanks") {
-      saveToProjectConfig("general", { pkgManager: answer });
+      saveProjectConfig({ general: { pkgManager: answer } });
     }
   }
 }

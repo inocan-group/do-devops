@@ -1,4 +1,4 @@
-import { getProjectConfig } from "~/shared/core";
+import { getProjectConfig } from "~/shared/config";
 import { askForUnitTestFramework } from "../private";
 import { DoDevopsHandler } from "~/@types/command";
 import { ITestOptions } from "./options";

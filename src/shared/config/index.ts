@@ -1,16 +1,17 @@
-// #autoindex
+// #autoindex, exclude: constants, exclude: constants
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 02:20 PM ( GMT-7 )
-// export: named; exclusions: index, private.
-// files: processLambdaFns, processStepFns, reportOnFnConfig, serverlessTranspilation.
+// index last changed at: 4th Apr, 2021, 03:24 PM ( GMT-7 )
+// export: named; exclusions: constants, index, private.
+// files: getIntegratedConfig, getProjectConfig, getUserConfig, saveProjectConfig, saveUserConfig.
 
 // local file exports
-export * from "./processLambdaFns";
-export * from "./processStepFns";
-export * from "./reportOnFnConfig";
-export * from "./serverlessTranspilation";
+export * from "./getIntegratedConfig";
+export * from "./getProjectConfig";
+export * from "./getUserConfig";
+export * from "./saveProjectConfig";
+export * from "./saveUserConfig";
 
 // Note:
 // -----

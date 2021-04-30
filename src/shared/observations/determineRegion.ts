@@ -6,7 +6,7 @@ import { emoji } from "~/shared/ui";
 import { getAwsProfile } from "~/shared/aws";
 import { getServerlessYaml } from "~/shared/serverless";
 import { DoDevopObservation } from "~/@types/observations";
-import { getIntegratedConfig, getUserConfig } from "~/shared/core";
+import { getIntegratedConfig, getUserConfig } from "~/shared/config";
 import { configIsReady, IGlobalOptions } from "~/@types";
 
 export interface IRegionOptions extends IGlobalOptions {
@@ -52,13 +52,13 @@ export async function determineRegion(
   // USER Config is last resort
   if (!region) {
     const userConfig = getUserConfig();
-    if (configIsReady(userConfig) && userConfig.general?.defaultAwsRegion) {
+    if (configIsReady(userConfig) && userConfig.aws?.defaultRegion) {
       if (!opts.quiet) {
         console.log(
           chalk`{bold - AWS region has been resolved using the User's config ${emoji.eyeballs}}. This is the source of "last resort" but may be intended.`
         );
       }
-      region = userConfig.general.defaultAwsRegion;
+      region = userConfig.aws.defaultRegion;
     }
   }
 

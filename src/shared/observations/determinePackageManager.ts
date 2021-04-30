@@ -1,10 +1,10 @@
+import chalk from "chalk";
 import { PackageManagerObservation, DoDevopObservation } from "~/@types/observations";
 import { DevopsError } from "~/errors";
 import { askListQuestion } from "../interactive";
 import { emoji } from "~/shared/ui";
-import { saveToProjectConfig } from "~/shared/core";
+import { saveProjectConfig } from "~/shared/config";
 import { removeOtherLockFiles } from "~/shared/npm";
-import chalk from "chalk";
 
 /**
  * Based on all observations made at startup, this function will try to
@@ -37,7 +37,7 @@ export async function determinePackageManager(
       ["npm", "pnpm", "yarn"],
       observations.has("pnpm") ? "pnpm" : observations.has("yarn") ? "yarn" : "npm"
     );
-    await saveToProjectConfig("general", { pkgManager });
+    await saveProjectConfig({ general: { pkgManager } });
     const removed = await removeOtherLockFiles(pkgManager);
     if (removed.length > 0) {
       console.log(chalk`- removed `);

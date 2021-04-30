@@ -1,6 +1,7 @@
 import parse from "destr";
-import { readFile } from "../file";
+import { currentDirectory, readFile } from "~/shared/file";
 import { IProjectConfig, IProjectConfigFilled } from "~/@types";
+import { CONFIG_FILE } from "~/shared/config/constants";
 
 /**
  * Gets the project's configuration from the current
@@ -10,7 +11,7 @@ import { IProjectConfig, IProjectConfigFilled } from "~/@types";
  */
 export function getProjectConfig(): IProjectConfig {
   return (
-    (parse(readFile("./.do-devops.json")) as IProjectConfigFilled | false) || {
+    (parse(readFile(currentDirectory(CONFIG_FILE))) as IProjectConfigFilled | false) || {
       projectConfig: false,
       kind: "project",
     }
