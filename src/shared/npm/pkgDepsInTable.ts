@@ -29,11 +29,11 @@ export function pkgDepsInTable(opts: IPkgDepsInTableOptions = {}) {
 
   const deps = [
     { name: "Dependencies", data: opts.ignoreDeps ? undefined : dependencies },
-    { name: "Dev Deps", data: opts.ignoreDevDeps ? undefined : devDependencies },
-    { name: "Optional Deps", data: opts.ignoreOptionalDeps ? undefined : optionalDependencies },
     { name: "Peer Deps", data: opts.ignorePeerDeps ? undefined : peerDependencies },
+    { name: "Optional Deps", data: opts.ignoreOptionalDeps ? undefined : optionalDependencies },
+    { name: "Dev Deps", data: opts.ignoreDevDeps ? undefined : devDependencies },
   ]
-    .filter((i) => i.data)
+    .filter((i) => i.data && Object.keys(i.data).length > 0)
     .map((i) => ({
       name: i.name,
       data: formatDependencies(convertDepDictionaryToArray(i.data as IDictionary<string>)),

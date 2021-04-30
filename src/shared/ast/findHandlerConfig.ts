@@ -1,18 +1,17 @@
 import chalk from "chalk";
-import { IDictionary, IServerlessFunction } from "common-types";
+import { IDictionary, IServerlessFunctionHandler } from "common-types";
+import { IDiscoveredConfig } from "~/@types";
 import { namedExports, parseFile } from "./index";
 
 /**
  * Given a handler file, this will return the object key/value
- * pairs of the file's `config` export. It will also provide a
- * list of functions who's `config` export did _not_ expressly
- * type the config as `IWrapperFunction`
+ * pairs of the file's `config` export.
  */
 export function findHandlerConfig(
   filename: string,
   /** the _package_ section should be replaced with a reference to the `filename.zip` */
   isWebpackZip: boolean = false
-) {
+): IDiscoveredConfig | undefined {
   const ast = parseFile(filename);
   const hash: IDictionary = {};
   const config = namedExports(ast).find((i) => i.name === "config");
@@ -25,9 +24,7 @@ export function findHandlerConfig(
       hash[i.name] = i.value;
     }
 
-    hash.handler = isWebpackZip
-      ? `.webpack/${fn}.handler`
-      : filename.replace(".ts", ".handler");
+    hash.handler = isWebpackZip ? `.webpack/${fn}.handler` : filename.replace(".ts", ".handler");
 
     if (isWebpackZip) {
       if (hash.package) {
@@ -39,8 +36,8 @@ export function findHandlerConfig(
     }
 
     return {
-      interface: config.interface,
-      config: hash as IServerlessFunction,
+      interface: config.interface as string,
+      config: hash as IServerlessFunctionHandler,
     };
   }
 }
