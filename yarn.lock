@@ -1467,10 +1467,15 @@ commander@^6.2.1:
   resolved "https://registry.yarnpkg.com/commander/-/commander-6.2.1.tgz#0792eb682dfbc325999bb2b84fddddba110ac73c"
   integrity sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==
 
-"common-types@> 1.15.0", common-types@^1.15.8, common-types@^1.24.5:
+"common-types@> 1.15.0", common-types@^1.15.8:
   version "1.24.5"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.24.5.tgz#be45966e845cab5c022b045d068f35a54ab8b5bb"
   integrity sha512-qhGRr2gbhvIcilCOnePILdLsiK1fObqc234dp6As0r/AC9CH65kVxexO032/QvH/gYLurjhHNp1xftOBqH9viw==
+
+common-types@^1.24.7:
+  version "1.24.7"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.24.7.tgz#72252d378cd5ac901df6be170ca09194cb3f45b4"
+  integrity sha512-hX7uSoRkjzDDIdEc1ZFUlOvuZKl4NVHFdOyqK8Oh6tlwju5u4NHGdGSQfRjaFX8SmOJqVGnnO8P2/e4VYWim8A==
 
 commondir@^1.0.1:
   version "1.0.1"
@@ -3750,10 +3755,10 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-dash@^1.13.0:
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.13.0.tgz#8cb6067503eaf92fee69b748c6da0cbf5fa9b097"
-  integrity sha512-1Y3gdRszgbAJ3VBaCxceIo+hFAimgfIWUBcyEmFsiIoPE0kMw3hPCh9lHxFbdotEvCccDObg8r0zTAE2tpnYqA==
+native-dash@^1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.14.0.tgz#3dfbc36b55f598c7ab912dfabfb7e5ac6dcbb3ee"
+  integrity sha512-q200Egw45BiDWto8ouKfXEhsLA7bcndpHTq//+HKz4udT5l8dBT/AijXcNm5DiP0oI41DVTyGJ1ftbtEoqYyEg==
 
 native-dash@~1.10.0:
   version "1.10.0"

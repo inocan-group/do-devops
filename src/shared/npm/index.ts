@@ -2,15 +2,14 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 09:10 AM ( GMT-7 )
+// index last changed at: 5th May, 2021, 03:20 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: installDevDep, pkgDepsInTable, writePackageJson.
+// files: installDevDep, timingFromNpmInfo.
 // directories: package-json, package-manager.
 
 // local file exports
 export * from "./installDevDep";
-export * from "./pkgDepsInTable";
-export * from "./writePackageJson";
+export * from "./timingFromNpmInfo";
 
 // directory exports
 export * from "./package-json/index";

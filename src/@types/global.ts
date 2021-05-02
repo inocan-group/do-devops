@@ -9,4 +9,4 @@ export type IGlobalOptions<T extends object = {}> = {
   quiet?: boolean;
   verbose?: boolean;
   help?: boolean;
-} & T;
+} & Partial<T>;

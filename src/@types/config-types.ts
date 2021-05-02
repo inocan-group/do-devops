@@ -1,4 +1,11 @@
-import { AwsAccountId, AwsArnPartition, AwsRegion, AwsStage, IDictionary } from "common-types";
+import {
+  AwsAccountId,
+  AwsArnPartition,
+  AwsRegion,
+  AwsStage,
+  IDictionary,
+  IServerlessFunctionHandler,
+} from "common-types";
 import { NotDefined } from "./general";
 import { PackageManagerObservation, TestObservation } from "./observations";
 
@@ -58,7 +65,9 @@ export interface ICommandConfig {
     addedFiles?: string[];
   };
   awsid?: {};
-  build?: {};
+  build?: {
+    lambda?: IServerlessFunctionHandler[];
+  };
   deploy?: {};
   endpoints?: {};
   fns?: {};

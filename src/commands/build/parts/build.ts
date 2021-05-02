@@ -5,11 +5,9 @@ import { IBuildOptions } from "./options";
 import { proxyToPackageManager } from "~/shared/core/proxyToPackageManager";
 import { askConfirmQuestion } from "~/shared/interactive";
 import { installDevDep } from "~/shared/npm";
-import { emoji, highlightFilepath } from "~/shared/ui";
-import { findHandlerConfig, getValidServerlessHandlers } from "~/shared/ast";
-import { reportOnFnConfig } from "~/commands/build/util";
+import { emoji } from "~/shared/ui";
+import { processLambdaFns } from "~/commands/build/util";
 import { logger } from "~/shared/core/logger";
-import { toRelativePath } from "~/shared";
 
 export const defaultConfig = {
   preBuildHooks: ["clean"],
@@ -48,31 +46,7 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, op
     }
 
     log.shout(chalk`{bold - ${emoji.run} Starting {yellow Serverless Devops} build process}\n`);
-    const fns = getValidServerlessHandlers(opts);
-    if (fns.length === 0) {
-      log.shout(
-        chalk`- ${emoji.eyeballs} no lambda function handlers found; see docs for how to ensure your fns are found`
-      );
-      log.info(chalk`{gray - document can be found at {blue https://aws-orchestrate.com}}`);
-      return;
-    }
-
-    log.info(chalk`- found {yellow {bold ${fns.length}}} lambda functions`);
-    const fnConfig = fns.map((fn) => findHandlerConfig(fn));
-    log.whisper(chalk`{gray - configuration blocks for lambda functions retrieved}`);
-    const report = reportOnFnConfig(fnConfig);
-    if (report.interfaces.has("IWrapperFunction")) {
-      log.info(
-        chalk`- ${emoji.angry} detected use of {italic deprecated} {inverse  IWrapperFunction } interface; please switch to {inverse  IHandlerConfig } instead.`
-      );
-      log.whisper(
-        chalk`- The following {bold ${
-          report.usage.withOtherInterface
-        }} {italic handler fns} are missing the appropriate typing:\n\t{dim ${report.usage.handlersWithOtherInterface
-          .map((i) => highlightFilepath(toRelativePath(i).replace(".handler", "")))
-          .join("\t")}}`
-      );
-    }
+    await processLambdaFns(opts, observations);
 
     // await buildLambdaTypescriptProject(opts, config);
   } else {
