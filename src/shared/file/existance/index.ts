@@ -2,11 +2,12 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 06:35 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 12:46 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: ensureDirectory, fileExists, filesExist.
+// files: dirExists, ensureDirectory, fileExists, filesExist.
 
 // local file exports
+export * from "./dirExists";
 export * from "./ensureDirectory";
 export * from "./fileExists";
 export * from "./filesExist";

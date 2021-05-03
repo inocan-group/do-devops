@@ -28,4 +28,6 @@ export async function saveProjectConfig<
   writeFileSync(currentDirectory(CONFIG_FILE), JSON.stringify(newConfig, null, 2), {
     encoding: "utf-8",
   });
+
+  return newConfig;
 }

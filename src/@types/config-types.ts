@@ -79,6 +79,8 @@ export interface ICommandConfig {
   ssm?: {};
   test?: {
     unitTestFramework: TestObservation;
+    useWallaby: boolean;
+    testPattern: string;
   };
 }
 

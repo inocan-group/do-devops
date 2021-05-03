@@ -1,8 +1,4 @@
-import {
-  getAwsProfile,
-  getAwsProfileList,
-  hasAwsProfileCredentialsFile,
-} from "../src/shared";
+import { getAwsProfile, getAwsProfileList, hasAwsProfileCredentialsFile } from "../src/shared";
 
 import { expect } from "chai";
 

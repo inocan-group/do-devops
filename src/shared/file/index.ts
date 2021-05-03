@@ -2,20 +2,17 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 04:22 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 07:16 AM ( GMT-7 )
 // export: named; exclusions: helpers, index, private.
-// files: createTsFile, directoryFiles, filepathParts, filesInfo, getAllFilesOfType, getDataFiles, getExportsFromFile, getFileFromHomeDirectory, getMonoRepoPackages, lintfix, readDataFile, relativePath, saveFileToHomeDirectory, saveYamlFile, stripFileExtension, symlinks.
-// directories: base-paths, crud, existance.
+// files: createTsFile, directoryFiles, filepathParts, filesInfo, getDataFiles, getMonoRepoPackages, lintfix, readDataFile, relativePath, saveFileToHomeDirectory, saveYamlFile, stripFileExtension.
+// directories: base-paths, crud, existance, utility.
 
 // local file exports
 export * from "./createTsFile";
 export * from "./directoryFiles";
 export * from "./filepathParts";
 export * from "./filesInfo";
-export * from "./getAllFilesOfType";
 export * from "./getDataFiles";
-export * from "./getExportsFromFile";
-export * from "./getFileFromHomeDirectory";
 export * from "./getMonoRepoPackages";
 export * from "./lintfix";
 export * from "./readDataFile";
@@ -23,12 +20,12 @@ export * from "./relativePath";
 export * from "./saveFileToHomeDirectory";
 export * from "./saveYamlFile";
 export * from "./stripFileExtension";
-export * from "./symlinks";
 
 // directory exports
 export * from "./base-paths/index";
 export * from "./crud/index";
 export * from "./existance/index";
+export * from "./utility/index";
 
 // Note:
 // -----

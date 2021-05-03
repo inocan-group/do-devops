@@ -1,4 +1,5 @@
 import { ConfirmQuestion } from "inquirer";
+import { IInteractiveOptions } from "~/@types/interactive-types";
 
 /**
  * Builds a composable boolean/confirm based question. For example:
@@ -14,10 +15,16 @@ import { ConfirmQuestion } from "inquirer";
  * coming later. If you want to just immediately ask the question then
  * use the `confirmQuestionNow()` instead.
  */
-export const confirmQuestion = (name: string, question: string): ConfirmQuestion => {
+export const confirmQuestion = (
+  name: string,
+  question: string,
+  options: IInteractiveOptions<{ Y: true; N: false }> = {}
+): ConfirmQuestion => {
   return {
-    type: "confirm",
+    type: "confirm" as const,
     name,
+    default: options.default || true,
     message: question,
+    ...(options.when ? { when: options.when } : { when: () => true }),
   };
 };

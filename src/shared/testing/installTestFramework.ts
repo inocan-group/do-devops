@@ -1,0 +1,48 @@
+import chalk from "chalk";
+import { TestObservation, Observations } from "~/@types";
+import { DevopsError } from "~/errors";
+import { logger } from "../core";
+import { installDevDep } from "../npm";
+
+export async function installTestFramework(framework: TestObservation, observations: Observations) {
+  const log = logger(observations);
+
+  let installed: boolean;
+  switch (framework) {
+    case "uvu":
+      installed = await installDevDep(observations, "uvu");
+      break;
+    case "jest":
+      installed = await installDevDep(
+        observations,
+        "jest",
+        "ts-jest",
+        "@types/jest",
+        "jest-extended"
+      );
+      break;
+    case "mocha":
+      installed = await installDevDep(observations, "mocha", "chai", "@types/mocha", "@types/chai");
+      break;
+    case "jasmine":
+      installed = await installDevDep(observations, "jasmine");
+      break;
+    case "qunit":
+      installed = await installDevDep(observations, "qunit");
+      break;
+    case "ava":
+      installed = await installDevDep(observations, "ava");
+      break;
+    default:
+      throw new DevopsError(
+        `Unknown test framework: ${framework}`,
+        "install/unknown-test-framework"
+      );
+  }
+
+  if (installed) {
+    log.info(chalk`{gray - installed {italic dev dependencies} for {bold {green ${framework}}}}`);
+  }
+
+  return installed;
+}

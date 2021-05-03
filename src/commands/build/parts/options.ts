@@ -1,8 +1,10 @@
+import { AwsStage } from "common-types";
 import { IOptionDefinition } from "~/@types/option-types";
 
 export interface IBuildOptions {
   force: boolean;
   alias: boolean;
+  stage: AwsStage;
 }
 
 export const options: IOptionDefinition = {

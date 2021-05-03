@@ -1,4 +1,5 @@
-import { ListQuestion } from "inquirer";
+import { Answers, DistinctChoice, ListChoiceMap, ListQuestion } from "inquirer";
+import { IInteractiveOptions } from "~/@types/interactive-types";
 
 /**
  * **listQuestion**
@@ -19,17 +20,20 @@ import { ListQuestion } from "inquirer";
  * Note: if you want to ask the question immediately, use
  * `listQuestionNow()` instead.
  */
-export function listQuestion(
+export function listQuestion<T extends DistinctChoice<ListChoiceMap<Answers>>[]>(
   name: string,
   question: string,
-  choices: ListQuestion["choices"],
-  defaultValue?: ListQuestion["default"]
+  choices: T,
+  options: IInteractiveOptions<T> = {}
 ): ListQuestion {
-  return {
-    type: "list",
+  const response: ListQuestion = {
+    type: "list" as const,
     name,
     message: question,
     choices,
-    default: defaultValue,
+    default: options.default,
+    ...(options.when ? { when: options.when } : { when: () => true }),
   };
+
+  return response;
 }

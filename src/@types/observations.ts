@@ -48,3 +48,8 @@ export type DoDevopObservation =
   | DbObservation
   | FrameworkObservation
   | ServerlessObservation;
+
+/**
+ * A _set_ of observations made about the `do-devops` runtime environment
+ */
+export type Observations<T extends string = DoDevopObservation> = Set<T>;

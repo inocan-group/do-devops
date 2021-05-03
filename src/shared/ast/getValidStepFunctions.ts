@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import fg from "fast-glob";
+import fg from "globby";
 import path from "path";
 
 import { parseFile } from "./parseFile";

@@ -1,68 +1,87 @@
 import chalk from "chalk";
 
-import { TestObservation } from "~/@types";
+import { ICommandConfig, IGlobalOptions, TestObservation } from "~/@types";
 import { TEST_FRAMEWORKS } from "~/constants";
+import { logger } from "~/shared/core";
+import { dirExists } from "~/shared/file";
 import { ask, confirmQuestion, listQuestion } from "~/shared/interactive";
 
 export interface ITestFrameworkAnswer {
   /** the test framework */
   fw: TestObservation;
-  installed: boolean;
+  /** the grep pattern used to identify test files */
+  testPattern: string;
   /** using wallaby or not */
   useWallaby: false;
 }
 
 /**
- * A user ends up here if:
- *
- * - they've run `dd build` but never run the command before in the repo
- * - they do they have _hints_ in terms of dev dependencies about what tool is being used
- * - basically we can assume that the user has a pretty clean slate wrt to testing
- * but that they _do_ have a package.json file.
+ * Asks user about the testing framework they wish to use and other test meta-data.
+ * The answer returned is `false` if user opts to quit but other otherwise will fulfill
+ * the **test** configuration requirements.
  */
-export async function askForUnitTestFramework(): Promise<ITestFrameworkAnswer | false> {
-  // const pkg = getPackageJson();
-  // const devDeps = Object.keys(pkg.devDependencies || {});
+export async function askForUnitTestFramework(
+  opts: IGlobalOptions<{ unitTestFramework: TestObservation }> = {}
+): Promise<ICommandConfig["test"] | false> {
+  const log = logger(opts);
   const fwChoices: Array<TestObservation | "quit"> = [...TEST_FRAMEWORKS, "quit"];
 
-  console.log(
+  log.shout(
     chalk`- we have not been able to determine which {italic unit testing} framework you're using.`
   );
 
   const framework = listQuestion(
-    "fw",
+    "unitTestFramework",
     "Choose the framework you'd like to use (or 'quit')",
     fwChoices,
-    "jest"
+    { default: opts.unitTestFramework || "jest", when: () => !opts.unitTestFramework }
   );
-
-  const install = confirmQuestion("installed", "Would you like us to install that for you now?");
 
   const wallaby = confirmQuestion(
     "useWallaby",
-    "Would you like us to add a WallabyJS config file so you can use it as a test runner in this repo?"
+    "Would you like us to add a WallabyJS config file so you can use it as a test runner in this repo?",
+    {
+      when: (c) => c.unitTestFramework !== "uvu",
+      default: (c: IDictionary) => (c.unitTestFramework === "uvu" ? false : true),
+    }
   );
 
+  const patternLookup = {
+    test: chalk`Any {inverse *-spec.ts} or {inverse *-test.ts} file in the {italic test} directory`,
+    tests: chalk`Any {inverse *-spec.ts} or {inverse *-test.ts} file in the {italic tests} directory`,
+    src: chalk`Any {inverse *-spec.ts} or {inverse *-test.ts} file in the {italic src} directory`,
+  };
+
+  const defaultDir: keyof typeof patternLookup = dirExists("./tests")
+    ? "tests"
+    : dirExists("./test")
+    ? "test"
+    : "tests";
+
   const patterns = [
-    "**/*[-.]spec.ts",
-    "**/*[-.]test.ts",
-    "**/*[-.](test|spec).ts",
-    "test/**/*.ts",
-    "tests/**/*.ts",
+    { [patternLookup.test]: ["**/test/**/?(*-)+(spec|test).ts"] },
+    { [patternLookup.tests]: ["**/tests/**/?(*-)+(spec|test).ts"] },
+    { [patternLookup.src]: ["**/src/**/?(*-)+(spec|test).ts"] },
   ];
 
   const testPatterns = listQuestion(
     "testPattern",
-    "Unit test runners use a regular expression to identify what files are tests; which one do you prefer?",
-    ["SKIP FOR NOW", ...patterns],
-    "**/*[-.]spec.ts"
+    "Unit test runners use a regular expression to identify what files are tests; which do you prefer?",
+    patterns,
+    { default: patterns.find((i) => Object.keys(i).includes(patternLookup[defaultDir])) }
   );
 
-  const { fw, installed, useWallaby } = await ask([framework, install, wallaby, testPatterns]);
+  const { unitTestFramework, useWallaby, testPattern } = await ask([
+    framework,
+    wallaby,
+    testPatterns,
+  ]);
 
-  return {
-    fw: fw !== "skip" ? fw : false,
-    installed,
-    useWallaby,
-  };
+  return unitTestFramework !== "skip"
+    ? false
+    : {
+        unitTestFramework,
+        useWallaby,
+        testPattern,
+      };
 }
