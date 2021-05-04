@@ -1,5 +1,3 @@
-import "mocha";
-
 describe("autoindex => ", () => {
   it("indexing work with named exports", async () => {
     // helpers.captureStdout();

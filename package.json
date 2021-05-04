@@ -40,7 +40,7 @@
     "lint:tsc": "yarn tsc --noEmit",
     "orphans": "yarn madge src --extensions ts --orphans",
     "summary": "yarn madge src --extensions ts --summary",
-    "test": "mocha -r ts-node/register test/**/*-spec.ts",
+    "test": "jest",
     "visualize": "yarn madge src --extensions ts -i /tmp/dep-ts-visualize.png && open /tmp/dep-ts-visualize.png",
     "visualize:js": "yarn madge bin --extensions js -i /tmp/dep-js-visualize.png && open /tmp/dep-js-visualize.png",
     "warnings": "yarn madge src --extensions ts --warnings",
