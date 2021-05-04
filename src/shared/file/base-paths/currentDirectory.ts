@@ -1,14 +1,14 @@
 /* eslint-disable unicorn/prefer-module */
 import path from "path";
+import { IDirectoryOptions } from "~/@types";
+import { toRelativePath } from "../relativePath";
 
 /**
  * Returns a file/directory name prefixed by _current working
  * directory_ which it is being executed in.
  */
-export function currentDirectory(offset: string = "") {
-  const base = process.cwd();
-  // just to be sure; remove path to homedir if it already exists
-  offset = offset.replace(base, "");
+export function currentDirectory(offset?: string, opts: Omit<IDirectoryOptions, "offset"> = {}) {
+  const base = offset ? path.posix.join(process.cwd(), offset) : process.cwd();
 
-  return path.posix.join(base, offset);
+  return opts.base ? toRelativePath(base, opts.base) : base;
 }

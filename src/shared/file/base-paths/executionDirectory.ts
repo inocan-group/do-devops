@@ -11,7 +11,6 @@ import { getCaller } from "~/shared/stack";
  */
 export function executionDirectory(opts: IDirectoryOptions = {}) {
   const caller = getCaller();
-  console.log({ caller });
 
   if (!caller.filePath) {
     throw new DevopsError(`Could not determine execution directory`, "file/unexpected");
