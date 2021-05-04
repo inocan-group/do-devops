@@ -8,7 +8,7 @@ describe("git shared functions", () => {
 
   it("getGitRemotes() returns proper details", async () => {
     const remotes = (await getGitRemotes()).pop();
-    expect(remotes).toBeUndefined();
+    expect(remotes).not.toBeUndefined();
     if (remotes) {
       expect(remotes.name).toBe("origin");
       expect(remotes.refs.fetch.includes("do-devops")).toBeTruthy();

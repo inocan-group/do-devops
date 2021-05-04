@@ -4,7 +4,7 @@ import path from "path";
 const config: InitialOptionsTsJest = {
   verbose: true,
   preset: "ts-jest/presets/js-with-ts",
-  testMatch: ["**/test/**/?(*-)+(spec|test).ts"],
+  testMatch: [process.cwd() + "/test/**/?(*)+(-spec|-test|.spec|.test).ts"],
   moduleNameMapper: {
     "^[/]{0,1}~/(.*)$": path.resolve(process.cwd(), "src", "$1"),
   },

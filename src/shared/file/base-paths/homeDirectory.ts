@@ -1,14 +1,13 @@
-/* eslint-disable unicorn/prefer-module */
 import path from "path";
 import { homedir } from "os";
+import { IDirectoryOptions } from "~/@types";
+import { toRelativePath } from "../relativePath";
 
 /**
  * Returns a file/directory name prefixed by user's _home directory_
  */
-export function homeDirectory(offset: string = "") {
-  const home = homedir();
-  // just to be sure; remove path to homedir if it already exists
-  offset = offset.replace(home, "");
+export function homeDirectory(opts: IDirectoryOptions = {}) {
+  const home = opts.offset ? path.posix.join(opts.offset, homedir()) : homedir();
 
-  return path.posix.join(home, offset);
+  return opts.base ? toRelativePath(home, opts.base) : home;
 }
