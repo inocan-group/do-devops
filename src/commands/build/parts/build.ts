@@ -28,18 +28,18 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, op
       log.info(
         chalk`{gray - to find more about this please refer to the docs: https://aws-orchestrate.com/devops}`
       );
-      process.exit();
+      return;
     }
 
-    if (!isValidServerlessTs()) {
+    if (!isValidServerlessTs(undefined, opts)) {
       log.shout(
-        chalk`{bold - in order for the build process to run your {blue serverless.ts} file must utilize the {yellow Serverless()}\n   configurator inside an asynchronous code block and be {italic transpilable} by Typescript's {bold tsc} compiler}`
+        chalk`{bold - in order for the build process to run your {blue serverless.ts} file must produce a {italic default} export\n  of the {yellow Serverless()} configurator (exported in the {bold blue aws-orchestrate} library).}`
       );
 
       log.info(
         chalk`{gray - to find more about this please refer to the docs: https://aws-orchestrate.com/devops}`
       );
-      process.exit();
+      return;
     }
 
     if (!observations.has("tsNode") || !observations.has("typescript")) {

@@ -8,11 +8,12 @@ export function getFileComponents(filepath: string, base?: string) {
   const parts = relative.split("/");
   const start = parts[0];
   const mid = parts.slice(1, -1).join("/");
-  const end = parts.slice(-1)[0];
-  const match = end.trim().match(/\.(\w*)$/) as [string, string];
+  const filename = parts.slice(-1)[0];
+  const match = filename.trim().match(/\.(\w*)$/) as [string, string];
   const ext = match[1];
   const re = new RegExp(`\.${ext}`);
-  const filename = end.replace(re, "");
 
-  return { start, mid, end, filename, ext, filepath: [start, mid].join("/") };
+  const fileWithoutExt = filename.replace(re, "");
+
+  return { start, mid, filename, fileWithoutExt, ext, filepath: [start, mid].join("/") };
 }

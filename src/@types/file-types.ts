@@ -25,3 +25,16 @@ export interface IFileWithStats {
   file: string;
   stats: Stats;
 }
+
+/**
+ * Options for all the base directory functions provided by `do-devops`
+ */
+export interface IDirectoryOptions {
+  /** a directory path that will be joined into the root path the function starts at */
+  offset?: string;
+  /**
+   * if you want to work with a "relative path" from some known "base dir" this can be
+   * passed in to get the relative path.
+   */
+  base?: string;
+}

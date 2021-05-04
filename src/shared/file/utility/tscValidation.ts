@@ -3,8 +3,10 @@ import { exec } from "shelljs";
 import { IGlobalOptions } from "~/@types";
 import { DevopsError } from "~/errors";
 import { logger } from "~/shared/core";
+import { emoji } from "~/shared/ui";
 import { currentDirectory, libraryDirectory } from "../base-paths";
 import { fileExists } from "../existance";
+import { getFileComponents } from "./getFileComponents";
 
 /**
  * Validates that a given Typescript file can be transpiled by
@@ -29,17 +31,19 @@ export function tscValidation(filename: string, opts: IGlobalOptions = {}): bool
 
   const command = `${tsc} ${filename} --noEmit`;
   log.whisper(
-    chalk`{dim - validating the "${filename}" file with the Typescript {bold {yellow tsc}} compiler}`
+    chalk`{gray - validating the "${filename}" file with the Typescript {bold {yellow tsc}} compiler}`
   );
   const outcome = exec(command, { silent: true });
   if (outcome.code === 0) {
     log.whisper(chalk`{dim - {bold {yellow tsc}} validation passed}`);
     return true;
   } else {
-    log.info(
-      chalk`- the file "{blue ${filename}}" could not be transpiled using {bold {yellow tsc}}`
+    log.shout(
+      chalk`- ${emoji.poop} failed to transpile {blue serverless.ts}: {bold tsc ${
+        getFileComponents(filename).filename
+      } --noEmit}`
     );
-    log.shout(chalk`- the error was:\n\n${outcome.stderr}`);
+    log.shout(chalk`\n\t{red ${outcome.stderr}${outcome.stdout}}`);
     return false;
   }
 }

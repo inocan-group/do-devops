@@ -20,7 +20,6 @@
     "declaration": true,
     "declarationMap": true,
     "outDir": "bin",
-    "typeRoots": ["src/@polyfills"],
 
     "paths": {
       "~/*": ["src/*"],
@@ -35,5 +34,5 @@
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }
