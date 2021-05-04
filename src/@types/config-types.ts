@@ -19,6 +19,12 @@ export interface IGlobalConfig {
      * available to determine.
      */
     pkgManager?: PackageManagerObservation;
+
+    /**
+     * Allows a user to store what command to use for bringing up files in
+     * an editor.
+     */
+    editorCommand?: string;
   };
   aws: {
     /**

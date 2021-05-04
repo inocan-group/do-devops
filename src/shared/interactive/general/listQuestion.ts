@@ -1,5 +1,11 @@
-import { Answers, DistinctChoice, ListChoiceMap, ListQuestion } from "inquirer";
-import { IInteractiveOptions } from "~/@types/interactive-types";
+import {
+  Answers,
+  AsyncDynamicQuestionProperty,
+  DistinctChoice,
+  ListChoiceMap,
+  ListQuestion,
+} from "inquirer";
+import { IChoice, IInteractiveOptions } from "~/@types/interactive-types";
 
 /**
  * **listQuestion**
@@ -17,16 +23,16 @@ import { IInteractiveOptions } from "~/@types/interactive-types";
  * };
  * ```
  *
- * Note: if you want to ask the question immediately, use
- * `listQuestionNow()` instead.
+ * Note: choices can be an array of values or an array of `IChoice` which
+ * requires the `name` and `value` and allows a `short` property as well.
  */
-export function listQuestion<T extends DistinctChoice<ListChoiceMap<Answers>>[]>(
+export function listQuestion<T extends string | number | object>(
   name: string,
   question: string,
-  choices: T,
-  options: IInteractiveOptions<T> = {}
-): ListQuestion {
-  const response: ListQuestion = {
+  choices: ListQuestion<T[]>["choices"],
+  options: IInteractiveOptions<T[]> = {}
+): ListQuestion<T[]> {
+  const response: ListQuestion<T[]> = {
     type: "list" as const,
     name,
     message: question,

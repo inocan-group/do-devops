@@ -1,19 +1,11 @@
 import chalk from "chalk";
+import { IDictionary } from "common-types";
 
 import { ICommandConfig, IGlobalOptions, TestObservation } from "~/@types";
 import { TEST_FRAMEWORKS } from "~/constants";
 import { logger } from "~/shared/core";
 import { dirExists } from "~/shared/file";
 import { ask, confirmQuestion, listQuestion } from "~/shared/interactive";
-
-export interface ITestFrameworkAnswer {
-  /** the test framework */
-  fw: TestObservation;
-  /** the grep pattern used to identify test files */
-  testPattern: string;
-  /** using wallaby or not */
-  useWallaby: false;
-}
 
 /**
  * Asks user about the testing framework they wish to use and other test meta-data.

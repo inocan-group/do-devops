@@ -1,8 +1,13 @@
 import path from "path";
 import { IDictionary } from "common-types";
-import { currentDirectory, libraryDirectory } from "../base-paths";
-import { dirExists, fileExists } from "../existance";
 import { DevopsError } from "~/errors";
+import {
+  getFilesUnderPath,
+  dirExists,
+  currentDirectory,
+  libraryDirectory,
+  templateFileCopy,
+} from "~/shared/file";
 
 /**
  * **templateDirCopy**
@@ -20,7 +25,7 @@ import { DevopsError } from "~/errors";
  * - `template/source-dir-missing`
  * - `dir/exists-not-dir`
  */
-export function templateDirCopy(source: string, target: string, replacements?: IDictionary) {
+export async function templateDirCopy(source: string, target: string, replacements?: IDictionary) {
   source = path.posix.join(libraryDirectory("/templates"), source);
   target = path.posix.join(currentDirectory(), target);
 
@@ -31,7 +36,19 @@ export function templateDirCopy(source: string, target: string, replacements?: I
     );
   }
 
-  const files = 
+  const files = await getFilesUnderPath(source);
+  const problems: string[] = [];
+  const transferred: string[] = [];
+  for (const file of files) {
+    const sourceFile = path.posix.join(source, file);
+    const targetFile = path.posix.join(target, file);
+    const completed = await templateFileCopy(sourceFile, targetFile, replacements);
+    if (!completed) {
+      problems.push(file);
+    } else {
+      transferred.push(file);
+    }
+  }
 
-  
+  return { transferred, ...(problems.length > 0 ? { problems } : {}) };
 }

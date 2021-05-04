@@ -1,6 +1,9 @@
-import { toRelativePath } from "./relativePath";
+import { toRelativePath } from "~/shared/file";
 
-export function filepathParts(filepath: string, base?: string) {
+/**
+ * Breaks files into parts so that they can be treated separately
+ */
+export function getFileComponents(filepath: string, base?: string) {
   const relative = toRelativePath(filepath, base);
   const parts = relative.split("/");
   const start = parts[0];
@@ -11,5 +14,5 @@ export function filepathParts(filepath: string, base?: string) {
   const re = new RegExp(`\.${ext}`);
   const filename = end.replace(re, "");
 
-  return { start, mid, end, filename, ext };
+  return { start, mid, end, filename, ext, filepath: [start, mid].join("/") };
 }

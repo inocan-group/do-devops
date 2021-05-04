@@ -1,9 +1,9 @@
 import path from "path";
 import { IDictionary } from "common-types";
 import { currentDirectory, libraryDirectory } from "../base-paths";
-import { fileExists } from "../existance";
 import { DevopsError } from "~/errors";
 import { readFile, write } from "../crud";
+import { fileExists } from "../existance";
 
 /**
  * **templateFileCopy**
@@ -20,7 +20,7 @@ import { readFile, write } from "../crud";
  * Errors:
  * - `template/source-file-missing`
  */
-export function templateFileCopy(source: string, target: string, replacements?: IDictionary) {
+export async function templateFileCopy(source: string, target: string, replacements?: IDictionary) {
   source = path.posix.join(libraryDirectory("/templates"), source);
   target = path.posix.join(currentDirectory(), target);
 
@@ -37,6 +37,10 @@ export function templateFileCopy(source: string, target: string, replacements?: 
       const re = new RegExp(lookFor, "g");
       content = content.replace(re, replacements[lookFor]);
     }
+  }
+
+  if (fileExists(target)) {
+    const action = await askAboutFileOverwrite();
   }
 
   return write(target, content);
