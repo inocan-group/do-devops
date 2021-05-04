@@ -4,7 +4,7 @@ import * as process from "process";
 import { askForStage, getServerlessYaml } from "../serverless/index";
 
 import { emoji } from "../ui";
-import { get } from "lodash";
+import { get } from "native-dash";
 import { DoDevopObservation, Observations } from "~/@types";
 
 export interface IStageOptions {

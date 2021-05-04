@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/no-useless-undefined */
 import chalk from "chalk";
-import { get } from "lodash";
+import { get } from "native-dash";
 import { determineProfile } from "./index";
 import { emoji } from "~/shared/ui";
 import { getAwsProfile } from "~/shared/aws";
