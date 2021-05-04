@@ -4,7 +4,7 @@ import { currentDirectory, saveProjectConfig, write } from "~/shared";
 import { findHandlerConfig, getValidServerlessHandlers } from "~/shared/ast";
 import { logger } from "~/shared/core";
 import { createTsFile } from "~/shared/file/createTsFile";
-import { filepathParts } from "~/shared/file/filepathParts";
+import { getFileComponents } from "~/shared/file";
 import { lintfix } from "~/shared/file/lintfix";
 import { emoji } from "~/shared/ui";
 import { reportOnFnConfig } from ".";
@@ -44,7 +44,7 @@ export async function processLambdaFns(
       chalk`- The following {bold ${
         report.usage.withOtherInterface
       }} handler fns are missing the appropriate typing:\n\t{dim ${report.usage.handlersWithOtherInterface
-        .map((i) => filepathParts(i).filename)
+        .map((i) => getFileComponents(i).filename)
         .join("\t")}}`
     );
   }
@@ -57,7 +57,7 @@ export async function processLambdaFns(
         name: "LambdaFunction",
         description: "an enumeration of all locally defined lambda functions",
         elements: lambda.map((l) => ({
-          el: `${filepathParts(l.config.handler).filename}`,
+          el: `${getFileComponents(l.config.handler).filename}`,
           comment: l.config.description,
         })),
       })

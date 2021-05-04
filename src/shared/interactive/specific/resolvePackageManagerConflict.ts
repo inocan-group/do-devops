@@ -7,11 +7,9 @@ import chalk from "chalk";
 export async function resolvePackageManagerConflict(observations: Set<DoDevopObservation>) {
   const pkgManager = await askListQuestion<
     Exclude<PackageManagerObservation, "packageManagerConflict">
-  >(
-    "Which package manager do you expect to use in this repo?",
-    ["npm", "pnpm", "yarn"],
-    observations.has("pnpm") ? "pnpm" : observations.has("yarn") ? "yarn" : "npm"
-  );
+  >("Which package manager do you expect to use in this repo?", ["npm", "pnpm", "yarn"], {
+    default: observations.has("pnpm") ? "pnpm" : observations.has("yarn") ? "yarn" : "npm",
+  });
   await saveProjectConfig({ general: { pkgManager } });
   const removed = await removeOtherLockFiles(pkgManager);
   if (removed.length > 0) {

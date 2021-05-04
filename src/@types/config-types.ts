@@ -73,6 +73,7 @@ export interface ICommandConfig {
   awsid?: {};
   build?: {
     lambda?: IServerlessFunctionHandler[];
+    stepFns?: string[];
   };
   deploy?: {};
   endpoints?: {};
@@ -86,7 +87,10 @@ export interface ICommandConfig {
   test?: {
     unitTestFramework: TestObservation;
     useWallaby: boolean;
-    testPattern: string;
+    /** the directory where test files are located; typically "test", "tests" or possibly "src" */
+    testDirectory: string;
+    /** the filename's ending pattern before which identifies a test file withing a directory structure*/
+    testFilePostfix: "-spec" | "-test" | undefined;
   };
 }
 

@@ -60,7 +60,7 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, op
     }
 
     log.shout(chalk`{bold - ${emoji.run} Starting {yellow Serverless Devops} build process}\n`);
-    const env = getBuildEnvironment();
+    // const env = getBuildEnvironment(opts, observations);
     await processLambdaFns(opts, observations);
 
     // await buildLambdaTypescriptProject(opts, config);

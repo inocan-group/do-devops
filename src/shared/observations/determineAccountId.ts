@@ -1,8 +1,8 @@
-import { IGlobalOptions } from "~/@types";
+import { DoDevopObservation, IAwsOptions, IGlobalOptions } from "~/@types";
 
 export function determineAccountId(
-  opts: IGlobalOptions<IAwsOptions>,
-  observations: Set<DoDevopsObservation>
+  _opts: IGlobalOptions<IAwsOptions>,
+  _observations: Set<DoDevopObservation>
 ) {
   //
 }

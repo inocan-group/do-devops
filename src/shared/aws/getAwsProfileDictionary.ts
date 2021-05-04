@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/no-array-callback-reference */
 import { IAwsProfile } from "~/@types";
-import { IDictionary } from "common-types";
+import { AwsRegion, IDictionary } from "common-types";
 import { hasAwsProfileCredentialsFile } from "~/shared/aws";
 import { readFile } from "~/shared/file";
 
@@ -35,11 +35,15 @@ export async function getAwsProfileDictionary(): Promise<Record<string, IAwsProf
           if (lineOfFile.includes(t)) {
             const [_, key, value] = lineOfFile.match(/\s*(\S+)\s*=\s*(\S+)/) as [
               unknown,
-              string,
+              string & keyof IAwsProfile,
               string
             ];
 
-            agg[profileSection][key as keyof IAwsProfile] = value;
+            if (key === "region") {
+              agg[profileSection][key] = value as AwsRegion;
+            } else {
+              agg[profileSection][key] = value as string;
+            }
           }
         }
       }

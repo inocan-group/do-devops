@@ -4,6 +4,7 @@ import { currentDirectory, libraryDirectory } from "../base-paths";
 import { DevopsError } from "~/errors";
 import { readFile, write } from "../crud";
 import { fileExists } from "../existance";
+import { askAboutFileOverwrite } from "~/shared/interactive";
 
 /**
  * **templateFileCopy**
@@ -40,7 +41,10 @@ export async function templateFileCopy(source: string, target: string, replaceme
   }
 
   if (fileExists(target)) {
-    const action = await askAboutFileOverwrite();
+    const copy = await askAboutFileOverwrite(source, target);
+    if (copy) {
+      write(target, content, { allowOverwrite: true });
+    }
   }
 
   return write(target, content);

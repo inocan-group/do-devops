@@ -20,8 +20,8 @@ export async function configureTestFramework(
   }
 
   if (!known.includes(framework)) {
-    console.log(`- sorry but currently only know how to install: ${known.join(", ")}`);
-    console.log(`- please ensure that you install the required dependencies for "${framework}"`);
+    log.shout(`- sorry but currently only know how to install: ${known.join(", ")}`);
+    log.info(`- please ensure that you install the required dependencies for "${framework}"`);
     return false;
   }
 
@@ -32,8 +32,14 @@ export async function configureTestFramework(
     case "jest":
       await templateDirCopy("test/jest/test-dir", "test");
       await templateFileCopy("test/jest/jest.config.ts", "/jest.config.ts", {
-        TEST_MATCHER: config.testPattern,
+        TEST_MATCHER: `["**/${config.testDirectory}/**/?(*-)+(${config.testFilePostfix}).ts"]`,
       });
       await templateFileCopy("test/jest/wallaby.js", "/wallaby.js");
+      break;
+    case "mocha":
+      await templateDirCopy("test/mocha/test-dir", "test");
+      break;
   }
+
+  return true;
 }

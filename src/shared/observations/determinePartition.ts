@@ -1,8 +1,8 @@
 import { DoDevopObservation, IAwsOptions, IGlobalOptions } from "~/@types";
 
 export function determinePartition(
-  opts: IGlobalOptions<IAwsOptions>,
-  observations: Set<DoDevopObservation>
+  _opts: IGlobalOptions<IAwsOptions>,
+  _observations: Set<DoDevopObservation>
 ) {
   //
 }

@@ -32,11 +32,9 @@ export async function determinePackageManager(
     );
     const pkgManager = await askListQuestion<
       Exclude<PackageManagerObservation, "packageManagerConflict">
-    >(
-      "Which package manager do you expect to use in this repo?",
-      ["npm", "pnpm", "yarn"],
-      observations.has("pnpm") ? "pnpm" : observations.has("yarn") ? "yarn" : "npm"
-    );
+    >("Which package manager do you expect to use in this repo?", ["npm", "pnpm", "yarn"], {
+      default: observations.has("pnpm") ? "pnpm" : observations.has("yarn") ? "yarn" : "npm",
+    });
     await saveProjectConfig({ general: { pkgManager } });
     const removed = await removeOtherLockFiles(pkgManager);
     if (removed.length > 0) {
@@ -58,7 +56,7 @@ export async function determinePackageManager(
     const answer = await askListQuestion<PackageManagerObservation | "none">(
       "We couldn't determine your default package manager, please choose from the list.",
       ["npm", "pnpm", "yarn", "none"],
-      "npm"
+      { default: "npm" }
     );
 
     return answer === "none" ? false : answer;

@@ -10,7 +10,7 @@ export async function installTestFramework(framework: TestObservation, observati
   let installed: boolean;
   switch (framework) {
     case "uvu":
-      installed = await installDevDep(observations, "uvu");
+      installed = await installDevDep(observations, "uvu", "ts-node");
       break;
     case "jest":
       installed = await installDevDep(
@@ -22,7 +22,14 @@ export async function installTestFramework(framework: TestObservation, observati
       );
       break;
     case "mocha":
-      installed = await installDevDep(observations, "mocha", "chai", "@types/mocha", "@types/chai");
+      installed = await installDevDep(
+        observations,
+        "mocha",
+        "chai",
+        "@types/mocha",
+        "@types/chai",
+        "ts-node"
+      );
       break;
     case "jasmine":
       installed = await installDevDep(observations, "jasmine");

@@ -1,11 +1,5 @@
-import {
-  Answers,
-  AsyncDynamicQuestionProperty,
-  DistinctChoice,
-  ListChoiceMap,
-  ListQuestion,
-} from "inquirer";
-import { IChoice, IInteractiveOptions } from "~/@types/interactive-types";
+import { ListQuestion } from "inquirer";
+import { IInteractiveOptions } from "~/@types/interactive-types";
 
 /**
  * **listQuestion**

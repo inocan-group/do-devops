@@ -38,35 +38,26 @@ export async function askForUnitTestFramework(
     }
   );
 
-  const patternLookup = {
-    test: chalk`Any {inverse *-spec.ts} or {inverse *-test.ts} file in the {italic test} directory`,
-    tests: chalk`Any {inverse *-spec.ts} or {inverse *-test.ts} file in the {italic tests} directory`,
-    src: chalk`Any {inverse *-spec.ts} or {inverse *-test.ts} file in the {italic src} directory`,
-  };
+  const defaultDir = dirExists("./tests") ? "tests" : dirExists("./test") ? "test" : "tests";
 
-  const defaultDir: keyof typeof patternLookup = dirExists("./tests")
-    ? "tests"
-    : dirExists("./test")
-    ? "test"
-    : "tests";
-
-  const patterns = [
-    { [patternLookup.test]: ["**/test/**/?(*-)+(spec|test).ts"] },
-    { [patternLookup.tests]: ["**/tests/**/?(*-)+(spec|test).ts"] },
-    { [patternLookup.src]: ["**/src/**/?(*-)+(spec|test).ts"] },
-  ];
-
-  const testPatterns = listQuestion(
-    "testPattern",
-    "Unit test runners use a regular expression to identify what files are tests; which do you prefer?",
-    patterns,
-    { default: patterns.find((i) => Object.keys(i).includes(patternLookup[defaultDir])) }
+  const directory = listQuestion(
+    "testDirectory",
+    "Which directory will you put your tests in?",
+    ["test", "tests", "src"],
+    { default: defaultDir }
+  );
+  const postfix = listQuestion(
+    "postfix",
+    "Test files are typically distinguished by having a 'postfix' part of their name to distinguish them from other files in the same directory",
+    ["-spec", "-test", { name: "none", value: undefined }],
+    { when: (c) => c.unitTestFramework !== "uvu" }
   );
 
-  const { unitTestFramework, useWallaby, testPattern } = await ask([
+  const { unitTestFramework, useWallaby, testDirectory, testFilePostfix } = await ask([
     framework,
     wallaby,
-    testPatterns,
+    directory,
+    postfix,
   ]);
 
   return unitTestFramework !== "skip"
@@ -74,6 +65,7 @@ export async function askForUnitTestFramework(
     : {
         unitTestFramework,
         useWallaby,
-        testPattern,
+        testDirectory,
+        testFilePostfix,
       };
 }

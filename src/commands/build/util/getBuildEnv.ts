@@ -17,11 +17,10 @@ export async function getBuildEnvironment(
   observations: Set<DoDevopObservation>
 ) {
   const profile = await determineProfile({ ...opts, interactive: true }, observations);
-  
 
   return {
     AWS_PARTITION: await determinePartition({ ...opts, interactive: true }, observations),
-    AWS_PROFILE: ,
+    AWS_PROFILE: profile,
     AWS_REGION: await determineRegion({ ...opts, interactive: true }, observations),
     AWS_STAGE: await determineStage({ ...opts, interactive: true }, observations),
     AWS_ACCOUNT_ID: await determineAccountId({ ...opts, interactive: true }, observations),
