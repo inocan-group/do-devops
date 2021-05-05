@@ -8,8 +8,8 @@ import { toRelativePath } from "../relativePath";
  *
  * Note: where an offset is used
  */
-export function homeDirectory(opts: IDirectoryOptions = {}) {
-  const home = opts.offset ? path.posix.join(homedir(), opts.offset) : homedir();
+export function homeDirectory(offset?: string, opts: IDirectoryOptions = {}) {
+  const home = offset ? path.posix.join(homedir(), offset) : homedir();
 
   return opts.base ? toRelativePath(home, opts.base) : home;
 }

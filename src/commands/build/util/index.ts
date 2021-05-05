@@ -2,12 +2,12 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 07:26 AM ( GMT-7 )
+// index last changed at: 5th May, 2021, 03:59 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: getBuildEnv, processLambdaFns, processStepFns, reportOnFnConfig, serverlessTranspilation.
+// files: getBuildEnvironment, processLambdaFns, processStepFns, reportOnFnConfig, serverlessTranspilation.
 
 // local file exports
-export * from "./getBuildEnv";
+export * from "./getBuildEnvironment";
 export * from "./processLambdaFns";
 export * from "./processStepFns";
 export * from "./reportOnFnConfig";

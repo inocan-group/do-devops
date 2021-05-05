@@ -36,7 +36,7 @@
     "leaves": "yarn madge src --extensions ts --leaves",
     "lint": "run-s lint:*",
     "lint:src": "eslint src/**/*.ts --fix ",
-    "lint:test": "eslint tests/**/*.ts --fix",
+    "lint:test": "eslint test/**/*.ts --fix",
     "lint:tsc": "yarn tsc --noEmit",
     "orphans": "yarn madge src --extensions ts --orphans",
     "summary": "yarn madge src --extensions ts --summary",

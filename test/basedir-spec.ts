@@ -16,7 +16,7 @@ describe("directory utilities => ", () => {
     expect(dir).not.toContain(".ts");
   });
   it("executionDirectory() with base set results in relative path", () => {
-    const dir = executionDirectory({ base: currentDirectory() });
+    const dir = executionDirectory(undefined, { base: currentDirectory() });
     expect(dir).toBe("test/");
   });
 
@@ -29,14 +29,14 @@ describe("directory utilities => ", () => {
   });
 
   it("homeDirectory() with offset works as expected", () => {
-    const dir = homeDirectory({ offset: ".." });
+    const dir = homeDirectory("..");
     const user = exec(`whoami`).stdout.trim();
     const subDirs = getSubdirectories(dir);
 
     expect(subDirs).toContain(user);
     expect(dir).not.toContain(".ts");
 
-    const dir2 = homeDirectory({ offset: ".aws" });
+    const dir2 = homeDirectory(".aws");
     expect(dir2).toContain(user);
     expect(dir2).toContain("/.aws");
   });

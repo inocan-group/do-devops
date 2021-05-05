@@ -6,7 +6,7 @@ import {
   IProjectConfig,
   IUserConfig,
 } from "~/@types";
-import { getIntegratedConfig } from "~/shared/config";
+import { getIntegratedConfig, saveProjectConfig } from "~/shared/config";
 import { askForAwsProfile } from "~/shared/aws";
 import { DoDevopObservation } from "~/@types/observations";
 
@@ -62,9 +62,10 @@ export async function determineProfile(
   if (!profile && opts.interactive) {
     try {
       profile = await askForAwsProfile({ exitOnError: false });
-      // TODO: what should be done with this?
-      // const _saveForNextTime = await askToSaveConfig("general.defaultAwsProfile", profile);
     } catch {}
+  }
+  if (profile) {
+    saveProjectConfig({ aws: { defaultProfile: profile } });
   }
 
   return profile ? profile : false;

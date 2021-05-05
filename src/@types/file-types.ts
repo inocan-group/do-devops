@@ -31,7 +31,7 @@ export interface IFileWithStats {
  */
 export interface IDirectoryOptions {
   /** a directory path that will be joined into the root path the function starts at */
-  offset?: string;
+  // offset?: string;
   /**
    * if you want to work with a "relative path" from some known "base dir" this can be
    * passed in to get the relative path.
