@@ -1,10 +1,12 @@
 import chalk from "chalk";
 import { PackageManagerObservation, DoDevopObservation } from "~/@types/observations";
 import { DevopsError } from "~/errors";
-import { askListQuestion } from "../interactive";
+import { askListQuestion } from "~/shared/interactive";
 import { emoji } from "~/shared/ui";
-import { saveProjectConfig } from "~/shared/config";
+import { getProjectConfig, saveProjectConfig } from "~/shared/config";
 import { removeOtherLockFiles } from "~/shared/npm";
+import { IGlobalOptions } from "~/@types";
+import { installPackageManager } from "~/shared/install";
 
 /**
  * Based on all observations made at startup, this function will try to
@@ -16,6 +18,7 @@ import { removeOtherLockFiles } from "~/shared/npm";
  * Note: if there's no `package.json` in current directory it will throw an error.
  */
 export async function determinePackageManager(
+  opts: IGlobalOptions<{ silent: boolean; manager?: PackageManagerObservation }>,
   observations: Set<DoDevopObservation>,
   interactive: boolean = false
 ): Promise<false | PackageManagerObservation> {
@@ -52,14 +55,19 @@ export async function determinePackageManager(
     return "pnpm";
   }
 
+  const config = getProjectConfig();
+  if (config.general?.pkgManager) {
+    return config.general.pkgManager;
+  }
+
   if (interactive) {
-    const answer = await askListQuestion<PackageManagerObservation | "none">(
+    const manager = await askListQuestion<PackageManagerObservation>(
       "We couldn't determine your default package manager, please choose from the list.",
-      ["npm", "pnpm", "yarn", "none"],
+      ["npm", "pnpm", "yarn"],
       { default: "npm" }
     );
-
-    return answer === "none" ? false : answer;
+    await installPackageManager({ ...opts, manager }, observations);
+    return manager;
   }
 
   return false;

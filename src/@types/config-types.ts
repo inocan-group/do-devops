@@ -7,7 +7,7 @@ import {
   IServerlessFunctionHandler,
 } from "common-types";
 import { NotDefined } from "./general";
-import { PackageManagerObservation, TestObservation } from "./observations";
+import { BundlerObservation, PackageManagerObservation, TestObservation } from "./observations";
 
 export interface IGlobalConfig {
   /**
@@ -19,6 +19,11 @@ export interface IGlobalConfig {
      * available to determine.
      */
     pkgManager?: PackageManagerObservation;
+
+    /**
+     * which bundler does a given repro prefer?
+     */
+    bundler?: BundlerObservation;
 
     /**
      * Allows a user to store what command to use for bringing up files in

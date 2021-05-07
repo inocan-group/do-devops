@@ -4,7 +4,7 @@ import chalk from "chalk";
 import { IDictionary, IServerlessYaml } from "common-types";
 import { getLambdaFunctions } from "./index";
 import { determineStage } from "~/shared/observations";
-import { getPackageJson, hasDevDependency, writePackageJson } from "../npm";
+import { getPackageJson, hasDevDependency, savePackageJson } from "../npm";
 import inquirer = require("inquirer");
 import { DevopsError } from "~/errors";
 /**
@@ -67,10 +67,7 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
   if (answers.action === Action.now) {
     const awsFunctions = await getLambdaFunctions();
     const stage = (await determineStage({})) || "dev";
-    const fns: string[] = [
-      ...awsFunctions.map((i) => i.FunctionName as string),
-      "CANCEL",
-    ];
+    const fns: string[] = [...awsFunctions.map((i) => i.FunctionName as string), "CANCEL"];
     const defaultFn = fns
       .filter((i) => i.toLocaleLowerCase().includes("shipper"))
       .find((i) => i.includes(stage));
@@ -93,9 +90,7 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
       }
       config.custom.logForwarding = { destinationARN: arn };
     } else {
-      console.log(
-        chalk`{grey - ok, cancelling the config of a shipping function for now}`
-      );
+      console.log(chalk`{grey - ok, cancelling the config of a shipping function for now}`);
     }
   } else if (answers.action === Action.remove) {
     const pkg = getPackageJson();
@@ -111,7 +106,7 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
       }
       return agg;
     }, {} as IDictionary<string>);
-    await writePackageJson(pkg);
+    await savePackageJson(pkg);
   } else {
     // nothing to do
   }

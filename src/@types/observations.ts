@@ -6,7 +6,7 @@ export type BaseObservations =
   | "typescriptTransformPaths";
 
 export type GitObservation = "gitignore" | "git-init";
-export type BundlerObservation = "webpack" | "rollup" | "vite" | "esbuild";
+export type BundlerObservation = "webpack" | "rollup" | "vite" | "esbuild" | "tsc";
 export type PackageManagerObservation = "yarn" | "npm" | "pnpm" | "packageManagerConflict";
 export type TestObservation = "mocha" | "jest" | "uvu" | "ava" | "jasmine" | "qunit";
 export type ExportObservation = "cjs" | "esm" | "typings";

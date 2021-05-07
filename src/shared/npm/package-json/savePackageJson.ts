@@ -4,7 +4,7 @@ import path from "path";
 import { promisify } from "util";
 const write = promisify(writeFile);
 
-export async function writePackageJson(pkg: IPackageJson) {
+export async function savePackageJson(pkg: IPackageJson) {
   await write(path.join(process.cwd(), "package.json"), JSON.stringify(pkg), {
     encoding: "utf-8",
   });

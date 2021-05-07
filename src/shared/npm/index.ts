@@ -2,16 +2,16 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 03:20 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 10:23 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: installDevDep, timingFromNpmInfo.
-// directories: package-json, package-manager.
+// files: timingFromNpmInfo.
+// directories: crud, package-json, package-manager.
 
 // local file exports
-export * from "./installDevDep";
 export * from "./timingFromNpmInfo";
 
 // directory exports
+export * from "./crud/index";
 export * from "./package-json/index";
 export * from "./package-manager/index";
 

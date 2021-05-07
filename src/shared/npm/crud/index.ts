@@ -1,33 +1,14 @@
-// #autoindex:named
+// #autoindex
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 10:18 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 10:45 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: exports.
-// directories: ast, aws, config, core, file, git, install, interactive, npm, observations, remove, serverless, sound, stack, testing, ui, yeoman.
+// files: installDevDep, removeDep.
 
 // local file exports
-export * from "./exports";
-
-// directory exports
-export * from "./ast/index";
-export * from "./aws/index";
-export * from "./config/index";
-export * from "./core/index";
-export * from "./file/index";
-export * from "./git/index";
-export * from "./install/index";
-export * from "./interactive/index";
-export * from "./npm/index";
-export * from "./observations/index";
-export * from "./remove/index";
-export * from "./serverless/index";
-export * from "./sound/index";
-export * from "./stack/index";
-export * from "./testing/index";
-export * from "./ui/index";
-export * from "./yeoman/index";
+export * from "./installDevDep";
+export * from "./removeDep";
 
 // Note:
 // -----

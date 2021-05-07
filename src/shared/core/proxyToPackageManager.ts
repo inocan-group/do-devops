@@ -22,7 +22,7 @@ export async function proxyToPackageManager(
     process.exit();
   }
 
-  const pkgManager = await determinePackageManager(observations, true);
+  const pkgManager = await determinePackageManager({}, observations, true);
   if (pkgManager) {
     let pkgCmd: string;
     let isScriptCmd = false;

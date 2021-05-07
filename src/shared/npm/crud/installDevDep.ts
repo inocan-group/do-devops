@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import { exec } from "shelljs";
 import { DoDevopObservation } from "~/@types";
-import { determinePackageManager } from "../observations";
-import { emoji } from "../ui";
+import { determinePackageManager } from "../../observations";
+import { emoji } from "../../ui";
 
 export async function installDevDep(observations: Set<DoDevopObservation>, ...packages: string[]) {
-  const pkgManager = await determinePackageManager(observations);
+  const pkgManager = await determinePackageManager({}, observations);
   const cmd = pkgManager === "yarn" ? `yarn add --dev ${packages}` : `${pkgManager}`;
   console.log(chalk`- installing with {blue ${cmd}}`);
   const response = exec(cmd);

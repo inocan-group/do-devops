@@ -6,11 +6,9 @@ import { CONFIG_FILE, DEFAULT_PROJECT_CONFIG } from "./constants";
 import { getProjectConfig } from "./getProjectConfig";
 
 /**
- * **saveUserConfig**
+ * **saveProjectConfig**
  *
- * updates the configuration to a _section_ which is either a command or to
- * the `general` section for shared meta-data. The value passed in is
- * deep copied with the current value to ensure it is non-destructive.
+ * updates the configuration stored in the current working directory
  */
 export async function saveProjectConfig<
   T extends Partial<Omit<IDoConfig, "kind" | "userConfig" | "projectConfig">>

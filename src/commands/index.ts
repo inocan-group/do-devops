@@ -2,32 +2,32 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 03:25 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 08:57 PM ( GMT-7 )
 // export: default; exclusions: index, private.
-// files: ls, watch.
-// directories: autoindex, awsid, build, deploy, endpoints, fns, info, install, invoke, latest, layers, outdated, pkg, ssm, test, why.
+// files: install, ls, watch.
+// directories: autoindex, awsid, build, deploy, endpoints, fns, info, invoke, latest, layers, outdated, pkg, ssm, test, why.
 
 // local file exports
-export {  default as ls } from "./ls";
-export {  default as watch } from "./watch";
+export { default as install } from "./install";
+export { default as ls } from "./ls";
+export { default as watch } from "./watch";
 
 // directory exports
-export {  default as autoindex } from "./autoindex/index";
-export {  default as awsid } from "./awsid/index";
-export {  default as build } from "./build/index";
-export {  default as deploy } from "./deploy/index";
-export {  default as endpoints } from "./endpoints/index";
-export {  default as fns } from "./fns/index";
-export {  default as info } from "./info/index";
-export {  default as install } from "./install/index";
-export {  default as invoke } from "./invoke/index";
-export {  default as latest } from "./latest/index";
-export {  default as layers } from "./layers/index";
-export {  default as outdated } from "./outdated/index";
-export {  default as pkg } from "./pkg/index";
-export {  default as ssm } from "./ssm/index";
-export {  default as test } from "./test/index";
-export {  default as why } from "./why/index";
+export { default as autoindex } from "./autoindex/index";
+export { default as awsid } from "./awsid/index";
+export { default as build } from "./build/index";
+export { default as deploy } from "./deploy/index";
+export { default as endpoints } from "./endpoints/index";
+export { default as fns } from "./fns/index";
+export { default as info } from "./info/index";
+export { default as invoke } from "./invoke/index";
+export { default as latest } from "./latest/index";
+export { default as layers } from "./layers/index";
+export { default as outdated } from "./outdated/index";
+export { default as pkg } from "./pkg/index";
+export { default as ssm } from "./ssm/index";
+export { default as test } from "./test/index";
+export { default as why } from "./why/index";
 
 // Note:
 // -----

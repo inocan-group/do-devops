@@ -1,6 +1,6 @@
 {
   "name": "do-devops",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",

@@ -9,27 +9,24 @@ import { emoji } from "~/shared/ui";
 import { processLambdaFns, processStepFns } from "~/commands/build/util";
 import { logger } from "~/shared/core/logger";
 import { isValidServerlessTs } from "~/shared/file";
-import { installGit, installGitIgnore } from "~/commands/install";
-
-export const defaultConfig = {
-  preBuildHooks: ["clean"],
-  targetDirectory: "dist",
-  buildTool: "tsc",
-};
+import { installGit, installGitIgnore, installBuildSystem } from "~/shared/install";
+import { getObservations, hasScript } from "~/shared";
 
 export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, opts, raw }) => {
   const log = logger(opts);
   const isServerless = observations.has("serverlessFramework");
   if (observations.has("packageJson") && !observations.has("git-init")) {
     log.shout(
-      chalk`- ${emoji.shocked} this repo appears to not have been initialized for git yet!`
+      chalk`- ${emoji.eyeballs} this repo appears to not have been initialized for git yet!`
     );
     await installGit(opts);
+    observations = getObservations();
   }
-  if (observations.has("packageJson") && !observations.has("git-init")) {
+  if (observations.has("packageJson") && !observations.has("gitignore")) {
     log.shout(chalk`- ${emoji.shocked} this repo appears to not have a {blue .gitignore} file!`);
     await installGitIgnore(opts);
   }
+
   if (isServerless) {
     if (!observations.has("serverlessTs")) {
       log.shout(
@@ -38,7 +35,7 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, op
       log.info(
         chalk`{gray - to find more about this please refer to the docs: https://aws-orchestrate.com/devops}`
       );
-      return;
+      return false;
     }
 
     if (!isValidServerlessTs(undefined, opts)) {
@@ -49,7 +46,7 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, op
       log.info(
         chalk`{gray - to find more about this please refer to the docs: https://aws-orchestrate.com/devops}`
       );
-      return;
+      return false;
     }
 
     if (!observations.has("tsNode") || !observations.has("typescript")) {
@@ -62,10 +59,10 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, op
         if (!success) {
           log.info(`- please get these deps installed offline and then try build again`);
 
-          process.exit();
+          return false;
         }
       } else {
-        process.exit();
+        return false;
       }
     }
 
@@ -76,8 +73,11 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, op
 
     // await buildLambdaTypescriptProject(opts, config);
   } else {
+    if (!hasScript("build") && !(await installBuildSystem(opts, observations))) {
+      return false;
+    }
     await proxyToPackageManager("build", observations, raw);
   }
 
-  process.exit();
+  return true;
 };
