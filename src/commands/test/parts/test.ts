@@ -3,8 +3,9 @@ import { ITestOptions } from "./options";
 import { determineTestingFramework } from "~/shared/observations";
 import { hasScript } from "~/shared/npm";
 import { proxyToPackageManager } from "~/shared/core/proxyToPackageManager";
-import { getProjectConfig, logger } from "~/shared";
+import { logger } from "~/shared/core";
 import { exec } from "async-shelljs";
+import { getProjectConfig } from "~/shared/config";
 
 export const handler: DoDevopsHandler<ITestOptions> = async ({ raw, observations, opts, argv }) => {
   const log = logger(opts);

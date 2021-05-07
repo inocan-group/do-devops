@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { IDoDevopsCommand } from "~/@types/command";
-import { emoji, getPackageJson, pkgDepsInTable } from "~/shared";
+import { getPackageJson, pkgDepsInTable } from "~/shared/npm";
+import { emoji } from "~/shared/ui";
 import { otherPackages, thisRepo } from "./parts";
 
 export interface IInfoOptions {

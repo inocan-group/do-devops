@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { DoDevopObservation, IGlobalOptions } from "~/@types";
-import { logger } from "~/shared";
+import { logger } from "~/shared/core";
 import { getValidStepFunctions } from "~/shared/ast";
 import { IBuildOptions } from "../parts";
 

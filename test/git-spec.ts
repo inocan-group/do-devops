@@ -1,4 +1,4 @@
-import { findOrgFromGitRemote, getGitRemotes } from "../src/shared";
+import { findOrgFromGitRemote, getGitRemotes } from "~/shared/git";
 
 describe("git shared functions", () => {
   it("getGitRemotes() has one remote", async () => {

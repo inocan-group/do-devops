@@ -4,13 +4,13 @@ import { DoDevopsHandler } from "~/@types/command";
 import { IBuildOptions } from "./options";
 import { proxyToPackageManager } from "~/shared/core/proxyToPackageManager";
 import { askConfirmQuestion } from "~/shared/interactive";
-import { installDevDep } from "~/shared/npm";
+import { installDevDep, hasScript } from "~/shared/npm";
 import { emoji } from "~/shared/ui";
 import { processLambdaFns, processStepFns } from "~/commands/build/util";
 import { logger } from "~/shared/core/logger";
 import { isValidServerlessTs } from "~/shared/file";
 import { installGit, installGitIgnore, installBuildSystem } from "~/shared/install";
-import { getObservations, hasScript } from "~/shared";
+import { getObservations } from "~/shared/observations";
 
 export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, opts, raw }) => {
   const log = logger(opts);
@@ -55,7 +55,7 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, op
       );
       const answer = await askConfirmQuestion("Add this dev dep?");
       if (answer) {
-        const success = await installDevDep(observations, "ts-node", "typescript");
+        const success = await installDevDep(opts, observations, "ts-node", "typescript");
         if (!success) {
           log.info(`- please get these deps installed offline and then try build again`);
 

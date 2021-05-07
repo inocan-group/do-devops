@@ -23,7 +23,10 @@ export async function installBuildSystem(opts: IGlobalOptions, observations: Obs
   }
 
   if (!observations.has("eslint")) {
-    await installEsLint(opts, observations);
+    const installed = await installEsLint(opts, observations);
+    if (!installed) {
+      return false;
+    }
   }
 
   const pkg = getPackageJson();
@@ -68,6 +71,7 @@ export async function installBuildSystem(opts: IGlobalOptions, observations: Obs
   // https://swc.rs/
 
   const installed = await installDevDep(
+    opts,
     observations,
     ...devDeps,
     "typescript",

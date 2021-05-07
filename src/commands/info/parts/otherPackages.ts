@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { IDictionary, INpmInfo, isNpmInfoRepository } from "common-types";
 import { DoDevopObservation, IGlobalOptions, INpmInfoTable } from "~/@types";
-import { convertGitUrlToHttp } from "~/shared";
+import { convertGitUrlToHttp } from "~/shared/git";
 import { getExternalPackageJson } from "~/shared/npm";
 import { consoleDimensions, toTable } from "~/shared/ui";
 

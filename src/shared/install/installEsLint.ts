@@ -4,7 +4,7 @@ import { installDevDep } from "~/shared/npm";
 import { askConfirmQuestion } from "~/shared/interactive";
 import { logger } from "~/shared/core";
 import { emoji } from "~/shared/ui";
-import { templateFileCopy } from "../exports";
+import { templateFileCopy } from "~/shared/file";
 
 /**
  * Installs and configures both **eslint** and **prettier**
@@ -24,6 +24,7 @@ export async function installEsLint(
   }
 
   const success = await installDevDep(
+    opts,
     observations,
     "eslint",
     "prettier",

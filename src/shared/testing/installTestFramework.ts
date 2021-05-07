@@ -1,19 +1,24 @@
 import chalk from "chalk";
-import { TestObservation, Observations } from "~/@types";
+import { TestObservation, Observations, IGlobalOptions } from "~/@types";
 import { DevopsError } from "~/errors";
 import { logger } from "../core";
 import { installDevDep } from "../npm";
 
-export async function installTestFramework(framework: TestObservation, observations: Observations) {
+export async function installTestFramework(
+  framework: TestObservation,
+  opts: IGlobalOptions,
+  observations: Observations
+) {
   const log = logger(observations);
 
   let installed: boolean;
   switch (framework) {
     case "uvu":
-      installed = await installDevDep(observations, "uvu", "ts-node");
+      installed = await installDevDep(opts, observations, "uvu", "ts-node");
       break;
     case "jest":
       installed = await installDevDep(
+        opts,
         observations,
         "jest",
         "ts-jest",
@@ -23,6 +28,7 @@ export async function installTestFramework(framework: TestObservation, observati
       break;
     case "mocha":
       installed = await installDevDep(
+        opts,
         observations,
         "mocha",
         "chai",
@@ -32,13 +38,13 @@ export async function installTestFramework(framework: TestObservation, observati
       );
       break;
     case "jasmine":
-      installed = await installDevDep(observations, "jasmine");
+      installed = await installDevDep(opts, observations, "jasmine");
       break;
     case "qunit":
-      installed = await installDevDep(observations, "qunit");
+      installed = await installDevDep(opts, observations, "qunit");
       break;
     case "ava":
-      installed = await installDevDep(observations, "ava");
+      installed = await installDevDep(opts, observations, "ava");
       break;
     default:
       throw new DevopsError(

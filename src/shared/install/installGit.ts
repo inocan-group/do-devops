@@ -1,8 +1,9 @@
 import chalk from "chalk";
 import { IGlobalOptions } from "~/@types";
-import { git, logger } from "~/shared";
+import { logger } from "~/shared/core";
 import { askConfirmQuestion, askInputQuestion } from "~/shared/interactive";
-import { installGitIgnore } from "./installGitIgnore";
+import { git } from "~/shared/git";
+import { installGitIgnore } from "~/shared/install";
 
 export async function installGit(opts: IGlobalOptions<{ silent: boolean }>) {
   const log = logger(opts);

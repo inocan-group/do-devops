@@ -62,8 +62,12 @@ export async function determineTestingFramework(
     if (!installAndConfig) {
       return config.test.unitTestFramework;
     }
-    const installed = await installTestFramework(config.test.unitTestFramework, observations);
-    const configured = await configureTestFramework(config.test.unitTestFramework, observations);
+    const installed = await installTestFramework(config.test.unitTestFramework, opts, observations);
+    const configured = await configureTestFramework(
+      config.test.unitTestFramework,
+      opts,
+      observations
+    );
 
     if (installed && configured) {
       log.info(

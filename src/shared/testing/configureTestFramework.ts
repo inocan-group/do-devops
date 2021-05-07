@@ -1,4 +1,4 @@
-import { TestObservation, Observations } from "~/@types";
+import { TestObservation, Observations, IGlobalOptions } from "~/@types";
 import { DevopsError } from "~/errors";
 import { templateDirCopy, templateFileCopy } from "~/shared/file";
 import { getProjectConfig } from "../config";
@@ -6,9 +6,10 @@ import { logger } from "../core";
 
 export async function configureTestFramework(
   framework: TestObservation,
-  observations: Observations
+  opts: IGlobalOptions,
+  _observations: Observations
 ) {
-  const log = logger(observations);
+  const log = logger(opts);
   const known: TestObservation[] = ["jest", "mocha", "uvu"];
   const config = getProjectConfig()?.test;
 

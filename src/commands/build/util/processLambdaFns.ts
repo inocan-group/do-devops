@@ -1,15 +1,15 @@
 import chalk from "chalk";
 import { DoDevopObservation, IDiscoveredConfig, IGlobalOptions } from "~/@types";
-import { currentDirectory, saveProjectConfig, write } from "~/shared";
+import { currentDirectory, write, getFileComponents } from "~/shared/file";
 import { findHandlerConfig, getValidServerlessHandlers } from "~/shared/ast";
 import { logger } from "~/shared/core";
 import { createTsFile } from "~/shared/file/createTsFile";
-import { getFileComponents } from "~/shared/file";
 import { lintfix } from "~/shared/file/lintfix";
 import { emoji } from "~/shared/ui";
 import { reportOnFnConfig } from ".";
 import { IBuildOptions } from "../parts";
 import { FNS_TYPES_FILE } from "~/constants";
+import { saveProjectConfig } from "~/shared/config";
 
 /**
  * Process through all handler functions, and:

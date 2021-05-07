@@ -1,6 +1,6 @@
 import { DoDevopObservation, IGlobalOptions } from "~/@types";
 import { DevopsError } from "~/errors";
-import { getAwsProfile } from "~/shared";
+import { getAwsProfile } from "~/shared/aws";
 import {
   determineAccountId,
   determinePartition,
