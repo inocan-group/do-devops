@@ -1,11 +1,11 @@
 import type { Config } from "@jest/types";
-import { resolve } from "path";
+import path from "path";
 
 const config: Config.InitialOptions = {
   verbose: true,
-  testMatch: [TEST_MATCHER],
+  testMatch: TEST_MATCHER,
   moduleNameMapper: {
-    "^[/]{0,1}~/(.*)$": resolve(process.cwd(), "src", "$1"),
+    "^[/]{0,1}~/(.*)$": path.resolve(process.cwd(), "src", "$1"),
   },
   transform: {
     "^.+\\.tsx?$": "ts-jest",

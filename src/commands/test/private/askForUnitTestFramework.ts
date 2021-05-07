@@ -1,11 +1,10 @@
 import chalk from "chalk";
-import { IDictionary } from "common-types";
 
 import { ICommandConfig, IGlobalOptions, TestObservation } from "~/@types";
 import { TEST_FRAMEWORKS } from "~/constants";
 import { logger } from "~/shared/core";
 import { dirExists } from "~/shared/file";
-import { ask, confirmQuestion, listQuestion } from "~/shared/interactive";
+import { askConfirmQuestion, askListQuestion } from "~/shared/interactive";
 
 /**
  * Asks user about the testing framework they wish to use and other test meta-data.
@@ -16,56 +15,43 @@ export async function askForUnitTestFramework(
   opts: IGlobalOptions<{ unitTestFramework: TestObservation }> = {}
 ): Promise<ICommandConfig["test"] | false> {
   const log = logger(opts);
-  const fwChoices: Array<TestObservation | "quit"> = [...TEST_FRAMEWORKS, "quit"];
 
   log.shout(
     chalk`- we have not been able to determine which {italic unit testing} framework you're using.`
   );
 
-  const framework = listQuestion(
-    "unitTestFramework",
-    "Choose the framework you'd like to use (or 'quit')",
-    fwChoices,
-    { default: opts.unitTestFramework || "jest", when: () => !opts.unitTestFramework }
-  );
+  const framework = opts.unitTestFramework
+    ? opts.unitTestFramework
+    : await askListQuestion<TestObservation>(
+        "Choose the unit test runner you'd like to use",
+        TEST_FRAMEWORKS,
+        { default: "jest" }
+      );
 
-  const wallaby = confirmQuestion(
-    "useWallaby",
-    "Would you like us to add a WallabyJS config file so you can use it as a test runner in this repo?",
-    {
-      when: (c) => c.unitTestFramework !== "uvu",
-      default: (c: IDictionary) => (c.unitTestFramework === "uvu" ? false : true),
-    }
-  );
+  const wallaby =
+    framework === "uvu"
+      ? false
+      : await askConfirmQuestion(
+          "Would you like us to add a WallabyJS config file so you can use it as a test runner in this repo?"
+        );
 
   const defaultDir = dirExists("./tests") ? "tests" : dirExists("./test") ? "test" : "tests";
 
-  const directory = listQuestion(
-    "testDirectory",
+  const directory = await askListQuestion<string>(
     "Which directory will you put your tests in?",
     ["test", "tests", "src"],
     { default: defaultDir }
   );
-  const postfix = listQuestion(
-    "postfix",
+  const postfix = await askListQuestion<string>(
     "Test files are typically distinguished by having a 'postfix' part of their name to distinguish them from other files in the same directory",
     ["-spec", "-test", { name: "none", value: undefined }],
     { when: (c) => c.unitTestFramework !== "uvu" }
   );
 
-  const { unitTestFramework, useWallaby, testDirectory, testFilePostfix } = await ask([
-    framework,
-    wallaby,
-    directory,
-    postfix,
-  ]);
-
-  return unitTestFramework !== "skip"
-    ? false
-    : {
-        unitTestFramework,
-        useWallaby,
-        testDirectory,
-        testFilePostfix,
-      };
+  return {
+    unitTestFramework: framework,
+    useWallaby: wallaby,
+    testDirectory: directory,
+    testFilePostfix: postfix,
+  };
 }

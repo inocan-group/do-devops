@@ -71,7 +71,7 @@ export async function determineTestingFramework(
 
     if (installed && configured) {
       log.info(
-        chalk`- ${emoji.party} ${config.test.unitTestFramework} setup and ready to use in this repo!`
+        chalk`\n- ${emoji.party} {green ${config.test.unitTestFramework}} setup and ready to use in this repo!\n`
       );
     }
   }

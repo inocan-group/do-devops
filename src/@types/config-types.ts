@@ -25,6 +25,9 @@ export interface IGlobalConfig {
      */
     bundler?: BundlerObservation;
 
+    testDir?: string;
+    srcDir?: string;
+
     /**
      * Allows a user to store what command to use for bringing up files in
      * an editor.
@@ -95,7 +98,7 @@ export interface ICommandConfig {
     /** the directory where test files are located; typically "test", "tests" or possibly "src" */
     testDirectory: string;
     /** the filename's ending pattern before which identifies a test file withing a directory structure*/
-    testFilePostfix: "-spec" | "-test" | undefined;
+    testFilePostfix: string;
   };
 }
 

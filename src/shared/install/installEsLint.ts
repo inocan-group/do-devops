@@ -51,7 +51,7 @@ export async function installEsLint(
     chalk`{gray - configuration files for both {italic eslint} and {italic prettier} have been saved}`
   );
 
-  log.info(chalk`- ${emoji.party} {blue eslint} has been installed and configured`);
+  log.info(chalk`- ${emoji.party} {blue eslint} has been installed and configured\n`);
 
   return true;
 }

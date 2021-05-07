@@ -18,9 +18,12 @@ import { installPackageManager } from "~/shared/install";
  * Note: if there's no `package.json` in current directory it will throw an error.
  */
 export async function determinePackageManager(
-  opts: IGlobalOptions<{ silent: boolean; manager?: PackageManagerObservation }>,
-  observations: Set<DoDevopObservation>,
-  interactive: boolean = false
+  opts: IGlobalOptions<{
+    silent: boolean;
+    manager?: PackageManagerObservation;
+    interactive: boolean;
+  }>,
+  observations: Set<DoDevopObservation>
 ): Promise<false | PackageManagerObservation> {
   if (!observations.has("packageJson")) {
     throw new DevopsError(
@@ -60,7 +63,7 @@ export async function determinePackageManager(
     return config.general.pkgManager;
   }
 
-  if (interactive) {
+  if (opts.interactive) {
     const manager = await askListQuestion<PackageManagerObservation>(
       "We couldn't determine your default package manager, please choose from the list.",
       ["npm", "pnpm", "yarn"],

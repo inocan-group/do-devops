@@ -17,9 +17,9 @@ import { fileExists } from "~/shared/file";
  * (which is only in memory, not persisted); similarly it will look for all requests
  * in cache before file or network operations_
  */
-export function getPackageJson(pathOverride?: string): IPackageJson {
+export function getPackageJson(pathOverride?: string, force: boolean = false): IPackageJson {
   // look in cache first
-  const p = getPackageJsonfromCache(pathOverride);
+  const p = !force ? getPackageJsonfromCache(pathOverride) : undefined;
   if (p) {
     return p as IPackageJson;
   }

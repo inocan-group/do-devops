@@ -54,7 +54,9 @@ export async function installTestFramework(
   }
 
   if (installed) {
-    log.info(chalk`{gray - installed {italic dev dependencies} for {bold {green ${framework}}}}`);
+    log.whisper(
+      chalk`{gray - installed all {italic dev dependencies} for {bold {green ${framework}}}}`
+    );
   }
 
   return installed;

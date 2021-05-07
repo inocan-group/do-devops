@@ -1,8 +1,10 @@
-import { writeFileSync } from "fs";
+import { mkdirSync, writeFileSync } from "fs";
 import { DevopsError, isClassification } from "~/errors";
-import { fileExists } from "../existance";
+import { dirExists, fileExists } from "../existance";
 import { IWriteOptions } from "~/@types";
 import { interpolateFilePath } from "~/shared/file/helpers";
+import chalk from "chalk";
+import path from "path";
 
 /**
  * **write**
@@ -42,9 +44,13 @@ export function write(filename: string, data: any, options: IWriteOptions = {}) 
 
     if (!options.offsetIfExists && !options.allowOverwrite && fileExists(filename)) {
       throw new DevopsError(
-        `The file "${filename}" already exists and the {italic overwrite} flag was not set. Write was not allowed.`,
+        chalk`The file "${filename}" already exists and the {italic overwrite} flag was not set. Write was not allowed.`,
         "do-devops/file-exists"
       );
+    }
+
+    if (!dirExists(path.dirname(filename))) {
+      mkdirSync(path.dirname(filename), { recursive: true });
     }
 
     writeFileSync(filename, content, {

@@ -28,17 +28,17 @@ export async function configureTestFramework(
 
   switch (framework) {
     case "uvu":
-      await templateDirCopy("test/uvu/test-dir", "test");
+      await templateDirCopy("test/uvu/test-dir", config.testDirectory);
       break;
     case "jest":
-      await templateDirCopy("test/jest/test-dir", "test");
+      await templateDirCopy("test/jest/test-dir", config.testDirectory);
       await templateFileCopy("test/jest/jest.config.ts", "/jest.config.ts", {
-        TEST_MATCHER: `["**/${config.testDirectory}/**/?(*-)+(${config.testFilePostfix}).ts"]`,
+        TEST_MATCHER: `["/${config.testDirectory}/**/?(*)+(${config.testFilePostfix}).ts"]`,
       });
       await templateFileCopy("test/jest/wallaby.js", "/wallaby.js");
       break;
     case "mocha":
-      await templateDirCopy("test/mocha/test-dir", "test");
+      await templateDirCopy("test/mocha/test-dir", config.testDirectory);
       break;
   }
 

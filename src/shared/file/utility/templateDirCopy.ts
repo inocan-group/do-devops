@@ -8,6 +8,7 @@ import {
   libraryDirectory,
   templateFileCopy,
 } from "~/shared/file";
+import { getFileComponents } from "./getFileComponents";
 
 /**
  * **templateDirCopy**
@@ -37,16 +38,20 @@ export async function templateDirCopy(source: string, target: string, replacemen
   }
 
   const files = await getFilesUnderPath(source);
+
   const problems: string[] = [];
   const transferred: string[] = [];
-  for (const file of files) {
-    const sourceFile = path.posix.join(source, file);
-    const targetFile = path.posix.join(target, file);
-    const completed = await templateFileCopy(sourceFile, targetFile, replacements);
+  for (const sourceFile of files) {
+    const targetFile = path.posix.join(target, getFileComponents(sourceFile).filename);
+    const completed = await templateFileCopy(
+      sourceFile.replace(libraryDirectory("templates"), ""),
+      targetFile.replace(currentDirectory(), ""),
+      replacements
+    );
     if (!completed) {
-      problems.push(file);
+      problems.push(sourceFile);
     } else {
-      transferred.push(file);
+      transferred.push(sourceFile);
     }
   }
 

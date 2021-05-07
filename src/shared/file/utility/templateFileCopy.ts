@@ -44,8 +44,12 @@ export async function templateFileCopy(source: string, target: string, replaceme
     const copy = await askAboutFileOverwrite(source, target);
     if (copy) {
       write(target, content, { allowOverwrite: true });
+    } else {
+      return false;
     }
+  } else {
+    write(target, content);
   }
 
-  return write(target, content);
+  return true;
 }

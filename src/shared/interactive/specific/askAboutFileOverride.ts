@@ -10,10 +10,10 @@ import { emoji } from "~/shared/ui";
 export type FileAction = "show" | "diff" | "skip" | "copy";
 
 const answers = [
-  { name: "Show both files in editor", value: "show" },
-  { name: "Show differences between files in editor", value: "diff" },
-  { name: "Skip this file being from being copied", value: "skip" },
-  { name: "Copy the template file over repo's version", value: "copy" },
+  { name: "SKIP this file being from being copied", value: "skip" },
+  { name: "COPY the template file over repo's version", value: "copy" },
+  { name: "SHOW both files in editor", value: "show" },
+  { name: "Show DIFFERENCES between files in editor", value: "diff" },
 ];
 
 /**
@@ -30,7 +30,7 @@ export async function askAboutFileOverwrite(
   const parts = getFileComponents(source, libraryDirectory("templates"));
   const filename = chalk`{dim ${parts.filepath}}{bold /${parts.filename}}`;
   const log = logger(opts);
-  log.shout(chalk`The file {blue ${filename}} already exists.`);
+  log.shout(chalk`The file {blue ${filename}} already exists.\n`);
   let action: FileAction | undefined;
   while (action !== "copy" && action !== "skip") {
     action = await askListQuestion<FileAction>("What do you want to do?", answers);

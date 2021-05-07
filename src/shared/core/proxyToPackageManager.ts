@@ -9,6 +9,49 @@ import { emoji } from "../ui";
 
 const NON_PROXY = new Set(["install", "outdated", "update", "why", "ls"]);
 
+function isDevFlag(flag: string, mngr: PackageManagerObservation) {
+  const matched = ["--save-dev", "--dev"].includes(flag);
+  if (!matched) {
+    return undefined;
+  }
+  switch (mngr) {
+    case "npm":
+    case "pnpm":
+      return "--save-dev";
+    case "yarn":
+    default:
+      return "--dev";
+  }
+}
+function isPeerFlag(flag: string, mngr: PackageManagerObservation) {
+  const matched = ["--save-peer", "--peer"].includes(flag);
+  if (!matched) {
+    return undefined;
+  }
+  switch (mngr) {
+    case "npm":
+    case "pnpm":
+      return "--save-peer";
+    case "yarn":
+    default:
+      return "--peer";
+  }
+}
+function isOptionalFlag(flag: string, mngr: PackageManagerObservation) {
+  const matched = ["--save-optional", "--optional"].includes(flag);
+  if (!matched) {
+    return undefined;
+  }
+  switch (mngr) {
+    case "npm":
+    case "pnpm":
+      return "--save-optional";
+    case "yarn":
+    default:
+      return "--optional";
+  }
+}
+
 export async function proxyToPackageManager(
   cmd: string,
   observations: Set<DoDevopObservation>,
@@ -22,17 +65,26 @@ export async function proxyToPackageManager(
     process.exit();
   }
 
-  const pkgManager = await determinePackageManager({}, observations, true);
+  const pkgManager = await determinePackageManager({ interactive: true }, observations);
   if (pkgManager) {
     let pkgCmd: string;
     let isScriptCmd = false;
 
     switch (cmd) {
       case "install":
+        const args = argv?.map(
+          (a) =>
+            isPeerFlag(a, pkgManager) ||
+            isOptionalFlag(a, pkgManager) ||
+            isDevFlag(a, pkgManager) ||
+            a
+        );
         pkgCmd =
           pkgManager === "yarn"
-            ? "yarn"
-            : `${pkgManager} install${argv ? " " + argv.join(" ") : ""}`;
+            ? args
+              ? `yarn add ${args.join(" ")}`
+              : "yarn"
+            : `${pkgManager} install ${args ? " " + args.join(" ") : ""}`;
         break;
       case "outdated":
       case "upgrade":
