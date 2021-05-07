@@ -2,7 +2,7 @@ import chalk from "chalk";
 import fg from "globby";
 import path from "path";
 
-import { parseFile } from "./parseFile";
+import { astParseWithTypescript } from "./astParseWithTypescript";
 import { toRelativePath } from "../file";
 import { IDictionary } from "common-types";
 
@@ -16,7 +16,7 @@ export function getValidServerlessHandlers(opts: IDictionary = {}) {
     let ast;
     let status = "starting";
     try {
-      ast = parseFile(curr);
+      ast = astParseWithTypescript(curr);
       status = "file-parsed";
       if (!ast.program.body[0].source) {
         if (opts.verbose) {

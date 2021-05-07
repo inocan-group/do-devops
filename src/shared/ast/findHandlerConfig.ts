@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { IDictionary, IServerlessFunctionHandler } from "common-types";
 import { IDiscoveredConfig } from "~/@types";
-import { namedExports, parseFile } from "./index";
+import { namedExports, astParseWithTypescript } from "./index";
 
 /**
  * Given a handler file, this will return the object key/value
@@ -12,7 +12,7 @@ export function findHandlerConfig(
   /** the _package_ section should be replaced with a reference to the `filename.zip` */
   isWebpackZip: boolean = false
 ): IDiscoveredConfig | undefined {
-  const ast = parseFile(filename);
+  const ast = astParseWithTypescript(filename);
   const hash: IDictionary = {};
   const config = namedExports(ast).find((i) => i.name === "config");
   if (!config) {

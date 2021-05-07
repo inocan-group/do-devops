@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { IGlobalOptions } from "~/@types";
 import { logger } from "~/shared/core";
-import { currentDirectory, readFile, fileIncludes, tscValidation } from "~/shared/file";
+import { currentDirectory, readFile, fileIncludes } from "~/shared/file";
 
 /**
  * Validates that:
@@ -24,13 +24,13 @@ export function isValidServerlessTs(fn?: string, opts: IGlobalOptions = {}) {
   }
   log.whisper(chalk`{gray - {blue serverless.ts} file {italic looks} structurally valid }`);
 
-  log.whisper(
-    chalk`{gray - attempting {bold tsc} transpilation of {blue serverless.ts}} to ensure validity`
-  );
-  if (!tscValidation(filename, opts)) {
-    return false;
-  }
-  log.whisper(chalk`{gray - transpilation was successful}`);
+  // log.whisper(
+  //   chalk`{gray - attempting {bold tsc} transpilation of {blue serverless.ts}} to ensure validity`
+  // );
+  // if (!tscValidation(filename, opts)) {
+  //   return false;
+  // }
+  // log.whisper(chalk`{gray - transpilation was successful}`);
 
   return true;
 }

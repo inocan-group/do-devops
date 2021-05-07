@@ -2,10 +2,10 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 11:32 AM ( GMT-7 )
+// index last changed at: 5th May, 2021, 07:59 PM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: exports.
-// directories: ast, aws, config, core, file, git, interactive, npm, observations, serverless, sound, stack, testing, ui, yeoman.
+// directories: ast, aws, config, core, file, git, install, interactive, npm, observations, serverless, sound, stack, testing, ui, yeoman.
 
 // local file exports
 export * from "./exports";
@@ -17,6 +17,7 @@ export * from "./config/index";
 export * from "./core/index";
 export * from "./file/index";
 export * from "./git/index";
+export * from "./install/index";
 export * from "./interactive/index";
 export * from "./npm/index";
 export * from "./observations/index";

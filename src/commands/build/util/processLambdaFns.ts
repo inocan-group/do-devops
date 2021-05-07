@@ -9,6 +9,7 @@ import { lintfix } from "~/shared/file/lintfix";
 import { emoji } from "~/shared/ui";
 import { reportOnFnConfig } from ".";
 import { IBuildOptions } from "../parts";
+import { FNS_TYPES_FILE } from "~/constants";
 
 /**
  * Process through all handler functions, and:
@@ -51,13 +52,13 @@ export async function processLambdaFns(
 
   const lambda = fnConfig.filter((f) => f !== undefined) as IDiscoveredConfig[];
   write(
-    currentDirectory("src/serverless-devops.ts"),
+    currentDirectory(FNS_TYPES_FILE),
     createTsFile()
       .addStringEnum({
         name: "LambdaFunction",
         description: "an enumeration of all locally defined lambda functions",
         elements: lambda.map((l) => ({
-          el: `${getFileComponents(l.config.handler).filename}`,
+          el: `${getFileComponents(l.config.handler).filename.replace(".handler", "")}`,
           comment: l.config.description,
         })),
       })
@@ -66,12 +67,12 @@ export async function processLambdaFns(
     { allowOverwrite: true }
   );
 
-  lintfix(currentDirectory("src/serverless-devops.ts"), observations);
+  lintfix(currentDirectory(FNS_TYPES_FILE), observations);
 
   saveProjectConfig({
     build: {
       lambda: lambda.map((f: IDiscoveredConfig) => f.config),
     },
   });
-  log.shout(chalk`{gray - functions saved to the {italic do-devops} project config file}`);
+  log.whisper(chalk`{gray - functions saved to the {italic do-devops} project config file}`);
 }

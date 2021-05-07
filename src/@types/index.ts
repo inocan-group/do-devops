@@ -2,11 +2,12 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 12:46 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 12:49 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: aws, build, command, config-types, defaultConfig, file-types, general, global, interactive-types, npm-types, observations, option-types, serverless-types, test, webpack.
+// files: ast-types, aws, build, command, config-types, defaultConfig, file-types, general, global, interactive-types, npm-types, observations, option-types, serverless-types, test, webpack.
 
 // local file exports
+export * from "./ast-types";
 export * from "./aws";
 export * from "./build";
 export * from "./command";

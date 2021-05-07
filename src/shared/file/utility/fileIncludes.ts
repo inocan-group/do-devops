@@ -19,6 +19,7 @@ export function fileIncludes(filename: string, ...lookFor: string[]) {
   for (const text of lookFor) {
     if (!content.includes(text)) {
       result = false;
+      console.log("false result:", filename);
     }
   }
 

@@ -1,6 +1,6 @@
 import { IPackageJson } from "common-types";
 import { DoDevopObservation } from "~/@types/observations";
-import { fileExists } from "../file";
+import { currentDirectory, dirExists, fileExists } from "../file";
 import {
   getPackageJson,
   hasDependency,
@@ -25,8 +25,15 @@ export function getObservations() {
   if (pkgJson) {
     observations.add("packageJson");
 
-    // TS
+    // Git
+    if (fileExists(currentDirectory(".gitignore"))) {
+      observations.add("gitignore");
+    }
+    if (dirExists(currentDirectory(".git"))) {
+      observations.add("git-init");
+    }
     if (hasDevDependency("typescript")) {
+      // TS
       observations.add("typescript");
     }
     if (hasDevDependency("ttypescript")) {

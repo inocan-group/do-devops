@@ -4,7 +4,7 @@ import { IDictionary } from "common-types";
 import { write } from "../file";
 
 import { get } from "native-dash";
-import { parseFile } from "./index";
+import { astParseWithTypescript } from "./index";
 
 type VariableDeclaration = recast.types.namedTypes.VariableDeclaration;
 type TSInterfaceDeclaration = recast.types.namedTypes.TSInterfaceDeclaration;
@@ -116,7 +116,8 @@ export interface IExportedDeclaration {
  * @param ast a Typescript file based AST
  */
 export function namedExports(file: string | recast.types.namedTypes.File): IExportedDeclaration[] {
-  const ast: recast.types.namedTypes.File = typeof file === "string" ? parseFile(file) : file;
+  const ast: recast.types.namedTypes.File =
+    typeof file === "string" ? astParseWithTypescript(file) : file;
 
   const namedExports = ast.program.body.filter((i) => i.type === "ExportNamedDeclaration");
 

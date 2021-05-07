@@ -1,4 +1,27 @@
-import type { Stats } from "node:fs";
+import type { Stats } from "fs";
+
+export interface IFilenameNotContent {
+  /** the file's filename in the file system */
+  filename: string;
+  /** the contents of a file */
+  content?: never;
+}
+
+export interface IContentNotFilename {
+  /** the file's filename in the file system */
+  filename?: never;
+  /** the contents of a file */
+  content: string;
+}
+
+/**
+ * Allows either a `filename` or the _contents_ of a file to be represented
+ */
+export type IFileOrContent = IFilenameNotContent | IContentNotFilename;
+
+export function isFilenameNotContent(input: IFileOrContent): input is IFilenameNotContent {
+  return input.filename !== undefined;
+}
 
 /**
  * Optional configuration for the `file/write()` function

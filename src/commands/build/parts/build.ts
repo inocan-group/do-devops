@@ -6,9 +6,10 @@ import { proxyToPackageManager } from "~/shared/core/proxyToPackageManager";
 import { askConfirmQuestion } from "~/shared/interactive";
 import { installDevDep } from "~/shared/npm";
 import { emoji } from "~/shared/ui";
-import { processLambdaFns } from "~/commands/build/util";
+import { processLambdaFns, processStepFns } from "~/commands/build/util";
 import { logger } from "~/shared/core/logger";
 import { isValidServerlessTs } from "~/shared/file";
+import { installGit, installGitIgnore } from "~/commands/install";
 
 export const defaultConfig = {
   preBuildHooks: ["clean"],
@@ -18,9 +19,18 @@ export const defaultConfig = {
 
 export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, opts, raw }) => {
   const log = logger(opts);
-  const serverless = observations.has("serverlessFramework");
-
-  if (serverless) {
+  const isServerless = observations.has("serverlessFramework");
+  if (observations.has("packageJson") && !observations.has("git-init")) {
+    log.shout(
+      chalk`- ${emoji.shocked} this repo appears to not have been initialized for git yet!`
+    );
+    await installGit(opts);
+  }
+  if (observations.has("packageJson") && !observations.has("git-init")) {
+    log.shout(chalk`- ${emoji.shocked} this repo appears to not have a {blue .gitignore} file!`);
+    await installGitIgnore(opts);
+  }
+  if (isServerless) {
     if (!observations.has("serverlessTs")) {
       log.shout(
         chalk`{bold - in order to use the {yellow Serverless Devops} commands, you'll need to have a {blue serverless.ts} file in the root of your repo}`
@@ -62,6 +72,7 @@ export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, op
     log.shout(chalk`{bold - ${emoji.run} Starting {yellow Serverless Devops} build process}\n`);
     // const env = getBuildEnvironment(opts, observations);
     await processLambdaFns(opts, observations);
+    await processStepFns(opts, observations);
 
     // await buildLambdaTypescriptProject(opts, config);
   } else {

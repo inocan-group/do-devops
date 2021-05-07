@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/consistent-function-scoping */
 export interface IEnumStruct {
   name: string;
   description: string;
@@ -12,8 +13,8 @@ export function createTsFile() {
    */
   export enum ${c.name} {
     ${c.elements
-      .map((e) => `${e.comment ? `/** ${e.comment} */\n\t` : ""}${e.el} = "${e.el}"`)
-      .join(",\n\t")}
+      .map((e) => `${e.comment ? `/** ${e.comment} */\n  ` : ""}${e.el} = "${e.el}"`)
+      .join(",\n  ")}
   }
   `;
 

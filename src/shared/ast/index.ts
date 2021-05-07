@@ -2,17 +2,20 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 04:23 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 02:55 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: findHandlerComments, findHandlerConfig, getValidServerlessHandlers, getValidStepFunctions, namedExports, parseFile, validateWebpackConfig.
+// files: astParseWithAcorn, astParseWithTypescript, findHandlerComments, findHandlerConfig, getDefaultExport, getValidServerlessHandlers, getValidStepFunctions, isTypeBasedObject, namedExports, validateWebpackConfig.
 
 // local file exports
+export * from "./astParseWithAcorn";
+export * from "./astParseWithTypescript";
 export * from "./findHandlerComments";
 export * from "./findHandlerConfig";
+export * from "./getDefaultExport";
 export * from "./getValidServerlessHandlers";
 export * from "./getValidStepFunctions";
+export * from "./isTypeBasedObject";
 export * from "./namedExports";
-export * from "./parseFile";
 export * from "./validateWebpackConfig";
 
 // Note:
