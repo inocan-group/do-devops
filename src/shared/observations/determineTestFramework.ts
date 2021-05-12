@@ -1,10 +1,9 @@
 import chalk from "chalk";
 import { DoDevopObservation, IGlobalOptions, TestObservation } from "~/@types";
-import { askForUnitTestFramework } from "~/shared/interactive";
+import { askForUnitTestFramework, askConfirmQuestion } from "~/shared/interactive";
 import { DevopsError } from "~/errors";
 import { getProjectConfig, saveProjectConfig } from "~/shared/config";
 import { logger } from "~/shared/core";
-import { askConfirmQuestion } from "~/shared/interactive";
 import { configureTestFramework, installTestFramework } from "~/shared/install";
 import { emoji } from "~/shared/ui";
 

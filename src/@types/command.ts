@@ -23,6 +23,7 @@ export type KnownCommand<E extends string = never> =
   | "layers"
   | "ls"
   | "pkg"
+  | "madge"
   | "ssm"
   | "test"
   | "validate"
