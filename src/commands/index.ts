@@ -2,10 +2,10 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 08:57 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 10:05 AM ( GMT-7 )
 // export: default; exclusions: index, private.
 // files: install, ls, watch.
-// directories: autoindex, awsid, build, deploy, endpoints, fns, info, invoke, latest, layers, outdated, pkg, ssm, test, why.
+// directories: autoindex, awsid, build, deploy, endpoints, fns, info, invoke, latest, layers, madge, outdated, pkg, ssm, test, why.
 
 // local file exports
 export { default as install } from "./install";
@@ -23,6 +23,7 @@ export { default as info } from "./info/index";
 export { default as invoke } from "./invoke/index";
 export { default as latest } from "./latest/index";
 export { default as layers } from "./layers/index";
+export { default as madge } from "./madge/index";
 export { default as outdated } from "./outdated/index";
 export { default as pkg } from "./pkg/index";
 export { default as ssm } from "./ssm/index";
