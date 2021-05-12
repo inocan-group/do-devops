@@ -13,7 +13,7 @@ export async function configureTestFramework(
   const known: TestObservation[] = ["jest", "mocha", "uvu"];
   const config = getProjectConfig()?.test;
 
-  if (!config) {
+  if (!config || !config.unitTestFramework || !config.testDirectory) {
     throw new DevopsError(
       `Can't configure a test framework without the configuration saved to the project's config file.`,
       "test/not-ready"
@@ -33,7 +33,8 @@ export async function configureTestFramework(
     case "jest":
       await templateDirCopy("test/jest/test-dir", config.testDirectory);
       await templateFileCopy("test/jest/jest.config.ts", "/jest.config.ts", {
-        TEST_MATCHER: `["/${config.testDirectory}/**/?(*)+(${config.testFilePostfix}).ts"]`,
+        TEST_MATCHER: `["**/?(*)+(${config.testFilePostfix}).ts"]`,
+        TEST_DIR: config.testDirectory,
       });
       await templateFileCopy("test/jest/wallaby.js", "/wallaby.js");
       break;

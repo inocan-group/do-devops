@@ -81,10 +81,10 @@ export async function proxyToPackageManager(
         );
         pkgCmd =
           pkgManager === "yarn"
-            ? args
+            ? args && args.length > 0
               ? `yarn add ${args.join(" ")}`
               : "yarn"
-            : `${pkgManager} install ${args ? " " + args.join(" ") : ""}`;
+            : `${pkgManager} install${args ? " " + args.join(" ") : ""}`;
         break;
       case "outdated":
       case "upgrade":
@@ -111,9 +111,6 @@ export async function proxyToPackageManager(
         chalk`{gray - we detected use of the {blue ${pkgManager}} in this repo and will {italic proxy} "${cmd}" to: {blue ${pkgCmd}}}\n`
       );
     } else {
-      console.log(
-        chalk`{gray - the primary utility of the {italic ${cmd}} command is when paired with a Serverless project}`
-      );
       if (isScriptCmd && !hasScript(cmd)) {
         console.log(
           chalk`{gray - we {italic would} proxy this as {blue ${pkgCmd}} but you don't have "${cmd}" defined in your scripts section.}\n`
@@ -131,11 +128,11 @@ export async function proxyToPackageManager(
       timeout: 0,
     });
   } else {
-    if (!NON_PROXY.has(cmd)) {
-      console.log(
-        `- The "${cmd}" command will be used in Serverless projects but otherwise proxies the command to your package manager of choice. `
-      );
-    }
+    // if (!NON_PROXY.has(cmd)) {
+    //   console.log(
+    //     `- The "${cmd}" command will be used in Serverless projects but otherwise proxies the command to your package manager of choice. `
+    //   );
+    // }
     console.log(chalk`- we can not currently tell {italic which} package manager you're using.`);
     const answer:
       | PackageManagerObservation

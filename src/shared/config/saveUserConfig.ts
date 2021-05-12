@@ -1,6 +1,6 @@
 import merge from "deepmerge";
 import { writeFileSync } from "fs";
-import { IDoConfig, IUserConfig } from "~/@types";
+import { IUserConfig, IUserConfigFilled } from "~/@types";
 import { getUserConfig } from "~/shared/config";
 import { homeDirectory } from "~/shared/file";
 import { CONFIG_FILE } from "./constants";
@@ -12,9 +12,7 @@ import { CONFIG_FILE } from "./constants";
  * the `general` section for shared meta-data. The value passed in is
  * deep copied with the current value to ensure it is non-destructive.
  */
-export async function saveUserConfig<
-  T extends Partial<Omit<IDoConfig, "kind" | "userConfig" | "projectConfig">>
->(updated: T) {
+export async function saveUserConfig<T extends Partial<IUserConfigFilled>>(updated: T) {
   let current = getUserConfig();
   if (!current.userConfig) {
     current = { kind: "user", userConfig: true, general: {}, aws: {} };

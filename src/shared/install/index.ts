@@ -2,16 +2,18 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 10:47 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 12:10 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: installBuildSystem, installEsLint, installGit, installGitIgnore, installPackageManager.
+// files: configureTestFramework, installBuildSystem, installEsLint, installGit, installGitIgnore, installPackageManager, installTestFramework.
 
 // local file exports
+export * from "./configureTestFramework";
 export * from "./installBuildSystem";
 export * from "./installEsLint";
 export * from "./installGit";
 export * from "./installGitIgnore";
 export * from "./installPackageManager";
+export * from "./installTestFramework";
 
 // Note:
 // -----

@@ -2,13 +2,14 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 04:38 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 12:25 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: askAboutFileOverride, askForDependency, askUserAboutEditorCommand, resolvePackageManagerConflict.
+// files: askAboutFileOverride, askForDependency, askForUnitTestFramework, askUserAboutEditorCommand, resolvePackageManagerConflict.
 
 // local file exports
 export * from "./askAboutFileOverride";
 export * from "./askForDependency";
+export * from "./askForUnitTestFramework";
 export * from "./askUserAboutEditorCommand";
 export * from "./resolvePackageManagerConflict";
 

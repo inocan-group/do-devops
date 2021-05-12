@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import { DoDevopObservation, IGlobalOptions, TestObservation } from "~/@types";
-import { askForUnitTestFramework } from "~/commands/test/private";
+import { askForUnitTestFramework } from "~/shared/interactive";
 import { DevopsError } from "~/errors";
 import { getProjectConfig, saveProjectConfig } from "~/shared/config";
 import { logger } from "~/shared/core";
 import { askConfirmQuestion } from "~/shared/interactive";
-import { configureTestFramework, installTestFramework } from "~/shared/testing";
+import { configureTestFramework, installTestFramework } from "~/shared/install";
 import { emoji } from "~/shared/ui";
 
 /**
@@ -60,22 +60,27 @@ export async function determineTestingFramework(
       chalk`Install and configure {italic ${config.test.unitTestFramework}} test framework for you?`
     );
     if (!installAndConfig) {
-      return config.test.unitTestFramework;
+      return config?.test?.unitTestFramework || false;
     }
-    const installed = await installTestFramework(config.test.unitTestFramework, opts, observations);
-    const configured = await configureTestFramework(
-      config.test.unitTestFramework,
-      opts,
-      observations
-    );
-
-    if (installed && configured) {
-      log.info(
-        chalk`\n- ${emoji.party} {green ${config.test.unitTestFramework}} setup and ready to use in this repo!\n`
+    if (config?.test?.unitTestFramework) {
+      const installed = await installTestFramework(
+        config.test.unitTestFramework,
+        opts,
+        observations
       );
+      const configured = await configureTestFramework(
+        config?.test?.unitTestFramework,
+        opts,
+        observations
+      );
+
+      if (installed && configured) {
+        log.info(
+          chalk`\n- ${emoji.party} {green ${config.test.unitTestFramework}} setup and ready to use in this repo!\n`
+        );
+      }
     }
   }
-
   return config && config.projectConfig && config.test?.unitTestFramework
     ? config.test.unitTestFramework
     : false;

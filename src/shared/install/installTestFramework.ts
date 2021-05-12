@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { TestObservation, Observations, IGlobalOptions } from "~/@types";
 import { DevopsError } from "~/errors";
-import { logger } from "../core";
-import { installDevDep } from "../npm";
+import { logger } from "~/shared/core";
+import { installDevDep } from "~/shared/npm";
 
 export async function installTestFramework(
   framework: TestObservation,
