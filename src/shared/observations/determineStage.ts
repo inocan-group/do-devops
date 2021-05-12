@@ -4,7 +4,8 @@ import * as process from "process";
 import { askForStage, getServerlessYaml } from "../serverless/index";
 
 import { emoji } from "../ui";
-import { get } from "lodash";
+import { get } from "native-dash";
+import { DoDevopObservation, Observations } from "~/@types";
 
 export interface IStageOptions {
   interactive?: boolean;
@@ -21,7 +22,10 @@ export interface IStageOptions {
  * @param opts the CLI options hash (which includes stage as
  * a possible parameter)
  */
-export async function determineStage(opts: IStageOptions) {
+export async function determineStage(
+  opts: IStageOptions,
+  _observations: Observations = new Set<DoDevopObservation>()
+) {
   try {
     let stage = get(opts, "stage") || process.env.NODE_ENV || process.env.AWS_STAGE;
 

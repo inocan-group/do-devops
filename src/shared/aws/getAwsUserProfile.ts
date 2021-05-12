@@ -7,17 +7,19 @@ import { IAwsProfile } from "../../@types";
  *
  * @param awsProfile you may pass in the _string_ name of the profile or the profile itself
  */
-export async function getAwsUserProfile(awsProfile: IAwsProfile | string) {
+export async function getAwsUserProfile(
+  awsProfile: IAwsProfile | string
+): Promise<IAM.GetUserResponse["User"]> {
   if (typeof awsProfile === "string") {
     awsProfile = await getAwsProfile(awsProfile);
   }
 
-  const up = new IAM({
+  const up = await new IAM({
     accessKeyId: (awsProfile as IAwsProfile).aws_access_key_id,
     secretAccessKey: (awsProfile as IAwsProfile).aws_secret_access_key,
   })
     .getUser()
     .promise();
 
-  return up;
+  return up.User;
 }

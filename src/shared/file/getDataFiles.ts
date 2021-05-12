@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import fg from "globby";
 import path from "path";
 import process from "process";
 

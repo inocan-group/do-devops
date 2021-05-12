@@ -65,7 +65,7 @@ export function determineLinter(): IObservedLinters {
       observations.add("prettier");
 
       if (fileExists(".prettierrc")) {
-        prettier = readFile(".prettierrc");
+        prettier = readFile(".prettierrc") || false;
       }
     }
     if (hasDevDependency("eslint-prettier-plugin")) {

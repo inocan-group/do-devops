@@ -2,7 +2,7 @@
 import { getValidServerlessHandlers } from "../ast/index";
 import { filesInfo, filesExist } from "../file";
 import path from "path";
-import get = require("lodash.get");
+import { get } from "native-dash";
 import { IWebpackHandlerDates } from "~/@types";
 
 let _cache: IWebpackHandlerDates[];
@@ -26,11 +26,7 @@ export function getLocalHandlerInfo(breakCache: boolean = false): IWebpackHandle
 
   const sourcePaths = getValidServerlessHandlers();
   const convertToWebpackPath = (source: string) =>
-    path.join(
-      process.cwd(),
-      ".webpack",
-      (source.split("/").pop() || "").replace(".ts", ".js")
-    );
+    path.join(process.cwd(), ".webpack", (source.split("/").pop() || "").replace(".ts", ".js"));
   const webpackPaths = sourcePaths.map((i) => convertToWebpackPath(i));
   const sourceInfo = filesInfo(...sourcePaths);
   // some handlers may not have been transpiled yet

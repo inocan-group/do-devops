@@ -1,4 +1,4 @@
-import { IServerlessYaml } from "common-types";
+import { IServerlessFunctionHandler, IServerlessYaml } from "common-types";
 
 /**
  * Provides a file and `ref` object which contains the handler function
@@ -11,3 +11,13 @@ export interface IHandlerReference {
     config?: Omit<IServerlessYaml, "handler">;
   };
 }
+
+/**
+ * The configuration which the AST process was able to
+ * discover for a function along with the _interface_ being
+ * used.
+ */
+export type IDiscoveredConfig = {
+  interface: string;
+  config: IServerlessFunctionHandler;
+};

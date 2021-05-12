@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-import { confirmQuestionNow } from "../interactive/confirmQuestionNow";
+import { askConfirmQuestion } from "~/shared/interactive";
 import { getAwsProfileDictionary } from "./index";
 
 export interface IAskForProfileOptions {
@@ -23,7 +23,7 @@ export async function askForAwsProfile(opts?: IAskForProfileOptions): Promise<st
   const profiles = await getAwsProfileDictionary();
 
   if (!profiles) {
-    const cont = confirmQuestionNow(
+    const cont = askConfirmQuestion(
       `Currently you don't have any AWS profiles (aka, profiles in ~/.aws/credentials).\nWould you like to create one now?`
     );
     if (!cont) {
@@ -32,9 +32,7 @@ export async function askForAwsProfile(opts?: IAskForProfileOptions): Promise<st
     }
   }
 
-  const defaultProfile = opts.defaultProfile
-    ? profiles[opts.defaultProfile]
-    : profiles[0];
+  const defaultProfile = opts.defaultProfile ? profiles[opts.defaultProfile] : profiles[0];
 
   const question: inquirer.ListQuestion = {
     name: "profile",

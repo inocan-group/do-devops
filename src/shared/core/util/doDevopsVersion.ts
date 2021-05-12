@@ -6,6 +6,7 @@ import { getPackageJson } from "~/shared/npm";
  */
 export function doDevopsVersion() {
   const libPkgJsonFilename = libraryDirectory();
+
   const version = fileExists(libPkgJsonFilename)
     ? getPackageJson(libPkgJsonFilename).version || "?"
     : "??";

@@ -1,6 +1,12 @@
 import { getServerlessYaml } from "~/shared/serverless";
-import { configIsReady, IIntegratedConfig, IProjectConfig, IUserConfig } from "~/@types";
-import { getIntegratedConfig, IGlobalOptions } from "~/shared/core";
+import {
+  configIsReady,
+  IGlobalOptions,
+  IIntegratedConfig,
+  IProjectConfig,
+  IUserConfig,
+} from "~/@types";
+import { getIntegratedConfig, saveProjectConfig } from "~/shared/config";
 import { askForAwsProfile } from "~/shared/aws";
 import { DoDevopObservation } from "~/@types/observations";
 
@@ -46,19 +52,20 @@ export async function determineProfile(
 
   let doConfig: IIntegratedConfig | IProjectConfig | IUserConfig;
   try {
-    doConfig = await getIntegratedConfig();
+    doConfig = getIntegratedConfig();
 
-    if (configIsReady(doConfig) && doConfig.general?.defaultAwsProfile) {
-      profile = doConfig.general.defaultAwsProfile;
+    if (configIsReady(doConfig) && doConfig.aws?.defaultProfile) {
+      profile = doConfig.aws?.defaultProfile;
     }
   } catch {}
 
   if (!profile && opts.interactive) {
     try {
       profile = await askForAwsProfile({ exitOnError: false });
-      // TODO: what should be done with this?
-      // const _saveForNextTime = await askToSaveConfig("general.defaultAwsProfile", profile);
     } catch {}
+  }
+  if (profile) {
+    saveProjectConfig({ aws: { defaultProfile: profile } });
   }
 
   return profile ? profile : false;

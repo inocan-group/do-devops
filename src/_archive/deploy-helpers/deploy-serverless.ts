@@ -7,7 +7,7 @@ import { emoji } from "~/shared/ui";
 import { isTranspileNeeded } from "./index";
 import { determineStage } from "~/shared/observations";
 import { hasDevDependency } from "~/shared/npm";
-import { getIntegratedConfig } from "~/shared/core";
+import { getIntegratedConfig } from "~/shared/config";
 
 export interface IServerlessDeployMeta {
   stage: string;
@@ -32,18 +32,12 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
   }
 
   console.log(
-    chalk`{grey - zipping up ${String(
-      fns.length
-    )} {bold Serverless} {italic handler} functions }`
+    chalk`{grey - zipping up ${String(fns.length)} {bold Serverless} {italic handler} functions }`
   );
   await zipWebpackFiles(fns);
-  console.log(
-    chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`
-  );
+  console.log(chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`);
 
-  console.log(
-    chalk`- deploying {bold ${String(fns.length)} functions} to "${stage}" stage`
-  );
+  console.log(chalk`- deploying {bold ${String(fns.length)} functions} to "${stage}" stage`);
   // const sandboxStage = stage === "dev" ? await sandbox(stage) : stage;
   // if (sandboxStage !== stage) {
   // }
@@ -62,9 +56,7 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
     });
     await Promise.all(promises);
     console.log(
-      chalk`\n- all {bold ${String(fns.length)}} function(s) were deployed! ${
-        emoji.rocket
-      }\n`
+      chalk`\n- all {bold ${String(fns.length)}} function(s) were deployed! ${emoji.rocket}\n`
     );
   } catch (error) {
     console.log(chalk`- {red {bold problems deploying functions!}} ${emoji.poop}`);
@@ -75,9 +67,7 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
 
 async function fullDeploy(meta: IServerlessDeployMeta) {
   const { stage, config } = meta;
-  console.log(
-    chalk`- Starting {bold FULL serverless} deployment for {italic ${stage}} stage`
-  );
+  console.log(chalk`- Starting {bold FULL serverless} deployment for {italic ${stage}} stage`);
 
   if (!hasDevDependency("serverless-webpack")) {
     console.log(
@@ -97,9 +87,7 @@ async function fullDeploy(meta: IServerlessDeployMeta) {
     console.log(chalk`{grey - zipping up all ${String(fns.length)} Serverless handlers}`);
 
     await zipWebpackFiles(fns);
-    console.log(
-      chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`
-    );
+    console.log(chalk`{grey - all handlers zipped; ready for deployment ${emoji.thumbsUp}}`);
   }
 
   if (config.showUnderlyingCommands) {

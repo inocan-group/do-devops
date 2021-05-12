@@ -1,20 +1,16 @@
 import "./test-console"; // TS declaration
 import parse from "destr";
 import { stderr, stdout } from "test-console";
-
 import { IDictionary } from "common-types";
-import fs from "node:fs";
-import process from "node:process";
+import fs from "fs";
+import process from "process";
 import yaml from "js-yaml";
 
 interface Console {
   _restored: boolean;
   // Console: typeof NodeJS.Console;
   assert(value: any, message?: string, ...optionalParams: any[]): void;
-  dir(
-    obj: any,
-    options?: { showHidden?: boolean; depth?: number; colors?: boolean }
-  ): void;
+  dir(obj: any, options?: { showHidden?: boolean; depth?: number; colors?: boolean }): void;
   error(message?: any, ...optionalParams: any[]): void;
   info(message?: any, ...optionalParams: any[]): void;
   log(message?: any, ...optionalParams: any[]): void;
@@ -41,9 +37,7 @@ export function setupEnv() {
     process.env.AWS_STAGE = "test";
   }
   const envFile = process.env.ENV_FILE || ".env";
-  const yamlConfig: IDictionary = parse(
-    yaml.load(fs.readFileSync(envFile, "utf8"))
-  ) as {};
+  const yamlConfig: IDictionary = parse(yaml.load(fs.readFileSync(envFile, "utf8"))) as {};
   const combined: IDictionary = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env,
@@ -122,14 +116,14 @@ export function length(listOf: IDictionary) {
   return listOf ? Object.keys(listOf).length : 0;
 }
 
-export async function loadData(file: string) {
-  return new Promise<string>((resolve, reject) => {
-    fs.readFile(process.cwd() + "/test/data/" + file, "utf8", (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
-}
+// export async function loadData(file: string) {
+//   return new Promise<string>((resolve, reject) => {
+//     fs.readFile(process.cwd() + "/test/data/" + file, "utf8", (err, data) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         resolve(data);
+//       }
+//     });
+//   });
+// }

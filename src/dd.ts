@@ -3,11 +3,18 @@ import chalk from "chalk";
 import commandLineArgs from "command-line-args";
 import * as process from "process";
 
-import { getCommand, getAllCommands, isKnownCommand, parseCmdArgs } from "~/shared/core";
+import {
+  getCommand,
+  getAllCommands,
+  isKnownCommand,
+  parseCmdArgs,
+  proxyToPackageManager,
+} from "~/shared/core";
 import { help } from "./shared/core/help";
 import { inverted } from "./shared/ui";
 import { getObservations } from "./shared/observations/getObserverations";
 import { doDevopsVersion, commandAnnouncement } from "./shared/core/util";
+import { hasScript } from "./shared/npm";
 
 (async () => {
   // pull off the command and stop there
@@ -18,11 +25,19 @@ import { doDevopsVersion, commandAnnouncement } from "./shared/core/util";
 
   /** the primary command */
   const cmdName = mainCommand.command as string | undefined;
+  // undocumented version switch
   if (!cmdName && mainCommand._unknown?.includes("--version")) {
     console.log(doDevopsVersion());
     process.exit();
   }
+
   const observations = getObservations();
+
+  // undocumented observations switch
+  if (!cmdName && mainCommand._unknown?.includes("--observations")) {
+    console.log(`Observations:`, [...observations].map((i) => chalk`{inverse  ${i} }`).join(" "));
+    process.exit();
+  }
 
   if (!cmdName) {
     commandAnnouncement(undefined, undefined, true);
@@ -40,9 +55,8 @@ import { doDevopsVersion, commandAnnouncement } from "./shared/core/util";
       process.exit();
     }
 
-    commandAnnouncement(cmdDefn, cmdInput.subCommand);
-
     try {
+      commandAnnouncement(cmdDefn, cmdInput.subCommand);
       await cmdDefn.handler(cmdInput);
       if (cmdInput.unknown && cmdInput.unknown.filter((i) => i).length > 0) {
         const plural = cmdInput.unknown.length === 1 ? false : true;
@@ -65,21 +79,27 @@ import { doDevopsVersion, commandAnnouncement } from "./shared/core/util";
       process.exit();
     }
   } else {
-    console.log(
-      `${chalk.bold.red("Whoops! ")} ${chalk.italic.yellowBright(
-        cmdName
-      )} is an unknown command! \n\n` +
-        `- Valid command syntax is: ${chalk.bold.inverse(
-          " dd [command] <options> "
-        )}\n  where valid commands are: ${chalk.italic(
-          getAllCommands()
-            .map((i) => i.kind)
-            .sort()
-            .join(", ")
-        )}\n\n` +
-        chalk`{dim - If you want more help with a specific command, use} ${inverted(
-          " dd [cmd] --help "
-        )}\n`
-    );
+    // check if the command is an **npm** script name
+    // and proxy to it if it is
+    if (hasScript(cmdName)) {
+      proxyToPackageManager(cmdName, observations, mainCommand._unknown);
+    } else {
+      console.log(
+        `${chalk.bold.red("Whoops! ")} ${chalk.italic.yellowBright(
+          cmdName
+        )} is an unknown command! \n\n` +
+          `- Valid command syntax is: ${chalk.bold.inverse(
+            " dd [command] <options> "
+          )}\n  where valid commands are: ${chalk.italic(
+            getAllCommands()
+              .map((i) => i.kind)
+              .sort()
+              .join(", ")
+          )}\n\n` +
+          chalk`{dim - If you want more help with a specific command, use} ${inverted(
+            " dd [cmd] --help "
+          )}\n`
+      );
+    }
   }
 })();

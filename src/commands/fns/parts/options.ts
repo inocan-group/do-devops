@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { AwsRegion, AwsStage } from "common-types";
 import { IOptionDefinition } from "~/@types/option-types";
 
 export const options: IOptionDefinition = {
@@ -40,8 +41,8 @@ export const options: IOptionDefinition = {
 export interface IFnsOptions {
   forceBuild: boolean;
   profile: string;
-  region: string;
-  stage: string;
+  region: AwsRegion;
+  stage: AwsStage;
   json: boolean;
   output: string;
 }

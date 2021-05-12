@@ -1,6 +1,6 @@
 // import { readFileSync } from "fs";
 import path from "path";
-import { parseFile } from "./index";
+import { astParseWithTypescript } from "./index";
 
 /**
  * Validates that the webpack config:
@@ -12,6 +12,6 @@ import { parseFile } from "./index";
  * @param filename optionally override the default webpack config filename
  */
 export function validateWebpackConfig(filename: string = "webpack.config.js") {
-  const config = parseFile(path.posix.join(process.cwd(), filename));
+  const config = astParseWithTypescript(path.posix.join(process.cwd(), filename));
   console.log(config.program.body);
 }
