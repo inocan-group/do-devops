@@ -7,7 +7,7 @@ const META_LINK_MSG = chalk`{dim - the results rely on meta-data tagging; check 
 
 /** handler for the "layers" command */
 export const handler: DoDevopsHandler = async ({ observations }) => {
-  if (observations.includes("serverlessFramework")) {
+  if (observations.has("serverlessFramework")) {
     const layers = getLayersFromPackageJson();
     if (layers.length > 0) {
       console.log(
@@ -16,8 +16,7 @@ export const handler: DoDevopsHandler = async ({ observations }) => {
           { col: "name", format: { width: 30, alignment: "left" } },
           {
             col: "versions",
-            formula: (v) =>
-              Array.isArray(v) ? v.pop()?.version || "unknown" : v || "unknown",
+            formula: (v) => (Array.isArray(v) ? v.pop()?.version || "unknown" : v || "unknown"),
             format: { width: 7, alignment: "center" },
           },
           { col: "description", format: { width: 64, alignment: "left", wrapWord: true } }
@@ -26,9 +25,7 @@ export const handler: DoDevopsHandler = async ({ observations }) => {
 
       console.log(META_LINK_MSG);
     } else {
-      console.log(
-        chalk`- there were {italic no} layers found as dependencies to this repo`
-      );
+      console.log(chalk`- there were {italic no} layers found as dependencies to this repo`);
       console.log(META_LINK_MSG);
     }
   } else {

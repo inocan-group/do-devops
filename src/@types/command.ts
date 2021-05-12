@@ -1,8 +1,8 @@
 /* eslint-disable no-use-before-define */
 
 import { IDictionary, isNonNullObject } from "common-types";
-import { IGlobalOptions } from "~/shared/core";
 import { ICommandDescription } from "./general";
+import { IGlobalOptions } from "./global";
 import { DoDevopObservation } from "./observations";
 import { IOptionDefinition } from "./option-types";
 
@@ -21,6 +21,7 @@ export type KnownCommand<E extends string = never> =
   | "invoke"
   | "latest"
   | "layers"
+  | "ls"
   | "pkg"
   | "ssm"
   | "test"
@@ -62,7 +63,7 @@ export interface ICommandInput<T extends object = {}> {
    * An array of observations about the environment that the user is running the
    * command in.
    */
-  observations: DoDevopObservation[];
+  observations: Set<DoDevopObservation>;
   unknown: string[];
 }
 
@@ -99,7 +100,7 @@ export function isCommandDescriptor(desc: unknown): desc is ICommandDescriptor {
  * > output_
  */
 export type DynamicCommandDefinition<T> = (
-  observations: DoDevopObservation[],
+  observations: Set<DoDevopObservation>,
   options?: IDictionary
 ) => T;
 
@@ -123,13 +124,13 @@ export function isDynamicCommandDefinition<T extends unknown | DynamicCommandDef
  * up by the `getCommmands()` function where the structure will
  * tested as an interface definition.
  */
-export interface IDoDevopsCommand {
+export interface IDoDevopsCommand<T extends {} = {}> {
   /** a unique type alias assigned to each command */
   kind: KnownCommand;
   /**
    * The handler function which handles the command's execution
    */
-  handler: DoDevopsHandler;
+  handler: DoDevopsHandler<T>;
   syntax?: string;
   /**
    * A description of the command.

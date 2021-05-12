@@ -2,13 +2,15 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 04:57 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 10:38 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: formatCommandsSection, getCommandMeta, globalCommandDescriptions.
+// files: commandAnnouncement, doDevopsVersion, finalizeCommandDefinition, formatCommandsSection, globalCommandDescriptions.
 
 // local file exports
+export * from "./commandAnnouncement";
+export * from "./doDevopsVersion";
+export * from "./finalizeCommandDefinition";
 export * from "./formatCommandsSection";
-export * from "./getCommandMeta";
 export * from "./globalCommandDescriptions";
 
 // Note:

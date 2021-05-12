@@ -2,11 +2,12 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 12:05 PM ( GMT-7 )
+// index last changed at: 4th Apr, 2021, 10:55 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: findOrgFromGitRemote, getGitBranch, getGitLastCommit, getGitRemote, git, gitTags.
+// files: convertGitUrlToHttp, findOrgFromGitRemote, getGitBranch, getGitLastCommit, getGitRemote, git, gitTags.
 
 // local file exports
+export * from "./convertGitUrlToHttp";
 export * from "./findOrgFromGitRemote";
 export * from "./getGitBranch";
 export * from "./getGitLastCommit";

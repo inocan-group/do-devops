@@ -1,6 +1,6 @@
 import { IPackageJson } from "common-types";
 import { DoDevopObservation } from "~/@types/observations";
-import { fileExists } from "../file";
+import { currentDirectory, dirExists, fileExists } from "../file";
 import {
   getPackageJson,
   hasDependency,
@@ -8,6 +8,7 @@ import {
   hasMainExport,
   hasModuleExport,
   hasTypingsExport,
+  PKG_MGR_LOCK_FILE_LOOKUP,
 } from "../npm";
 import { determineLinter } from "./index";
 
@@ -15,107 +16,126 @@ import { determineLinter } from "./index";
  * Gets the core "observations" about the current directory.
  */
 export function getObservations() {
-  let observations: DoDevopObservation[] = [];
+  let observations: Set<DoDevopObservation> = new Set<DoDevopObservation>();
   let pkgJson: IPackageJson | undefined;
   try {
     pkgJson = getPackageJson();
   } catch {}
 
   if (pkgJson) {
-    observations.push("packageJson");
+    observations.add("packageJson");
 
-    // TS
+    // Git
+    if (fileExists(currentDirectory(".gitignore"))) {
+      observations.add("gitignore");
+    }
+    if (dirExists(currentDirectory(".git"))) {
+      observations.add("git-init");
+    }
     if (hasDevDependency("typescript")) {
-      observations.push("typescript");
+      // TS
+      observations.add("typescript");
     }
     if (hasDevDependency("ttypescript")) {
-      observations.push("ttypescript");
+      observations.add("ttypescript");
     }
     if (hasDevDependency("typescript-transform-paths")) {
-      observations.push("typescriptTransformPaths");
+      observations.add("typescriptTransformPaths");
     }
 
     // Bundlers
     if (hasDevDependency("rollup")) {
-      observations.push("rollup");
+      observations.add("rollup");
     }
     if (hasDevDependency("webpack")) {
-      observations.push("webpack");
+      observations.add("webpack");
     }
     if (hasDevDependency("vite")) {
-      observations.push("vite");
+      observations.add("vite");
     }
     if (hasDevDependency("esbuild")) {
-      observations.push("esbuild");
+      observations.add("esbuild");
     }
 
     // DBs
     if (hasDependency("firebase-admin") || hasDependency("@firebase/app")) {
-      observations.push("firebase");
+      observations.add("firebase");
     }
     if (hasDependency("firemodel")) {
-      observations.push("firemodel");
+      observations.add("firemodel");
     }
     if (hasDependency("universal-fire")) {
-      observations.push("universalFire");
+      observations.add("universalFire");
     }
     if (hasDependency("supabase")) {
-      observations.push("supabase");
+      observations.add("supabase");
     }
 
     // Testing
     if (hasDevDependency("mocha")) {
-      observations.push("mocha");
+      observations.add("mocha");
     }
     if (hasDevDependency("jest")) {
-      observations.push("jest");
+      observations.add("jest");
     }
     if (hasDevDependency("uvu")) {
-      observations.push("uvu");
+      observations.add("uvu");
     }
 
     // Serverless
     if (hasDevDependency("serverless")) {
-      observations.push("serverlessFramework");
+      observations.add("serverlessFramework");
     }
     if (fileExists("./serverless.yml")) {
-      observations.push("serverlessYml");
+      observations.add("serverlessYml");
     }
     if (fileExists("./serverless.ts")) {
-      observations.push("serverlessTs");
+      observations.add("serverlessTs");
     }
     if (hasDevDependency("webpack-plugin")) {
-      observations.push("serverlessWebpackPlugin");
+      observations.add("serverlessWebpackPlugin");
     }
     // https://www.serverless.com/plugins/serverless-sam
     if (hasDevDependency("serverless-sam")) {
-      observations.push("serverlessSamPlugin");
+      observations.add("serverlessSamPlugin");
+    }
+
+    // needed for serverless devops handoffs
+    if (hasDevDependency("ts-node")) {
+      observations.add("tsNode");
     }
 
     // package manager
-    if (fileExists("yarn.lock")) {
-      observations.push("yarn");
+    let pm = 0;
+    if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.yarn)) {
+      pm++;
+      observations.add("yarn");
     }
-    if (fileExists("pnpm-lock.yaml")) {
-      observations.push("pnpm");
+    if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.pnpm)) {
+      pm++;
+      observations.add("pnpm");
     }
-    if (fileExists("package-lock.json")) {
-      observations.push("npm");
+    if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.npm)) {
+      pm++;
+      observations.add("npm");
+    }
+    if (pm > 1) {
+      observations.add("packageManagerConflict");
     }
 
     if (hasMainExport()) {
-      observations.push("cjs");
+      observations.add("cjs");
     }
     if (hasModuleExport()) {
-      observations.push("esm");
+      observations.add("esm");
     }
     if (hasTypingsExport()) {
-      observations.push("typings");
+      observations.add("typings");
     }
 
     // linters
     const lint = determineLinter();
-    observations = [...observations, ...lint.observations];
+    observations = new Set<DoDevopObservation>([...observations, ...lint.observations]);
   }
 
   return observations;

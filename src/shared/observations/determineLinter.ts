@@ -11,7 +11,7 @@ export interface ILinterInfo {
 }
 
 export interface IObservedLinters {
-  observations: LintObservation[];
+  observations: Set<LintObservation>;
   tslint: boolean | ILinterInfo;
   eslint: boolean | ILinterInfo;
   prettier: boolean | String;
@@ -26,7 +26,7 @@ export interface IObservedLinters {
  * present we will send back the configuration file as text if it can be found.
  */
 export function determineLinter(): IObservedLinters {
-  const observations: LintObservation[] = [];
+  const observations: Set<LintObservation> = new Set<LintObservation>();
   let eslint: IObservedLinters["eslint"] = false;
   let tslint: IObservedLinters["tslint"] = false;
   let prettier: IObservedLinters["prettier"] = false;
@@ -34,17 +34,17 @@ export function determineLinter(): IObservedLinters {
 
   if (pkg) {
     if (hasDevDependency("eslint")) {
-      observations.push("eslint");
+      observations.add("eslint");
 
       if (hasDevDependency("@typescript-eslint/eslint-plugin")) {
-        observations.push("typescriptEslintPlugin");
+        observations.add("typescriptEslintPlugin");
       }
       if (hasDevDependency("@typescript-eslint/parser")) {
-        observations.push("typescriptEslintParser");
+        observations.add("typescriptEslintParser");
       }
 
       if (pkg.eslintConfig) {
-        observations.push("eslintConfig");
+        observations.add("eslintConfig");
         eslint = { config: parse(pkg.eslintConfig), filename: "package.json" };
       } else {
         for (const filename of [".eslintrc", ".eslintrc.js", ".eslintrc.ts"]) {
@@ -55,23 +55,21 @@ export function determineLinter(): IObservedLinters {
     }
 
     if (hasDevDependency("tslint")) {
-      observations.push("tslint");
+      observations.add("tslint");
 
       const fileContent = readFile("tslint.json");
-      tslint = fileContent
-        ? { config: parse(fileContent), filename: "tslint.json" }
-        : true;
+      tslint = fileContent ? { config: parse(fileContent), filename: "tslint.json" } : true;
     }
 
     if (hasDevDependency("prettier")) {
-      observations.push("prettier");
+      observations.add("prettier");
 
       if (fileExists(".prettierrc")) {
-        prettier = readFile(".prettierrc");
+        prettier = readFile(".prettierrc") || false;
       }
     }
     if (hasDevDependency("eslint-prettier-plugin")) {
-      observations.push("eslintPrettierPlugin");
+      observations.add("eslintPrettierPlugin");
     }
   }
 

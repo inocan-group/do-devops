@@ -1,8 +1,15 @@
-import { AwsRegion, IDictionary } from "common-types";
+import {
+  AwsAccountId,
+  AwsArnPartition,
+  AwsRegion,
+  AwsStage,
+  IDictionary,
+  IServerlessFunctionHandler,
+} from "common-types";
 import { NotDefined } from "./general";
-import { PackageManagerObservation, TestObservation } from "./observations";
+import { BundlerObservation, PackageManagerObservation, TestObservation } from "./observations";
 
-export interface IGeneralConfig {
+export interface IGlobalConfig {
   /**
    * General/shared configuraiton across commands
    */
@@ -12,24 +19,70 @@ export interface IGeneralConfig {
      * available to determine.
      */
     pkgManager?: PackageManagerObservation;
+
+    /**
+     * which bundler does a given repro prefer?
+     */
+    bundler?: BundlerObservation;
+
+    testDir?: string;
+    srcDir?: string;
+
+    /**
+     * Allows a user to store what command to use for bringing up files in
+     * an editor.
+     */
+    editorCommand?: string;
+  };
+  aws: {
     /**
      * A default AWS _region_ to use for if other means fail to identify
      * the region.
      */
-    defaultAwsRegion?: AwsRegion;
+    defaultRegion?: AwsRegion;
 
     /**
      * A default _profile_ to use for AWS if other means fail to identify
      * the profile name.
      */
-    defaultAwsProfile?: string;
+    defaultProfile?: string;
+
+    /**
+     * The default stage for Serverless build/deploy operations
+     */
+    defaultStage?: AwsStage;
+
+    /**
+     * The default AWS _partition_
+     */
+    defaultPartition?: AwsArnPartition;
+
+    /**
+     * The _default_ account id to use for AWS
+     */
+    defaultAccountId?: AwsAccountId;
+
+    /**
+     * The default AWS stack/app name
+     */
+    defaultStackName?: string;
   };
 }
 
 export interface ICommandConfig {
-  autoindex?: {};
+  autoindex?: {
+    /** the glob pattern to identify files to autoindex */
+    glob?: string;
+    /** include the VueJS SFC files and export the default export to a named export in index file */
+    sfc?: boolean;
+    /** specific files to add to regex pattern */
+    addedFiles?: string[];
+  };
   awsid?: {};
-  build?: {};
+  build?: {
+    lambda?: IServerlessFunctionHandler[];
+    stepFns?: string[];
+  };
   deploy?: {};
   endpoints?: {};
   fns?: {};
@@ -40,7 +93,12 @@ export interface ICommandConfig {
   pkg?: {};
   ssm?: {};
   test?: {
-    unitTestFramework: TestObservation;
+    unitTestFramework?: TestObservation;
+    useWallaby?: boolean;
+    /** the directory where test files are located; typically "test", "tests" or possibly "src" */
+    testDirectory?: string;
+    /** the filename's ending pattern before which identifies a test file withing a directory structure*/
+    testFilePostfix?: string[];
   };
 }
 
@@ -49,13 +107,13 @@ export type IProjectConfigFilled = {
   /** indicates whether the project config file exists */
   projectConfig: true;
 } & ICommandConfig &
-  IGeneralConfig;
+  IGlobalConfig;
 
 export type IProjectConfigUnfilled = {
   kind: "project";
   projectConfig: false;
 } & NotDefined<ICommandConfig> &
-  NotDefined<IGeneralConfig>;
+  NotDefined<IGlobalConfig>;
 
 export type IProjectConfig = IProjectConfigFilled | IProjectConfigUnfilled;
 
@@ -64,19 +122,16 @@ export type IUserConfigFilled = {
   /** indicates whether the user config file exists */
   userConfig: true;
 } & ICommandConfig &
-  IGeneralConfig;
+  IGlobalConfig;
 
 export type IUserConfigUnfilled = {
   kind: "user";
   userConfig: false;
 } & NotDefined<ICommandConfig> &
-  NotDefined<IGeneralConfig>;
+  NotDefined<IGlobalConfig>;
 export type IUserConfig = IUserConfigFilled | IUserConfigUnfilled;
 
-export type IIntegratedConfig = { kind: "integrated"; ready: boolean } & Omit<
-  IUserConfig,
-  "kind"
-> &
+export type IIntegratedConfig = { kind: "integrated"; ready: boolean } & Omit<IUserConfig, "kind"> &
   Omit<IProjectConfig, "kind">;
 
 export type IDoConfig = IUserConfigFilled | IProjectConfigFilled | IIntegratedConfig;
@@ -89,7 +144,6 @@ export function configIsReady(config: unknown): config is IDoConfig {
       (config as IDictionary).ready) ||
     ((config as IDoConfig).kind === "project" &&
       (config as IProjectConfigFilled).projectConfig === true) ||
-    ((config as IDoConfig).kind === "user" &&
-      (config as IUserConfigFilled).userConfig === true)
+    ((config as IDoConfig).kind === "user" && (config as IUserConfigFilled).userConfig === true)
   );
 }

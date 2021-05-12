@@ -2,16 +2,19 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 12:05 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 02:52 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: determineCredentials, determineLinter, determinePackageManager, determineProfile, determineRegion, determineStage, determineTestFramework, getObserverations, hasServerlessTsFile, isServerless, isTypescriptMicroserviceProject.
+// files: determineAccountId, determineCredentials, determineLinter, determinePackageManager, determinePartition, determineProfile, determineRegion, determineStackName, determineStage, determineTestFramework, getObserverations, hasServerlessTsFile, isServerless, isTypescriptMicroserviceProject.
 
 // local file exports
+export * from "./determineAccountId";
 export * from "./determineCredentials";
 export * from "./determineLinter";
 export * from "./determinePackageManager";
+export * from "./determinePartition";
 export * from "./determineProfile";
 export * from "./determineRegion";
+export * from "./determineStackName";
 export * from "./determineStage";
 export * from "./determineTestFramework";
 export * from "./getObserverations";

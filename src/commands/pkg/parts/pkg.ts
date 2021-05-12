@@ -1,7 +1,6 @@
 import chalk from "chalk";
 import { asyncExec } from "async-shelljs";
 import { emoji } from "~/shared/ui";
-import { detectTarget } from "../../../_archive/deploy-helpers";
 import { determineRegion, determineStage } from "~/shared/observations";
 import { DoDevopsHandler } from "~/@types/command";
 import { IPkgOptions } from "./pkg-meta";
@@ -12,19 +11,15 @@ import { IPkgOptions } from "./pkg-meta";
  * The `package` command is used in **Serverless** projects to build all of
  * the _deployable_ assets but without actually deploying.
  */
-export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts }) => {
-  // const { pkg } = await getConfig();
-  const detect = await detectTarget();
-  const target = detect.target;
+export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts, observations }) => {
   const stage = await determineStage(opts);
   const region = await determineRegion(opts);
 
-  if (!target) {
+  if (!observations.has("serverlessFramework")) {
     console.log(
-      `  - ${emoji.poop} You must state a valid "target" [ ${
-        target ? target + "{italic not valid}" : "no target stated"
-      } ]`
+      `  - the {bold pkg} command is only intended for use in repos that use the Serverless framework\n`
     );
+    return;
   }
 
   console.log(
@@ -39,9 +34,7 @@ export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts }) => {
   const directory = opts.dir ? opts.dir : ".serverless";
 
   console.log(chalk`\n{bold {green - Packaging is complete!}} ${emoji.rocket}`);
-  console.log(
-    chalk`- the assets can all be found in the {italic {blue ${directory}} directory.}`
-  );
+  console.log(chalk`- the assets can all be found in the {italic {blue ${directory}} directory.}`);
   await asyncExec(`ls -l ${directory}`);
   if (opts.validate) {
     console.log(
@@ -66,9 +59,7 @@ export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts }) => {
       console.log(chalk`{dim    ${validateUpdate}}`);
       await asyncExec(validateUpdate);
     } catch {
-      console.log(
-        chalk`{red - Error validating the {italic update} template!} ${emoji.poop}`
-      );
+      console.log(chalk`{red - Error validating the {italic update} template!} ${emoji.poop}`);
     }
   }
 

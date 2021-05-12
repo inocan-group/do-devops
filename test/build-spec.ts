@@ -1,8 +1,5 @@
-import chai from "chai";
 import { existsSync } from "fs";
 import { rm } from "async-shelljs";
-
-const expect = chai.expect;
 
 describe("build command => ", () => {
   it("creates default config when none exists", async () => {
@@ -10,6 +7,6 @@ describe("build command => ", () => {
     try {
       rm(filename);
     } catch {}
-    expect(existsSync(filename)).to.equal(false);
+    expect(existsSync(filename)).toBeFalsy();
   });
 });

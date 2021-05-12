@@ -1,29 +1,20 @@
-import {
-  getAwsProfile,
-  getAwsProfileList,
-  hasAwsProfileCredentialsFile,
-} from "../src/shared";
-
-import { expect } from "chai";
+import { getAwsProfile, getAwsProfileList, hasAwsProfileCredentialsFile } from "~/shared/aws";
 
 describe("AWS Credentials => ", () => {
   it("getAwsProfileList() finds credentials file and produces structured information", async () => {
     const credentialsFile = hasAwsProfileCredentialsFile();
 
     if (!credentialsFile) {
-      console.log("this test will not run as there is not a credentials file");
+      console.log("this test will not run as there is not a AWS credentials file");
     } else {
       const profiles = await getAwsProfileList();
 
-      expect(profiles).not.equal(false);
-      if (profiles) {
-        expect(profiles).to.be.an("object");
-        const firstKey = Object.keys(profiles).pop() as string;
-        expect(profiles[firstKey]).to.be.an("object");
-        expect(Object.keys(profiles[firstKey])).to.include("aws_access_key_id");
-        expect(Object.keys(profiles[firstKey])).to.include("aws_secret_access_key");
-      } else {
-        console.log("This condition should not be met");
+      expect(profiles.length).toBeGreaterThanOrEqual(1);
+      for (const p of profiles) {
+        expect(typeof p).toBe("object");
+        expect(typeof p.aws_access_key_id).toBe("string");
+        expect(typeof p.aws_secret_access_key).toBe("string");
+        expect(typeof p.name).toBe("string");
       }
     }
   });
@@ -34,12 +25,13 @@ describe("AWS Credentials => ", () => {
     if (!credentialsFile) {
       console.log("this test will not run as there is not a credentials file");
     } else {
-      const profiles = await getAwsProfileList();
-      expect(profiles).to.be.an("object");
-      for (const p of Object.keys(profiles)) {
-        const profile = profiles[p as keyof typeof profiles];
-        expect(Object.keys(profile)).to.include("aws_access_key_id");
-        expect(Object.keys(profile)).to.include("aws_secret_access_key");
+      const profiles = await (await getAwsProfileList()).map((i) => i.name);
+      for (const p of profiles) {
+        const profile = await getAwsProfile(p);
+        expect(typeof profile).toBe("object");
+        expect(typeof profile.aws_access_key_id).toBe("string");
+        expect(typeof profile.aws_secret_access_key).toBe("string");
+        expect((profile as any).name).toBeUndefined();
       }
     }
   });
@@ -56,7 +48,7 @@ describe("AWS Credentials => ", () => {
 
         throw new Error("should have thrown error before getting here!");
       } catch (error) {
-        expect(error.code).to.equal("not-ready");
+        expect(error.code).toBe("invalid-profile-name");
       }
     }
   });

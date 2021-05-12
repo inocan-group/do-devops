@@ -1,18 +1,21 @@
 import chalk from "chalk";
 import commandLineUsage from "command-line-usage";
-import { IDictionary } from "common-types";
-import { DoDevopObservation, Finalized, IDoDevopsCommand, KnownCommand } from "~/@types";
+import { DoDevopObservation, Finalized, IDoDevopsCommand } from "~/@types";
 import { emoji } from "~/shared/ui";
 import { globalOptions, convertOptionsToArray } from "./index";
-import { formatCommandsSection, getCommandMeta, globalCommandDescriptions } from "./util";
+import {
+  formatCommandsSection,
+  finalizeCommandDefinition,
+  globalCommandDescriptions,
+} from "./util";
 
 /**
  * Provide help on **do-devops**, either in a global sense or for a
  * particular function.
  */
-export function help(opts: IDictionary, observations: DoDevopObservation[], cmd?: KnownCommand) {
-  const { subCommands, description, syntax, options } = cmd
-    ? getCommandMeta(cmd, observations, opts)
+export function help(observations: Set<DoDevopObservation>, cmdDefn?: IDoDevopsCommand) {
+  const { kind, subCommands, description, syntax, options } = cmdDefn
+    ? finalizeCommandDefinition(cmdDefn, observations)
     : ({
         subCommands: globalCommandDescriptions(observations),
         description:
@@ -33,10 +36,10 @@ export function help(opts: IDictionary, observations: DoDevopObservation[], cmd?
   ];
 
   if (subCommands) {
-    sections.push(formatCommandsSection(subCommands, cmd));
+    sections.push(formatCommandsSection(subCommands, kind));
   }
 
-  if (cmd) {
+  if (kind) {
     sections.push({
       header: "Options",
       optionList: convertOptionsToArray(options || {}),

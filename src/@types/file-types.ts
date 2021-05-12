@@ -1,4 +1,27 @@
-import type { Stats } from "node:fs";
+import type { Stats } from "fs";
+
+export interface IFilenameNotContent {
+  /** the file's filename in the file system */
+  filename: string;
+  /** the contents of a file */
+  content?: never;
+}
+
+export interface IContentNotFilename {
+  /** the file's filename in the file system */
+  filename?: never;
+  /** the contents of a file */
+  content: string;
+}
+
+/**
+ * Allows either a `filename` or the _contents_ of a file to be represented
+ */
+export type IFileOrContent = IFilenameNotContent | IContentNotFilename;
+
+export function isFilenameNotContent(input: IFileOrContent): input is IFilenameNotContent {
+  return input.filename !== undefined;
+}
 
 /**
  * Optional configuration for the `file/write()` function
@@ -24,4 +47,17 @@ export interface IWriteOptions {
 export interface IFileWithStats {
   file: string;
   stats: Stats;
+}
+
+/**
+ * Options for all the base directory functions provided by `do-devops`
+ */
+export interface IDirectoryOptions {
+  /** a directory path that will be joined into the root path the function starts at */
+  // offset?: string;
+  /**
+   * if you want to work with a "relative path" from some known "base dir" this can be
+   * passed in to get the relative path.
+   */
+  base?: string;
 }

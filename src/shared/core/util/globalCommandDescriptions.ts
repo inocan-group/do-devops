@@ -6,7 +6,7 @@ import { getAllCommands } from "~/shared/core";
  * all of the top level commands in `do-devops`
  */
 export function globalCommandDescriptions(
-  observations: DoDevopObservation[]
+  observations: Set<DoDevopObservation>
 ): ICommandDescription[] {
   return getAllCommands(observations).map((i) => {
     return {

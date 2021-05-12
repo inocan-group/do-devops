@@ -54,7 +54,7 @@ export function parseCmdArgs(cmd: IDoDevopsCommand, incomingArgv: string[]) {
 
   return {
     subCommand: subCommand ? (cmd.greedy ? subCommand.command[0] : subCommand.command) : undefined,
-    argv: cmd.greedy ? (subCommand ? subCommand.slice(1) || [] : argv.argv) : [],
+    argv: cmd.greedy ? (subCommand ? subCommand.slice(1) || [] : argv.argv || []) : [],
     raw: incomingArgv,
     opts,
     unknown: _unknown || [],

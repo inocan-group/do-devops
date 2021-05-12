@@ -2,14 +2,12 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 12:05 PM ( GMT-7 )
+// index last changed at: 5th May, 2021, 12:25 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: askForSpecificTests, askForUnitTestFramework, jest, other, testName.
+// files: askForSpecificTests, other, testName.
 
 // local file exports
 export * from "./askForSpecificTests";
-export * from "./askForUnitTestFramework";
-export * from "./jest";
 export * from "./other";
 export * from "./testName";
 

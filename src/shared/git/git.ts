@@ -1,11 +1,12 @@
 import simpleGit, { SimpleGitOptions } from "simple-git";
+import { currentDirectory } from "../file";
 
 /**
  * Returns an instance of the [`SimpleGit` library](https://github.com/steveukx/git-js)
  */
-export function git(baseDir?: string, options: Partial<SimpleGitOptions> = {}) {
-  if (!baseDir) {
-    baseDir = process.cwd();
+export function git(dir?: string, options: Partial<SimpleGitOptions> = {}) {
+  if (!dir) {
+    dir = currentDirectory();
   }
-  return simpleGit(baseDir, options);
+  return simpleGit(dir, options);
 }

@@ -10,7 +10,7 @@ const command: IDoDevopsCommand = {
       console.log(
         chalk`- invalid command syntax, you must state a repo to report on: {blue dd {bold [repo]} {italic [opts]}}\n`
       );
-      if (observations.includes("packageJson")) {
+      if (observations.has("packageJson")) {
         console.log(
           chalk`{gray - you often want to target a repo that is listed as a dependency in this repo.\n- The deps in this repo are ({italic excluding dev deps}):}\n`
         );

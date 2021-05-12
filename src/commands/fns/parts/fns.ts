@@ -12,14 +12,15 @@ import type { FunctionConfiguration } from "aws-sdk/clients/lambda";
 import { determineRegion } from "~/shared/observations";
 import { functionsApiTable } from "./tables";
 import { write } from "~/shared/file";
+import { IGlobalOptions } from "~/@types";
 
-export const handler: DoDevopsHandler<IFnsOptions> = async ({
+export const handler: DoDevopsHandler<IGlobalOptions<IFnsOptions>> = async ({
   unknown: argv,
   opts,
   observations,
 }) => {
   const filterBy = argv.length > 0 ? (fn: string) => fn.includes(argv[0]) : () => true;
-  const isServerlessProject = observations.includes("serverlessFramework");
+  const isServerlessProject = observations.has("serverlessFramework");
   const region = opts.region ? opts.region : await determineRegion(opts);
   const stageFilterMsg = opts.stage
     ? chalk`, filtered down to only those in the {bold ${opts.stage.toUpperCase()}} stage.`
@@ -58,7 +59,7 @@ export const handler: DoDevopsHandler<IFnsOptions> = async ({
       );
     }
     process.exit();
-  } else if (observations.includes("serverlessTs")) {
+  } else if (observations.has("serverlessTs")) {
     if (opts.forceBuild) {
       console.log(
         `- detected use of the ${chalk.blue(

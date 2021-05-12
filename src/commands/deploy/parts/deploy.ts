@@ -1,5 +1,3 @@
-import { detectTarget } from "../../../_archive/deploy-helpers";
-import { emoji } from "~/shared/ui";
 import { DoDevopsHandler } from "~/@types/command";
 import { IOptionDefinition } from "~/@types/option-types";
 import { proxyToPackageManager } from "~/shared/core/proxyToPackageManager";
@@ -66,30 +64,24 @@ export interface IDeployOptions {
  *
  * Over time we may add other targets for deployment.
  */
-export const handler: DoDevopsHandler<IDeployOptions> = async ({
-  unknown: argv,
-  opts,
-  observations,
-}) => {
+export const handler: DoDevopsHandler<IDeployOptions> = async ({ observations }) => {
   // const { deploy, global } = await getConfig();
-  if (observations.includes("serverlessFramework")) {
-    let { target } = await detectTarget(opts);
-    if (target === "both") {
-      const ask = (await import(`./deploy-helpers/deploy-${target}`)).default;
-      target = await ask(opts);
-    }
-
-    if (!target) {
-      console.log(
-        `  - ${emoji.poop} You must state a valid "target" [ ${
-          target ? target + "{italic not valid}" : "no target stated"
-        } ]`
-      );
-    }
-
+  if (observations.has("serverlessFramework")) {
+    // let { target } = await detectTarget(opts);
+    // if (target === "both") {
+    //   const ask = (await import(`./deploy-helpers/deploy-${target}`)).default;
+    //   target = await ask(opts);
+    // }
+    // if (!target) {
+    //   console.log(
+    //     `  - ${emoji.poop} You must state a valid "target" [ ${
+    //       target ? target + "{italic not valid}" : "no target stated"
+    //     } ]`
+    //   );
+    // }
     // await runHooks(deploy.preDeployHooks);
-    const helper = (await import(`./deploy-helpers/deploy-${target}`)).default;
-    await helper(argv, opts);
+    // const helper = (await import(`./deploy-helpers/deploy-${target}`)).default;
+    // await helper(argv, opts);
   } else {
     await proxyToPackageManager("deploy", observations);
   }

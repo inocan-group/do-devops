@@ -1,5 +1,4 @@
 node_modules/*
 test/node_modules/*
-.git/
 bin/*
 converage/*
