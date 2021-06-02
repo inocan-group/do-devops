@@ -26,7 +26,7 @@ import { hasScript } from "./shared/npm";
   /** the primary command */
   const cmdName = mainCommand.command as string | undefined;
   // undocumented version switch
-  if (!cmdName && mainCommand._unknown?.includes("--version")) {
+  if (!cmdName && mainCommand._unknown && mainCommand._unknown.includes("--version")) {
     console.log(doDevopsVersion());
     process.exit();
   }
@@ -34,7 +34,7 @@ import { hasScript } from "./shared/npm";
   const observations = getObservations();
 
   // undocumented observations switch
-  if (!cmdName && mainCommand._unknown?.includes("--observations")) {
+  if (!cmdName && mainCommand._unknown && mainCommand._unknown.includes("--version")) {
     console.log(`Observations:`, [...observations].map((i) => chalk`{inverse  ${i} }`).join(" "));
     process.exit();
   }
@@ -62,11 +62,9 @@ import { hasScript } from "./shared/npm";
         const plural = cmdInput.unknown.length === 1 ? false : true;
         const preposition = cmdInput.unknown.length === 1 ? "was" : "were";
         console.log(
-          chalk`- Note: {italic there ${preposition} ${
-            cmdInput.unknown.length
-          } {italic unknown} parameter${
-            plural ? "s" : ""
-          } received (and ignored): {gray ${cmdInput.unknown.join(", ")}}}`
+          chalk`- Note: {italic there ${preposition} ${cmdInput.unknown.length
+            } {italic unknown} parameter${plural ? "s" : ""
+            } received (and ignored): {gray ${cmdInput.unknown.join(", ")}}}`
         );
       }
     } catch (error) {
@@ -88,17 +86,17 @@ import { hasScript } from "./shared/npm";
         `${chalk.bold.red("Whoops! ")} ${chalk.italic.yellowBright(
           cmdName
         )} is an unknown command! \n\n` +
-          `- Valid command syntax is: ${chalk.bold.inverse(
-            " dd [command] <options> "
-          )}\n  where valid commands are: ${chalk.italic(
-            getAllCommands()
-              .map((i) => i.kind)
-              .sort()
-              .join(", ")
-          )}\n\n` +
-          chalk`{dim - If you want more help with a specific command, use} ${inverted(
-            " dd [cmd] --help "
-          )}\n`
+        `- Valid command syntax is: ${chalk.bold.inverse(
+          " dd [command] <options> "
+        )}\n  where valid commands are: ${chalk.italic(
+          getAllCommands()
+            .map((i) => i.kind)
+            .sort()
+            .join(", ")
+        )}\n\n` +
+        chalk`{dim - If you want more help with a specific command, use} ${inverted(
+          " dd [cmd] --help "
+        )}\n`
       );
     }
   }
