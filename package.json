@@ -1,6 +1,6 @@
 {
   "name": "dd",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",
@@ -29,10 +29,12 @@
     "templates"
   ],
   "scripts": {
-    "build": "yarn lint && yarn clean && ttsc -p tsconfig.build.json && chmod +x bin/dd.js",
+    "build": "run-s lint clean build:bundle",
+    "build:bundle": "ttsc -p tsconfig.build.json && chmod +x bin/dd.js",
     "circular": "yarn madge src --extensions ts --circular",
     "clean": "rimraf src/**/*.js && rimraf bin",
     "dd": "./bin/dd.js",
+    "prepublish": "lint",
     "leaves": "yarn madge src --extensions ts --leaves",
     "lint": "run-s lint:*",
     "lint:src": "eslint src/**/*.ts --fix ",
