@@ -12,9 +12,9 @@ export async function installGit(opts: IGlobalOptions<{ silent: boolean }>) {
   let remoteUrl = "";
 
   if (!opts.silent) {
-    const confirm = await askConfirmQuestion("Should we initalize {blue git} for you?");
+    const confirm = await askConfirmQuestion(chalk`Should we initalize {blue git} for you?`);
     setupRemote = await askConfirmQuestion(
-      "Would you like to set a {italic remote} for this repo now?"
+      chalk`Would you like to set a {italic remote} for this repo now?`
     );
     if (setupRemote) {
       remoteName = await askInputQuestion("What should the remote's name be?", {

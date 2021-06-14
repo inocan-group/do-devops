@@ -34,7 +34,7 @@ import { hasScript } from "./shared/npm";
   const observations = getObservations();
 
   // undocumented observations switch
-  if (!cmdName && mainCommand._unknown && mainCommand._unknown.includes("--version")) {
+  if (!cmdName && mainCommand._unknown && mainCommand._unknown.includes("--observations")) {
     console.log(`Observations:`, [...observations].map((i) => chalk`{inverse  ${i} }`).join(" "));
     process.exit();
   }
