@@ -1,18 +1,16 @@
 // #autoindex
-
 // #region autoindexed files
 
-// index last changed at: 6th Jun, 2021, 06:07 PM ( GMT-7 )
+// index last changed at: 6th Jun, 2021, 12:13 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: askAboutFileOverride, askConfigureImageOptimization, askForDependency, askForUnitTestFramework, askUserAboutEditorCommand, resolvePackageManagerConflict.
+// files: createMetaFor, formatImageMeta, getImageMeta, getImages, imageCache.
 
 // local file exports
-export * from "./askAboutFileOverride";
-export * from "./askConfigureImageOptimization";
-export * from "./askForDependency";
-export * from "./askForUnitTestFramework";
-export * from "./askUserAboutEditorCommand";
-export * from "./resolvePackageManagerConflict";
+export * from "./createMetaFor";
+export * from "./formatImageMeta";
+export * from "./getImageMeta";
+export * from "./getImages";
+export * from "./imageCache";
 
 // Note:
 // -----

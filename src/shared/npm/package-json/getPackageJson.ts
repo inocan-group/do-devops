@@ -23,6 +23,7 @@ export function getPackageJson(pathOverride?: string, force: boolean = false): I
   if (p) {
     return p as IPackageJson;
   }
+
   const filename = path.join(
     pathOverride?.replace("package.json", "") || process.cwd(),
     "package.json"

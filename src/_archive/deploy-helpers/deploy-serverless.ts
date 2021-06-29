@@ -23,7 +23,7 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
     )}} functions to {italic ${stage}} stage ${emoji.party}`
   );
 
-  const transpile = isTranspileNeeded(meta);
+  const transpile = await isTranspileNeeded(meta);
   if (transpile.length > 0) {
     // const build = (await import("../../commands/build/util/tools/webpack")).default({
     //   opts: { fns: transpile },
@@ -82,7 +82,7 @@ async function fullDeploy(meta: IServerlessDeployMeta) {
     //   await build();
     // }
 
-    const fns = getLocalHandlerInfo().map((i) => i.fn);
+    const fns = (await getLocalHandlerInfo()).map((i) => i.fn);
 
     console.log(chalk`{grey - zipping up all ${String(fns.length)} Serverless handlers}`);
 

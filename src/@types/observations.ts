@@ -5,7 +5,7 @@ export type BaseObservations =
   | "tsNode"
   | "typescriptTransformPaths";
 
-export type GitObservation = "gitignore" | "git-init";
+export type GitObservation = "gitignore" | "git-init" | "git-parent-init";
 export type BundlerObservation = "webpack" | "rollup" | "vite" | "esbuild" | "tsc" | "swc";
 export type PackageManagerObservation = "yarn" | "npm" | "pnpm" | "packageManagerConflict";
 export type TestObservation = "mocha" | "jest" | "uvu" | "ava" | "jasmine" | "qunit";
@@ -38,7 +38,8 @@ export type DbObservation =
   | "sqlite"
   | "dynamodb";
 
-export type MonorepoObservation = "rushjs" | "lerna" | "yarnWorkspaces";
+export type MonorepoObservation = "rushjs" | "lerna" | "yarnWorkspaces" | "monorepo-package" | "pnpm-workspace" | "pnpm-monorepo" | "no-parent-repo";
+export type NpmObservation = "private" | "public" | "parent-private" | "parent-public";
 
 export type DoDevopObservation =
   | BaseObservations
@@ -49,6 +50,8 @@ export type DoDevopObservation =
   | PackageManagerObservation
   | TestObservation
   | DbObservation
+  | MonorepoObservation
+  | NpmObservation
   | FrameworkObservation
   | ServerlessObservation;
 

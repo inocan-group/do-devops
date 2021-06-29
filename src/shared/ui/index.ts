@@ -2,12 +2,13 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 09:16 AM ( GMT-7 )
+// index last changed at: 6th Jun, 2021, 05:46 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: consoleDimensions, emoji, highlightFilepath, inverted, styles, toTable, truncate.
+// files: consoleDimensions, durationSince, emoji, highlightFilepath, inverted, styles, toTable, truncate.
 
 // local file exports
 export * from "./consoleDimensions";
+export * from "./durationSince";
 export * from "./emoji";
 export * from "./highlightFilepath";
 export * from "./inverted";

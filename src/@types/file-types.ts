@@ -23,6 +23,8 @@ export function isFilenameNotContent(input: IFileOrContent): input is IFilenameN
   return input.filename !== undefined;
 }
 
+
+
 /**
  * Optional configuration for the `file/write()` function
  */
@@ -61,3 +63,48 @@ export interface IDirectoryOptions {
    */
   base?: string;
 }
+
+
+export interface IFilenameComponents {
+  /**
+   * The first section of the directory path;
+   * if there is no directory path then it will
+   * be an empty string.
+   */
+  start: string;
+  /**
+   * The sections of the directory path _other_
+   * than the first part which is captured by `start`.
+   * 
+   * The `mid` is _only_ directory segments and is
+   * an empty string where there less than two directory
+   * path segments.
+   */
+  mid: string;
+  /**
+   * The filename including the file extension but _not_
+   * including the directory path.
+   */
+  filename: string;
+  /**
+   * The filename with the file extension (and directory
+   * path) removed.
+   */
+  fileWithoutExt: string;
+  /**
+   * The full directory path, excluding the filename.
+   * 
+   * Note: _equivalent to `start` + `mid`_
+   */
+  filepath: string;
+
+  /**
+   * the file's extension
+   */
+  ext: string;
+
+  /** the full directory path, filename and extension */
+  full: string;
+}
+
+export type IFileInfo = Stats & IFilenameComponents;

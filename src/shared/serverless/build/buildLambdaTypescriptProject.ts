@@ -55,7 +55,7 @@ export async function buildLambdaTypescriptProject(
     chalk`- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`
   );
 
-  const handlerInfo = getLocalHandlerInfo();
+  const handlerInfo = await getLocalHandlerInfo();
   console.log(
     chalk`{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`
   );

@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 import { getValidServerlessHandlers } from "../ast/index";
-import { filesInfo, filesExist } from "../file";
+import { fileInfo, filesExist } from "../file";
 import path from "path";
 import { get } from "native-dash";
 import { IWebpackHandlerDates } from "~/@types";
@@ -19,7 +19,7 @@ let _cache: IWebpackHandlerDates[];
  * **Note:** this function _caches_ results for better performance but you
  * can break the cache by send in a `true` value to the `breakCache` parameter.
  */
-export function getLocalHandlerInfo(breakCache: boolean = false): IWebpackHandlerDates[] {
+export async function getLocalHandlerInfo(breakCache: boolean = false): Promise<IWebpackHandlerDates[]> {
   if (_cache && !breakCache) {
     return _cache;
   }
@@ -28,20 +28,20 @@ export function getLocalHandlerInfo(breakCache: boolean = false): IWebpackHandle
   const convertToWebpackPath = (source: string) =>
     path.join(process.cwd(), ".webpack", (source.split("/").pop() || "").replace(".ts", ".js"));
   const webpackPaths = sourcePaths.map((i) => convertToWebpackPath(i));
-  const sourceInfo = filesInfo(...sourcePaths);
+  const sourceInfo = await fileInfo(...sourcePaths);
   // some handlers may not have been transpiled yet
   const webpackFilesExist = filesExist(...webpackPaths);
-  const webpackInfo = webpackFilesExist ? filesInfo(...webpackFilesExist) : [];
+  const webpackInfo = webpackFilesExist ? await fileInfo(...webpackFilesExist) : [];
 
   return sourceInfo.reduce((agg: IWebpackHandlerDates[], source) => {
     return {
       ...agg,
-      fn: source.fileName,
-      source: source.filePath,
-      sourceModified: source.stats.mtime,
-      webpack: convertToWebpackPath(source.filePath),
+      fn: source.filename,
+      source: source.filepath,
+      sourceModified: source.mtime,
+      webpack: convertToWebpackPath(source.filepath),
       webpackModified: get(
-        webpackInfo.find((w) => w.fileName === source.fileName) || {},
+        webpackInfo.find((w) => w.filename === source.filename) || {},
         "stats.mtime",
         new Date("1970-01-01")
       ),

@@ -1,4 +1,5 @@
 import { TestObservation } from "./@types";
+export const IMAGE_CACHE = ".image-metadata.json";
 
 export const TEST_FRAMEWORKS: TestObservation[] = [
   "mocha",

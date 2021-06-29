@@ -12,7 +12,7 @@ const NON_PROXY = new Set(["install", "outdated", "update", "why", "ls"]);
 function isDevFlag(flag: string, mngr: PackageManagerObservation) {
   const matched = ["--save-dev", "--dev"].includes(flag);
   if (!matched) {
-    return undefined;
+    return;
   }
   switch (mngr) {
     case "npm":
@@ -26,7 +26,7 @@ function isDevFlag(flag: string, mngr: PackageManagerObservation) {
 function isPeerFlag(flag: string, mngr: PackageManagerObservation) {
   const matched = ["--save-peer", "--peer"].includes(flag);
   if (!matched) {
-    return undefined;
+    return;
   }
   switch (mngr) {
     case "npm":
@@ -40,7 +40,7 @@ function isPeerFlag(flag: string, mngr: PackageManagerObservation) {
 function isOptionalFlag(flag: string, mngr: PackageManagerObservation) {
   const matched = ["--save-optional", "--optional"].includes(flag);
   if (!matched) {
-    return undefined;
+    return;
   }
   switch (mngr) {
     case "npm":
@@ -99,11 +99,10 @@ export async function proxyToPackageManager(
         break;
       default:
         isScriptCmd = true;
-        pkgCmd = `${
-          pkgManager === "yarn"
-            ? `yarn ${cmd}${argv ? " " + argv.join(" ") : ""}`
-            : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""}`
-        }`;
+        pkgCmd = `${pkgManager === "yarn"
+          ? `yarn ${cmd}${argv ? " " + argv.join(" ") : ""}`
+          : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""}`
+          }`;
     }
 
     if (NON_PROXY.has(cmd)) {
@@ -119,7 +118,7 @@ export async function proxyToPackageManager(
       }
 
       console.log(
-        chalk`{gray - since this project is not we will instead just proxy {blue ${pkgCmd}} for you}\n`
+        chalk`{gray - we will proxy {blue ${pkgCmd}} for you}\n`
       );
     }
 
@@ -128,18 +127,13 @@ export async function proxyToPackageManager(
       timeout: 0,
     });
   } else {
-    // if (!NON_PROXY.has(cmd)) {
-    //   console.log(
-    //     `- The "${cmd}" command will be used in Serverless projects but otherwise proxies the command to your package manager of choice. `
-    //   );
-    // }
     console.log(chalk`- we can not currently tell {italic which} package manager you're using.`);
     const answer:
       | PackageManagerObservation
       | "not now, thanks" = await askListQuestion(
-      "Would you like save the package manager to this repo in a config file?",
-      ["not now, thanks", "npm", "pnpm", "yarn"]
-    );
+        "Would you like save the package manager to this repo in a config file?",
+        ["not now, thanks", "npm", "pnpm", "yarn"]
+      );
     if (answer !== "not now, thanks") {
       saveProjectConfig({ general: { pkgManager: answer } });
     }

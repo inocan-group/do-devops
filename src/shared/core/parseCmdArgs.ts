@@ -52,9 +52,12 @@ export function parseCmdArgs(cmd: IDoDevopsCommand, incomingArgv: string[]) {
   // opts come from both "local" and "global" options
   const opts = { ...(global ? global : {}), ...(local ? local : {}) };
 
+  const sc = subCommand ? (cmd.greedy ? subCommand?.command[0] : subCommand?.command) : undefined;
+
+
   return {
-    subCommand: subCommand ? (cmd.greedy ? subCommand.command[0] : subCommand.command) : undefined,
-    argv: cmd.greedy ? (subCommand ? subCommand.slice(1) || [] : argv.argv || []) : [],
+    subCommand: sc,
+    argv: cmd.greedy ? (sc ? sc?.slice(1) || [] : argv.argv || []) : [],
     raw: incomingArgv,
     opts,
     unknown: _unknown || [],

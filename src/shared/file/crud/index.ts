@@ -2,11 +2,12 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 05:47 PM ( GMT-7 )
+// index last changed at: 6th Jun, 2021, 12:07 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: readFile, removeFile, write.
+// files: readAndParseFile, readFile, removeFile, write.
 
 // local file exports
+export * from "./readAndParseFile";
 export * from "./readFile";
 export * from "./removeFile";
 export * from "./write";
