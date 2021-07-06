@@ -11,6 +11,7 @@ import { convertGitUrlToHttp, getCurrentGitBranch, getGitLastCommit, getGitRemot
 import { askConfirmQuestion, resolvePackageManagerConflict } from "~/shared/interactive";
 import { getExternalPackageJson, getPackageJson } from "~/shared/npm";
 import { dim, emoji, green } from "~/shared/ui";
+import { monorepoInfo } from "./components/monorepo";
 
 /**
  * if user adds packages to the `pp info [p1] [p2]` this function will respond
@@ -140,12 +141,9 @@ export async function thisRepo(opts: IGlobalOptions, observations: Set<DoDevopOb
       ? convertGitUrlToHttp(pkg.repository)
       : chalk`{red The repository is ${chalk.bold("not")} stated in {blue package.json}}; it may be deduced by the GIT remotes:\n${gitRemotes.join("\n")}`;
 
-  const monorepo = observations.has("monorepo")
-    ? ["Monorepo", chalk`This repo is a {bold {green monorepo}} and contains the following packages:`]
-    : ["", ""];
 
   const data = [
-    monorepo,
+    monorepoInfo(observations),
     [
       chalk.bold("Desc"),
       pkg.description ? pkg.description : chalk.bold.italic("no description provided!"),

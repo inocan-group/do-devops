@@ -1,16 +1,12 @@
 // #autoindex
-
 // #region autoindexed files
 
 // index last changed at: 7th Jul, 2021, 07:09 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: readFile, readYamlConfig, removeFile, write.
+// files: monorepo.
 
 // local file exports
-export * from "./readFile";
-export * from "./readYamlConfig";
-export * from "./removeFile";
-export * from "./write";
+export * from "./monorepo";
 
 // Note:
 // -----

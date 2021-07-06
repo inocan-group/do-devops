@@ -2,13 +2,17 @@
 
 // #region autoindexed files
 
-// index last changed at: 4th Apr, 2021, 07:01 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 07:09 PM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: otherPackages, thisRepo.
+// directories: components.
 
 // local file exports
 export * from "./otherPackages";
 export * from "./thisRepo";
+
+// directory exports
+export * from "./components/index";
 
 // Note:
 // -----
