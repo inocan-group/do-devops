@@ -2,13 +2,14 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 10:43 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 05:25 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: convertDepDictionaryToArray, dependencies, getExternalPackageJson, getPackageJson, hasDependency, hasDevDependency, hasMainExport, hasModuleExport, hasScript, hasTypings, pkgDepsInTable, savePackageJson.
+// files: convertDepDictionaryToArray, dependencies, getExportsFromPackageJson, getExternalPackageJson, getPackageJson, hasDependency, hasDevDependency, hasMainExport, hasModuleExport, hasScript, hasTypings, pkgDepsInTable, savePackageJson.
 
 // local file exports
 export * from "./convertDepDictionaryToArray";
 export * from "./dependencies";
+export * from "./getExportsFromPackageJson";
 export * from "./getExternalPackageJson";
 export * from "./getPackageJson";
 export * from "./hasDependency";

@@ -38,7 +38,7 @@ export type DbObservation =
   | "sqlite"
   | "dynamodb";
 
-export type MonorepoObservation = "rushjs" | "lerna" | "yarnWorkspaces";
+export type MonorepoObservation = "rushjs" | "lerna" | "yarnWorkspaces" | "monorepo" | "pnpmWorkspaces";
 
 export type DoDevopObservation =
   | BaseObservations
@@ -49,6 +49,7 @@ export type DoDevopObservation =
   | PackageManagerObservation
   | TestObservation
   | DbObservation
+  | MonorepoObservation
   | FrameworkObservation
   | ServerlessObservation;
 

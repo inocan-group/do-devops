@@ -27,7 +27,7 @@ export const options: IOptionDefinition = {
   sfc: {
     type: Boolean,
     group: "local",
-    description: chalk`allows switching on the inclusion of VueJS SFC files; when turned on it is an {italic additive} inclusion where the configured export type is respected but the SFC's are always default exports who's name is transformed to the component name.`,
+    description: chalk`by default VueJS SFC files will be extracted as a default import but this can be turned off with this flag`,
   },
   dir: {
     type: String,

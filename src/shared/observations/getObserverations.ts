@@ -20,7 +20,7 @@ export function getObservations() {
   let pkgJson: IPackageJson | undefined;
   try {
     pkgJson = getPackageJson();
-  } catch {}
+  } catch { }
 
   if (pkgJson) {
     observations.add("packageJson");
@@ -114,6 +114,10 @@ export function getObservations() {
     if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.pnpm)) {
       pm++;
       observations.add("pnpm");
+      if (fileExists("pnpm-workspace.yaml")) {
+        observations.add("monorepo");
+        observations.add("pnpmWorkspaces");
+      }
     }
     if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.npm)) {
       pm++;
