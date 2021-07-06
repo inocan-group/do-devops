@@ -18,7 +18,7 @@ export function createMetaInfo(
   if (sym.dirs.length > 0) {
     output.push(`// directories: ${sym.dirs.join(", ")}.`);
   }
-  if (opts.sfc && sym.sfcs.length > 0) {
+  if (opts.sfc !== false && sym.sfcs.length > 0) {
     output.push(`// SFCs: ${sym.sfcs.map((i) => removeExtension(i)).join(", ")}.`);
   }
 

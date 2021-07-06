@@ -1,9 +1,6 @@
-import { asyncExec } from "async-shelljs";
+import { git } from "./git";
 
 export async function getGitLastCommit() {
-  const result = await asyncExec("git rev-parse --short HEAD ", {
-    silent: true
-  });
-
-  return result.replace("\n", "");
+  const latest = (await git().log({ maxCount: 1, strictDate: true })).latest;
+  return latest;
 }

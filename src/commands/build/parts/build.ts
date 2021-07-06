@@ -9,23 +9,22 @@ import { emoji } from "~/shared/ui";
 import { processLambdaFns, processStepFns } from "~/commands/build/util";
 import { logger } from "~/shared/core/logger";
 import { isValidServerlessTs } from "~/shared/file";
-import { installGit, installGitIgnore, installBuildSystem } from "~/shared/install";
-import { getObservations } from "~/shared/observations";
+import { installBuildSystem } from "~/shared/install";
 
 export const handler: DoDevopsHandler<IBuildOptions> = async ({ observations, opts, raw }) => {
   const log = logger(opts);
   const isServerless = observations.has("serverlessFramework");
-  if (observations.has("packageJson") && !observations.has("git-init")) {
-    log.shout(
-      chalk`- ${emoji.eyeballs} this repo appears to not have been initialized for git yet!`
-    );
-    await installGit(opts);
-    observations = getObservations();
-  }
-  if (observations.has("packageJson") && !observations.has("gitignore")) {
-    log.shout(chalk`- ${emoji.shocked} this repo appears to not have a {blue .gitignore} file!`);
-    await installGitIgnore(opts);
-  }
+  // if (observations.has("packageJson") && !observations.has("git-init") && !observations.has("pnpm-workspace")) {
+  //   log.shout(
+  //     chalk`- ${emoji.eyeballs} this repo appears to not have been initialized for git yet!`
+  //   );
+  //   await installGit(opts);
+  //   observations = getObservations();
+  // }
+  // if (observations.has("packageJson") && !observations.has("gitignore")) {
+  //   log.shout(chalk`- ${emoji.shocked} this repo appears to not have a {blue .gitignore} file!`);
+  //   await installGitIgnore(opts);
+  // }
 
   if (isServerless) {
     if (!observations.has("serverlessTs")) {

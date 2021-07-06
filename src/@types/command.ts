@@ -10,6 +10,7 @@ import { IOptionDefinition } from "./option-types";
  * The set of registered commands recognized by `do-devops`
  */
 export type KnownCommand<E extends string = never> =
+  | "add"
   | "autoindex"
   | "awsid"
   | "bitbucket"

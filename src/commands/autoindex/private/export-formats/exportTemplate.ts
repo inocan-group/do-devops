@@ -34,7 +34,7 @@ export function exportTemplate(
   }
 
   // if the command line switch for Vue SFC's is turned on
-  if (opts.sfc && exportable.sfcs.length > 0) {
+  if (opts.sfc !== false && exportable.sfcs.length > 0) {
     contentLines.push("\n// SFC components");
     for (const sfc of exportable.sfcs) {
       contentLines.push(`export { default as ${removeExtension(sfc)} } from "./${sfc}";`);
