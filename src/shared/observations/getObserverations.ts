@@ -105,7 +105,7 @@ export function getObservations() {
       observations.add("tsNode");
     }
 
-    // package manager
+    // package manager & monorepo
     let pm = 0;
     if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.yarn)) {
       pm++;
@@ -126,7 +126,12 @@ export function getObservations() {
     if (pm > 1) {
       observations.add("packageManagerConflict");
     }
+    if (hasDevDependency("lerna")) {
+      observations.add("lerna");
+      observations.add("monorepo");
+    }
 
+    // module exports
     if (hasMainExport()) {
       observations.add("cjs");
     }

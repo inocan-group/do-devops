@@ -51,7 +51,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
 
     // commands
     if (opts.circular) {
-      const cmd = `npx madge ${dir} --circular ${flags.join(" ")}`;
+      const cmd = `pnpx madge ${dir} --circular ${flags.join(" ")}`;
       log.info(chalk`\n- running {bold madge} with following command: {blue ${cmd}}`);
       const response = exec(cmd);
       if (response.code !== 0) {
