@@ -143,12 +143,12 @@ export async function thisRepo(opts: IGlobalOptions, observations: Set<DoDevopOb
 
 
   const data = [
-    monorepoInfo(observations),
+    await monorepoInfo(observations),
     [
       chalk.bold("Desc"),
       pkg.description ? pkg.description : chalk.bold.italic("no description provided!"),
     ],
-    ...exportsRow,
+    exportsRow,
     [
       "NPM",
       npmInformation,
