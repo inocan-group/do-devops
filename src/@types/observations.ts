@@ -38,7 +38,7 @@ export type DbObservation =
   | "sqlite"
   | "dynamodb";
 
-export type MonorepoObservation = "rushjs" | "lerna" | "yarnWorkspaces" | "monorepo-package" | "pnpm-workspace" | "pnpm-monorepo" | "no-parent-repo";
+export type MonorepoObservation = "rushjs" | "lerna" | "yarnWorkspaces" | "monorepo-package" | "pnpmWorkspacess" | "pnpm-monorepo" | "no-parent-repo" | "monorepo";
 export type NpmObservation = "private" | "public" | "parent-private" | "parent-public";
 
 export type DoDevopObservation =

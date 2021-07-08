@@ -105,7 +105,7 @@ export function getObservations() {
       observations.add("tsNode");
     }
 
-    // package manager
+    // package manager & monorepo
     let pm = 0;
     if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.yarn)) {
       pm++;
@@ -114,6 +114,10 @@ export function getObservations() {
     if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.pnpm)) {
       pm++;
       observations.add("pnpm");
+      if (fileExists("pnpm-workspace.yaml")) {
+        observations.add("monorepo");
+        observations.add("pnpmWorkspaces");
+      }
     }
     if (fileExists(PKG_MGR_LOCK_FILE_LOOKUP.npm)) {
       pm++;
@@ -121,6 +125,10 @@ export function getObservations() {
     }
     if (pm > 1) {
       observations.add("packageManagerConflict");
+    }
+    if (hasDevDependency("lerna")) {
+      observations.add("lerna");
+      observations.add("monorepo");
     }
 
     // npm
@@ -144,7 +152,7 @@ export function getObservations() {
           observations.add("parent-public");
         }
         if (fileExists(repoDirectory("pnpm-workspace.yaml"))) {
-          observations.add("pnpm-workspace");
+          observations.add("pnpmWorkspacess");
         }
       } catch {
         observations.add("no-parent-repo");

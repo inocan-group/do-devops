@@ -1,20 +1,13 @@
-//#autoindex
-
+// #autoindex
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 06:37 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 07:00 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: convertGitUrlToHttp, findOrgFromGitRemote, getGitBranch, getGitLastCommit, getGitLog, getGitRemote, git, gitTags.
+// files: getLernaPackages, getMonorepoPackages.
 
 // local file exports
-export * from "./convertGitUrlToHttp";
-export * from "./findOrgFromGitRemote";
-export * from "./getGitBranch";
-export * from "./getGitLastCommit";
-export * from "./getGitLog";
-export * from "./getGitRemote";
-export * from "./git";
-export * from "./gitTags";
+export * from "./getLernaPackages";
+export * from "./getMonorepoPackages";
 
 // Note:
 // -----

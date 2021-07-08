@@ -2,14 +2,16 @@
 
 // #region autoindexed files
 
-// index last changed at: 6th Jun, 2021, 02:49 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 07:00 AM ( GMT-7 )
 // export: default; exclusions: index, private.
-// files: install, ls, watch.
+// files: add, install, ls, upgrade, watch.
 // directories: autoindex, awsid, build, deploy, endpoints, fns, image, info, invoke, latest, layers, madge, outdated, pkg, scaffold, ssm, test, upgrade, why.
 
 // local file exports
+export { default as add } from "./add";
 export { default as install } from "./install";
 export { default as ls } from "./ls";
+export { default as upgrade } from "./upgrade";
 export { default as watch } from "./watch";
 
 // directory exports
