@@ -7,7 +7,7 @@ import {
   IServerlessFunctionHandler,
 } from "common-types";
 import { NotDefined } from "./general";
-import { IImagePreBlurConfig, IImageRule } from "./images";
+import { IImagePreBlurConfig, IImageRule } from "./image-types";
 import { BundlerObservation, PackageManagerObservation, TestObservation } from "./observations";
 
 export interface IGlobalConfig {
@@ -96,10 +96,10 @@ export interface ICommandConfig {
      * The (base) directory to place images when generated
      */
     targetDir: string;
-    /** 
+    /**
      * the _breakpoints_ which the app uses can be defined; each breakpoint
      * should be given a name and then the number represents the min-width to achieve this.
-     * 
+     *
      * By default this is set as:
      * ```ts
      * {
@@ -113,7 +113,7 @@ export interface ICommandConfig {
      */
     breakpoints?: Record<string, number>;
     /**
-     * Expresses whether a small 
+     * Expresses whether a small
      */
     preBlur?: IImagePreBlurConfig;
     quality?: {

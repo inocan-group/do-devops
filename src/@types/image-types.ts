@@ -1,37 +1,75 @@
 import { AspectRatioColon } from "common-types";
-import { IDictionary } from "native-dash/dist/@types/IDictionary";
-import type { ColourspaceEnum, FormatEnum, GifOptions, JpegOptions, PngOptions, WebpOptions, AvifOptions, TiffOptions, HeifOptions, Metadata, TileOptions } from "sharp";
+import type {
+  ColourspaceEnum,
+  FormatEnum,
+  GifOptions,
+  JpegOptions,
+  PngOptions,
+  WebpOptions,
+  AvifOptions,
+  TiffOptions,
+  HeifOptions,
+  Metadata,
+  TileOptions,
+} from "sharp";
 
-export type ImageMetadata = {
+export type SharpBufferProperties = "exif" | "iptc" | "icc" | "xmp";
+
+/** metadata provided by **Sharp** but excluding the properties which return _buffers_ */
+export type ISharpMetadata = Exclude<Metadata, SharpBufferProperties>;
+
+/** fill this in once working with ExifTool */
+export type Exif = {};
+/** fill this in once working with ExifTool */
+export type Iptc = {};
+
+export type IDetailedMeta = ISharpMetadata & Exif & Iptc;
+/**
+ * Metadata from sharp is always made available but only where a rule
+ * has expressed interest in details are the EXIF and IPTC data structures
+ * provided.
+ */
+export type ImageMetadata = IDetailedMeta | ISharpMetadata;
+
+export type IImageMetadata = {
   file: string;
   updated: Date;
   created: Date;
   size: number;
   isSourceImage: boolean;
-  meta: Exclude<Metadata, "exif" | "iptc"> & { exif: IDictionary; iptc: IDictionary };
+  /** reference to the source image for a non-source image */
+  from?: string;
+  /** meta data available for given file */
+  meta: ImageMetadata;
 };
 
-export type ImageFormat = keyof FormatEnum;
+/**
+ * The valid files extensions (and corresponding formats) supported by
+ * the Sharp image conversion tool.
+ */
+export type SharpImageFormat = keyof FormatEnum;
 
 /**
  * If set to `true` it will generate a 16x blurred **jpg** image of reasonable quality.
- * If you want more control you should use the object notation. 
+ * If you want more control you should use the object notation.
  */
-export type IImagePreBlurConfig = boolean | {
-  /**
-   * If stated it must be a number between 0.3 and 1000, this will make the blur
-   * higher quality (but more CPU intensive) than the default settings.
-   * 
-   * Documentation: [Sharp Blur](https://sharp.pixelplumbing.com/api-operation#blur)
-   */
-  sigma?: number;
-  /**
-   * The width of the pre-blurred image; by default a width of `16px` will be used.
-   */
-  size?: number;
-  /** the image format to use for blurring; by default JPG is used */
-  format?: ImageFormat;
-};
+export type IImagePreBlurConfig =
+  | boolean
+  | {
+      /**
+       * If stated it must be a number between 0.3 and 1000, this will make the blur
+       * higher quality (but more CPU intensive) than the default settings.
+       *
+       * Documentation: [Sharp Blur](https://sharp.pixelplumbing.com/api-operation#blur)
+       */
+      sigma?: number;
+      /**
+       * The width of the pre-blurred image; by default a width of `16px` will be used.
+       */
+      size?: number;
+      /** the image format to use for blurring; by default JPG is used */
+      format?: SharpImageFormat;
+    };
 
 /**
  * values are either a number represented as a string
@@ -42,14 +80,14 @@ export type ImageAspectStrategy = "cover" | "contain" | "fill" | "inside" | "out
 
 /**
  * The _fit_ strategy when you are changing the aspect ratio.
- * 
+ *
  * Docs: [Sharp Resize](https://sharp.pixelplumbing.com/api-resize)
  */
 export type ImageFitChangingAspect = "cover" | "contain" | "fill";
 
 /**
  * The _fit_ strategy when you are _not_ changing the aspect ratio.
- * 
+ *
  * Docs: [Sharp Resize](https://sharp.pixelplumbing.com/api-resize)
  */
 export type ImageFitUnchangedAspect = "inside" | "outside" | undefined;
@@ -87,7 +125,7 @@ type IImageBaseRule = {
   /**
    * Image formats to convert to
    */
-  formats: ImageFormat[];
+  formats: SharpImageFormat[];
   /**
    * Files to be excluded from this rule. Filenames can be full filenames
    * or partials.
@@ -95,10 +133,9 @@ type IImageBaseRule = {
   exclude?: string[];
 
   /**
-   * File names (including partials) which must be matched 
+   * File names (including partials) which must be matched
    */
   include?: string[];
-
 
   /**
    * Specifies the sizes of images to be generated; width must specified but
@@ -110,7 +147,7 @@ type IImageBaseRule = {
   /**
    * When converting to images that support progressive loading, this flag indicates
    * whether this feature should be turned on.
-   * 
+   *
    * @default true
    */
   progressive?: boolean;
@@ -119,7 +156,7 @@ type IImageBaseRule = {
    * Boolean flag which indicates whether a small, heavily blurred version of
    * the image should be generated. Typically this is used as a starting image
    * that loads almost immediately (potentially even inline to HTML).
-   * 
+   *
    * @default true
    */
   preBlur?: boolean;
@@ -136,11 +173,10 @@ type IImageBaseRule = {
    */
   preserveMeta?: boolean;
 
-
   /**
    * If you want a copyright tag embedded into images you can
    * state that here and all generated images of this rule will include that.
-   * 
+   *
    * **Note:** this will be added to the EXIF metadata; in the future it would
    * be nice to get this into IPTC and XMP.
    */
@@ -169,20 +205,20 @@ export interface IPreBlurOptions {
   /**
    * The image format used for blurred image; default is `jpg`.
    */
-  format?: ImageFormat;
+  format?: SharpImageFormat;
   /**
    * If left at it's default value of `true` it will create a time-efficient
    * blur effect.
-   * 
+   *
    * For more CPU intensive but higher quality blurs you will need to state
    * the _sigma_ value to use for blurring (a value between 0.3 and 1000).
-   * 
+   *
    * More info here: [Sharp Blur Parameters](https://sharp.pixelplumbing.com/api-operation#blur)
    */
   blur?: true | number;
 
   /**
-   * If turned on it it will 
+   * If turned on it it will
    */
   removeAlpha?: boolean;
 }
@@ -212,10 +248,10 @@ export interface IConvertImageOptions {
   /**
    * If left at it's default value of `true` it will create a time-efficient
    * blur effect.
-   * 
+   *
    * For more CPU intensive but higher quality blurs you will need to state
    * the _sigma_ value to use for blurring (a value between 0.3 and 1000).
-   * 
+   *
    * More info here: [Sharp Blur Parameters](https://sharp.pixelplumbing.com/api-operation#blur)
    */
   blur?: number | boolean;
@@ -230,7 +266,7 @@ export interface IConvertImageOptions {
 
   /**
    * Sharpens the image; default if `false`.
-   * 
+   *
    * [Docs](https://sharp.pixelplumbing.com/api-operation#sharpen)
    */
   sharpen?: {
@@ -257,7 +293,7 @@ export interface IConvertImageOptions {
   /**
    * Will auto-rotate the image if the `Orientation` tag in EXIF is present. This will
    * also remove the tag (as the rotation of them image means that tag no long applies).
-   * 
+   *
    * @default true
    */
   autoRotate?: boolean;
@@ -274,7 +310,7 @@ export interface IConvertImageOptions {
 }
 
 export type IRefreshCacheOptions = {
-  /** 
+  /**
    * force the images being passed in to go through a full
    * build and refresh regardless of if images already exist in cache
    */

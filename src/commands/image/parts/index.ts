@@ -1,14 +1,15 @@
 // #autoindex
 // #region autoindexed files
 
-// index last changed at: 6th Jun, 2021, 05:45 PM ( GMT-7 )
+// index last changed at: 9th Sep, 2021, 10:51 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: convertImage, formatDefaults, image-cmd, options, preBlurImage.
+// files: convertImage, formatDefaults, image-cmd, image-types, options, preBlurImage.
 
 // local file exports
 export * from "./convertImage";
 export * from "./formatDefaults";
 export * from "./image-cmd";
+export * from "./image-types";
 export * from "./options";
 export * from "./preBlurImage";
 

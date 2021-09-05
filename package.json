@@ -66,6 +66,7 @@
     "deepmerge": "^4.2.2",
     "destr": "^1.1.0",
     "diff": "^5.0.0",
+    "exiftool-vendored": "^15.3.0",
     "find-up": "^5.0.0",
     "globby": "^11.0.0",
     "inferred-types": "^0.3.0",

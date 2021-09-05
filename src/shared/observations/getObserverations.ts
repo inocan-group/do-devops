@@ -20,7 +20,7 @@ export function getObservations() {
   let pkgJson: IPackageJson | undefined;
   try {
     pkgJson = getPackageJson();
-  } catch { }
+  } catch {}
 
   if (pkgJson) {
     observations.add("packageJson");
@@ -139,7 +139,7 @@ export function getObservations() {
       observations.add("public");
     }
 
-    // monorepo 
+    // monorepo
 
     if (!observations.has("git-init")) {
       // if a repo is not in GIT yet this is an signal that
@@ -152,7 +152,7 @@ export function getObservations() {
           observations.add("parent-public");
         }
         if (fileExists(repoDirectory("pnpm-workspace.yaml"))) {
-          observations.add("pnpmWorkspacess");
+          observations.add("pnpmWorkspaces");
         }
       } catch {
         observations.add("no-parent-repo");

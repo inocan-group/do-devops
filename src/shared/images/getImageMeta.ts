@@ -1,28 +1,21 @@
 import { Stats, statSync } from "fs";
 import sharp from "sharp";
-import { ImageMetadata } from "~/@types/images";
+import { IImageMetadata } from "~/@types/image-types";
 import { getFileComponents, readAndParseFile, repoDirectory, write } from "../file";
 import { IMAGE_CACHE } from "~/constants";
 import { IDictionary } from "common-types";
 import { getProjectConfig } from "../config";
-import parse from "destr";
+import { omit } from "native-dash";
 
 async function getSharpMetadata(file: string) {
   return sharp(file).metadata();
 }
 
-function unbufferExif<T extends Exclude<sharp.Metadata, "iptc"> & { iptc?: any }>(meta: T) {
-  return { ...meta, exif: parse(meta.exif?.toString()) || {} };
-}
-
-function unbufferIptc<T extends Exclude<sharp.Metadata, "iptc"> & { exif?: any }>(meta: T) {
-  return { ...meta, iptc: parse(meta.iptc?.toString()) || {} };
-}
-
-async function createMetaFor(f: Stats, img: string): Promise<ImageMetadata> {
-  const sourceDirs = getProjectConfig().image?.rules?.map(r => r.source) || [];
+async function createMetaFor(f: Stats, img: string): Promise<IImageMetadata> {
+  const sourceDirs = getProjectConfig().image?.rules?.map((r) => r.source) || [];
   const imgPath = getFileComponents(img).filepath || "ROOT_DIRECTORY";
-  const isSourceImage = sourceDirs.some(s => s.includes(imgPath));
+  const isSourceImage = sourceDirs.some((s) => s.includes(imgPath));
+  const meta = omit(await getSharpMetadata(img), "exif", "icc", "iptc", "xmp");
 
   return {
     file: img,
@@ -30,7 +23,7 @@ async function createMetaFor(f: Stats, img: string): Promise<ImageMetadata> {
     created: f.ctime,
     size: f.size,
     isSourceImage,
-    meta: unbufferIptc(unbufferExif(await getSharpMetadata(img))),
+    meta,
   };
 }
 
@@ -38,16 +31,17 @@ async function createMetaFor(f: Stats, img: string): Promise<ImageMetadata> {
  * Will check passed in file for existinance in the cache and
  * whether these entries are stale, if they are it will fill
  * them in.
- * 
+ *
  * Regardless of initial caching state, this function returns
  * the metadata for the images requested.
  */
 async function refreshCache(images: string[]) {
-  const c: IDictionary<ImageMetadata> = readAndParseFile<IDictionary<ImageMetadata>>(repoDirectory(IMAGE_CACHE)) || {};
+  const c: IDictionary<IImageMetadata> =
+    readAndParseFile<IDictionary<IImageMetadata>>(repoDirectory(IMAGE_CACHE)) || {};
   console.log({ c });
 
-  const cache: Record<string, ImageMetadata> = {};
-  const promises: Promise<ImageMetadata>[] = [];
+  const cache: Record<string, IImageMetadata> = {};
+  const promises: Promise<IImageMetadata>[] = [];
 
   for (const img of images) {
     const f = statSync(img);
@@ -75,10 +69,9 @@ async function refreshCache(images: string[]) {
   return cache;
 }
 
-
 /**
  * Recieves an array of images and returns an array of `ImageMetadata`
- * which leverages the [Sharp](https://sharp.pixelplumbing.com) library 
+ * which leverages the [Sharp](https://sharp.pixelplumbing.com) library
  * to get metadata for image files.
  */
 export async function getImageMeta(...images: string[]) {
