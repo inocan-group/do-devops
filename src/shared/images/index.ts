@@ -1,16 +1,15 @@
-// #autoindex
+// #autoindex, exclude: useExifTool, useImageApi, useSharp
 // #region autoindexed files
 
-// index last changed at: 6th Jun, 2021, 12:13 PM ( GMT-7 )
-// export: named; exclusions: index, private.
-// files: createMetaFor, formatImageMeta, getImageMeta, getImages, imageCache.
+// index last changed at: 9th Sep, 2021, 03:08 PM ( GMT-7 )
+// export: named; exclusions: useExifTool, useImageApi, useSharp, index, private.
+// files: createMetaFor, formatImageMeta, getImages, useExifTools.
 
 // local file exports
 export * from "./createMetaFor";
 export * from "./formatImageMeta";
-export * from "./getImageMeta";
 export * from "./getImages";
-export * from "./imageCache";
+export * from "./useExifTools";
 
 // Note:
 // -----

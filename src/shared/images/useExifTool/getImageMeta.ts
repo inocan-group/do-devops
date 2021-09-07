@@ -1,17 +1,17 @@
 import { Stats, statSync } from "fs";
 import sharp from "sharp";
-import { IImageMetadata } from "~/@types/image-types";
-import { getFileComponents, readAndParseFile, repoDirectory, write } from "../file";
+import { IImageCacheRef } from "~/@types/image-types";
+import { getFileComponents, readAndParseFile, repoDirectory, write } from "../../file";
 import { IMAGE_CACHE } from "~/constants";
 import { IDictionary } from "common-types";
-import { getProjectConfig } from "../config";
+import { getProjectConfig } from "../../config";
 import { omit } from "native-dash";
 
 async function getSharpMetadata(file: string) {
   return sharp(file).metadata();
 }
 
-async function createMetaFor(f: Stats, img: string): Promise<IImageMetadata> {
+async function createMetaFor(f: Stats, img: string): Promise<IImageCacheRef> {
   const sourceDirs = getProjectConfig().image?.rules?.map((r) => r.source) || [];
   const imgPath = getFileComponents(img).filepath || "ROOT_DIRECTORY";
   const isSourceImage = sourceDirs.some((s) => s.includes(imgPath));
@@ -36,12 +36,12 @@ async function createMetaFor(f: Stats, img: string): Promise<IImageMetadata> {
  * the metadata for the images requested.
  */
 async function refreshCache(images: string[]) {
-  const c: IDictionary<IImageMetadata> =
-    readAndParseFile<IDictionary<IImageMetadata>>(repoDirectory(IMAGE_CACHE)) || {};
+  const c: IDictionary<IImageCacheRef> =
+    readAndParseFile<IDictionary<IImageCacheRef>>(repoDirectory(IMAGE_CACHE)) || {};
   console.log({ c });
 
-  const cache: Record<string, IImageMetadata> = {};
-  const promises: Promise<IImageMetadata>[] = [];
+  const cache: Record<string, IImageCacheRef> = {};
+  const promises: Promise<IImageCacheRef>[] = [];
 
   for (const img of images) {
     const f = statSync(img);

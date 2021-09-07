@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import type { IImageMetadata } from "~/@types/image-types";
+import type { IImageCacheRef } from "~/@types/image-types";
 import { highlightFilepath, durationSince } from "~/shared/ui";
 
-export function formatImageMeta(image: IImageMetadata) {
+export function formatImageMeta(image: IImageCacheRef) {
   const ratio =
     image.meta.width && image.meta.height
       ? chalk`, {italic aspect: {dim ${

@@ -1,21 +1,13 @@
-//#autoindex:named
+// #autoindex
 
 // #region autoindexed files
 
-// index last changed at: 9th Sep, 2021, 06:13 PM ( GMT-7 )
+// index last changed at: 9th Sep, 2021, 11:13 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: consoleDimensions, durationSince, emoji, highlightFilepath, inverted, numberWithCommas, styles, toTable, truncate.
+// files: image-guards.
 
 // local file exports
-export * from "./consoleDimensions";
-export * from "./durationSince";
-export * from "./emoji";
-export * from "./highlightFilepath";
-export * from "./inverted";
-export * from "./numberWithCommas";
-export * from "./styles";
-export * from "./toTable";
-export * from "./truncate";
+export * from "./image-guards";
 
 // Note:
 // -----

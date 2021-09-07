@@ -26,8 +26,14 @@ export function readFile(filename: string) {
   try {
     return filesExist(filename) ? readFileSync(filename, { encoding: "utf-8" }) : undefined;
   } catch (error) {
-    console.log(chalk`{red - ${emoji.poop} ran into a problem reading file {blue ${filename}}.} Error message: ${error.message}`);
-    console.log(chalk`- Stack:{dim \n${error.stack}}`);
+    console.log(
+      chalk`{red - ${
+        emoji.poop
+      } ran into a problem reading file {blue ${filename}}.} Error message: ${
+        (error as Error).message
+      }`
+    );
+    console.log(chalk`- Stack:{dim \n${(error as Error).stack}}`);
 
     process.exit(1);
   }

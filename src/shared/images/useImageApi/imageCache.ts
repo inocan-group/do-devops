@@ -1,11 +1,11 @@
 import { IDictionary } from "common-types";
 import { keys } from "native-dash";
-import { IGlobalOptions, IImageMetadata, IRefreshCacheOptions } from "~/@types";
+import { IGlobalOptions, IImageCacheRef, IRefreshCacheOptions } from "~/@types";
 import { IMAGE_CACHE } from "~/constants";
-import { logger } from "../core";
-import { currentDirectory } from "../file";
-import { repoDirectory } from "../file/base-paths/repoDirectory";
-import { readAndParseFile } from "../file/crud/readAndParseFile";
+import { logger } from "../../core";
+import { currentDirectory } from "../../file";
+import { repoDirectory } from "../../file/base-paths/repoDirectory";
+import { readAndParseFile } from "../../file/crud/readAndParseFile";
 
 /**
  * The cache holds all image metadata that it gets
@@ -16,7 +16,7 @@ import { readAndParseFile } from "../file/crud/readAndParseFile";
  * in a known state before writing back to the file
  * cache.
  */
-let MEM_CACHE: Record<string, IImageMetadata> = {};
+let MEM_CACHE: Record<string, IImageCacheRef> = {};
 
 /**
  * Loads all images from the current image cache into the memory
@@ -29,8 +29,8 @@ let MEM_CACHE: Record<string, IImageMetadata> = {};
  */
 export function loadImageCache() {
   MEM_CACHE =
-    readAndParseFile<IDictionary<IImageMetadata>>(currentDirectory(IMAGE_CACHE)) ||
-    readAndParseFile<IDictionary<IImageMetadata>>(repoDirectory(IMAGE_CACHE)) ||
+    readAndParseFile<IDictionary<IImageCacheRef>>(currentDirectory(IMAGE_CACHE)) ||
+    readAndParseFile<IDictionary<IImageCacheRef>>(repoDirectory(IMAGE_CACHE)) ||
     {};
 
   return MEM_CACHE;

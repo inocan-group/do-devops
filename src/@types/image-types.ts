@@ -12,26 +12,151 @@ import type {
   Metadata,
   TileOptions,
 } from "sharp";
+import { ExifDateTime, Tags } from "exiftool-vendored";
+
+export type MetaDataDetail = "basic" | "categorical" | "all";
 
 export type SharpBufferProperties = "exif" | "iptc" | "icc" | "xmp";
 
+export interface IptcCreatorContactInfo {
+  /** website URL */
+  CiUrlWork: string;
+  /** contact's city */
+  CiAdrCity: string;
+  /** state or province of contact */
+  CiAdrRegion: string;
+  /** contact's country */
+  CiAdrCtry: string;
+  /** postcode / zipcode */
+  CiAdrPcode: string;
+  /** email address */
+  CiEmailWork: string;
+  /** telephone */
+  CiTelWork: string;
+  /** address */
+  CiAdrExtadr: string[];
+  [key: string]: any;
+}
+
+export type ExifTagsPlusMissing<T extends {} = {}> = Omit<Tags, "CreatorContactInfo"> & {
+  /** this breaks out the generic "Struct" which ExifTools provides */
+  CreatorContactInfo: IptcCreatorContactInfo;
+  [key: string]: unknown;
+} & T;
+
 /** metadata provided by **Sharp** but excluding the properties which return _buffers_ */
-export type ISharpMetadata = Exclude<Metadata, SharpBufferProperties>;
+export type ISharpMetadata = Exclude<Metadata, SharpBufferProperties> & {
+  metaDetailLevel: "basic";
+};
 
-/** fill this in once working with ExifTool */
-export type Exif = {};
-/** fill this in once working with ExifTool */
-export type Iptc = {};
+export type IExifToolMeta = Tags &
+  Omit<ISharpMetadata, "metaDetailLevel"> & { metaDetailLevel: "tags" };
 
-export type IDetailedMeta = ISharpMetadata & Exif & Iptc;
 /**
- * Metadata from sharp is always made available but only where a rule
- * has expressed interest in details are the EXIF and IPTC data structures
- * provided.
+ * The ExifTool provides so metadata that TS can't compute types so they have reduced the number
+ * of attributes to those which are statistically more common. That's a good start but of these
+ * meta-data fields many are reporting on the same thing. For this reason we reduce the attributes
+ * down to the "best" representation of commonly desired meta info.
+ *
+ * > See `metaReducer()` function in useExifTools
  */
-export type ImageMetadata = IDetailedMeta | ISharpMetadata;
+export type ICategoricalMeta = {
+  /** a listing of all `Tags` from ExifTool which were populated in the image */
+  populated: string[];
+  /** any errors encountered by **ExifTool** which were encountered in trying to get meta data */
+  errors: string[];
 
-export type IImageMetadata = {
+  /** the Camera's manufacturer */
+  make: string | undefined;
+  /** the Camera model used in taking this picture */
+  model: string | undefined;
+  /** the color profile for the image */
+  color: string | undefined;
+  shutterSpeed: string | undefined;
+  iso: number | undefined;
+  createDate: ExifDateTime | undefined;
+  modifyDate: ExifDateTime | undefined;
+  height: number | undefined;
+  width: number | undefined;
+  software: string | undefined;
+  aperture: number | undefined;
+  lens: string | undefined;
+  lensMake: string | undefined;
+  focalLength: string | undefined;
+  /** equivalent focal length for a 35mm camera */
+  focalLength35: string | undefined;
+  exposureProgram: string | undefined;
+  exposureMode: string | undefined;
+  bracketing: string | undefined;
+  meteringMode: string | undefined;
+  exposureBias: number | undefined;
+  flash: string | undefined;
+  flashCompensation: number | undefined;
+  brightness: number | undefined;
+  scene: string | undefined;
+  subject: string | undefined;
+  location: {
+    city: string | undefined;
+    state: string | undefined;
+    location: string | undefined;
+    country: string | undefined;
+    countryCode: string | undefined;
+  };
+  rating: number | undefined;
+  megapixels: number | undefined;
+  copyright: string | undefined;
+  caption: string | undefined;
+  title: string | undefined;
+  gps: {
+    altitude: string | undefined;
+    coordinates: [number, number] | undefined;
+    latitudeReference: "N" | "S" | undefined;
+    longitudeReference: "E" | "W" | undefined;
+    destination: [number, number] | undefined;
+  };
+  dpi: [number, number] | undefined;
+  /**
+   * Some meta formats come back with number some with a number component
+   * but with useful textual content too. For this reason the type is always converted
+   * to a string.
+   */
+  sharpness: string | undefined;
+  /**
+   * Example: "99.9m"
+   */
+  subjectDistance: string | undefined;
+};
+
+/**
+ * Both categorical meta from ExifTool and Sharp's metadata
+ */
+export type ICategoricalMetaWithSharp = ICategoricalMeta &
+  Omit<ISharpMetadata, "metaDetailLevel"> & { metaDetailLevel: "categorical" };
+
+export type IAllImageMeta = Omit<IExifToolMeta, "metaDetailLevel"> & {
+  metaDetailLevel: "all";
+} & Omit<ICategoricalMeta, "metaDetailLevel">;
+
+/**
+ * Some metadata from **Sharp** and **ExifTool** is always provided but the level of detail
+ * can depend. Levels which exist are:
+ *
+ * - `basic` - just the meta provided by sharp (this base is ALWAYS available)
+ * - `categorical` - a downsampling of meta tags from ExifTool into useful categories (plus Sharp's base info); this is tyically the most useful for _providing_ meta insight but loses resolution if writing because the precise tags are not present. Though note, it provides a property called `populated` which indicates all tags which were present in image.
+ * - `tags` - provides sharp's base plus ALL tags that ExifTool produces
+ * - `all` - provides sharp's base, all ExifTool tags, and categories on property "categories"
+ * (to avoid namespace collisions)
+ */
+export type ImageMetadata =
+  | ICategoricalMetaWithSharp
+  | ISharpMetadata
+  | IExifToolMeta
+  | IAllImageMeta;
+
+/**
+ * A cache reference for an individual image
+ */
+export type IImageCacheRef = {
   file: string;
   updated: Date;
   created: Date;
@@ -39,8 +164,20 @@ export type IImageMetadata = {
   isSourceImage: boolean;
   /** reference to the source image for a non-source image */
   from?: string;
+  /** the level of detail of metadata for a given image */
+  metaDetailLevel?: "basic" | "catories" | "all";
+
   /** meta data available for given file */
   meta: ImageMetadata;
+};
+
+/**
+ * An image cache used by do-devops to efficiently
+ * provide meta-data and performing targetted updates
+ */
+export type IImageCache = {
+  source: Record<string, IImageCacheRef>;
+  converted: Record<string, IImageCacheRef>;
 };
 
 /**
