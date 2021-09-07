@@ -1,4 +1,4 @@
-import { AspectRatioColon } from "common-types";
+import { AspectRatioColon, epochWithMilliseconds } from "common-types";
 import type {
   ColourspaceEnum,
   FormatEnum,
@@ -158,8 +158,8 @@ export type ImageMetadata =
  */
 export type IImageCacheRef = {
   file: string;
-  updated: Date;
-  created: Date;
+  modified: epochWithMilliseconds;
+  created: epochWithMilliseconds;
   size: number;
   isSourceImage: boolean;
   /** reference to the source image for a non-source image */
@@ -238,11 +238,16 @@ export type ChromaSubsampling = "4:4:4" | "4:2:0";
 
 export type ColorSpace = keyof ColourspaceEnum;
 
-export type IImageQuality = {
-  jpg?: number;
-  webp?: number;
-  avif?: number;
-};
+export interface ImageFormatOptions {
+  jpg?: JpegOptions;
+  png?: PngOptions;
+  webp?: WebpOptions;
+  gif?: GifOptions;
+  tiff?: TiffOptions;
+  avif?: AvifOptions;
+  heif?: HeifOptions;
+  tile?: TileOptions;
+}
 
 type IImageBaseRule = {
   name: string;
@@ -255,39 +260,14 @@ type IImageBaseRule = {
    */
   destination: string;
   /**
-   * Flag indicating whether the rule will follow into subdirs
+   * glob pattern to pickup images
    */
-  subDirs: boolean;
+  glob: string;
 
   /**
-   * Image formats to convert to
+   * The widths of converted images
    */
-  formats: SharpImageFormat[];
-  /**
-   * Files to be excluded from this rule. Filenames can be full filenames
-   * or partials.
-   */
-  exclude?: string[];
-
-  /**
-   * File names (including partials) which must be matched
-   */
-  include?: string[];
-
-  /**
-   * Specifies the sizes of images to be generated; width must specified but
-   * height is optional. If height is _not_ specified the current aspect-ratio
-   * will be used.
-   */
-  sizes: ImageTargetSize[];
-
-  /**
-   * When converting to images that support progressive loading, this flag indicates
-   * whether this feature should be turned on.
-   *
-   * @default true
-   */
-  progressive?: boolean;
+  widths: number[];
 
   /**
    * Boolean flag which indicates whether a small, heavily blurred version of
@@ -302,20 +282,27 @@ type IImageBaseRule = {
    * Sensible defaults are used as a default and can be overriden at the global
    * level but here you can define these settings at the rule level
    */
-  quality?: IImageQuality;
+  options?: ImageFormatOptions;
 
   /**
-   * By default it preserves EXIF and IPTC metadata but if you would like this stripped out
-   * you can state this.
+   * Image files can retain their meta-data or have it removed. In general, it's
+   * probably best to remove meta-data if you are in doubt.
+   *
+   * Note: this is independant of "sidecar" files and applies to the meta data
+   * which is in the image file itself.
    */
   preserveMeta?: boolean;
 
   /**
+   * How much meta information should be captured in images?
+   *
+   * @default "basic"
+   */
+  sidecarDetail: "basic" | "categorical";
+
+  /**
    * If you want a copyright tag embedded into images you can
    * state that here and all generated images of this rule will include that.
-   *
-   * **Note:** this will be added to the EXIF metadata; in the future it would
-   * be nice to get this into IPTC and XMP.
    */
   copyright?: string;
 };
@@ -335,41 +322,6 @@ export type IUnchangedAspectRatio = IImageBaseRule & {
 export type IImageFit = ImageFitUnchangedAspect | ImageFitChangingAspect;
 
 export type IImageRule = IFixedAspectRatio | IUnchangedAspectRatio;
-
-export interface IPreBlurOptions {
-  /** the width of the blurred image; aspect-ratio is maintained */
-  size?: number;
-  /**
-   * The image format used for blurred image; default is `jpg`.
-   */
-  format?: SharpImageFormat;
-  /**
-   * If left at it's default value of `true` it will create a time-efficient
-   * blur effect.
-   *
-   * For more CPU intensive but higher quality blurs you will need to state
-   * the _sigma_ value to use for blurring (a value between 0.3 and 1000).
-   *
-   * More info here: [Sharp Blur Parameters](https://sharp.pixelplumbing.com/api-operation#blur)
-   */
-  blur?: true | number;
-
-  /**
-   * If turned on it it will
-   */
-  removeAlpha?: boolean;
-}
-
-export interface ImageFormatOptions {
-  jpg?: JpegOptions;
-  png?: PngOptions;
-  webp?: WebpOptions;
-  gif?: GifOptions;
-  tiff?: TiffOptions;
-  avif?: AvifOptions;
-  heif?: HeifOptions;
-  tile?: TileOptions;
-}
 
 export interface IConvertImageOptions {
   size?: number | [number, number];

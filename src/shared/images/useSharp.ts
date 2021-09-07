@@ -34,6 +34,7 @@ export function useSharp(options: ISharpOptions = {}) {
     jpg: {
       quality: 60,
       mozjpeg: true,
+      progressive: true,
     },
     avif: {
       quality: 30,

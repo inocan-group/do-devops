@@ -6,6 +6,7 @@ import {
   IDictionary,
   IServerlessFunctionHandler,
 } from "common-types";
+import { ImageFormatOptions } from ".";
 import { NotDefined } from "./general";
 import { IImagePreBlurConfig, IImageRule } from "./image-types";
 import { BundlerObservation, PackageManagerObservation, TestObservation } from "./observations";
@@ -89,39 +90,29 @@ export interface ICommandConfig {
   fns?: {};
   image?: {
     /**
-     * The directory to look for source images
+     * The directory to look for source images. This is typically not
+     * in the build path itself and defaults to `/assets`
      */
     sourceDir: string;
     /**
-     * The (base) directory to place images when generated
+     * The (base) directory to place images when generated,
+     * this is used when creating new rules and provides a sensible
+     * default. Typically this would be "/public"
      */
     targetDir: string;
     /**
-     * the _breakpoints_ which the app uses can be defined; each breakpoint
-     * should be given a name and then the number represents the min-width to achieve this.
-     *
-     * By default this is set as:
-     * ```ts
-     * {
-     *  sm: 640,
-     *  md: 768,
-     *  lg: 1024,
-     *  xl: 1280,
-     *  xxl: 1536
-     * }
-     * ```
+     * The default widths to use for new rules
      */
-    breakpoints?: Record<string, number>;
+    defaultWidths: [640, 768, 1024, 1280, 1536];
     /**
-     * Expresses whether a small
+     * Default formatting rules beyond system and API defaults
      */
-    preBlur?: IImagePreBlurConfig;
-    quality?: {
-      jpg?: number;
-      webp?: number;
-      avif?: number;
-    };
+    formatOptions?: ImageFormatOptions;
     rules?: IImageRule[];
+    /**
+     * Whether meta data "sidecar" files should be produced
+     */
+    sidecar: "none" | "per-image" | "per-rule";
   };
   info?: {};
   invoke?: {};

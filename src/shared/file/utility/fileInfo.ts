@@ -7,8 +7,6 @@ import { getFileComponents } from ".";
 
 const info = promisify(stat);
 
-
-
 /**
  * Get's file info from an array of files (using Node's `stat` operation).
  *
@@ -20,11 +18,13 @@ export async function fileInfo(...files: string[]): Promise<IFileInfo[]> {
   let rememberFile: string | undefined;
   try {
     const promises: Promise<IFileInfo>[] = [];
-    for (const file of files) {
+    for (const file of files.filter((i) => i)) {
       const parts = getFileComponents(file);
-      promises.push(info(file).then(s => {
-        return { ...parts, ...s };
-      }));
+      promises.push(
+        info(file).then((s) => {
+          return { ...parts, ...s };
+        })
+      );
     }
 
     const results = await Promise.all(promises);

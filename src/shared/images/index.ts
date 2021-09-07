@@ -1,7 +1,7 @@
 // #autoindex, exclude: useExifTool, useImageApi, useSharp
 // #region autoindexed files
 
-// index last changed at: 9th Sep, 2021, 03:08 PM ( GMT-7 )
+// index last changed at: 9th Sep, 2021, 08:30 PM ( GMT-7 )
 // export: named; exclusions: useExifTool, useImageApi, useSharp, index, private.
 // files: createMetaFor, formatImageMeta, getImages, useExifTools.
 
