@@ -2,13 +2,17 @@
 
 // #region autoindexed files
 
-// index last changed at: 9th Sep, 2021, 05:09 PM ( GMT-7 )
+// index last changed at: 9th Sep, 2021, 05:36 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: askConfigureImageOptimization, askImageConfiguration.
+// files: askAddImageRule, askChangeImageRule, askConfigureImageOptimization, askImageConfiguration, askImageDefaults, askRemoveImageRule.
 
 // local file exports
+export * from "./askAddImageRule";
+export * from "./askChangeImageRule";
 export * from "./askConfigureImageOptimization";
 export * from "./askImageConfiguration";
+export * from "./askImageDefaults";
+export * from "./askRemoveImageRule";
 
 // Note:
 // -----

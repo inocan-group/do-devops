@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import chalk from "chalk";
 import destr from "destr";
 import type { IImageCache, IImageRule } from "~/@types";
@@ -24,6 +25,8 @@ export interface IImageTools {
   cache: IImageCache;
 }
 
+export type ImageApi = ReturnType<typeof useImageApi>;
+
 /**
  * Returns an API surface for working with _images_ which is backed by a file/memory cache
  * so that updates are as efficient as possible. This API is supported by:
@@ -45,6 +48,8 @@ export function useImageApi(rules: IImageRule[], options: IImageApiOptions = {})
 
   // provide API surface
   const api = {
+    /** the rules configured on the API */
+    rules,
     /**
      * watches for changes in defined image rules and reacts to changes by
      * both updating the cache as well as re-creating "converted" images as

@@ -4,16 +4,17 @@ import { IProjectConfig } from "~/@types";
 import { Observations } from "~/@types/observations";
 import { getProjectConfig } from "~/shared/config/getProjectConfig";
 import { logger } from "~/shared/core/logger";
-import { useImageApi } from "~/shared/images/useImageApi";
+import { ImageApi, useImageApi } from "~/shared/images/useImageApi";
+import { askAddImageRule, askChangeImageRule, askImageDefaults, askRemoveImageRule } from ".";
 import { askListQuestion } from "../..";
 
-export async function askImageConfiguration(_o: Observations) {
+export async function askImageConfiguration(o: Observations) {
   const log = logger();
   const config = getProjectConfig().image as Exclude<IProjectConfig["image"], undefined>;
   log.info(chalk`Welcome back, your {bold {yellow image}} configuration summary is:\n`);
   log.info(chalk`{bold {yellow Rules:}}`);
-  const c = useImageApi(config.rules);
-  await c.summarize();
+  const api: ImageApi = useImageApi(config.rules);
+  await api.summarize();
   log.info();
 
   const actions = ["Add Rule", "Remove Rule", "Change Rule", "Manage Defaults", "Quit"] as const;
@@ -24,16 +25,16 @@ export async function askImageConfiguration(_o: Observations) {
     actions
   );
 
-  const actionMap: Record<Actions, () => Promise<any>> = {
-    "Add Rule": async () => "",
-    "Remove Rule": async () => "",
-    "Change Rule": async () => "",
-    "Manage Defaults": async () => "",
+  const actionMap: Record<Actions, (o: Observations, api: ImageApi) => Promise<any>> = {
+    "Add Rule": askAddImageRule,
+    "Remove Rule": askRemoveImageRule,
+    "Change Rule": askChangeImageRule,
+    "Manage Defaults": askImageDefaults,
     Quit: async () => {
-      log.info("exit ...");
+      log.info("exiting ...");
       process.exit();
     },
   };
 
-  actionMap[action]();
+  await actionMap[action](o, api);
 }

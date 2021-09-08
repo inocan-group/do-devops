@@ -5,19 +5,31 @@
   "aws": {},
   "image": {
     "sourceDir": "test/data",
-    "destinationDir": "public",
+    "destinationDir": "temp",
     "rules": [
       {
         "name": "testing",
         "source": "test/data",
-        "destination": "public",
+        "destination": "temp",
         "glob": "*.jpg",
-        "widths": [640, 768, 1024, 1280, 1536],
+        "widths": [
+          640,
+          768,
+          1024,
+          1280,
+          1536
+        ],
         "preBlur": true,
         "sidecarDetail": "none"
       }
     ],
-    "defaultWidths": [640, 768, 1024, 1280, 1536],
+    "defaultWidths": [
+      640,
+      768,
+      1024,
+      1280,
+      1536
+    ],
     "formatOptions": {
       "jpg": {
         "mozjpeg": true,

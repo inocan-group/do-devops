@@ -27,12 +27,14 @@ export async function askConfigureImageOptimization(_o: Observations) {
   }
 
   console.log(
-    chalk`Welcome weary traveler! It appears you've not configured images for this repo before. Let's get that out of the way now.\n`
+    wordWrap(
+      chalk`Welcome weary traveler! It appears you've not configured {bold {blue images}} for this repo before. Let's get that out of the way now.\n`
+    )
   );
 
   const sourceDir = await askForNestedDirectory(
     wordWrap(
-      chalk`You are expected to choose a {blue source directory} to act as the {italic default} dir for all your rule's source images. Choose from the directories below ({dim {italic dirs with image will be at top of list}}):`
+      chalk`You are expected to choose a {blue source directory} to act as the {italic default} dir for all your rule's source images. Choose from the directories below ({italic dirs with image will be at top of list}):`
     ),
     {
       name: "Source Directory",
