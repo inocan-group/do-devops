@@ -23,8 +23,7 @@
     "outDir": "bin",
 
     "paths": {
-      "~/*": ["src/*"],
-      "/~/*": ["src/*"]
+      "~/*": ["src/*"]
     },
     "plugins": [
       // Transform paths in output .js files

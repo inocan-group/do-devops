@@ -1,3 +1,4 @@
+import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
 import { DoDevopsHandler } from "~/@types";
 import { DevopsError } from "~/errors";
@@ -65,9 +66,10 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
     default:
       log.shout(
         subCommand
-          ? chalk`the subcommand '${subCommand}' is not valid; valid subcommands are: {italic optimize, watch,} and {italic config}.`
-          : chalk`the {bold {red image}} command expects a sub command: {blue dd image [sub-command]} where valid subcommands are {italic optimize, watch,} and {italic config}.`
+          ? chalk`the subcommand '${subCommand}' is not known!`
+          : chalk`the {bold {yellow image}} command expects a {italic sub-command}`
       );
+      await asyncExec(`dd image --help`);
   }
 
   await api.close();
