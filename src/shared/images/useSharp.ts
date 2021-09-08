@@ -78,8 +78,8 @@ export function useSharp(options: ISharpOptions = {}) {
           const now = Date.now();
           return {
             file: out,
-            created: new Date(now),
-            updated: new Date(now),
+            created: now,
+            modified: now,
             size: info.size,
             isSourceImage: false,
             from: image,
@@ -121,13 +121,15 @@ export function useSharp(options: ISharpOptions = {}) {
      * Provides a blurred JPG version of an image in a highly reduced size so that
      * it may be used in as an initial version of an image prior to loading full
      * image.
+     *
+     * Note: blurred images always have metadata removed from original image
      */
     blurredPreImage: async (image: string, outDir: string, size: number = 32) => {
       const s = getFileComponents(image);
       const baseName = `${s.fileWithoutExt}-blurred.jpg`;
       const blurFilename = join(outDir, baseName);
       await sharp(image)
-        .toFormat("jpg", { mozjpeg: true })
+        .toFormat("jpg", { mozjpeg: true, progressive: true })
         .blur(true)
         .resize({ width: size })
         .toFile(blurFilename);

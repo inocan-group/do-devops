@@ -1345,7 +1345,7 @@ array-unique@^0.3.2:
   resolved "https://registry.yarnpkg.com/array-unique/-/array-unique-0.3.2.tgz#a894b75d4bc4f6cd679ef3244a9fd8f46ae2d428"
   integrity sha1-qJS3XUvE9s1nnvMkSp/Y9Gri1Cg=
 
-array.prototype.flat@^1.2.4:
+array.prototype.flat@^1.2.3, array.prototype.flat@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/array.prototype.flat/-/array.prototype.flat-1.2.4.tgz#6ef638b43312bd401b4c6199fdec7e2dc9e9a123"
   integrity sha512-4470Xi3GAPAjZqFcljX2xzckv1qeKPizoNkiS0+O4IoPR2ZNpcjE0pkhdihlDouK+x6QOast26B4Q/O9DJnwSg==
@@ -1621,10 +1621,25 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
+breakword@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/breakword/-/breakword-1.0.5.tgz#fd420a417f55016736b5b615161cae1c8f819810"
+  integrity sha512-ex5W9DoOQ/LUEU3PMdLs9ua/CYZl1678NUkKOdUSi8Aw5F1idieaiRURCBFJCwVcrD1J8Iy3vfWSloaMwO2qFg==
+  dependencies:
+    wcwidth "^1.0.1"
+
 brilliant-errors@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/brilliant-errors/-/brilliant-errors-0.1.1.tgz#e01caaf6e71bf3b2d3b26590e3cdb0d71a997329"
   integrity sha512-wKJkCxhVtLa+f8MAlVeN6BA9p2WntCvxiHPKUOIYw3Gd+lBgKk9V81hfjm4wgbDW7vFTVi6lh5Fi+C9JuSmUWw==
+
+brilliant-errors@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/brilliant-errors/-/brilliant-errors-0.3.1.tgz#c3e59fa01f52069d6cd3f64da77436c0f75aea0f"
+  integrity sha512-oPUlFidgxs6HhTo1ksSoAAEG2nDXdR+73Za2t6s2Yem1MXJzq+tJy9zYs65TWt/suLA3bGE6PLUyS3+yysnbEQ==
+  dependencies:
+    callsites "^3.1.0"
+    common-types "^1.25.0"
 
 brorand@^1.0.1, brorand@^1.1.0:
   version "1.1.0"
@@ -2095,6 +2110,11 @@ commander@^6.2.1:
   version "1.26.2"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.26.2.tgz#24fb2f611efe93f9f22772e2a86f219f32a56af8"
   integrity sha512-gpXbn8TlkwUbua43abLH1UgyqpYuAsq+p82dOaA3yu66vHmDqww6DSYtHDG8rVppPApCrF3oEA5Ot94OGVjiLg==
+
+common-types@^1.25.0, common-types@^1.26.0:
+  version "1.28.2"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.28.2.tgz#09b6bcf48c5aede67f06adc050b63cd5371cc8c7"
+  integrity sha512-NyxLB6VzJ1RhTbtZ56mOa5m7bhjhw6Bb59DEF+Qwt6yne2KKtFV8L7GCVv/fJjltOuuNJAUwpajMjBx7q31rgg==
 
 commondir@^1.0.1:
   version "1.0.1"
@@ -3515,6 +3535,11 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.2.0
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
+grapheme-splitter@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/grapheme-splitter/-/grapheme-splitter-1.0.4.tgz#9cf3a665c6247479896834af35cf1dbb4400767e"
+  integrity sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==
+
 graphviz@0.0.9:
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/graphviz/-/graphviz-0.0.9.tgz#0bbf1df588c6a92259282da35323622528c4bbc4"
@@ -3733,12 +3758,25 @@ infer-owner@^1.0.3:
   resolved "https://registry.yarnpkg.com/infer-owner/-/infer-owner-1.0.4.tgz#c4cefcaa8e51051c2a40ba2ce8a3d27295af9467"
   integrity sha512-IClj+Xz94+d7irH5qRyfJonOdfTzuDaifE6ZPWfx0N0+/ATZCbuTPq2prFl526urkQd90WyUKIh1DfBQ2hMz9A==
 
-inferred-types@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/inferred-types/-/inferred-types-0.3.0.tgz#0e5fa4a267219eef65d70acac075869e738d2f65"
-  integrity sha512-911l68vKWzxq+mK5X1twg1JZUwL9I0M7x+L7YRywW6GYkxUbmkr9Aq/R3riI54MNpsdpMX13MnqwZmWO17Jv4w==
+inferred-types@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/inferred-types/-/inferred-types-0.15.0.tgz#2b2ab5611a0cf74db8afbe69e1a042263843889e"
+  integrity sha512-m3DF6LdAX/COoaE/8w7PyjJHp93QQbjOWUBe8OgLH/p2DfcmLux2Oq0Irue1qsnwCQae9YukRBfPhRa5fv50rA==
   dependencies:
-    native-dash "~1.10.0"
+    brilliant-errors "^0.3.1"
+    native-dash "^1.15.1"
+  optionalDependencies:
+    common-types "^1.26.0"
+
+inferred-types@^0.9.2:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/inferred-types/-/inferred-types-0.9.3.tgz#c6c28bb7f63cce96d0c52439a9ac6a48127eff22"
+  integrity sha512-oNZITjAj/jM8mBuvbf3T7zkxmvdIjDrrDIHP36Q7meeMrVkca+qQNFutMeM+JfHvJ+CXec8FdyP6CjMbnZQkIg==
+  dependencies:
+    brilliant-errors "^0.3.1"
+    native-dash "^1.15.1"
+  optionalDependencies:
+    common-types "^1.26.0"
 
 inflight@^1.0.4:
   version "1.0.6"
@@ -5204,15 +5242,17 @@ napi-build-utils@^1.0.1:
   resolved "https://registry.yarnpkg.com/napi-build-utils/-/napi-build-utils-1.0.2.tgz#b1fddc0b2c46e380a0b7a76f984dd47c41a13806"
   integrity sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==
 
+native-dash@^1.15.1:
+  version "1.18.4"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.18.4.tgz#0ede1c4942d78319c3d61c44ef1c1eb98a79f441"
+  integrity sha512-yHklLAGakR+3JU6U6/153kI8d5Ou25s8e+CkPjXpWdvhdL4iRgkqR/1RfrcUiwazABhrwTCR01eOYcZgn9wUow==
+  optionalDependencies:
+    inferred-types "^0.9.2"
+
 native-dash@^1.16.2:
   version "1.16.2"
   resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.16.2.tgz#7f5db5e9e20ad0dfba36ce060121050db104d35f"
   integrity sha512-uNZ4o4HjJPQXwdT+w1VqsGXXLQPvnvDrHTBIvRCuSD4Ix24IkpqDOrJxK5TjTr42p3zEcXRPl+uA4zfNntPSfA==
-
-native-dash@~1.10.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.10.0.tgz#ba9cf90a0b927705699bac335e92382a19b1e97e"
-  integrity sha512-DDIUubO1N5Ul7Ldd9JfkdzMAungddSTgwY8Qyk6k0cS7z7vx8AdgWhRCBVnymFnQbs/wRQdnC2yiL28jlt/E/Q==
 
 natural-compare@^1.4.0:
   version "1.4.0"
@@ -6597,6 +6637,18 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
+smartwrap@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/smartwrap/-/smartwrap-2.0.2.tgz#7e25d3dd58b51c6ca4aba3a9e391650ea62698a4"
+  integrity sha512-vCsKNQxb7PnCNd2wY1WClWifAc2lwqsG8OaswpJkVJsvMGcnEntdTCDajZCkk93Ay1U3t/9puJmb525Rg5MZBA==
+  dependencies:
+    array.prototype.flat "^1.2.3"
+    breakword "^1.0.5"
+    grapheme-splitter "^1.0.4"
+    strip-ansi "^6.0.0"
+    wcwidth "^1.0.1"
+    yargs "^15.1.0"
+
 snapdragon-node@^2.0.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/snapdragon-node/-/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"
@@ -7755,7 +7807,7 @@ yargs-parser@^18.1.2:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
-yargs@^15.4.1:
+yargs@^15.1.0, yargs@^15.4.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.4.1.tgz#0d87a16de01aee9d8bec2bfbf74f67851730f4f8"
   integrity sha512-aePbxDmcYW++PaqBsJ+HYUFwCdv4LVvdnhBy78E57PIor8/OVvhMrADFFEDh8DHDFRv/O9i3lPhsENjO7QX0+A==

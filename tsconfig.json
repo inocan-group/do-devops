@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "ES2017",
+    "target": "ES2018",
+    "lib": ["ES2019.Array", "ES2020"],
     "moduleResolution": "node",
 
     "sourceMap": true,

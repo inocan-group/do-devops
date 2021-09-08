@@ -1,0 +1,35 @@
+{
+  "kind": "project",
+  "projectConfig": true,
+  "general": {},
+  "aws": {},
+  "image": {
+    "sourceDir": "test/data",
+    "destinationDir": "public",
+    "rules": [
+      {
+        "name": "testing",
+        "source": "test/data",
+        "destination": "public",
+        "glob": "*.jpg",
+        "widths": [640, 768, 1024, 1280, 1536],
+        "preBlur": true,
+        "sidecarDetail": "none"
+      }
+    ],
+    "defaultWidths": [640, 768, 1024, 1280, 1536],
+    "formatOptions": {
+      "jpg": {
+        "mozjpeg": true,
+        "quality": 60
+      },
+      "avif": {
+        "quality": 30
+      },
+      "webp": {
+        "quality": 40
+      }
+    },
+    "sidecar": "none"
+  }
+}

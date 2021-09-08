@@ -12,7 +12,7 @@ import type {
   Metadata,
   TileOptions,
 } from "sharp";
-import { ExifDateTime, Tags } from "exiftool-vendored";
+import { ExifDateTime, Tags, WriteTags } from "exiftool-vendored";
 
 export type MetaDataDetail = "basic" | "categorical" | "all";
 
@@ -249,7 +249,7 @@ export interface ImageFormatOptions {
   tile?: TileOptions;
 }
 
-type IImageBaseRule = {
+export type IImageRule = {
   name: string;
   /**
    * The directory which this rule operates on
@@ -285,13 +285,10 @@ type IImageBaseRule = {
   options?: ImageFormatOptions;
 
   /**
-   * Image files can retain their meta-data or have it removed. In general, it's
-   * probably best to remove meta-data if you are in doubt.
-   *
-   * Note: this is independant of "sidecar" files and applies to the meta data
-   * which is in the image file itself.
+   * A rule may state which meta properties it is interested in preserving in
+   * the converted images.
    */
-  preserveMeta?: boolean;
+  preserveMeta?: Array<keyof WriteTags>;
 
   /**
    * How much meta information should be captured in images?
@@ -302,26 +299,12 @@ type IImageBaseRule = {
 
   /**
    * If you want a copyright tag embedded into images you can
-   * state that here and all generated images of this rule will include that.
+   * state that here and all generated images of this rule will include it.
    */
   copyright?: string;
 };
 
-export type IFixedAspectRatio = IImageBaseRule & {
-  aspectRatio: `${number}:${number}`;
-  fit: ImageFitChangingAspect;
-  /** defaults to `Centre` position but you can override */
-  position?: ImagePosition;
-};
-
-export type IUnchangedAspectRatio = IImageBaseRule & {
-  fit?: ImageFitUnchangedAspect;
-  aspectRatio?: undefined;
-};
-
 export type IImageFit = ImageFitUnchangedAspect | ImageFitChangingAspect;
-
-export type IImageRule = IFixedAspectRatio | IUnchangedAspectRatio;
 
 export interface IConvertImageOptions {
   size?: number | [number, number];

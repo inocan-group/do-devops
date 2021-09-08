@@ -69,7 +69,7 @@
     "exiftool-vendored": "^15.3.0",
     "find-up": "^5.0.0",
     "globby": "^11.0.0",
-    "inferred-types": "^0.3.0",
+    "inferred-types": "^0.15.0",
     "inquirer": "8.0.0",
     "js-yaml": "^4.1.0",
     "matcher": "^4.0.0",
@@ -80,6 +80,7 @@
     "sharp": "^0.28.3",
     "shift-parser": "^7.0.3",
     "simple-git": "^2.12.0",
+    "smartwrap": "^2.0.2",
     "table": "^6.6.0",
     "typed-mapper": "^0.4.1",
     "webpack": "^4.46.0"

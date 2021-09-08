@@ -1,13 +1,13 @@
 // #autoindex
+
 // #region autoindexed files
 
 // index last changed at: 9th Sep, 2021, 12:47 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: handler, options.
+// files: csvParser.
 
 // local file exports
-export * from "./handler";
-export * from "./options";
+export * from "./csvParser";
 
 // Note:
 // -----

@@ -8,7 +8,7 @@ import {
 } from "common-types";
 import { ImageFormatOptions } from ".";
 import { NotDefined } from "./general";
-import { IImagePreBlurConfig, IImageRule } from "./image-types";
+import { IImageRule } from "./image-types";
 import { BundlerObservation, PackageManagerObservation, TestObservation } from "./observations";
 
 export interface IGlobalConfig {
@@ -99,7 +99,7 @@ export interface ICommandConfig {
      * this is used when creating new rules and provides a sensible
      * default. Typically this would be "/public"
      */
-    targetDir: string;
+    destinationDir: string;
     /**
      * The default widths to use for new rules
      */
@@ -108,7 +108,7 @@ export interface ICommandConfig {
      * Default formatting rules beyond system and API defaults
      */
     formatOptions?: ImageFormatOptions;
-    rules?: IImageRule[];
+    rules: IImageRule[];
     /**
      * Whether meta data "sidecar" files should be produced
      */
