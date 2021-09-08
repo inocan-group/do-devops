@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { globbySync } from "globby";
+import { sync } from "globby";
 import path from "path";
 
 import { astParseWithTypescript } from "./astParseWithTypescript";
@@ -11,7 +11,7 @@ import { IDictionary } from "common-types";
  * directory that have a `handlers` export.
  */
 export function getValidServerlessHandlers(opts: IDictionary = {}) {
-  const allFiles = globbySync(path.join(process.env.PWD || "", "/src/**/*.ts"));
+  const allFiles = sync(path.join(process.env.PWD || "", "/src/**/*.ts"));
   return allFiles.reduce((agg: string[], curr) => {
     let ast;
     let status = "starting";

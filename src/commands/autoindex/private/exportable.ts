@@ -1,7 +1,7 @@
 import path from "path";
 import { existsSync, readdirSync } from "fs";
 
-import { globby } from "globby";
+import globby from "globby";
 import { IExportableSymbols } from "./index";
 import { isOrphanedIndexFile, removeExtension } from "./util";
 

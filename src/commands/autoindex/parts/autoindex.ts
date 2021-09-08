@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { globby } from "globby";
+import globby from "globby";
 import path from "path";
 import { IDictionary } from "common-types";
 import { isAutoindexFile, processFiles, watchHandler } from "../private";

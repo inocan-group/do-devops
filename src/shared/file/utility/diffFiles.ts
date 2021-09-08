@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import diff = require("diff");
+import diff from "diff";
 import { readFile } from "~/shared/file";
 
 export function diffFiles(file1: string, file2: string) {

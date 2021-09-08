@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { globbySync } from "globby";
+import { sync } from "globby";
 import path from "path";
 import { IDictionary } from "common-types";
 import { describe } from "native-dash";
@@ -13,7 +13,7 @@ import { getDefaultExport } from "./getDefaultExport";
  * directory that have a `handlers` export.
  */
 export function getValidStepFunctions(opts: IDictionary = {}) {
-  const allFiles = globbySync(path.join(process.env.PWD || "", "/src/**/*.ts"));
+  const allFiles = sync(path.join(process.env.PWD || "", "/src/**/*.ts"));
   return allFiles
     .filter((f) => fileIncludes(f, "StateMachine"))
     .reduce((agg: string[], curr) => {

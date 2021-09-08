@@ -1,4 +1,4 @@
-import { globbySync } from "globby";
+import { sync } from "globby";
 import path from "path";
 
 /**
@@ -10,5 +10,5 @@ import path from "path";
  */
 export function getAllFilesOfType(type: string, dir: string = "src") {
   const directory = dir.slice(0, 1) === "/" ? dir : path.posix.join(process.cwd(), dir);
-  return globbySync([`${directory}/**/*.${type}`]);
+  return sync([`${directory}/**/*.${type}`]);
 }

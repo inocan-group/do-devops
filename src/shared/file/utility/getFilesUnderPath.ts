@@ -1,4 +1,4 @@
-import { globby } from "globby";
+import globby from "globby";
 
 /**
  * Uses a glob utility to identify all files under a given path.

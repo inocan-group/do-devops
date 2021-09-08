@@ -1,4 +1,4 @@
-import { globbySync } from "globby";
+import { sync } from "globby";
 import path from "path";
 
 /**
@@ -9,7 +9,7 @@ export function findConfigFunctionDefnFiles(basePath?: string) {
   const glob = basePath
     ? path.join(basePath, "*.ts")
     : path.join(process.env.PWD || "", "/serverless-config/functions/**/*.ts");
-  return globbySync([
+  return sync([
     glob,
     path.join(basePath || process.env.PWD || "", "serverless-config/functions.ts"),
   ]) as string[];

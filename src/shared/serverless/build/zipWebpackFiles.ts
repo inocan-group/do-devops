@@ -3,7 +3,7 @@ import path from "path";
 
 import { emoji } from "../../ui";
 import "~/@polyfills/bestzip";
-import zip = require("bestzip");
+import zip from "bestzip";
 /**
  * Zips up a number of
  *

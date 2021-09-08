@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { Stats } from "fs";
-import { globby } from "globby";
+import globby from "globby";
 import { join } from "path";
 import { IImageCache, IImageRule } from "~/@types/image-types";
 import { logger } from "~/shared/core";

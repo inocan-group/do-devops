@@ -1,4 +1,4 @@
-import inquirer = require("inquirer");
+import inquirer from "inquirer";
 
 /**
  * Asks the user to choose an AWS region
@@ -26,8 +26,8 @@ export async function askForAwsRegion(): Promise<string> {
       "ap-northeast-2",
       "ap-northeast-3",
       "ap-southeast-1",
-      "ap-southeast-2"
-    ]
+      "ap-southeast-2",
+    ],
   };
   const answer = await inquirer.prompt(question);
   return answer.region;

@@ -1,4 +1,4 @@
-import { findUpSync } from "find-up";
+import fu from "find-up";
 import { parentDirectory } from "~/shared/file";
 
 /**
@@ -7,5 +7,5 @@ import { parentDirectory } from "~/shared/file";
  * in the starting directory to look in.
  */
 export function findPackageJson(dir?: string) {
-  return findUpSync("package.json", { cwd: dir || parentDirectory() });
+  return fu.sync("package.json", { cwd: dir || parentDirectory() });
 }
