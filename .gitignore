@@ -2,3 +2,5 @@ node_modules/*
 test/node_modules/*
 bin/*
 converage/*
+.image-metadata.json
+temp/*

@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import type { IDoDevopsCommand } from "~/@types";
-import { IImageOptions, handler } from "./parts";
+import { IImageOptions, handler, options } from "./parts";
 
 const command: IDoDevopsCommand<IImageOptions> = {
   kind: "image",
@@ -8,7 +8,8 @@ const command: IDoDevopsCommand<IImageOptions> = {
   description:
     "Provides an image optimization solution leveraging image resizing, blurring, and more.",
   syntax: chalk`dd image [ {italic optimize | watch | config} ] [ {italic options} ]`,
-  greedy: true,
+  greedy: false,
+  options,
   subCommands: [
     { name: "optimize", summary: "optimize/convert images based on configured rules" },
     {
@@ -16,6 +17,7 @@ const command: IDoDevopsCommand<IImageOptions> = {
       summary: "watch file system for changes to source images and optimize when changed",
     },
     { name: "config", summary: "configure rules for optimizing the images in this repo" },
+    { name: "summarize", summary: "summarize the current configuration" },
   ],
 };
 

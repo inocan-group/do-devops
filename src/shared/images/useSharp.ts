@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { join } from "path";
 import sharp, {
   WebpOptions,
@@ -133,7 +132,6 @@ export function useSharp(options: ISharpOptions = {}) {
         .blur(true)
         .resize({ width: size })
         .toFile(blurFilename);
-      console.log(chalk`{gray - {blue ${blurFilename}} written to disk}`);
 
       return baseName;
     },

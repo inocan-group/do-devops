@@ -15,7 +15,7 @@ import { askImageConfiguration } from "./askImageConfiguration";
 
 const filter = (v: string) => !v.startsWith(".") && v !== "node_modules";
 
-export async function askAddImageRule(o: Observations, _api: ImageApi) {
+export async function askAddImageRule(o: Observations, api: ImageApi) {
   const log = logger();
   const config = getProjectConfig().image as Exclude<IProjectConfig["image"], undefined>;
   const rule: Partial<IImageRule> = {};
@@ -67,5 +67,5 @@ export async function askAddImageRule(o: Observations, _api: ImageApi) {
   await saveProjectConfig("image.rules", [...config.rules, rule as IImageRule]);
   log.info(`- your new rule named "${rule.name}", has been added to project configuration`);
   log.info();
-  return askImageConfiguration(o);
+  return askImageConfiguration(o, api);
 }

@@ -1,19 +1,16 @@
 import chalk from "chalk";
 import { Keys } from "inferred-types";
-import { IProjectConfig } from "~/@types";
 import { Observations } from "~/@types/observations";
-import { getProjectConfig } from "~/shared/config/getProjectConfig";
 import { logger } from "~/shared/core/logger";
-import { ImageApi, useImageApi } from "~/shared/images/useImageApi";
+import { ImageApi } from "~/shared/images/useImageApi";
 import { askAddImageRule, askChangeImageRule, askImageDefaults, askRemoveImageRule } from ".";
 import { askListQuestion } from "../..";
 
-export async function askImageConfiguration(o: Observations) {
+export async function askImageConfiguration(o: Observations, api: ImageApi) {
   const log = logger();
-  const config = getProjectConfig().image as Exclude<IProjectConfig["image"], undefined>;
   log.info(chalk`Welcome back, your {bold {yellow image}} configuration summary is:\n`);
   log.info(chalk`{bold {yellow Rules:}}`);
-  const api: ImageApi = useImageApi(config.rules);
+  // const api: ImageApi = useImageApi(config.rules);
   await api.summarize();
   log.info();
 

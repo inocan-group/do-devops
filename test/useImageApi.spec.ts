@@ -1,13 +1,13 @@
-import { ImageMetadata } from "~/@types";
+import { IImageRule, ImageMetadata } from "~/@types";
 import { checkCacheFreshness } from "~/shared/images/useImageApi/checkCacheFreshness";
 
 describe("useImageApi()", () => {
   it("cache freshness with empty cache", async () => {
-    const { missing, outOfDate } = await checkCacheFreshness(
-      { source: {}, converted: {} },
-      "test/data",
-      "**/*.(jpg|heic)"
-    );
+    const { missing, outOfDate } = await checkCacheFreshness({ source: {}, converted: {} }, {
+      name: "test",
+      source: "test/data",
+      glob: "**/*.(jpg|heic)",
+    } as IImageRule);
 
     expect(missing).toHaveLength(3);
     expect(outOfDate).toHaveLength(0);
@@ -29,8 +29,7 @@ describe("useImageApi()", () => {
         },
         converted: {},
       },
-      "test/data",
-      "**/*.(jpg|heic)"
+      { name: "test", source: "test/data", glob: "**/*.(jpg|heic)" } as IImageRule
     );
 
     expect(missing).toHaveLength(2);

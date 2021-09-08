@@ -26,5 +26,5 @@ export async function askChangeImageRule(o: Observations, api: ImageApi) {
 
   // TODO: finish editing of image rule
 
-  return askImageConfiguration(o);
+  return askImageConfiguration(o, api);
 }

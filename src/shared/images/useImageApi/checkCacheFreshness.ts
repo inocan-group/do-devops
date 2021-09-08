@@ -1,7 +1,9 @@
+import chalk from "chalk";
 import { Stats } from "fs";
-import globby from "globby";
+import { globby } from "globby";
 import { join } from "path";
-import { IImageCache } from "~/@types";
+import { IImageCache, IImageRule } from "~/@types/image-types";
+import { logger } from "~/shared/core";
 import { repoDirectory } from "~/shared/file";
 
 type IGlobResultWithStats = {
@@ -11,11 +13,29 @@ type IGlobResultWithStats = {
   stats: Stats;
 };
 
+export interface ICacheFreshness {
+  /**
+   * A list of filenames which were missing from the
+   * existing cache. These filenames will have relative
+   * paths from the project's root directory.
+   */
+  missing: string[];
+  /**
+   * A list of filenames which _were_ found in the existing
+   * cache but with dates which were out-of-date. These filenames
+   * will have relative paths from the project's root directory.
+   */
+  outOfDate: string[];
+}
+
 export async function checkCacheFreshness(
   cache: IImageCache,
-  baseDir: string,
-  globPattern: string
-) {
+  rule: IImageRule
+): Promise<ICacheFreshness> {
+  const log = logger();
+  const baseDir = rule.source;
+  const globPattern = rule.glob;
+
   const targetFiles = (
     (await globby(globPattern, {
       cwd: join(repoDirectory(), baseDir),
@@ -23,7 +43,7 @@ export async function checkCacheFreshness(
       stats: true,
       caseSensitiveMatch: false,
     })) as unknown as IGlobResultWithStats[]
-  ).map((i) => ({ name: i.path, modified: i.stats.mtimeMs }));
+  ).map((i) => ({ name: join(baseDir, i.path), modified: i.stats.mtimeMs }));
 
   const missing = [];
   const outOfDate = [];
@@ -37,6 +57,10 @@ export async function checkCacheFreshness(
       outOfDate.push(file.name);
     }
   }
+
+  log.whisper(
+    chalk`{dim - there were {bold ${targetFiles.length}} source images discovered for the {blue ${rule.name}} rule. Of which ${missing.length} were {italic missing} from the cache and ${outOfDate.length} were in the cache but stale.}`
+  );
 
   return { missing, outOfDate };
 }

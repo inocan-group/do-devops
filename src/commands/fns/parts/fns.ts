@@ -125,7 +125,7 @@ export const handler: DoDevopsHandler<IGlobalOptions<IFnsOptions>> = async ({
 
     console.log(output);
   } catch (error) {
-    console.log(`- Error finding functions: ${error.message}\n`);
+    console.log(`- Error finding functions: ${(error as Error).message}\n`);
     process.exit();
   }
 };

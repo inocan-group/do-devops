@@ -4,6 +4,7 @@ import path from "path";
 import { dump } from "js-yaml";
 import { IServerlessYaml } from "common-types";
 import { emoji } from "../ui";
+import { isDevopsError } from "~/@type-guards";
 
 export async function saveToServerlessYaml(data: IServerlessYaml) {
   try {
@@ -13,11 +14,12 @@ export async function saveToServerlessYaml(data: IServerlessYaml) {
 
     fs.writeFileSync(filename, yamlData, { encoding: "utf-8" });
   } catch (error) {
-    console.log(
-      chalk`- {red writing the {bold serverless.yml} file has failed!} ${emoji.poop}`
-    );
-    console.log(error.message);
-    console.log(chalk`{dim ${error.stack}}`);
-    process.exit();
+    console.log(chalk`- {red writing the {bold serverless.yml} file has failed!} ${emoji.poop}`);
+    expect(isDevopsError(error)).toBeTruthy();
+    if (isDevopsError(error)) {
+      console.log(error.message);
+      console.log(chalk`{dim ${error.stack}}`);
+      process.exit();
+    }
   }
 }

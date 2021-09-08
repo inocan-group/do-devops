@@ -15,7 +15,9 @@ export function doDevopsVersion() {
 
     return version;
   } catch (error) {
-    console.log(chalk`{gray - ${emoji.poop} failed to detect do-devops version: ${error.message}}`);
+    console.log(
+      chalk`{gray - ${emoji.poop} failed to detect do-devops version: ${(error as Error).message}}`
+    );
     console.log(chalk`{gray - library directory reported as being: ${libPkgJsonFilename}}`);
     return "?";
   }

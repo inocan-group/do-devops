@@ -1,4 +1,4 @@
-import fg from "globby";
+import { globby } from "globby";
 import path from "path";
 import process from "process";
 
@@ -36,7 +36,7 @@ export async function getDataFiles(opts: IDataFileOptions = {}) {
     "test/data",
     opts.fileType ? `**/*.${opts.fileType}` : "**/*"
   );
-  const results = await fg(glob);
+  const results = await globby(glob);
 
   return strip(opts)(results);
 }

@@ -7,7 +7,7 @@ import { ImageApi } from "~/shared/images/useImageApi";
 import { askImageConfiguration } from ".";
 import { askListQuestion } from "../..";
 
-export async function askImageDefaults(o: Observations, _api: ImageApi) {
+export async function askImageDefaults(o: Observations, api: ImageApi) {
   const log = logger();
   const config = getProjectConfig().image as Exclude<IProjectConfig["image"], undefined>;
   log.info(
@@ -25,5 +25,5 @@ export async function askImageDefaults(o: Observations, _api: ImageApi) {
   await askListQuestion(`Which of the following do you want to edit?`, options);
 
   log.info();
-  return askImageConfiguration(o);
+  return askImageConfiguration(o, api);
 }

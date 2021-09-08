@@ -60,8 +60,8 @@ async function functionDeploy(fns: string[], meta: IServerlessDeployMeta) {
     );
   } catch (error) {
     console.log(chalk`- {red {bold problems deploying functions!}} ${emoji.poop}`);
-    console.log(`- ${error.message}`);
-    console.log(chalk`- {dim ${error.stack}}`);
+    console.log(`- ${(error as Error).message}`);
+    console.log(chalk`- {dim ${(error as Error).stack}}`);
   }
 }
 

@@ -8,6 +8,7 @@
 
 // local file exports
 export * from "./image-guards";
+export * from "./errors";
 
 // Note:
 // -----

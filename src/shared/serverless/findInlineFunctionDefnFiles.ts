@@ -1,4 +1,4 @@
-import fg from "globby";
+import { globbySync } from "globby";
 import path from "path";
 
 /**
@@ -14,5 +14,5 @@ export function findInlineFunctionDefnFiles(basePath?: string) {
     ? path.join(basePath, "/**/*.defn.ts")
     : path.join(process.env.PWD || "", "/src/**/*.defn.ts");
 
-  return fg.sync([glob]) as string[];
+  return globbySync([glob]) as string[];
 }

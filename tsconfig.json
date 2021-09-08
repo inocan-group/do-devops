@@ -35,5 +35,6 @@
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },
-  "include": ["src", "test"]
+  "include": ["src", "test"],
+  "exclude": ["bin", "node_modules"]
 }

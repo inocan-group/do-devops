@@ -1,5 +1,17 @@
-import { sync } from "globby";
+import { globbySync } from "globby";
 
 export function getImages(dir: string) {
-  return sync(["**/*.gif", "**/*.jpg", "**/*.jpeg", "**/*.png", "**/*.avif", "**/*.webp", "**/*.tiff", "**/*.heif"], { cwd: dir, onlyFiles: true, gitignore: true });
+  return globbySync(
+    [
+      "**/*.gif",
+      "**/*.jpg",
+      "**/*.jpeg",
+      "**/*.png",
+      "**/*.avif",
+      "**/*.webp",
+      "**/*.tiff",
+      "**/*.heif",
+    ],
+    { cwd: dir, onlyFiles: true, gitignore: true }
+  );
 }

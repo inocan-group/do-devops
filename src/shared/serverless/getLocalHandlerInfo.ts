@@ -19,7 +19,9 @@ let _cache: IWebpackHandlerDates[];
  * **Note:** this function _caches_ results for better performance but you
  * can break the cache by send in a `true` value to the `breakCache` parameter.
  */
-export async function getLocalHandlerInfo(breakCache: boolean = false): Promise<IWebpackHandlerDates[]> {
+export async function getLocalHandlerInfo(
+  breakCache: boolean = false
+): Promise<IWebpackHandlerDates[]> {
   if (_cache && !breakCache) {
     return _cache;
   }
@@ -27,7 +29,7 @@ export async function getLocalHandlerInfo(breakCache: boolean = false): Promise<
   const sourcePaths = getValidServerlessHandlers();
   const convertToWebpackPath = (source: string) =>
     path.join(process.cwd(), ".webpack", (source.split("/").pop() || "").replace(".ts", ".js"));
-  const webpackPaths = sourcePaths.map((i) => convertToWebpackPath(i));
+  const webpackPaths = sourcePaths.map((i: any) => convertToWebpackPath(i));
   const sourceInfo = await fileInfo(...sourcePaths);
   // some handlers may not have been transpiled yet
   const webpackFilesExist = filesExist(...webpackPaths);

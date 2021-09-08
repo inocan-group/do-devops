@@ -35,7 +35,7 @@ export async function fileInfo(...files: string[]): Promise<IFileInfo[]> {
       `Attempt to get info/stat from the file "${rememberFile}" [ ${path.join(
         process.cwd(),
         rememberFile || ""
-      )} ] failed [ call included request for ${files.length} files ]: ${error.message}`,
+      )} ] failed [ call included request for ${files.length} files ]: ${(error as Error).message}`,
       "do-devops/filesInfo"
     );
   }

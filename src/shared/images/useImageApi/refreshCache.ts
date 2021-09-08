@@ -6,6 +6,7 @@ import { logger } from "~/shared/core/logger";
 import { emoji } from "~/shared/ui";
 import { IImageTools } from "../useImageApi";
 import { buildTagsFromCache } from "./buildTagsFromCache";
+import { saveImageCache } from "./saveImageCache";
 
 /**
  * Refreshes the cache to disk and memory
@@ -15,15 +16,21 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
   const metaPromises = [];
   const resizePromises = [];
   for (const file of stale) {
+    // get metadata for source images
     metaPromises.push(
       tools.exif.getMetadata(file, true).then(
         (i) =>
           (tools.cache.source[file] = {
             ...tools.cache.source[file],
-            meta: { ...tools.cache.source[file].meta, ...i, metaDetailLevel: "tags" },
+            meta: {
+              ...(tools.cache.source[file]?.meta || {}),
+              ...i,
+              metaDetailLevel: "tags",
+            },
           })
       )
     );
+    // resize and convert to webformats
     resizePromises.push(
       tools.sharp.resizeToWebFormats(
         file,
@@ -33,10 +40,23 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
       )
     );
   }
+
+  /** the web-optimized images which have now been saved */
   const resized = (await Promise.all(resizePromises)).flat();
-  log.whisper(
-    chalk`{dim - using the "${rule}" rule, {bold ${resized.length}} images have been resized using Sharp to fit "web formats"}`
+
+  for (const f of resized) {
+    tools.cache.converted[f.file] = f;
+  }
+
+  saveImageCache(tools.cache);
+  log.info(
+    `- ${emoji.thumbsUp} image cache saved to disk with updated source and converted images`
   );
+
+  log.whisper(
+    chalk`{dim - using the "${rule.name}" rule, {bold ${resized.length}} images have been resized using Sharp to fit "web formats"}`
+  );
+
   if (rule.preBlur) {
     const waitBlurry = [];
     for (const file of stale) {
@@ -45,7 +65,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     // TODO: fix output format for promises here; we're just getting a string right now
     const blurred = await Promise.all(waitBlurry);
     log.whisper(
-      `{dim - produced a blurred image preload for ${blurred.length} images associated to "${rule}" rule}`
+      chalk`{dim - produced a blurred image preload for ${blurred.length} images associated to "${rule.name}" rule}`
     );
   }
 
@@ -69,8 +89,8 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
   }
 
   log.whisper(
-    `- looking at metadata for converted images and will apply the following policy:\n- ${metaMessages.join(
-      "\n- "
+    `- looking at metadata requirements for the optimized images; will apply the following policy:\n    - ${metaMessages.join(
+      "\n    - "
     )}`
   );
 

@@ -3,13 +3,11 @@ import chalk from "chalk";
 import destr from "destr";
 import type { IImageCache, IImageRule } from "~/@types";
 import { IMAGE_CACHE } from "~/constants";
-import { useExifTools } from ".";
-import { logger } from "../core";
-import { fileExists } from "../file";
-import { readFile } from "../file/crud/readFile";
+import { useExifTools, useSharp } from "~/shared/images";
+import { logger } from "~/shared/core";
+import { readFile, fileExists } from "~/shared/file";
 import { convertStale } from "./useImageApi/convertStale";
 import { watchForChange } from "./useImageApi/watchForChange";
-import { useSharp } from "./useSharp";
 
 export interface IGetImageOptions {}
 
@@ -38,8 +36,17 @@ export function useImageApi(rules: IImageRule[], options: IImageApiOptions = {})
   const log = logger();
   const exif = useExifTools();
   const sharp = useSharp();
+  const cacheFileExists = fileExists(IMAGE_CACHE);
+
+  log.whisper(
+    cacheFileExists && options.clearCache !== true
+      ? chalk`{dim - cache file found on disk, loading ...}`
+      : options.clearCache === true
+      ? chalk`{dim - starting with clean cache due to "clearCache" flag}`
+      : chalk`{dim - no cache file found on disk, will start with clean cache}`
+  );
   const cache = (
-    fileExists(IMAGE_CACHE) && !options.clearCache
+    cacheFileExists && options.clearCache !== true
       ? destr(readFile(IMAGE_CACHE))
       : { source: {}, converted: {} }
   ) as IImageCache;
@@ -62,6 +69,9 @@ export function useImageApi(rules: IImageRule[], options: IImageApiOptions = {})
     convert: async () => {
       await convertStale(rules, tools, options);
     },
+    /**
+     * Summarize the current configuration for the Image service
+     */
     summarize: async () => {
       for (const r of rules || []) {
         log.info(
@@ -69,9 +79,20 @@ export function useImageApi(rules: IImageRule[], options: IImageApiOptions = {})
         );
       }
     },
-
+    /**
+     * Gets the metadata for an image using **ExifTool**. By default, the data returned is a pure
+     * key/value pairing of all metadata but if you set `format` to "categorical" you'll get a more
+     * compact and dedupped set of tags.
+     */
     getMetaForImage: async (image: string, format: "tags" | "categorical" = "tags") => {
       return format === "tags" ? exif.getMetadata(image) : exif.categorizedMetadata(image);
+    },
+    /**
+     * Because ExifTools keeps an open connection; it's definitely preferred that you close
+     * after use.
+     */
+    close: async () => {
+      return exif.close();
     },
   };
 

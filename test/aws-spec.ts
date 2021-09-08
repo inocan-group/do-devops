@@ -1,3 +1,4 @@
+import { isDevopsError } from "~/@type-guards";
 import { getAwsProfile, getAwsProfileList, hasAwsProfileCredentialsFile } from "~/shared/aws";
 
 describe("AWS Credentials => ", () => {
@@ -48,7 +49,10 @@ describe("AWS Credentials => ", () => {
 
         throw new Error("should have thrown error before getting here!");
       } catch (error) {
-        expect(error.code).toBe("invalid-profile-name");
+        expect(isDevopsError(error)).toBeTruthy();
+        if (isDevopsError(error)) {
+          expect(error.code).toBe("invalid-profile-name");
+        }
       }
     }
   });

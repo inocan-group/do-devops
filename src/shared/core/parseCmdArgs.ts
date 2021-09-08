@@ -11,7 +11,7 @@ import { convertOptionsToArray, globalOptions } from "./index";
  */
 export function parseCmdArgs(cmd: IDoDevopsCommand, incomingArgv: string[]) {
   // to ensure that what we'd see as "argv" from the perspective of a
-  // command, we must build an "optoin" for it
+  // command, we must build an "option" for it
   const subCommandDefn: IOptionDefinition = {
     command: {
       ...{
@@ -53,7 +53,6 @@ export function parseCmdArgs(cmd: IDoDevopsCommand, incomingArgv: string[]) {
   const opts = { ...(global ? global : {}), ...(local ? local : {}) };
 
   const sc = subCommand ? (cmd.greedy ? subCommand?.command[0] : subCommand?.command) : undefined;
-
 
   return {
     subCommand: sc,

@@ -14,7 +14,7 @@ async function getNpmInfo(pkgs: string[], _opts: IDictionary) {
       const info = await getExternalPackageJson(pkg);
       successful.push({ name: pkg, value: info });
     } catch (error) {
-      failed.push({ name: pkg, error: error.message });
+      failed.push({ name: pkg, error: (error as Error).message });
     }
   }
 

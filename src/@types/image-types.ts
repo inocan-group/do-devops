@@ -157,6 +157,7 @@ export type ImageMetadata =
  * A cache reference for an individual image
  */
 export type IImageCacheRef = {
+  /** the relative path to the file from the project's root */
   file: string;
   modified: epochWithMilliseconds;
   created: epochWithMilliseconds;

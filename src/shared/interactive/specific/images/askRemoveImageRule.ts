@@ -22,5 +22,5 @@ export async function askRemoveImageRule(o: Observations, api: ImageApi) {
 
   log.info(`- ${rule} has been removed from configuration`);
 
-  return askImageConfiguration(o);
+  return askImageConfiguration(o, api);
 }
