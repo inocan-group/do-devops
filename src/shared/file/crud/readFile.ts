@@ -1,4 +1,6 @@
+import chalk from "chalk";
 import { readFileSync } from "fs";
+import { emoji } from "~/shared/ui";
 import { filesExist } from "../existance/filesExist";
 import { interpolateFilePath } from "../helpers";
 
@@ -21,5 +23,18 @@ import { interpolateFilePath } from "../helpers";
 export function readFile(filename: string) {
   filename = interpolateFilePath(filename);
 
-  return filesExist(filename) ? readFileSync(filename, { encoding: "utf-8" }) : undefined;
+  try {
+    return filesExist(filename) ? readFileSync(filename, { encoding: "utf-8" }) : undefined;
+  } catch (error) {
+    console.log(
+      chalk`{red - ${
+        emoji.poop
+      } ran into a problem reading file {blue ${filename}}.} Error message: ${
+        (error as Error).message
+      }`
+    );
+    console.log(chalk`- Stack:{dim \n${(error as Error).stack}}`);
+
+    process.exit(1);
+  }
 }

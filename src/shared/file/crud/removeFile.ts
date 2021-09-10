@@ -40,7 +40,7 @@ export function removeFile(filename: string) {
     rmSync(filename);
   } catch (error) {
     throw new DevopsError(
-      `Problem encountered trying to remove file "${filename}": ${error.message}`,
+      `Problem encountered trying to remove file "${filename}": ${(error as Error).message}`,
       "removal-failed/other"
     );
   }

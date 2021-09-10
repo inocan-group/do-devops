@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import fg from "globby";
+import { sync } from "globby";
 import path from "path";
 import { IDictionary } from "common-types";
 import { describe } from "native-dash";
@@ -13,7 +13,7 @@ import { getDefaultExport } from "./getDefaultExport";
  * directory that have a `handlers` export.
  */
 export function getValidStepFunctions(opts: IDictionary = {}) {
-  const allFiles = fg.sync(path.join(process.env.PWD || "", "/src/**/*.ts"));
+  const allFiles = sync(path.join(process.env.PWD || "", "/src/**/*.ts"));
   return allFiles
     .filter((f) => fileIncludes(f, "StateMachine"))
     .reduce((agg: string[], curr) => {
@@ -63,7 +63,7 @@ export function getValidStepFunctions(opts: IDictionary = {}) {
       } catch (error) {
         console.log(
           chalk`- Error processing  {red ${toRelativePath(curr)}} [s: ${status}]: {grey ${
-            error.message
+            (error as Error).message
           }}`
         );
         return agg;

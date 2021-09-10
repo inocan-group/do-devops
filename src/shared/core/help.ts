@@ -49,8 +49,10 @@ export function help(observations: Set<DoDevopObservation>, cmdDefn?: IDoDevopsC
   try {
     console.log(commandLineUsage(sections));
   } catch (error) {
-    console.log(`  - ${emoji.poop}  ${chalk.red("Problem displaying help:")} ${error.message}\n`);
-    console.log(chalk.grey(error.stack));
+    console.log(
+      `  - ${emoji.poop}  ${chalk.red("Problem displaying help:")} ${(error as Error).message}\n`
+    );
+    console.log(chalk.grey((error as Error).stack));
   }
   console.log();
   process.exit();

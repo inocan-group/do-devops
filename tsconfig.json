@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "ES2017",
+    "target": "ES2018",
+    "lib": ["ES2019.Array", "ES2020"],
     "moduleResolution": "node",
 
-    "sourceMap": false,
+    "sourceMap": true,
     "incremental": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -22,17 +23,16 @@
     "outDir": "bin",
 
     "paths": {
-      "~/*": ["src/*"],
-      "/~/*": ["src/*"]
+      "~/*": ["src/*"]
     },
     "plugins": [
       // Transform paths in output .js files
       { "transform": "typescript-transform-paths" },
-
       // Transform paths in output .d.ts files
       // (Include this line if you output declarations files)
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },
-  "include": ["src", "test"]
+  "include": ["src", "test"],
+  "exclude": ["bin", "node_modules"]
 }

@@ -2,15 +2,17 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 10:57 AM ( GMT-7 )
+// index last changed at: 6th Jun, 2021, 06:16 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: currentDirectory, executionDirectory, homeDirectory, libraryDirectory.
+// files: currentDirectory, executionDirectory, homeDirectory, libraryDirectory, parentDirectory, repoDirectory.
 
 // local file exports
 export * from "./currentDirectory";
 export * from "./executionDirectory";
 export * from "./homeDirectory";
 export * from "./libraryDirectory";
+export * from "./parentDirectory";
+export * from "./repoDirectory";
 
 // Note:
 // -----

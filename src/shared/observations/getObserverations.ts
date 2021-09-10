@@ -1,6 +1,6 @@
 import { IPackageJson } from "common-types";
 import { DoDevopObservation } from "~/@types/observations";
-import { currentDirectory, dirExists, fileExists } from "../file";
+import { currentDirectory, dirExists, fileExists, repoDirectory } from "../file";
 import {
   getPackageJson,
   hasDependency,
@@ -20,7 +20,7 @@ export function getObservations() {
   let pkgJson: IPackageJson | undefined;
   try {
     pkgJson = getPackageJson();
-  } catch { }
+  } catch {}
 
   if (pkgJson) {
     observations.add("packageJson");
@@ -131,7 +131,34 @@ export function getObservations() {
       observations.add("monorepo");
     }
 
-    // module exports
+    // npm
+    if (pkgJson.private === true) {
+      observations.add("private");
+    }
+    if (pkgJson.private === false) {
+      observations.add("public");
+    }
+
+    // monorepo
+
+    if (!observations.has("git-init")) {
+      // if a repo is not in GIT yet this is an signal that
+      // repo may very well just be a package in a monorepo
+      try {
+        const parent = getPackageJson(repoDirectory());
+        if (parent?.private === "true") {
+          observations.add("parent-private");
+        } else {
+          observations.add("parent-public");
+        }
+        if (fileExists(repoDirectory("pnpm-workspace.yaml"))) {
+          observations.add("pnpmWorkspaces");
+        }
+      } catch {
+        observations.add("no-parent-repo");
+      }
+    }
+
     if (hasMainExport()) {
       observations.add("cjs");
     }

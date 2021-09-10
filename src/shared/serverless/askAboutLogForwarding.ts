@@ -5,7 +5,7 @@ import { IDictionary, IServerlessYaml } from "common-types";
 import { getLambdaFunctions } from "./index";
 import { determineStage } from "~/shared/observations";
 import { getPackageJson, hasDevDependency, savePackageJson } from "../npm";
-import inquirer = require("inquirer");
+import inquirer from "inquirer";
 import { DevopsError } from "~/errors";
 /**
  * Checks whether the existing configuration has `logForwarding`

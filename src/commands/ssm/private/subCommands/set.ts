@@ -60,12 +60,12 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: arg
     );
   } catch (error) {
     console.log();
-    if (error.code === "ParameterAlreadyExists") {
+    if ((error as any)?.code === "ParameterAlreadyExists") {
       console.log(
         chalk`- {red {bold Paramater Already Exists!}} to overwrite a parameter which already exists you must add {blue --force} to the CLI command`
       );
     } else {
-      console.log(chalk`{red {bold Error:}} ${error.message}`);
+      console.log(chalk`{red {bold Error:}} ${(error as Error).message}`);
     }
 
     console.log();

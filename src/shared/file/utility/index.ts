@@ -2,14 +2,15 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 01:08 PM ( GMT-7 )
+// index last changed at: 6th Jun, 2021, 12:16 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: diffFiles, directoryFiles, fileIncludes, getAllFilesOfType, getExportsFromFile, getFileComponents, getFilesUnderPath, getSubdirectories, isValidServerlessTs, symlinks, templateDirCopy, templateFileCopy, tscValidation.
+// files: diffFiles, directoryFiles, fileIncludes, fileInfo, getAllFilesOfType, getExportsFromFile, getFileComponents, getFilesUnderPath, getSubdirectories, isValidServerlessTs, symlinks, templateDirCopy, templateFileCopy, tscValidation.
 
 // local file exports
 export * from "./diffFiles";
 export * from "./directoryFiles";
 export * from "./fileIncludes";
+export * from "./fileInfo";
 export * from "./getAllFilesOfType";
 export * from "./getExportsFromFile";
 export * from "./getFileComponents";

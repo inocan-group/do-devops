@@ -1,4 +1,4 @@
-import inquirer = require("inquirer");
+import inquirer from "inquirer";
 import { getLocalServerlessFunctionsFromServerlessYaml } from "./getLocalServerlessFunctionsFromServerlessYaml";
 
 /**

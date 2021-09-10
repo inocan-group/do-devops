@@ -13,19 +13,16 @@ import { asyncExec } from "async-shelljs";
 export async function getMicroserviceConfig(accountInfo: IServerlessAccountInfo) {
   const cliFile = path.join(process.env.PWD || "", "serverless-config", "build.ts");
   try {
-    const config = await asyncExec(
-      `yarn ts-node ${cliFile} '${JSON.stringify(accountInfo)}'`,
-      {
-        silent: true,
-      }
-    );
+    const config = await asyncExec(`yarn ts-node ${cliFile} '${JSON.stringify(accountInfo)}'`, {
+      silent: true,
+    });
 
     return config;
   } catch (error) {
     console.log(chalk`{yellow - failed executing ${cliFile}}`);
 
     throw new DevopsError(
-      `Problem getting the microservice config file [ ${cliFile} ]: ${error.message}`,
+      `Problem getting the microservice config file [ ${cliFile} ]: ${(error as Error).message}`,
       "devops/missing-config"
     );
   }

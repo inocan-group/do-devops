@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { IDoDevopsCommand } from "~/@types/command";
 import { proxyToPackageManager } from "~/shared/core";
 
@@ -8,7 +7,7 @@ const command: IDoDevopsCommand = {
     await proxyToPackageManager("upgrade", observations, raw);
     process.exit();
   },
-  description: chalk`proxies your package manager's {bold italic upgrade} command`,
+  description: "proxies your package manager's 'upgrade' command",
 };
 
 export default command;

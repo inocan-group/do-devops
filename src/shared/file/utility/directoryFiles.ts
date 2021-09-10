@@ -17,7 +17,7 @@ export function directoryFiles(dir: string): IFileWithStats[] {
     }, []);
   } catch (error) {
     throw new DevopsError(
-      `Attempt to get files from the directory "${dir}" failed: ${error.message}`,
+      `Attempt to get files from the directory "${dir}" failed: ${(error as Error).message}`,
       "do-devops/directoryFiles"
     );
   }

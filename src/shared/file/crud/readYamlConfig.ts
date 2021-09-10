@@ -25,8 +25,13 @@ import { interpolateFilePath } from "../helpers";
 export function readYamlConfig<T extends object>(filename: string): T | undefined {
   filename = interpolateFilePath(filename);
   try {
-    return filesExist(filename) ? load(readFileSync(filename, { encoding: "utf-8" })) as T : undefined;
+    return filesExist(filename)
+      ? (load(readFileSync(filename, { encoding: "utf-8" })) as T)
+      : undefined;
   } catch (error) {
-    throw new DevopsError(chalk`Problem loading YAML config from file {blue ${filename}}: ${error.message}`, "read-yaml-config/unknown");
+    throw new DevopsError(
+      chalk`Problem loading YAML config from file {blue ${filename}}: ${(error as Error).message}`,
+      "read-yaml-config/unknown"
+    );
   }
 }

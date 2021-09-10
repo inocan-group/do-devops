@@ -1,5 +1,5 @@
 import { IAwsProfile } from "~/@types";
-import AWS = require("aws-sdk");
+import AWS from "aws-sdk";
 /**
  * Returns the `userId`, `accountId`, `arn`, and `user` when passed
  * the key/secret key found in a user's `~/.aws/credentials` file.

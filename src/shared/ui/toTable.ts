@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import { table, ColumnUserConfig } from "table";
+import { DevopsError } from "~/errors";
 import { emoji } from ".";
 import { consoleDimensions } from "./consoleDimensions";
 
@@ -8,10 +9,7 @@ export type ColumnFormulaTuple<T extends object, K extends keyof T = keyof T> = 
   K,
   (prop: T[K]) => unknown
 ];
-export type AdvancedColumn<
-  T extends object,
-  K extends keyof T & string = keyof T & string
-> = {
+export type AdvancedColumn<T extends object, K extends keyof T & string = keyof T & string> = {
   col: K;
   formula?: (prop: T[K]) => unknown;
   /** by default the column is the name but you can specify your own where required */
@@ -106,15 +104,10 @@ export function toTable<T extends object, K extends keyof T & string = keyof T &
   try {
     return table(tableData, { columns: colConfig }) + hiddenColMessage;
   } catch (error) {
-    console.log(`- ${emoji.poop} problems building table: ${error.message}`);
-    if (error.message === "Table must have a consistent number of cells.") {
-      console.log(
-        "     - table row lengths are:",
-        tableData.map((i) => i.length)
-      );
-
-      console.log();
-    }
-    process.exit();
+    const errMessage =
+      (error as Error).message === "Table must have a consistent number of cells."
+        ? `     - table row lengths are: \n${tableData.map((i) => i.length)}`
+        : `- ${emoji.poop} problems building table: ${(error as Error).message}`;
+    throw new DevopsError(errMessage, "ui/invalid-table-data");
   }
 }

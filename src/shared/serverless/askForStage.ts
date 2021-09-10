@@ -1,9 +1,11 @@
-import inquirer = require("inquirer");
+import inquirer from "inquirer";
 
 /**
  * Asks the user to choose an AWS region
  */
-export async function askForStage(message: string = "What stage are you working with?"): Promise<string> {
+export async function askForStage(
+  message: string = "What stage are you working with?"
+): Promise<string> {
   const question: inquirer.ListQuestion = {
     type: "list",
     name: "stage",

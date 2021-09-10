@@ -2,14 +2,15 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 12:27 PM ( GMT-7 )
+// index last changed at: 9th Sep, 2021, 04:03 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: ask, askCheckboxQuestion, askConfirmQuestion, askInputQuestion, askListQuestion, checkboxQuestion, confirmQuestion, inputQuestion, listQuestion.
+// files: ask, askCheckboxQuestion, askConfirmQuestion, askForNestedDirectory, askInputQuestion, askListQuestion, checkboxQuestion, confirmQuestion, inputQuestion, listQuestion.
 
 // local file exports
 export * from "./ask";
 export * from "./askCheckboxQuestion";
 export * from "./askConfirmQuestion";
+export * from "./askForNestedDirectory";
 export * from "./askInputQuestion";
 export * from "./askListQuestion";
 export * from "./checkboxQuestion";

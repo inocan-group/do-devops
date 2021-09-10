@@ -1,10 +1,11 @@
 import { mkdirSync, writeFileSync } from "fs";
-import { DevopsError, isClassification } from "~/errors";
+import { DevopsError } from "~/errors";
 import { dirExists, fileExists } from "../existance";
 import { IWriteOptions } from "~/@types";
 import { interpolateFilePath } from "~/shared/file/helpers";
 import chalk from "chalk";
 import path from "path";
+import { isClassification } from "~/@type-guards";
 
 /**
  * **write**
@@ -63,7 +64,7 @@ export function write(filename: string, data: any, options: IWriteOptions = {}) 
       throw error;
     }
     throw new DevopsError(
-      `Problem writing file "${filename}": ${error.message}`,
+      `Problem writing file "${filename}": ${(error as Error).message}`,
       "do-devops/file-write-error"
     );
   }

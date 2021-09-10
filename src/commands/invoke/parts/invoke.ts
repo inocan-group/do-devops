@@ -81,7 +81,7 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
     }
     await asyncExec(`sls invoke local --function ${fn} --data '${data}'`);
   } catch (error) {
-    console.log(`- Error finding functions: ${error.message}\n`);
+    console.log(`- Error finding functions: ${(error as Error).message}\n`);
     process.exit();
   }
 };

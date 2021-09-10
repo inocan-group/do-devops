@@ -6,7 +6,9 @@ import {
   IDictionary,
   IServerlessFunctionHandler,
 } from "common-types";
+import { ImageFormatOptions } from ".";
 import { NotDefined } from "./general";
+import { IImageRule } from "./image-types";
 import { BundlerObservation, PackageManagerObservation, TestObservation } from "./observations";
 
 export interface IGlobalConfig {
@@ -86,6 +88,39 @@ export interface ICommandConfig {
   deploy?: {};
   endpoints?: {};
   fns?: {};
+  image?: {
+    /**
+     * The directory to look for source images. This is typically not
+     * in the build path itself and defaults to `/assets`
+     */
+    sourceDir: string;
+    /**
+     * The (base) directory to place images when generated,
+     * this is used when creating new rules and provides a sensible
+     * default. Typically this would be "/public"
+     */
+    destinationDir: string;
+    /**
+     * The default widths to use for new rules
+     */
+    defaultWidths: [640, 768, 1024, 1280, 1536];
+
+    /**
+     * A boolean flag which when set to true ensures that any optimizations
+     * update a typescript file `optimized-images.ts`.
+     */
+    supportTS?: boolean;
+
+    /**
+     * Default formatting rules beyond system and API defaults
+     */
+    formatOptions?: ImageFormatOptions;
+    rules: IImageRule[];
+    /**
+     * Whether meta data "sidecar" files should be produced
+     */
+    sidecar: "none" | "per-image" | "per-rule";
+  };
   info?: {};
   invoke?: {};
   latest?: {};

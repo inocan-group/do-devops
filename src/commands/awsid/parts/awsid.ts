@@ -39,7 +39,7 @@ export const handler: DoDevopsHandler<{ all: boolean }> = async ({ unknown: argv
       results.push({ profile, ...(await getAwsIdentityFromProfile(profiles[profile])) });
       process.stdout.write(chalk`{green .}`);
     } catch (error) {
-      errors.push({ ...error, profile });
+      errors.push({ error, profile });
       process.stdout.write(chalk`{red .}`);
     }
   }
@@ -53,7 +53,7 @@ export const handler: DoDevopsHandler<{ all: boolean }> = async ({ unknown: argv
       } which encountered errors trying to authenticate, the rest were fine.`
     );
     for (const e of errors) {
-      console.log(chalk`- {bold {red ${e.profile}}}: {grey ${e.message}}`);
+      console.log(chalk`- {bold {red ${e.profile}}}: {grey ${(e as any)?.error?.message}}`);
     }
   }
 };

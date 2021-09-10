@@ -1,0 +1,69 @@
+/* eslint-disable unicorn/prefer-set-has */
+import chalk from "chalk";
+import { directoryFiles, getFileComponents } from "~/shared/file";
+import { useSharp } from "~/shared/images/useSharp";
+import { numberWithCommas } from "~/shared/ui";
+import { removeTempFiles } from "./helpers/removeTempFiles";
+
+enum images {
+  fireHydrant = "./test/data/fire-hydrant.jpg",
+  flake = "./test/data/Flake.jpg",
+  heic = "./test/data/IMG_0086.HEIC",
+}
+
+let api: ReturnType<typeof useSharp>;
+
+describe("test Sharp image conversion library using default options", () => {
+  beforeAll(() => {
+    api = useSharp();
+  });
+  afterAll(() => {
+    removeTempFiles();
+  });
+
+  it("convert image to 1024px wide, using JPG, WebP and AVIF formats", async () => {
+    const size = 1024;
+    await api.resizeToWebFormats(images.fireHydrant, "./test/data/temp", 1024);
+    const parts = getFileComponents(images.fireHydrant);
+    const avif = parts.fileWithoutExt + `-${size}.avif`;
+    const webp = parts.fileWithoutExt + `-${size}.webp`;
+    const jpg = parts.fileWithoutExt + `-${size}.jpg`;
+    const fileInfo = directoryFiles("./test/data/temp");
+    const files = fileInfo.map((i) => i.file);
+
+    for (const i of fileInfo) {
+      console.log(chalk`${i.file} {italic is} ${numberWithCommas(i.stats.size)} bytes`);
+    }
+
+    for (const exp of [avif, webp, jpg]) {
+      expect(files.includes(exp)).toBeTruthy();
+    }
+  });
+
+  it("convert image to multiple sizes and formats", async () => {
+    const converted = await api.resizeToWebFormats(
+      images.fireHydrant,
+      "./test/data/temp",
+      [640, 1024, 1200]
+    );
+
+    expect(converted).toHaveLength(9); // 3 x 3
+    expect(converted.every((i) => i.isSourceImage === false)).toBeTruthy();
+
+    const imgFiles = converted.map((i) => i.file);
+    expect(imgFiles).toContain("test/data/temp/fire-hydrant-640.avif");
+    expect(imgFiles).toContain("test/data/temp/fire-hydrant-1024.avif");
+    expect(imgFiles).toContain("test/data/temp/fire-hydrant-1200.avif");
+  });
+
+  it("blurPreImage() creates a small JPG blurred image is created", async () => {
+    const blurImage = await api.blurredPreImage(images.fireHydrant, "./test/data/temp");
+    expect(blurImage).toBe("fire-hydrant-blurred.jpg");
+
+    const files = directoryFiles("./test/data/temp");
+    expect(files.map((i) => i.file).includes("fire-hydrant-blurred.jpg")).toBeTruthy();
+    const file = files.find((i) => i.file === "fire-hydrant-blurred.jpg");
+    expect(file).not.toBeUndefined();
+    expect(file?.stats.size).toBeLessThan(1000);
+  });
+});

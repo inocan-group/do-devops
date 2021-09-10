@@ -25,6 +25,8 @@
     "no-nested-ternary": "off",
     // doesn't play well with prettier
     "unicorn/no-nested-ternary": "off",
+    "unicorn/empty-brace-spaces": "warn",
+    "unicorn/import-style": "off",
     // this is kind of nice sometimes
     "unicorn/no-array-callback-reference": "off",
     // only because this is a CLI
