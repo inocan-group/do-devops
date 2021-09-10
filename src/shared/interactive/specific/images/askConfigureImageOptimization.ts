@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import path from "path";
-import { IImageRule, Observations } from "~/@types";
+import { IImageRule, ImageMetaDetail, Observations } from "~/@types";
 import { saveProjectConfig } from "~/shared/config";
 import { csvParser } from "~/shared/data";
 import { currentDirectory } from "~/shared/file";
@@ -121,6 +121,11 @@ export async function askConfigureImageOptimization(_o: Observations) {
 
   rule.preBlur = await askConfirmQuestion(
     `Should images in this rule also generate a small blurred image for pre-loading?`
+  );
+
+  rule.metaDetail = await askListQuestion<ImageMetaDetail>(
+    `What level of detail will this rule need for metadata?`,
+    ["basic", "categorical", "tags"]
   );
 
   rule.sidecarDetail = await askListQuestion<IImageRule["sidecarDetail"]>(

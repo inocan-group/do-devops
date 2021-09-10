@@ -28,6 +28,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
               created: tools.cache.source[file]?.created || now,
               modified: now,
               isSourceImage: true,
+              rule: rule.name,
 
               size: m.size,
               width: m.width,
@@ -58,7 +59,16 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
   }
 
   /** the web-optimized images which have now been saved */
-  const resized = (await Promise.all(optimizedImages)).flat();
+  const resized = (await Promise.all(optimizedImages)).flat().map(
+    (i) =>
+      ({
+        ...i,
+        rule: rule.name,
+        isSourceImage: false,
+        metaDetailLevel: "basic",
+        meta: {},
+      } as unknown as IImageCacheRef<"basic">)
+  );
 
   for (const f of resized) {
     tools.cache.converted[f.file] = f;

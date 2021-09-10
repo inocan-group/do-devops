@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { IImageRule, IProjectConfig, Observations } from "~/@types";
+import { IImageRule, ImageMetaDetail, IProjectConfig, Observations } from "~/@types";
 import { getProjectConfig, saveProjectConfig } from "~/shared/config";
 import { logger } from "~/shared/core/logger";
 import { csvParser } from "~/shared/data";
@@ -56,6 +56,11 @@ export async function askAddImageRule(o: Observations, api: ImageApi) {
 
   rule.preBlur = await askConfirmQuestion(
     `Should images have a small blurred image produced for pre-loading?`
+  );
+
+  rule.metaDetail = await askListQuestion<ImageMetaDetail>(
+    `What level of detail will this rule need for metadata?`,
+    ["basic", "categorical", "tags"]
   );
 
   rule.sidecarDetail = await askListQuestion<IImageRule["sidecarDetail"]>(
