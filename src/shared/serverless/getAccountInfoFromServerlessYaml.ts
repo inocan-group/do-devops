@@ -25,7 +25,7 @@ export async function getAccountInfoFromServerlessYaml(): Promise<IServerlessAcc
     return info;
   } catch (error) {
     throw new DevopsError(
-      `Problems getting serverless.yml's account info: ${error.message}`,
+      `Problems getting serverless.yml's account info: ${(error as Error).message}`,
       "serverless-framework/account-info"
     );
   }

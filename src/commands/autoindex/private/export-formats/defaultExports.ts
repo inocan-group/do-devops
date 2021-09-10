@@ -1,5 +1,7 @@
-import { IExportableSymbols, removeExtension, exportTemplate } from "../index";
+import { exportTemplate } from "./index";
 import { IDictionary } from "common-types";
+import { IExportableSymbols } from "../reference/types";
+import { removeExtension } from "../util/removeExtension";
 
 /**
  * Given a set of files and directories that are exportable, this function will

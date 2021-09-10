@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import inquirer = require("inquirer");
+import inquirer from "inquirer";
 
 export default async function deployBoth() {
   console.log(

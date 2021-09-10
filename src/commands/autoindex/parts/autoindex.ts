@@ -51,9 +51,7 @@ async function setupAutoIndexWatcher(watched: IDictionary<FSWatcher>, opts: IDic
     interval: 100,
   });
   watcher.on("error", (e) => {
-    log(
-      chalk`{red Error occurred watching for changes to autoindex files:} ${e.message}\n`
-    );
+    log(chalk`{red Error occurred watching for changes to autoindex files:} ${e.message}\n`);
   });
 
   watcher.on("ready", () => {
@@ -86,11 +84,7 @@ async function setupAutoIndexWatcher(watched: IDictionary<FSWatcher>, opts: IDic
           case "add":
           case "link":
             if (!watchedDirs.includes(dir) && isAutoindexFile(filepath)) {
-              log(
-                `- new autoindex file detected: ${highlightFilepath(
-                  filepath
-                )}; watcher started`
-              );
+              log(`- new autoindex file detected: ${highlightFilepath(filepath)}; watcher started`);
               watched[filepath] = setupWatcherDir(dir, [], opts);
               processFiles([filepath], opts);
             }
@@ -130,13 +124,13 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts }) => {
   const monoRepoPackages: false | string[] = getMonoRepoPackages(process.cwd());
   if (monoRepoPackages && !opts.quiet) {
     console.log(
-      chalk`{grey - monorepo detected with {yellow ${String(
-        monoRepoPackages.length
-      )}} packages}`
+      chalk`{grey - monorepo detected with {yellow ${String(monoRepoPackages.length)}} packages}`
     );
   }
 
-  const candidateFiles = await globby(["**/index.ts", "**/index.js", "!**/node_modules"]);
+  const candidateFiles = (await globby(["**/index.ts", "**/index.js", "!**/node_modules"])).filter(
+    (i) => !i.endsWith(".d.ts")
+  );
 
   /** those files known to be autoindex files */
   const autoIndexFiles = candidateFiles.filter((fc) => isAutoindexFile(fc));

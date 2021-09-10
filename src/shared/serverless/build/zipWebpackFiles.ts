@@ -3,7 +3,7 @@ import path from "path";
 
 import { emoji } from "../../ui";
 import "~/@polyfills/bestzip";
-import zip = require("bestzip");
+import zip from "bestzip";
 /**
  * Zips up a number of
  *
@@ -27,8 +27,8 @@ export async function zipWebpackFiles(fns: string[]) {
     return Promise.all(promises);
   } catch (error) {
     console.log(chalk`{red - Problem zipping webpack files! ${emoji.angry}}`);
-    console.log(`- ${error.message}`);
-    console.log(chalk`{grey \n${error.stack}}\n`);
+    console.log(`- ${(error as Error).message}`);
+    console.log(chalk`{grey \n${(error as Error).stack}}\n`);
     process.exit();
   }
 }

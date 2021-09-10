@@ -1,4 +1,4 @@
-import glob from "globby";
+import globby from "globby";
 
 /**
  * Uses a glob utility to identify all files under a given path.
@@ -11,7 +11,7 @@ import glob from "globby";
 export async function getFilesUnderPath(dir: string, extension?: string): Promise<string[]> {
   dir = dir.replace(/\\/g, "/");
   const pattern = extension ? `${dir}/**/*.${extension}` : `${dir}/**`;
-  const files = await glob(pattern);
+  const files = await globby(pattern);
 
   return files || [];
 }

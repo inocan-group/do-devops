@@ -20,8 +20,8 @@ export async function saveYamlFile(filename: string, data: IDictionary) {
     console.log(
       chalk`- {red writing the {bold {italic ${filename}} YAML file has failed!} ${emoji.poop}}`
     );
-    console.log(error.message);
-    console.log(chalk`{dim ${error.stack}}`);
+    console.log((error as Error).message);
+    console.log(chalk`{dim ${(error as Error).stack}}`);
     process.exit();
   }
 }

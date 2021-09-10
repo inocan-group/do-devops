@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { format } from "date-fns";
 import { IServerlessDeployMeta } from "./deploy-serverless";
-import { filesInfo, getAllFilesOfType } from "~/shared/file";
+import { fileInfo, getAllFilesOfType } from "~/shared/file";
 import { emoji } from "~/shared/ui";
 import { getLocalHandlerInfo } from "~/shared/serverless";
 
@@ -12,8 +12,8 @@ import { getLocalHandlerInfo } from "~/shared/serverless";
  * @param meta the meta information from CLI
  * @param fns optionally pass in a subset of functions which are being deployed
  */
-export function isTranspileNeeded(_meta: IServerlessDeployMeta, _fns?: string[]) {
-  const handlerInfo = getLocalHandlerInfo();
+export async function isTranspileNeeded(_meta: IServerlessDeployMeta, _fns?: string[]) {
+  const handlerInfo = await getLocalHandlerInfo();
 
   const fnsNotTranspiled = handlerInfo.filter(
     (i) => i.sourceModified > i.webpackModified
@@ -34,12 +34,12 @@ export function isTranspileNeeded(_meta: IServerlessDeployMeta, _fns?: string[])
   }
 
   const handlerFns = new Set(handlerInfo.map((i) => i.source));
-  const sharedFnInfo = filesInfo(
+  const sharedFnInfo = await fileInfo(
     ...getAllFilesOfType("ts").filter((i: any) => !handlerFns.has(i))
   );
 
   const mostRecentShared = sharedFnInfo.reduce((agg: Date, fn) => {
-    return fn.stats.mtime > agg ? fn.stats.mtime : agg;
+    return fn.mtime > agg ? fn.mtime : agg;
   }, new Date("1970-01-01"));
   const fnsOlderThanShared = handlerInfo.filter((i) =>
     mostRecentShared > i.webpackModified ? { fn: i.fn, source: i.source } : false
@@ -49,9 +49,8 @@ export function isTranspileNeeded(_meta: IServerlessDeployMeta, _fns?: string[])
     console.log(
       chalk`{dim {yellow - there are {bold {red ${String(
         fnsOlderThanShared.length
-      )}}} transpiled handler functions which are {italic older} than shared files source ${
-        emoji.angry
-      } }} [ {grey ${format(mostRecentShared, "h:mm aaaa @ d MMM")}} ]`
+      )}}} transpiled handler functions which are {italic older} than shared files source ${emoji.angry
+        } }} [ {grey ${format(mostRecentShared, "h:mm aaaa @ d MMM")}} ]`
     );
   } else {
     console.log(

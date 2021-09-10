@@ -1,11 +1,12 @@
 // #autoindex
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 06:43 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 07:00 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: getMonorepoPackages.
+// files: getLernaPackages, getMonorepoPackages.
 
 // local file exports
+export * from "./getLernaPackages";
 export * from "./getMonorepoPackages";
 
 // Note:

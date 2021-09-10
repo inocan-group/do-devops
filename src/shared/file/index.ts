@@ -2,14 +2,13 @@
 
 // #region autoindexed files
 
-// index last changed at: 5th May, 2021, 03:20 PM ( GMT-7 )
+// index last changed at: 6th Jun, 2021, 12:13 PM ( GMT-7 )
 // export: named; exclusions: helpers, index, private.
-// files: createTsFile, filesInfo, getDataFiles, getMonoRepoPackages, lintfix, readDataFile, relativePath, saveFileToHomeDirectory, saveYamlFile, stripFileExtension.
+// files: createTsFile, getDataFiles, getMonoRepoPackages, lintfix, readDataFile, relativePath, saveFileToHomeDirectory, saveYamlFile, stripFileExtension.
 // directories: base-paths, crud, existance, utility.
 
 // local file exports
 export * from "./createTsFile";
-export * from "./filesInfo";
 export * from "./getDataFiles";
 export * from "./getMonoRepoPackages";
 export * from "./lintfix";

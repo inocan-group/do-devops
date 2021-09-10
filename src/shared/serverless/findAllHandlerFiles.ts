@@ -1,4 +1,4 @@
-import fg from "globby";
+import { sync } from "globby";
 import path from "path";
 
 /**
@@ -7,7 +7,7 @@ import path from "path";
  */
 export async function findAllHandlerFiles() {
   const glob = path.join(process.env.PWD || "", "/src/handlers/**/*.ts");
-  const files = fg.sync(glob);
+  const files = sync(glob);
   const handlers = [];
   console.log(files);
 

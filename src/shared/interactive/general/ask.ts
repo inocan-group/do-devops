@@ -1,4 +1,4 @@
-import inquirer = require("inquirer");
+import inquirer from "inquirer";
 
 /**
  * Provides a simple wrapping of the actual "asking" aspect of

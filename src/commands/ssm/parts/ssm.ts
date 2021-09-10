@@ -36,9 +36,11 @@ export const handler: DoDevopsHandler<ISsmOptions> = async (input) => {
     await subCommands[subCommand as keyof typeof subCommands].execute(input);
   } catch (error) {
     console.log(
-      chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${error.message}\n`
+      chalk`{red - Ran into error when running "ssm ${subCommand}":}\n  - ${
+        (error as Error).message
+      }\n`
     );
-    console.log(chalk`{grey - ${error.stack}}`);
+    console.log(chalk`{grey - ${(error as Error).stack}}`);
 
     process.exit(1);
   }

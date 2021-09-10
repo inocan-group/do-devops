@@ -4,6 +4,7 @@ import path from "path";
 import { DevopsError } from "~/errors";
 import { IServerlessYaml } from "common-types";
 import { load } from "js-yaml";
+import { isDevopsError } from "~/@type-guards";
 
 /**
  * Get the `serverless.yml` file in the root of the project
@@ -22,6 +23,9 @@ export async function getServerlessYaml(): Promise<IServerlessYaml> {
 
     return { ...baseStructure, ...(config as IServerlessYaml) };
   } catch (error) {
-    throw new DevopsError(`Failure getting serverless.yml: ${error.message}`, error.name);
+    const error_ = isDevopsError(error)
+      ? new DevopsError(`Failure getting serverless.yml: ${error.message}`, error.name)
+      : new DevopsError(`Failure getting serverless.yml`, "serverless/not-ready");
+    throw error_;
   }
 }

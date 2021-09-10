@@ -1,5 +1,8 @@
-import { DevopsError } from "./DevopsError";
-import { isDevopsError } from "./isDevopsError";
+import { DevopsError } from "~/errors";
+
+export function isDevopsError(err: unknown): err is DevopsError {
+  return typeof err === "object" && (err as any).kind === "DevopsError";
+}
 
 export function isClassification(
   error: unknown,
