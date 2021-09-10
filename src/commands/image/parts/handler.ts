@@ -19,6 +19,7 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
 
   switch (subCommand?.trim()) {
     case "config":
+    case "configure":
       // eslint-disable-next-line unicorn/prefer-ternary
       if (!config) {
         await askConfigureImageOptimization(observations);
