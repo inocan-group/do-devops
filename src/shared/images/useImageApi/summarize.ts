@@ -10,10 +10,12 @@ export function summarize(rules: IImageRule[], tools: IImageTools) {
     acc = [...acc, tools.cache.source[i]];
     return acc;
   }, [] as IImageCacheRef[]);
+
   const convertedImages = Object.keys(tools.cache.converted).reduce((acc, i) => {
-    acc = [...acc, tools.cache.source[i]];
+    acc = [...acc, tools.cache.converted[i]];
     return acc;
   }, [] as IImageCacheRef[]);
+
   const lastUpdate = formatDistance(
     sourceImages.reduce((mostRecent, i) => (i.modified > mostRecent ? i.modified : mostRecent), 0),
     Date.now(),
@@ -23,7 +25,7 @@ export function summarize(rules: IImageRule[], tools: IImageTools) {
   log.info(chalk`{bold ------------------------------}\n`);
 
   log.info(chalk`- there are {yellow {bold ${sourceImages.length}}} source images in the cache`);
-  log.info(chalk`- the last {italic detected change} in these source images was ${lastUpdate}`);
+  log.info(chalk`- the last detected change in these source images was ${lastUpdate}`);
   log.info(
     chalk`{dim - the rules {italic plus} source images have produced {bold {yellow ${convertedImages.length}}} optimized images}`
   );

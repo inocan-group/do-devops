@@ -48,6 +48,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
 
     optimizedImages.push(tools.sharp.resizeToWebFormats(file, rule.destination, rule.widths));
   }
+  /** source images */
   const sis = await Promise.all(sourceImages);
   for (const si of sis) {
     const [cacheRef, exifMeta] = si;
@@ -58,8 +59,11 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     };
   }
 
-  /** the web-optimized images which have now been saved */
-  const resized = (await Promise.all(optimizedImages)).flat().map(
+  /**
+   * the web-optimized images after having been generated,
+   * are now now mapped to cache refs
+   */
+  const optimized = (await Promise.all(optimizedImages)).flat().map(
     (i) =>
       ({
         ...i,
@@ -70,17 +74,18 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
       } as unknown as IImageCacheRef<"basic">)
   );
 
-  for (const f of resized) {
+  for (const f of optimized) {
     tools.cache.converted[f.file] = f;
   }
 
   saveImageCache(tools.cache);
+
   log.info(
     `- ${emoji.thumbsUp} image cache saved to disk with updated source and converted images`
   );
 
   log.whisper(
-    chalk`{dim - using the "${rule.name}" rule, {bold ${resized.length}} images have been resized using Sharp to fit "web formats"}`
+    chalk`{dim - using the "${rule.name}" rule, {bold ${optimized.length}} images have been resized using Sharp to fit "web formats"}`
   );
 
   if (rule.preBlur) {
@@ -88,7 +93,6 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     for (const file of stale) {
       waitBlurry.push(tools.sharp.blurredPreImage(file, rule.destination));
     }
-    // TODO: fix output format for promises here; we're just getting a string right now
     const blurred = await Promise.all(waitBlurry);
     log.whisper(
       chalk`{dim - produced a blurred image preload for ${blurred.length} images associated to "${rule.name}" rule}`
@@ -122,7 +126,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
 
   if (rule.preserveMeta && rule.preserveMeta.length > 0) {
     const metaTransfers = [];
-    for (const file of resized) {
+    for (const file of optimized) {
       if (!file.from) {
         throw new DevopsError(
           `Attempt to bring metadata over to "${file.file}" file failed as the 'from' property in the cache was not populated!`,
@@ -150,12 +154,12 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
 
   if (rule.copyright) {
     const cpPromises = [];
-    for (const file of resized) {
+    for (const file of optimized) {
       cpPromises.push(tools.exif.addCopyright(file.file, rule.copyright));
     }
     await Promise.all(cpPromises);
     log.whisper(
-      chalk`- copyright notices have been applied to the {yellow {bold ${resized.length}}} images which were created as a result of recent changes to source files`
+      chalk`- copyright notices have been applied to the {yellow {bold ${optimized.length}}} images which were created as a result of recent changes to source files`
     );
   }
 

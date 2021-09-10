@@ -52,6 +52,7 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
       break;
 
     case "summarize":
+    case "summary":
       await api.summarize();
       break;
 
