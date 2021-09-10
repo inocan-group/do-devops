@@ -1,24 +1,22 @@
 import { ExifDate, ExifDateTime } from "exiftool-vendored";
-import { IAllImageMeta, ICategoricalMetaWithSharp, IExifToolMeta, ImageMetadata } from "~/@types";
+import { IImageCacheRef } from "~/@types";
 
 /**
  * A type guard which helps to distinguish between the ExifTool's
  * categorical/reduced set versus other levels of detail.
  */
-export function hasCatoricalMetadata(meta: ImageMetadata): meta is ICategoricalMetaWithSharp {
-  return meta.metaDetailLevel === "categorical";
+export function hasCatoricalMetadata(
+  input: IImageCacheRef
+): input is IImageCacheRef<"categorical"> {
+  return input.metaDetailLevel === "categorical";
 }
 
 /**
  * A type guard which helps to distinguish between ExifTool's
  * **full** set of metadata versus other levels of detail.
  */
-export function hasTagsMetadata(meta: ImageMetadata): meta is IExifToolMeta {
-  return meta.metaDetailLevel === "tags";
-}
-
-export function hasAllMetaData(meta: ImageMetadata): meta is IAllImageMeta {
-  return meta.metaDetailLevel === "all";
+export function hasTagsMetadata(input: IImageCacheRef): input is IImageCacheRef<"tags"> {
+  return input.metaDetailLevel === "tags";
 }
 
 export function isExifDateTime(d: unknown): d is ExifDateTime {

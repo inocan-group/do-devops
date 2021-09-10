@@ -61,7 +61,7 @@
     "chokidar": "^3.5.1",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.1.1",
-    "common-types": "^1.28.2",
+    "common-types": "^1.29.0",
     "date-fns": "^2.23.0",
     "deepmerge": "^4.2.2",
     "destr": "^1.1.0",

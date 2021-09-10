@@ -1,6 +1,6 @@
 import { ExifDate, ExifDateTime, Tags } from "exiftool-vendored";
 import { isExifDate } from "~/@type-guards";
-import { ExifTagsPlusMissing } from "~/@types";
+import { IExifToolMetadata } from "~/@types";
 
 /**
  * converts ExifDate to ExifDateTime, if not an ExifDate then just passes
@@ -49,5 +49,5 @@ export function reduceFl35(input: string | undefined) {
  * Polishes data returned from ExifTool's `Tags` output
  */
 export function improveMetaResults<T extends {} = {}>(meta: Tags) {
-  return { ...meta } as ExifTagsPlusMissing<T>;
+  return { ...meta } as IExifToolMetadata<T>;
 }

@@ -1,3 +1,4 @@
+import { omit } from "native-dash";
 import { join } from "path";
 import sharp, {
   WebpOptions,
@@ -27,6 +28,9 @@ function outFilename(dir: string, name: string, width: number, format: SharpImag
   return join(dir, `${name}-${width}.${format}`);
 }
 
+/**
+ * Do image transforms with the [Sharp](https://sharp.pixelplumbing.com/) library.
+ */
 export function useSharp(options: ISharpOptions = {}) {
   const o: ISharpOptions = {
     simd: true,
@@ -80,14 +84,29 @@ export function useSharp(options: ISharpOptions = {}) {
             created: now,
             modified: now,
             size: info.size,
+            width: info.width,
+            height: info.height,
             isSourceImage: false,
             from: image,
             metaDetailLevel: "basic",
-            meta: info as unknown as ISharpMetadata,
+            sharpMeta: info as unknown as ISharpMetadata,
+            meta: undefined,
           } as IImageCacheRef;
         })
         .catch((error) => {
           throw new Error(`Problem writing file ${out}! ${error.message}`);
+        });
+    },
+    /**
+     * Returns the primary metadata which Sharp exposes (minus the bulky and encoded)
+     * buffers.
+     */
+    getMetadata: async (source: string): Promise<ISharpMetadata> => {
+      return sharp(source)
+        .metadata()
+        .then((meta) => {
+          /** strip out the buffer data */
+          return omit(meta, "exif", "iptc", "icc", "xmp");
         });
     },
     /**

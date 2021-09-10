@@ -14,7 +14,14 @@ import type {
 } from "sharp";
 import { ExifDateTime, Tags, WriteTags } from "exiftool-vendored";
 
-export type MetaDataDetail = "basic" | "categorical" | "all";
+/**
+ * Different levels of detail for meta data.
+ *
+ * - `basic` - what Sharp provides
+ * - `tags` - large key/value dictionary from ExifTool
+ * - `categorical` - a summarized set of common attributes
+ */
+export type ImageMetaDetail = "basic" | "categorical" | "tags";
 
 export type SharpBufferProperties = "exif" | "iptc" | "icc" | "xmp";
 
@@ -38,19 +45,14 @@ export interface IptcCreatorContactInfo {
   [key: string]: any;
 }
 
-export type ExifTagsPlusMissing<T extends {} = {}> = Omit<Tags, "CreatorContactInfo"> & {
+export type IExifToolMetadata<T extends {} = {}> = Omit<Tags, "CreatorContactInfo"> & {
   /** this breaks out the generic "Struct" which ExifTools provides */
   CreatorContactInfo: IptcCreatorContactInfo;
   [key: string]: unknown;
 } & T;
 
 /** metadata provided by **Sharp** but excluding the properties which return _buffers_ */
-export type ISharpMetadata = Exclude<Metadata, SharpBufferProperties> & {
-  metaDetailLevel: "basic";
-};
-
-export type IExifToolMeta = Tags &
-  Omit<ISharpMetadata, "metaDetailLevel"> & { metaDetailLevel: "tags" };
+export type ISharpMetadata = Exclude<Metadata, SharpBufferProperties>;
 
 /**
  * The ExifTool provides so metadata that TS can't compute types so they have reduced the number
@@ -130,46 +132,41 @@ export type ICategoricalMeta = {
 /**
  * Both categorical meta from ExifTool and Sharp's metadata
  */
-export type ICategoricalMetaWithSharp = ICategoricalMeta &
-  Omit<ISharpMetadata, "metaDetailLevel"> & { metaDetailLevel: "categorical" };
-
-export type IAllImageMeta = Omit<IExifToolMeta, "metaDetailLevel"> & {
-  metaDetailLevel: "all";
-} & Omit<ICategoricalMeta, "metaDetailLevel">;
-
-/**
- * Some metadata from **Sharp** and **ExifTool** is always provided but the level of detail
- * can depend. Levels which exist are:
- *
- * - `basic` - just the meta provided by sharp (this base is ALWAYS available)
- * - `categorical` - a downsampling of meta tags from ExifTool into useful categories (plus Sharp's base info); this is tyically the most useful for _providing_ meta insight but loses resolution if writing because the precise tags are not present. Though note, it provides a property called `populated` which indicates all tags which were present in image.
- * - `tags` - provides sharp's base plus ALL tags that ExifTool produces
- * - `all` - provides sharp's base, all ExifTool tags, and categories on property "categories"
- * (to avoid namespace collisions)
- */
-export type ImageMetadata =
-  | ICategoricalMetaWithSharp
-  | ISharpMetadata
-  | IExifToolMeta
-  | IAllImageMeta;
+export type ICategoricalMetaWithSharp = ICategoricalMeta & ISharpMetadata;
 
 /**
  * A cache reference for an individual image
  */
-export type IImageCacheRef = {
+export type IImageCacheRef<T extends ImageMetaDetail = ImageMetaDetail> = {
   /** the relative path to the file from the project's root */
   file: string;
   modified: epochWithMilliseconds;
   created: epochWithMilliseconds;
   size: number;
+  /** the width of the image (received from Sharp's metadata) */
+  width: number;
+  /** the height of the image (received from Sharp's metadata) */
+  height: number;
+  /**
+   * Metadata properties derived from the **Sharp** tool; this
+   * is always available regardless of configured `metaDetailLevel`
+   */
+  sharpMeta: ISharpMetadata;
+
   isSourceImage: boolean;
+  /** the rule which was responsible for this cache entry */
+  rule: string;
   /** reference to the source image for a non-source image */
   from?: string;
   /** the level of detail of metadata for a given image */
-  metaDetailLevel?: "basic" | "catories" | "all";
+  metaDetailLevel: T;
 
   /** meta data available for given file */
-  meta: ImageMetadata;
+  meta: T extends "categorical"
+    ? ICategoricalMeta
+    : T extends "tags"
+    ? IExifToolMetadata
+    : undefined;
 };
 
 /**
@@ -250,6 +247,8 @@ export interface ImageFormatOptions {
   tile?: TileOptions;
 }
 
+// export type MetaDetailLevel = "basic" | "categorical" | "tags";
+
 export type IImageRule = {
   name: string;
   /**
@@ -260,6 +259,10 @@ export type IImageRule = {
    * The directory where the converted files will be placed
    */
   destination: string;
+  /**
+   * The level of details stored in the cache about image meta-data
+   */
+  metaDetail: ImageMetaDetail;
   /**
    * glob pattern to pickup images
    */

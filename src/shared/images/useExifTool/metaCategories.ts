@@ -1,11 +1,11 @@
-import { ICategoricalMeta, ExifTagsPlusMissing } from "~/@types/image-types";
+import { ICategoricalMeta, IExifToolMetadata } from "~/@types/image-types";
 import { convertToExifDateTime, reduceFl35 } from "./conversion-tools";
 
 /**
  * Reduces massive tag set found in certain files to more of the
  * "core essentials".
  */
-export function metaReducer(meta: ExifTagsPlusMissing): ICategoricalMeta {
+export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
   const populated = Object.keys(meta).filter((i) => i);
 
   const make = [meta.DeviceManufacturer, meta.CameraID, meta.Make, meta.VendorID]

@@ -104,6 +104,13 @@ export interface ICommandConfig {
      * The default widths to use for new rules
      */
     defaultWidths: [640, 768, 1024, 1280, 1536];
+
+    /**
+     * A boolean flag which when set to true ensures that any optimizations
+     * update a typescript file `optimized-images.ts`.
+     */
+    supportTS?: boolean;
+
     /**
      * Default formatting rules beyond system and API defaults
      */

@@ -1,14 +1,14 @@
 /* eslint-disable no-use-before-define */
 import chalk from "chalk";
 import destr from "destr";
-import type { IImageCache, IImageCacheRef, IImageRule } from "~/@types";
+import type { IImageCache, IImageRule } from "~/@types";
 import { IMAGE_CACHE } from "~/constants";
 import { useExifTools, useSharp } from "~/shared/images";
 import { logger } from "~/shared/core";
 import { readFile, fileExists } from "~/shared/file";
 import { convertStale } from "./useImageApi/convertStale";
 import { watchForChange } from "./useImageApi/watchForChange";
-import { formatDistance } from "date-fns";
+import { summarize } from "./useImageApi/summarize";
 
 export interface IGetImageOptions {}
 
@@ -74,40 +74,7 @@ export function useImageApi(rules: IImageRule[], options: IImageApiOptions = {})
      * Summarize the current configuration for the Image service
      */
     summarize: async () => {
-      const sourceImages = Object.keys(tools.cache.source).reduce((acc, i) => {
-        acc = [...acc, tools.cache.source[i]];
-        return acc;
-      }, [] as IImageCacheRef[]);
-      const convertedImages = Object.keys(tools.cache.converted).reduce((acc, i) => {
-        acc = [...acc, tools.cache.source[i]];
-        return acc;
-      }, [] as IImageCacheRef[]);
-      const lastUpdate = formatDistance(
-        Date.now(),
-        sourceImages.reduce(
-          (mostRecent, i) => (i.modified > mostRecent ? i.modified : mostRecent),
-          0
-        )
-      );
-      log.info(chalk`{bold Summary of Image Configuration}`);
-      log.info(chalk`{bold ------------------------------}\n`);
-
-      log.info(
-        chalk`- there are {yellow {bold ${sourceImages.length}}} source images in the cache`
-      );
-      log.info(chalk`- the last {italic detected change} in these source images was ${lastUpdate}`);
-      log.info(
-        chalk`{dim - the rules {italic plus} source images have produced {bold {yellow ${convertedImages.length}}} optimized images}`
-      );
-
-      log.info(chalk`Rule Overview:`);
-      log.info(chalk`---------------`);
-
-      for (const r of rules || []) {
-        log.info(
-          chalk`  - ${r.name}: {dim source: "${r.source}", destination: "${r.destination}", glob: "${r.glob}"}`
-        );
-      }
+      return summarize(rules, tools);
     },
     /**
      * Gets the metadata for an image using **ExifTool**. By default, the data returned is a pure

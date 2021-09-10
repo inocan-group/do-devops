@@ -1,5 +1,5 @@
 import { exiftool, Tags, WriteTags } from "exiftool-vendored";
-import { ExifTagsPlusMissing, IptcCreatorContactInfo } from "~/@types/image-types";
+import { IExifToolMetadata, IptcCreatorContactInfo } from "~/@types/image-types";
 import { DevopsError } from "~/errors";
 import { removeFile } from "../file";
 import { improveMetaResults } from "./useExifTool/conversion-tools";
@@ -8,7 +8,7 @@ import { metaReducer } from "./useExifTool/metaCategories";
 // DOCS: https://photostructure.github.io/exiftool-vendored.js/
 
 export type IExifToolOptions = {};
-const cache: Record<string, ExifTagsPlusMissing> = {};
+const cache: Record<string, IExifToolMetadata> = {};
 
 /** removed the `_original` file created by ExifTool writes */
 async function removeOriginalFile(file: string) {
@@ -30,14 +30,14 @@ async function refreshCache(image: string, returnMeta: boolean, payload: WriteTa
     // refresh metadata
 
     if (cache[image]) {
-      cache[image] = { ...cache[image], ...payload } as ExifTagsPlusMissing;
+      cache[image] = { ...cache[image], ...payload } as IExifToolMetadata;
     } else {
       // force reload; no need to add payload manually in this case
       await useExifTools().getMetadata(image, true);
     }
   } else {
     // not asking for a return; so only updated cache if image is already there
-    cache[image] = { ...cache[image], ...payload } as ExifTagsPlusMissing;
+    cache[image] = { ...cache[image], ...payload } as IExifToolMetadata;
   }
 }
 
@@ -66,9 +66,9 @@ export function useExifTools(options: IExifToolOptions = {}) {
     getMetadata: async <T extends { [key: string]: unknown }>(
       file: string,
       force = false
-    ): Promise<ExifTagsPlusMissing<T>> => {
+    ): Promise<IExifToolMetadata<T>> => {
       if (Object.keys(cache).includes(file) && !force) {
-        return cache[file] as unknown as ExifTagsPlusMissing<T>;
+        return cache[file] as unknown as IExifToolMetadata<T>;
       }
       // ExifTool
       const meta = improveMetaResults<T>(await exiftool.read(file));
@@ -93,7 +93,7 @@ export function useExifTools(options: IExifToolOptions = {}) {
         }
       });
       if (cache[image]) {
-        cache[image] = {} as ExifTagsPlusMissing;
+        cache[image] = {} as IExifToolMetadata;
       }
 
       if (!keepOriginalCopy) {
@@ -120,7 +120,7 @@ export function useExifTools(options: IExifToolOptions = {}) {
         );
       }
       await exiftool.write(file, { [tag]: value });
-      cache[file] = { ...cache[file], [tag]: value as ExifTagsPlusMissing };
+      cache[file] = { ...cache[file], [tag]: value as IExifToolMetadata };
 
       if (!keepOriginalCopy) {
         removeOriginalFile(file);
@@ -159,7 +159,7 @@ export function useExifTools(options: IExifToolOptions = {}) {
       await refreshCache(image, returnMeta, tags);
 
       const results = (returnMeta ? cache[image] : undefined) as R extends true
-        ? ExifTagsPlusMissing
+        ? IExifToolMetadata
         : void;
 
       if (!keepOriginalCopy) {
@@ -190,7 +190,7 @@ export function useExifTools(options: IExifToolOptions = {}) {
       await refreshCache(image, returnMeta, eraser);
 
       const results = (returnMeta ? cache[image] : undefined) as R extends true
-        ? ExifTagsPlusMissing
+        ? IExifToolMetadata
         : void;
       if (!keepOriginalCopy) {
         removeOriginalFile(image);
@@ -214,7 +214,7 @@ export function useExifTools(options: IExifToolOptions = {}) {
       const result = await api.setTags(image, payload, returnMeta, keepOriginalCopy);
       await refreshCache(image, returnMeta, payload);
 
-      return result as R extends true ? ExifTagsPlusMissing : void;
+      return result as R extends true ? IExifToolMetadata : void;
     },
     /**
      * Sets the "title" of the image to all relevant meta-data properties
@@ -236,7 +236,7 @@ export function useExifTools(options: IExifToolOptions = {}) {
         removeOriginalFile(image);
       }
 
-      return (returnMeta ? cache[image] : undefined) as R extends true ? ExifTagsPlusMissing : void;
+      return (returnMeta ? cache[image] : undefined) as R extends true ? IExifToolMetadata : void;
     },
     /**
      * Returns the metadata derived from **ExifTool** but grouped into a set of useful

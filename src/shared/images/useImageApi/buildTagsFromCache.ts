@@ -1,5 +1,5 @@
 import { WriteTags } from "exiftool-vendored";
-import { IImageCache, ImageMetadata } from "~/@types/image-types";
+import { IImageCache, IImageCacheRef } from "~/@types/image-types";
 
 /**
  * Creates a dictionary of name/value pairs from a source file's cache, given an
@@ -11,7 +11,8 @@ export function buildTagsFromCache(
   sourceFile: string
 ) {
   return tags.reduce((acc, tag) => {
-    acc = { ...acc, [tag]: cache.source[sourceFile].meta[tag as keyof ImageMetadata] };
+    const c = cache.source[sourceFile] as IImageCacheRef<"tags">;
+    acc = { ...acc, [tag]: c.meta[tag] };
     return acc;
-  }, {});
+  }, {} as Record<string | keyof WriteTags, any>);
 }

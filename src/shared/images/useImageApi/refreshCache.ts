@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { format } from "date-fns";
-import { IImageRule } from "~/@types/image-types";
+import { IExifToolMetadata, IImageCacheRef, IImageRule } from "~/@types/image-types";
 import { DevopsError } from "~/errors";
 import { logger } from "~/shared/core/logger";
 import { emoji } from "~/shared/ui";
@@ -13,36 +13,52 @@ import { saveImageCache } from "./saveImageCache";
  */
 export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: string[]) {
   const log = logger();
-  const metaPromises = [];
-  const resizePromises = [];
+  type SourceImage = [sharp: IImageCacheRef, exif: IExifToolMetadata | undefined];
+  const sourceImages: Promise<SourceImage>[] = [];
+  const optimizedImages: Promise<IImageCacheRef[]>[] = [];
+
+  const now = Date.now();
   for (const file of stale) {
-    // get metadata for source images
-    metaPromises.push(
-      tools.exif.getMetadata(file, true).then(
-        (i) =>
-          (tools.cache.source[file] = {
-            ...tools.cache.source[file],
-            meta: {
-              ...(tools.cache.source[file]?.meta || {}),
-              ...i,
-              metaDetailLevel: "tags",
-            },
-          })
-      )
+    sourceImages.push(
+      Promise.all([
+        tools.sharp.getMetadata(file).then(
+          (m) =>
+            ({
+              file,
+              created: tools.cache.source[file]?.created || now,
+              modified: now,
+              isSourceImage: true,
+
+              size: m.size,
+              width: m.width,
+              height: m.height,
+
+              metaDetailLevel: "basic",
+              sharpMeta: m,
+            } as IImageCacheRef)
+        ),
+        (rule.metaDetail !== "basic"
+          ? rule.metaDetail === "categorical"
+            ? tools.exif.categorizedMetadata(file)
+            : tools.exif.getMetadata(file)
+          : Promise.resolve()) as Promise<IExifToolMetadata | undefined>,
+      ])
     );
-    // resize and convert to webformats
-    resizePromises.push(
-      tools.sharp.resizeToWebFormats(
-        file,
-        rule.destination,
-        rule.widths,
-        rule.preserveMeta ? {} : {}
-      )
-    );
+
+    optimizedImages.push(tools.sharp.resizeToWebFormats(file, rule.destination, rule.widths));
+  }
+  const sis = await Promise.all(sourceImages);
+  for (const si of sis) {
+    const [cacheRef, exifMeta] = si;
+    tools.cache.source[cacheRef.file] = {
+      ...cacheRef,
+      meta: exifMeta,
+      metaDetailLevel: rule.metaDetail,
+    };
   }
 
   /** the web-optimized images which have now been saved */
-  const resized = (await Promise.all(resizePromises)).flat();
+  const resized = (await Promise.all(optimizedImages)).flat();
 
   for (const f of resized) {
     tools.cache.converted[f.file] = f;
@@ -94,7 +110,6 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     )}`
   );
 
-  await Promise.all(metaPromises);
   if (rule.preserveMeta && rule.preserveMeta.length > 0) {
     const metaTransfers = [];
     for (const file of resized) {

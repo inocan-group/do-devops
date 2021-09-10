@@ -1,4 +1,5 @@
-import { IImageRule, ImageMetadata } from "~/@types";
+/* eslint-disable unicorn/numeric-separators-style */
+import { IExifToolMetadata, IImageRule, ISharpMetadata } from "~/@types";
 import { checkCacheFreshness } from "~/shared/images/useImageApi/checkCacheFreshness";
 
 describe("useImageApi()", () => {
@@ -22,9 +23,14 @@ describe("useImageApi()", () => {
             modified: fakeEpoch,
             created: fakeEpoch,
             file: "Flake.jpg",
+            rule: "fakerule",
+            width: 123,
+            height: 456,
+            metaDetailLevel: "basic",
             isSourceImage: true,
-            meta: {} as ImageMetadata,
             size: 1000,
+            sharpMeta: {} as ISharpMetadata,
+            meta: {} as IExifToolMetadata,
           },
         },
         converted: {},

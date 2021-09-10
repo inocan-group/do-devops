@@ -2,13 +2,13 @@
 
 // #region autoindexed files
 
-// index last changed at: 9th Sep, 2021, 11:13 AM ( GMT-7 )
+// index last changed at: 9th Sep, 2021, 12:27 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: image-guards.
+// files: errors, image-guards.
 
 // local file exports
-export * from "./image-guards";
 export * from "./errors";
+export * from "./image-guards";
 
 // Note:
 // -----

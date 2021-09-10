@@ -6,30 +6,20 @@
   "image": {
     "sourceDir": "test/data",
     "destinationDir": "temp",
+    "metaDetail": "categorical",
     "rules": [
       {
         "name": "testing",
         "source": "test/data",
         "destination": "temp",
+        "metaDetail": "categorical",
         "glob": "*.jpg",
-        "widths": [
-          640,
-          768,
-          1024,
-          1280,
-          1536
-        ],
+        "widths": [640, 768, 1024, 1280, 1536],
         "preBlur": true,
         "sidecarDetail": "none"
       }
     ],
-    "defaultWidths": [
-      640,
-      768,
-      1024,
-      1280,
-      1536
-    ],
+    "defaultWidths": [640, 768, 1024, 1280, 1536],
     "formatOptions": {
       "jpg": {
         "mozjpeg": true,
