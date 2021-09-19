@@ -12,6 +12,7 @@ import {
   askListQuestion,
   askForNestedDirectory,
 } from "~/shared/interactive";
+import { logger } from "~/shared/core";
 
 const filter = (v: string) => !v.startsWith(".") && v !== "node_modules";
 
@@ -20,13 +21,14 @@ const filter = (v: string) => !v.startsWith(".") && v !== "node_modules";
  * have any config for images yet.
  */
 export async function askConfigureImageOptimization(_o: Observations) {
+  const log = logger();
   const images = getImages(currentDirectory());
   const imageDirs = new Set<string>();
   for (const i of images) {
     imageDirs.add(path.dirname(i));
   }
 
-  console.log(
+  log.shout(
     wordWrap(
       chalk`Welcome weary traveler! It appears you've not configured {bold {blue images}} for this repo before. Let's get that out of the way now.\n`
     )
@@ -42,7 +44,7 @@ export async function askConfigureImageOptimization(_o: Observations) {
       leadChoices: [...imageDirs],
     }
   );
-  console.log();
+  log.info();
 
   const destinationDir = await askForNestedDirectory(
     wordWrap(
@@ -59,8 +61,8 @@ export async function askConfigureImageOptimization(_o: Observations) {
     }
   );
 
-  console.log();
-  console.log(
+  log.info();
+  log.shout(
     wordWrap(
       chalk`The {italic general} configuration of the image service is now complete but {italic rules} are a key component of having a complete setup. For this reason we will add one rule now and if you want to add more later simply run {blue dd image config} again and choose "add rule" from the options.\n\n`
     )
@@ -74,7 +76,7 @@ export async function askConfigureImageOptimization(_o: Observations) {
 
   rule.source = await askForNestedDirectory(
     wordWrap(
-      `Each rule must state a root directory for their {bold {blue source}} images;\nit is already defaulted to the general setting you chose earlier but if this rule should start somewhere else feel free to change`
+      chalk`Each rule must state a root directory for their {bold {blue source}} images;\nit is already defaulted to the general setting you chose earlier but if this rule should start somewhere else feel free to change`
     ),
     { name: "Rule Source Directory", filter, leadChoices: [sourceDir] }
   );
@@ -152,6 +154,17 @@ export async function askConfigureImageOptimization(_o: Observations) {
       sidecar: "none",
     },
   });
+
+  log.info(
+    chalk`\n\nFantastic, you have default properties configured {bold plus} your first rule defined!\n`
+  );
+  log.info(chalk`- to convert images run {blue dd image optimize} and your rule will be executed.`);
+  log.info(
+    chalk`- the {blue .do-devop.json} file in the root of the repo will host your configuration.`
+  );
+  log.info(
+    chalk`- you can always edit the config directly in the config file or if you prefer use the {blue dd image config} menu`
+  );
 
   return { sourceDir, targetDir: destinationDir, rules };
 }

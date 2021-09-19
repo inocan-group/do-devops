@@ -49,6 +49,8 @@ export type MonorepoObservation =
   | "monorepo";
 export type NpmObservation = "private" | "public" | "parent-private" | "parent-public";
 
+export type ImageObservations = "image-cache" | "image-ts-support" | "image-rules-defined";
+
 export type DoDevopObservation =
   | BaseObservations
   | GitObservation
@@ -60,6 +62,7 @@ export type DoDevopObservation =
   | DbObservation
   | MonorepoObservation
   | NpmObservation
+  | ImageObservations
   | FrameworkObservation
   | ServerlessObservation;
 
