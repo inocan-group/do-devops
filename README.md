@@ -72,6 +72,10 @@ Ok the remaining commands are a little less attached to the idea of AWS and Serv
 There are plenty more functions but this should give you a flavor and hopefully let you decide if you're interested.
 
 
+## Path Aliases
+
+In order to have the transpiled source and types resolve the Typescript path aliases we have installed `ts-patch` to patch **tsc** to allow for the plugin API to be used in the CLI. This then let's us use `typescript-transform-paths`.
+
 ## Contribution
 
 We welcome contributions as PR's but we ask that you respect the `eslint` rules that are defined in this repo from a code style standpoint and that you target the **develop** branch for your PR.

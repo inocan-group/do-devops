@@ -1,19 +1,25 @@
-import path from "path";
-import { existsSync, readdirSync } from "fs";
+import globby from "globby";
+import { dirname } from "path";
+import { getPackageJson } from "../npm";
+
+export type IMonoRepoPackages = {
+  name: string;
+  path: string;
+};
 
 /**
- * Gives back a list of packages in the **Lerna** monorepo. If the
- * "packages" directory does not exist then it will return
- * `false`, if there _is_ a packages directory but no sub-directories
- * you'll just get an empty array.
+ * Gets all subdirectories which have a `package.json` and
+ * are assumed to be distinct packages.
  */
-export function getMonoRepoPackages(baseDir: string) {
-  const dir = path.posix.join(baseDir, "packages");
-  if (!existsSync(dir)) {
-    return false;
-  }
+export async function getMonoRepoPackages(baseDir?: string): Promise<IMonoRepoPackages[]> {
+  const glob = ["**/package.json", "!**/node_modules"];
 
-  return readdirSync(dir, { withFileTypes: true })
-    .filter((i) => i.isDirectory())
-    .map((i) => i.name);
+  return (await globby(glob, { cwd: baseDir, deep: 10 }))
+    .map((i) => {
+      return {
+        name: getPackageJson(i).name,
+        path: dirname(i),
+      } as IMonoRepoPackages;
+    })
+    .filter((i) => i.path !== ".");
 }

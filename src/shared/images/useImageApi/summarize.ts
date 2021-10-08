@@ -2,10 +2,26 @@ import chalk from "chalk";
 import { formatDistance } from "date-fns";
 import { IImageCacheRef, IImageRule } from "~/@types/image-types";
 import { logger } from "~/shared/core/logger";
+import { emoji, wordWrap } from "~/shared/ui";
 import { IImageTools } from "../useImageApi";
 
 export function summarize(rules: IImageRule[], tools: IImageTools) {
   const log = logger();
+
+  if (!tools.cache) {
+    log.shout(
+      chalk`- ${emoji.eyeballs} there is no image cache; do you want to run {dd image convert} first?`
+    );
+  }
+  if (!tools.cache.source) {
+    console.log(
+      wordWrap(
+        chalk`- ${emoji.eyeballs} there appears to be something wrong with your image cache as the cache file does exist but the "source" folder is missing. Please have a look but it is probably best that you re-build the cache with {blue dd image optimize --force}`
+      )
+    );
+    process.exit();
+  }
+
   const sourceImages = Object.keys(tools.cache.source).reduce((acc, i) => {
     acc = [...acc, tools.cache.source[i]];
     return acc;

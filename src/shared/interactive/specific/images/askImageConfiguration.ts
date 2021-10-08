@@ -3,6 +3,7 @@ import { Keys } from "inferred-types";
 import { Observations } from "~/@types/observations";
 import { logger } from "~/shared/core/logger";
 import { ImageApi } from "~/shared/images/useImageApi";
+import { emoji } from "~/shared/ui";
 import { askAddImageRule, askChangeImageRule, askImageDefaults, askRemoveImageRule } from ".";
 import { askListQuestion } from "../..";
 
@@ -11,8 +12,12 @@ export async function askImageConfiguration(o: Observations, api: ImageApi) {
   log.info(chalk`Welcome back, your {bold {yellow image}} configuration summary is:\n`);
   log.info(chalk`{bold {yellow Rules:}}`);
   // const api: ImageApi = useImageApi(config.rules);
-  await api.summarize();
-  log.info();
+  if (!o.has("image-cache")) {
+    log.info(`- ${emoji.eyeballs} there is no image cache yet so no summary info is available.`);
+  } else {
+    await api.summarize();
+    log.info();
+  }
 
   const actions = ["Add Rule", "Remove Rule", "Change Rule", "Manage Defaults", "Quit"] as const;
   type Actions = Keys<typeof actions>;

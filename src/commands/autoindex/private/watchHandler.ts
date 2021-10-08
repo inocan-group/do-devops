@@ -5,6 +5,8 @@ import { processFiles } from "./processFiles";
 import { directoryFiles } from "~/shared/file";
 import { isAutoindexFile } from "./util";
 import { highlightFilepath } from "~/shared/ui";
+import { Observations } from "~/@types";
+import { WhiteBlackList } from ".";
 
 /** to avoid circular events, we need to allow certain files to be ignored */
 let filesToIgnore: string[] = [];
@@ -12,7 +14,12 @@ let filesToIgnore: string[] = [];
 /**
  * configures a watch handler for an `autoindex` watched directory
  */
-export function watchHandler(dir: string, options: IDictionary = {}) {
+export function watchHandler(
+  dir: string,
+  options: IDictionary = {},
+  o: Observations,
+  scope: WhiteBlackList
+) {
   const log = console.log.bind(console);
   return (evtBeingWatched: string) => {
     return (filepath: string) => {
@@ -59,7 +66,7 @@ export function watchHandler(dir: string, options: IDictionary = {}) {
       }
 
       if (indexFiles.length > 0) {
-        processFiles(indexFiles, { ...options, quiet: true }).then(() => log());
+        processFiles(indexFiles, { ...options, quiet: true }, o, scope).then(() => log());
       }
     };
   };

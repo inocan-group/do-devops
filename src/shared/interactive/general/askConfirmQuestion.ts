@@ -1,4 +1,5 @@
 import { ConfirmQuestion } from "inquirer";
+import { wordWrap } from "~/shared/ui";
 import { ask } from "./ask";
 
 /**
@@ -14,11 +15,15 @@ import { ask } from "./ask";
  * If you want to compose functions into an array of questions and then ask,
  * use `confirmQuestion()` instead.
  */
-export const askConfirmQuestion = async (question: string): Promise<boolean> => {
+export const askConfirmQuestion = async (
+  question: string,
+  defaultAnswer: boolean = true
+): Promise<boolean> => {
   const q: ConfirmQuestion = {
     type: "confirm",
     name: "yesOrNo",
-    message: question,
+    message: wordWrap(question),
+    default: defaultAnswer,
   };
   const answer = await ask(q);
   return answer.yesOrNo;

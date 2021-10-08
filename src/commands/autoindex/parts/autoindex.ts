@@ -1,21 +1,32 @@
 import chalk from "chalk";
 import globby from "globby";
-import path from "path";
+import path, { join } from "path";
 import { IDictionary } from "common-types";
-import { isAutoindexFile, processFiles, watchHandler } from "../private";
+import { isAutoindexFile, processFiles, watchHandler, WhiteBlackList } from "../private";
 import { getMonoRepoPackages } from "~/shared/file";
 import { FSWatcher, watch } from "chokidar";
-import { highlightFilepath } from "~/shared/ui";
+import { emoji, highlightFilepath } from "~/shared/ui";
 import { DoDevopsHandler } from "~/@types/command";
 import { IAutoindexOptions } from "./options";
+import { askForAutoindexConfig } from "~/shared/interactive";
+import { getProjectConfig } from "~/shared/config";
+import { getPackageJson } from "~/shared/npm";
+import { logger } from "~/shared/core";
+import { Observations } from "~/@types";
 
 /**
  * Watches for changes in any file where an autoindex file resides
  */
-function setupWatcherDir(dir: string, ignored: string[] = [], opts: IDictionary) {
+function setupWatcherDir(
+  dir: string,
+  ignored: string[] = [],
+  opts: IDictionary,
+  o: Observations,
+  scope: WhiteBlackList
+) {
   const EVENTS: string[] = ["add", "change", "unlink", "link"];
 
-  const h = watchHandler(dir, opts);
+  const h = watchHandler(dir, opts, o, scope);
 
   const watcher = watch(dir, {
     ignored,
@@ -42,7 +53,12 @@ function setupWatcherDir(dir: string, ignored: string[] = [], opts: IDictionary)
 /**
  * Watch for changes to autoindex files and add/remove file watchers in response
  */
-async function setupAutoIndexWatcher(watched: IDictionary<FSWatcher>, opts: IDictionary) {
+async function setupAutoIndexWatcher(
+  watched: IDictionary<FSWatcher>,
+  opts: IDictionary,
+  o: Observations,
+  scope: WhiteBlackList
+) {
   const log = console.log.bind(console);
   const watcher = watch("**/index.[jt]s", {
     ignored: "node_modules/*",
@@ -85,8 +101,8 @@ async function setupAutoIndexWatcher(watched: IDictionary<FSWatcher>, opts: IDic
           case "link":
             if (!watchedDirs.includes(dir) && isAutoindexFile(filepath)) {
               log(`- new autoindex file detected: ${highlightFilepath(filepath)}; watcher started`);
-              watched[filepath] = setupWatcherDir(dir, [], opts);
-              processFiles([filepath], opts);
+              watched[filepath] = setupWatcherDir(dir, [], opts, o, scope);
+              processFiles([filepath], opts, o, scope);
             }
             break;
           case "unlink":
@@ -120,56 +136,121 @@ async function setupAutoIndexWatcher(watched: IDictionary<FSWatcher>, opts: IDic
  * signature. If found then it _rebuilds_ thes file based on files in
  * the file's current directory
  */
-export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts }) => {
-  const monoRepoPackages: false | string[] = getMonoRepoPackages(process.cwd());
-  if (monoRepoPackages && !opts.quiet) {
+export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observations }) => {
+  const log = logger(opts);
+  if (opts.config) {
+    await askForAutoindexConfig(opts, observations);
+    process.exit();
+  }
+  const projectConfig = getProjectConfig();
+
+  const monoRepoPackages = await getMonoRepoPackages(process.cwd());
+  if (monoRepoPackages.length > 0 && !opts.quiet) {
     console.log(
-      chalk`{grey - monorepo detected with {yellow ${String(monoRepoPackages.length)}} packages}`
+      chalk`- ${emoji.eyeballs} monorepo detected with {yellow ${String(
+        monoRepoPackages.length
+      )}} packages`
+    );
+    for (const pkg of monoRepoPackages) {
+      console.log(chalk`{gray   - {bold ${pkg.name}} {italic at} {dim ${pkg.path}}}`);
+    }
+    console.log(
+      chalk`- ${emoji.run} will run each package separately based on it's own configuration`
     );
   }
 
-  const candidateFiles = (await globby(["**/index.ts", "**/index.js", "!**/node_modules"])).filter(
-    (i) => !i.endsWith(".d.ts")
-  );
+  monoRepoPackages.push({ path: ".", name: getPackageJson(process.cwd()).name });
+  const isMonorepo = monoRepoPackages.length > 1;
 
-  /** those files known to be autoindex files */
-  const autoIndexFiles = candidateFiles.filter((fc) => isAutoindexFile(fc));
-  if (!opts.quiet) {
+  for (const repo of monoRepoPackages) {
+    const isRoot = isMonorepo && repo.path === ".";
+    const name = isRoot ? `${repo.name} (ROOT)` : repo.name;
+    if (isMonorepo) {
+      log.info(chalk`\n- running {blue autoindex} on repo {bold {yellow ${name}}}\n`);
+    }
+    const indexGlobs = (projectConfig.autoindex?.indexGlobs || [
+      "**/index.ts",
+      "**/index.js",
+      "**/index.mjs",
+      "!**/*.d.ts",
+      "!**/node_modules",
+      ...(isMonorepo && repo.path === "."
+        ? monoRepoPackages.filter((i) => i.path !== ".").map((i) => `!${i.path}/**`)
+        : []),
+    ]) as readonly string[];
+
+    const candidateFiles = (await globby(indexGlobs, { cwd: join(process.cwd(), repo.path) })).map(
+      (i) => join(repo.path, i)
+    );
+    const bGlob = projectConfig.autoindex?.blacklistGlobs;
+    const blacklist = bGlob
+      ? (await globby(bGlob, { cwd: join(process.cwd(), repo.path) })).map((i) =>
+          join(repo.path, i)
+        )
+      : [];
+    const wGlob = projectConfig.autoindex?.whitelistGlobs;
+    const whitelist = wGlob
+      ? (await globby(wGlob, { cwd: join(process.cwd(), repo.path) })).map((i) =>
+          join(repo.path, i)
+        )
+      : undefined;
+
+    /** those files known to be autoindex files */
+    const autoIndexFiles = candidateFiles.filter((fc) => isAutoindexFile(fc));
     if (candidateFiles.length === autoIndexFiles.length) {
-      console.log(
-        chalk`- found {yellow ${String(
-          candidateFiles.length
-        )}} index files, all of which are setup to be autoindexed.\n`
-      );
+      if (candidateFiles.length > 0) {
+        log.info(
+          chalk`- found {yellow ${String(
+            candidateFiles.length
+          )}} index files, {bold {yellow {italic all}}} of which are setup to be autoindexed.`
+        );
+      }
     } else {
-      console.log(
+      log.info(
         chalk`- found {yellow ${String(
           candidateFiles.length
         )}} {italic candidate} files, of which {yellow ${String(
           autoIndexFiles.length
-        )}} have been setup to be autoindexed.\n`
+        )}} have been setup to be autoindexed.`
+      );
+      const diff = candidateFiles.length - autoIndexFiles.length;
+      if (diff > 0) {
+        log.info(chalk`- files {italic not} setup were:`);
+        const missing = candidateFiles.filter((i) => !autoIndexFiles.includes(i));
+        for (const file of missing) {
+          log.info(chalk`{dim   - ${file}}`);
+        }
+      }
+    }
+
+    if (autoIndexFiles.length > 0) {
+      await processFiles(autoIndexFiles, opts, observations, { whitelist, blacklist });
+    } else {
+      log.info(chalk`- No {italic index} files found in this package`);
+    }
+
+    if (opts.watch) {
+      /**
+       * A dictionary of all active watched directories. Keys are the directory path,
+       * values are the watcher object.
+       */
+      const watchedDirs: IDictionary<FSWatcher> = {};
+      setupAutoIndexWatcher(watchedDirs, opts, observations, { whitelist, blacklist });
+
+      for (const d of autoIndexFiles.map((i) => path.posix.dirname(i))) {
+        watchedDirs[d] = setupWatcherDir(d, [], opts, observations, { whitelist, blacklist });
+      }
+
+      console.log(
+        chalk`- watching {yellow {bold ${String(
+          autoIndexFiles.length
+        )}}} directories for autoindex changes`
       );
     }
   }
-
-  await processFiles(autoIndexFiles, opts);
-
-  if (opts.watch) {
-    /**
-     * A dictionary of all active watched directories. Keys are the directory path,
-     * values are the watcher object.
-     */
-    const watchedDirs: IDictionary<FSWatcher> = {};
-    setupAutoIndexWatcher(watchedDirs, opts);
-
-    for (const d of autoIndexFiles.map((i) => path.posix.dirname(i))) {
-      watchedDirs[d] = setupWatcherDir(d, [], opts);
-    }
-
-    console.log(
-      chalk`- watching {yellow {bold ${String(
-        autoIndexFiles.length
-      )}}} directories for autoindex changes`
-    );
+  if (isMonorepo) {
+    log.shout(chalk`\n- ${emoji.party} all repos have been updated with {blue autoindex}`);
+  } else {
+    log.shout(chalk`- ${emoji.party} {blue autoindex} updated successfully`);
   }
 };

@@ -1,6 +1,9 @@
 import { IPackageJson } from "common-types";
 import { DoDevopObservation } from "~/@types/observations";
+import { IMAGE_CACHE } from "~/constants";
+import { getProjectConfig } from "../config";
 import { currentDirectory, dirExists, fileExists, repoDirectory } from "../file";
+import { TS_IMAGE_SUPPORT_FILE } from "../images/useImageApi/createTsSupportFile";
 import {
   getPackageJson,
   hasDependency,
@@ -17,6 +20,7 @@ import { determineLinter } from "./index";
  */
 export function getObservations() {
   let observations: Set<DoDevopObservation> = new Set<DoDevopObservation>();
+  const projectConfig = getProjectConfig();
   let pkgJson: IPackageJson | undefined;
   try {
     pkgJson = getPackageJson();
@@ -52,6 +56,9 @@ export function getObservations() {
     }
     if (hasDevDependency("vite")) {
       observations.add("vite");
+    }
+    if (hasDevDependency("vue")) {
+      observations.add("vue");
     }
     if (hasDevDependency("esbuild")) {
       observations.add("esbuild");
@@ -103,6 +110,17 @@ export function getObservations() {
     // needed for serverless devops handoffs
     if (hasDevDependency("ts-node")) {
       observations.add("tsNode");
+    }
+
+    // Image Command
+    if (fileExists(IMAGE_CACHE)) {
+      observations.add("image-cache");
+    }
+    if (fileExists(TS_IMAGE_SUPPORT_FILE)) {
+      observations.add("image-ts-support");
+    }
+    if (projectConfig.image && projectConfig.image.rules.length > 0) {
+      observations.add("image-rules-defined");
     }
 
     // package manager & monorepo

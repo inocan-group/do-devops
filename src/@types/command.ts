@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 
 import { IDictionary, isNonNullObject } from "common-types";
+import { Observations } from ".";
 import { ICommandDescription } from "./general";
 import { IGlobalOptions } from "./global";
 import { DoDevopObservation } from "./observations";
@@ -168,6 +169,11 @@ export interface IDoDevopsCommand<T extends {} = {}> {
    * list unless the user explicitly requests it with `dd --showHidden`
    */
   hiddenCommand?: boolean;
+
+  config?: <T extends IGlobalOptions<any>, O extends Observations>(
+    opts: T,
+    observations: O
+  ) => Promise<void>;
 }
 
 export type Finalized<T extends IDoDevopsCommand> = Omit<

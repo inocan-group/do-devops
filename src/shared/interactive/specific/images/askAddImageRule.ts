@@ -22,7 +22,7 @@ export async function askAddImageRule(o: Observations, api: ImageApi) {
 
   rule.name = await askInputQuestion(`What will the new rule be called:`);
   rule.source = await askForNestedDirectory(
-    wordWrap(`What is the root directory for {bold {blue source images}}?`),
+    wordWrap(chalk`What is the root directory for {bold {blue source images}}?`),
     { name: "Source Directory", filter, leadChoices: [config.sourceDir] }
   );
   rule.destination = await askForNestedDirectory(
