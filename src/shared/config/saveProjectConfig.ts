@@ -2,6 +2,7 @@ import merge from "deepmerge";
 import { writeFileSync } from "fs";
 import { set } from "native-dash";
 import { IDoConfig, IProjectConfig, IProjectConfigFilled } from "~/@types";
+import { logger } from "../core";
 import { currentDirectory } from "../file";
 import { CONFIG_FILE, DEFAULT_PROJECT_CONFIG } from "./constants";
 import { getProjectConfig } from "./getProjectConfig";
@@ -41,13 +42,14 @@ async function saveProjectConfig(dotPath: string, payload: any): Promise<IProjec
 async function saveProjectConfig<
   T extends Partial<Omit<IDoConfig, "kind" | "userConfig" | "projectConfig">>
 >(first: T | string, second?: any): Promise<IProjectConfigFilled> {
+  const log = logger();
   let current = getProjectConfig();
   if (!current.projectConfig) {
     current = DEFAULT_PROJECT_CONFIG;
   }
   const newConfig =
     typeof first === "string" ? configSet(current, first, second) : configMerge(current, first);
-  console.log(newConfig);
+  log.whisper(newConfig);
 
   writeFileSync(currentDirectory(CONFIG_FILE), JSON.stringify(newConfig, null, 2), {
     encoding: "utf-8",

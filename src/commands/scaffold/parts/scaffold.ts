@@ -11,7 +11,7 @@ import { installEsLint, installTestFramework } from "~/shared/install";
 import chalk from "chalk";
 import { asyncExec } from "async-shelljs";
 import { getSubdirectories } from "~/shared/file/utility";
-import { wordWrap } from "~/shared/ui";
+import { emoji, wordWrap } from "~/shared/ui";
 
 const scaffolds = ["typescript", "eslint", "jest", "vitesse"];
 
@@ -56,8 +56,10 @@ export const handler: DoDevopsHandler<IGlobalOptions<IScaffoldOptions>> = async 
     }
 
     if (confirm) {
-      await asyncExec(`npx degit antfu/vitesse ${dir}`);
-      console.log(chalk``);
+      await asyncExec(`npx degit antfu/vitesse ${dir} --force`);
+      console.log(chalk`- vitesse template installed`);
+      await asyncExec(`pnpm install`);
+      console.log(chalk`\n- ${emoji.party} Vitesse template installed and all deps are loaded \n`);
     } else {
       process.exit();
     }
