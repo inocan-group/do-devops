@@ -57,6 +57,9 @@ export function getObservations() {
     if (hasDevDependency("vite")) {
       observations.add("vite");
     }
+    if (hasDevDependency("vue")) {
+      observations.add("vue");
+    }
     if (hasDevDependency("esbuild")) {
       observations.add("esbuild");
     }

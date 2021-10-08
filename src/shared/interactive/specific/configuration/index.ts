@@ -4,19 +4,10 @@
 
 // index last changed at: 10th Oct, 2021, 01:06 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: askAboutFileOverride, askForDependency, askForUnitTestFramework, askUserAboutEditorCommand, resolvePackageManagerConflict.
-// directories: configuration, images.
+// files: askForAutoindexConfig.
 
 // local file exports
-export * from "./askAboutFileOverride";
-export * from "./askForDependency";
-export * from "./askForUnitTestFramework";
-export * from "./askUserAboutEditorCommand";
-export * from "./resolvePackageManagerConflict";
-
-// directory exports
-export * from "./configuration/index";
-export * from "./images/index";
+export * from "./askForAutoindexConfig";
 
 // Note:
 // -----

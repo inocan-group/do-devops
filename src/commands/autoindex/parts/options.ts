@@ -2,6 +2,7 @@ import chalk from "chalk";
 import { IOptionDefinition } from "~/@types/option-types";
 
 export interface IAutoindexOptions {
+  config: boolean;
   add: string;
   glob: string;
   sfc: boolean;
@@ -12,6 +13,11 @@ export interface IAutoindexOptions {
 }
 
 export const options: IOptionDefinition = {
+  config: {
+    type: Boolean,
+    group: "local",
+    description: `configure autoindex for a project`,
+  },
   add: {
     type: String,
     group: "local",
