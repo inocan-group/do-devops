@@ -13,7 +13,7 @@ import { asyncExec } from "async-shelljs";
 import { getSubdirectories } from "~/shared/file/utility";
 import { emoji, wordWrap } from "~/shared/ui";
 
-const scaffolds = ["typescript", "eslint", "jest", "vitesse"];
+const scaffolds = ["typescript", "eslint", "jest", "vitesse", "vitesse-webext"];
 
 export const handler: DoDevopsHandler<IGlobalOptions<IScaffoldOptions>> = async ({
   opts,
@@ -27,12 +27,15 @@ export const handler: DoDevopsHandler<IGlobalOptions<IScaffoldOptions>> = async 
   if (which.includes("jest")) {
     await installTestFramework("jest", opts, observations);
   }
-  if (which.includes("vitesse")) {
+  if (which.includes("vitesse") || which.includes("vitesse-webext")) {
+    const pkg = which.includes("vitesse-ext") ? "vitesse-webext" : "vitesse";
     let confirm: boolean = true;
     let dir: string = ".";
     if (observations.has("packageJson")) {
       confirm = await askConfirmQuestion(
-        chalk`- install {bold {blue Vitesse}} starter template for VueJS/ViteJS into {bold {yellow current}} directory?`
+        chalk`- install {bold {blue Vitesse${
+          pkg.includes("ext") ? chalk`{italic  browser extension}` : ""
+        }}} starter template for VueJS/ViteJS into {bold {yellow current}} directory?`
       );
     } else {
       const dirChoices = [
@@ -56,10 +59,16 @@ export const handler: DoDevopsHandler<IGlobalOptions<IScaffoldOptions>> = async 
     }
 
     if (confirm) {
-      await asyncExec(`npx degit antfu/vitesse ${dir} --force`);
-      console.log(chalk`- vitesse template installed`);
+      asyncExec(`npx degit antfu/${pkg} ${dir} --force`);
+      console.log(
+        chalk`- vitesse ${pkg.includes("ext") ? "browser extension " : ""}template installed`
+      );
       await asyncExec(`pnpm install`);
-      console.log(chalk`\n- ${emoji.party} Vitesse template installed and all deps are loaded \n`);
+      console.log(
+        chalk`\n- ${emoji.party} Vitesse ${
+          pkg.includes("ext") ? "browser extension " : ""
+        }template installed and all deps are loaded \n`
+      );
     } else {
       process.exit();
     }

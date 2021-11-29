@@ -1,4 +1,6 @@
 import { astParseWithTypescript, namedExports } from "./index";
+import { NamedTypes } from "ast-types/gen/namedTypes";
+export type CommentLine = NamedTypes["CommentLine"];
 
 // const types = recast.types.namedTypes;
 // const builders = recast.types.builders;
@@ -9,7 +11,7 @@ import { astParseWithTypescript, namedExports } from "./index";
  * it will also look for comments associated with the `fn`
  * export.
  */
-export function findHandlerComments(filename: string) {
+export function findHandlerComments(filename: string): unknown[] {
   const ast = astParseWithTypescript(filename);
   const fn = namedExports(ast).find((i) => i.name === "fn");
   const fnComments = fn ? fn.comments.filter((i) => i.leading) : [];
