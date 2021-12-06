@@ -43,7 +43,7 @@
     "build:bin": "npx tsup src/dd.ts --out-dir bin --format='cjs,esm'",
     "build:dist": "npx tsup src/shared/index.ts --dts --format='cjs,esm'",
     "circular": "yarn madge src --extensions ts --circular",
-    "clean": "rimraf src/**/*.js && rimraf bin",
+    "clean": "rimraf src/**/*.js dist/**/* bin/**/*",
     "dd": "./bin/dd.js",
     "prepublish": "run-s lint build",
     "leaves": "yarn madge src --extensions ts --leaves",
