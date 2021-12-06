@@ -164,7 +164,7 @@ export function getObservations() {
       // repo may very well just be a package in a monorepo
       try {
         const parent = getPackageJson(repoDirectory());
-        if (parent?.private === "true") {
+        if (parent?.private === true) {
           observations.add("parent-private");
         } else {
           observations.add("parent-public");

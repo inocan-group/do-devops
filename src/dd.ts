@@ -9,7 +9,7 @@ import {
   isKnownCommand,
   parseCmdArgs,
   proxyToPackageManager,
-} from "~/shared/core";
+} from "~/shared/core/index";
 import { help } from "./shared/core/help";
 import { inverted } from "./shared/ui";
 import { getObservations } from "./shared/observations/getObserverations";
