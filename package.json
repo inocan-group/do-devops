@@ -1,6 +1,6 @@
 {
   "name": "dd",
-  "version": "0.14.2",
+  "version": "0.15.0",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",
@@ -18,24 +18,34 @@
   },
   "license": "MIT",
   "author": "Ken Snyder",
-  "main": "./bin/index.js",
-  "typings": "./bin/index.d.ts",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "module": "./dist/index.mjs",
+  "exports": {
+    "*": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "bin": {
     "dd": "./bin/dd.js",
     "do": "./bin/dd.js"
   },
   "files": [
     "bin",
-    "templates"
+    "templates",
+    "dist"
   ],
   "scripts": {
     "prepare": "ts-patch install -s",
-    "build": "run-s lint clean build:bundle",
-    "build:bundle": "tsc -p tsconfig.build.json && chmod +x bin/dd.js",
+    "build": "run-s clean build:bundle",
+    "build:bundle": "run-p build:bin build:dist",
+    "build:bin": "npx tsup src/dd.ts --out-dir bin --format='cjs,esm'",
+    "build:dist": "npx tsup src/shared/index.ts --dts --format='cjs,esm'",
     "circular": "yarn madge src --extensions ts --circular",
     "clean": "rimraf src/**/*.js && rimraf bin",
     "dd": "./bin/dd.js",
-    "prepublish": "yarn lint",
+    "prepublish": "run-s lint build",
     "leaves": "yarn madge src --extensions ts --leaves",
     "lint": "run-s lint:*",
     "lint:src": "yarn eslint src/**/*.ts --fix ",
@@ -83,6 +93,7 @@
     "simple-git": "^2.45.1",
     "smartwrap": "^2.0.2",
     "table": "^6.6.0",
+    "ts-morph": "^13.0.2",
     "typed-mapper": "^0.4.1",
     "webpack": "^4.46.0"
   },
@@ -118,6 +129,7 @@
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
     "ts-patch": "^1.4.4",
+    "tsup": "^5.10.1",
     "typescript": "^4.4.2",
     "typescript-transform-paths": "3.3.1"
   }
