@@ -1,6 +1,6 @@
 {
   "name": "dd",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",
@@ -29,7 +29,8 @@
   },
   "bin": {
     "dd": "./bin/dd.js",
-    "do": "./bin/dd.js"
+    "do": "./bin/dd.js",
+    "edd": "./bin/dd.mjs"
   },
   "files": [
     "bin",
@@ -46,6 +47,7 @@
     "clean": "rimraf src/**/*.js dist/**/* bin/**/*",
     "dd": "./bin/dd.js",
     "prepublish": "run-s lint build",
+    "prepublishOnly": "run-s lint build",
     "leaves": "yarn madge src --extensions ts --leaves",
     "lint": "run-s lint:*",
     "lint:src": "yarn eslint src/**/*.ts --fix ",
