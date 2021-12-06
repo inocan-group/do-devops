@@ -21,6 +21,7 @@
     "declaration": true,
     "declarationMap": true,
     "outDir": "bin",
+    "tsBuildInfoFile": ".tsbuildinfo",
 
     "paths": {
       "~/*": ["src/*"]

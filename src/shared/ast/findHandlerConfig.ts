@@ -15,6 +15,7 @@ export function findHandlerConfig(
   const ast = astParseWithTypescript(filename);
   const hash: IDictionary = {};
   const config = namedExports(ast).find((i) => i.name === "config");
+
   if (!config) {
     return;
   } else {
