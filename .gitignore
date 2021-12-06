@@ -4,3 +4,4 @@ bin/*
 converage/*
 .image-metadata.json
 temp/*
+dist/*
