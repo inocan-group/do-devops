@@ -1,9 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": false,
     "declarationMap": false,
-    "outDir": "bin"
+    "declaration": false,
+    "composite": false,
+    "outDir": "./bin",
+    "noEmit": false,
+    "tsBuildInfoFile": ".tsbuildinfo-cli"
   },
   "include": ["src"],
   "exclude": ["test", "bin", "node_modules"]

@@ -5,3 +5,4 @@ converage/*
 .image-metadata.json
 temp/*
 dist/*
+.tsbuildinfo*
