@@ -8,16 +8,19 @@ import path from "path";
 export async function findAllHandlerFiles() {
   const glob = path.join(process.env.PWD || "", "/src/handlers/**/*.ts");
   const files = sync(glob);
-  const handlers = [];
+  const handlers: any[] = [];
   console.log(files);
 
-  for await (const file of files) {
-    console.log(file);
+  // const project = new Project();
+  // project.addSourceFilesAtPaths(files);
 
-    const ref = await import(file);
-    if (ref.handler) {
-      handlers.push({ file, ref });
-    }
-  }
+  // TODO:
+
+  // for await (const file of files) {
+  // const ref = await import(file);
+  // if (ref.handler) {
+  //   handlers.push({ file, ref });
+  // }
+  // }
   console.log(handlers.map((i) => i.file));
 }
