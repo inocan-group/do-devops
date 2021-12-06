@@ -1,4 +1,10 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false,
+    "outDir": "bin"
+  },
+  "include": ["src"],
   "exclude": ["test", "bin", "node_modules"]
 }

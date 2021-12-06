@@ -1,11 +1,9 @@
 /* eslint-disable unicorn/import-style */
 import chalk, { Modifiers, ForegroundColor } from "chalk";
 
-export type ModifiedForegroundColor = [
-  typeof Modifiers | undefined,
-  typeof ForegroundColor
-];
-export type ForegroundColor = typeof ForegroundColor;
+export type ModifiedForegroundColor = [Modifiers | undefined, ForegroundColor];
+
+export { Modifiers, ForegroundColor };
 
 /**
  * Uses `chalk` to present a nicely formatted
