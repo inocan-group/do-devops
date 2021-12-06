@@ -6,7 +6,8 @@
     "composite": false,
     "outDir": "./bin",
     "noEmit": false,
-    "tsBuildInfoFile": ".tsbuildinfo-cli"
+    "incremental": false,
+    "tsBuildInfoFile": null
   },
   "include": ["src"],
   "exclude": ["test", "bin", "node_modules"]

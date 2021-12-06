@@ -29,8 +29,7 @@
   },
   "bin": {
     "dd": "./bin/dd.js",
-    "do": "./bin/dd.js",
-    "edd": "./bin/dd.mjs"
+    "do": "./bin/dd.js"
   },
   "files": [
     "bin",
