@@ -73,13 +73,13 @@ export interface IGlobalConfig {
 
 export interface ICommandConfig {
   autoindex?: {
-    /** the glob patterns used to identify autoindex files */
-    indexGlobs: string[];
-
+    /**
+     * Glob patterns used to find candidate autoindex files
+     */
     whitelistGlobs?: string[];
 
     /**
-     * glob patterns used to exclude files or directories
+     * Glob patterns to exclude autoindex files
      */
     blacklistGlobs: string[];
 

@@ -20,9 +20,9 @@ export async function installDevDep(
   const response = exec(cmd);
   if (response.code === 0) {
     log.info(
-      chalk`\n- ${emoji.party} package${
+      chalk`\n- ${emoji.checkmark} package${
         packages.length > 1 ? "s" : ""
-      } [{italic {gray ${packages.join(", ")}}}] {italic installed} as dev dependenc${
+      } [ {italic {gray ${packages.join(", ")}}} ] {italic installed} as dev dependenc${
         packages.length > 1 ? "ies" : "y"
       }\n`
     );

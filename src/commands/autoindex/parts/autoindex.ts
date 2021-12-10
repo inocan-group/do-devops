@@ -14,6 +14,9 @@ import { getPackageJson } from "~/shared/npm";
 import { logger } from "~/shared/core";
 import { Observations } from "~/@types";
 
+export const WHITE_LIST_DEFAULTS = ["**/index.ts"];
+export const BLACK_LIST_DEFAULTS = ["!**/*.d.ts", "!**/node_modules"];
+
 /**
  * Watches for changes in any file where an autoindex file resides
  */
@@ -168,32 +171,35 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
     if (isMonorepo) {
       log.info(chalk`\n- running {blue autoindex} on repo {bold {yellow ${name}}}\n`);
     }
-    const indexGlobs = (projectConfig.autoindex?.indexGlobs || [
-      "**/index.ts",
-      "**/index.js",
-      "**/index.mjs",
-      "!**/*.d.ts",
-      "!**/node_modules",
-      ...(isMonorepo && repo.path === "."
-        ? monoRepoPackages.filter((i) => i.path !== ".").map((i) => `!${i.path}/**`)
-        : []),
-    ]) as readonly string[];
 
-    const candidateFiles = (await globby(indexGlobs, { cwd: join(process.cwd(), repo.path) })).map(
-      (i) => join(repo.path, i)
-    );
-    const bGlob = projectConfig.autoindex?.blacklistGlobs;
-    const blacklist = bGlob
-      ? (await globby(bGlob, { cwd: join(process.cwd(), repo.path) })).map((i) =>
-          join(repo.path, i)
-        )
-      : [];
-    const wGlob = projectConfig.autoindex?.whitelistGlobs;
-    const whitelist = wGlob
-      ? (await globby(wGlob, { cwd: join(process.cwd(), repo.path) })).map((i) =>
-          join(repo.path, i)
-        )
-      : undefined;
+    const whitelist = projectConfig.autoindex?.whitelistGlobs || WHITE_LIST_DEFAULTS;
+    const blacklist = projectConfig.autoindex?.blacklistGlobs || BLACK_LIST_DEFAULTS;
+
+    // const blacklist = bGlob
+    //   ? (await globby(bGlob, { cwd: join(process.cwd(), repo.path) })).map((i) =>
+    //       join(repo.path, i)
+    //     )
+    //   : [];
+    // const whitelist = wGlob
+    //   ? (await globby(wGlob, { cwd: join(process.cwd(), repo.path) })).map((i) =>
+    //       join(repo.path, i)
+    //     )
+    //   : undefined;
+
+    // const indexGlobs = (projectConfig.autoindex?.indexGlobs || [
+    //   "**/index.ts",
+    //   "**/index.js",
+    //   "**/index.mjs",
+    //   "!**/*.d.ts",
+    //   "!**/node_modules",
+    //   ...(isMonorepo && repo.path === "."
+    //     ? monoRepoPackages.filter((i) => i.path !== ".").map((i) => `!${i.path}/**`)
+    //     : []),
+    // ]) as readonly string[];
+
+    const candidateFiles = (
+      await globby([...whitelist, ...blacklist], { cwd: join(process.cwd(), repo.path) })
+    ).map((i) => join(repo.path, i));
 
     /** those files known to be autoindex files */
     const autoIndexFiles = candidateFiles.filter((fc) => isAutoindexFile(fc));

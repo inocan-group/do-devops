@@ -7,19 +7,49 @@ import {
   askInputQuestion,
   askListQuestion,
 } from "~/shared/interactive";
-import { installEsLint, installTestFramework } from "~/shared/install";
+import {
+  installEsLint,
+  installGit,
+  installGitIgnore,
+  installTestFramework,
+  installTypescript,
+} from "~/shared/install";
 import chalk from "chalk";
 import { asyncExec } from "async-shelljs";
 import { getSubdirectories } from "~/shared/file/utility";
 import { emoji, wordWrap } from "~/shared/ui";
+import { Keys } from "inferred-types";
 
-const scaffolds = ["typescript", "eslint", "jest", "vitesse", "vitesse-webext"];
+const scaffolds = [
+  "gitignore",
+  "git",
+  "typescript",
+  "eslint",
+  "jest",
+  "vitesse",
+  "vitesse-webext",
+] as const;
 
 export const handler: DoDevopsHandler<IGlobalOptions<IScaffoldOptions>> = async ({
   opts,
   observations,
 }) => {
-  const which = await askCheckboxQuestion("choose the scaffolds you want to use", scaffolds);
+  opts = { ...opts, silent: true };
+  const which = await askCheckboxQuestion<Keys<typeof scaffolds>>(
+    "choose the scaffolds you want to use",
+    scaffolds
+  );
+
+  if (which.includes("gitignore")) {
+    await installGitIgnore(opts);
+  }
+  if (which.includes("git")) {
+    await installGit(opts);
+  }
+
+  if (which.includes("typescript")) {
+    await installTypescript(opts, observations);
+  }
 
   if (which.includes("eslint")) {
     await installEsLint(opts, observations);
@@ -28,7 +58,7 @@ export const handler: DoDevopsHandler<IGlobalOptions<IScaffoldOptions>> = async 
     await installTestFramework("jest", opts, observations);
   }
   if (which.includes("vitesse") || which.includes("vitesse-webext")) {
-    const pkg = which.includes("vitesse-ext") ? "vitesse-webext" : "vitesse";
+    const pkg = which.includes("vitesse-webext") ? "vitesse-webext" : "vitesse";
     let confirm: boolean = true;
     let dir: string = ".";
     if (observations.has("packageJson")) {
