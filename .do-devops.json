@@ -2,7 +2,7 @@
   "kind": "project",
   "projectConfig": true,
   "general": {
-    "pkgManager": "yarn"
+    "pkgManager": "pnpm"
   },
   "aws": {},
   "image": {
@@ -16,24 +16,12 @@
         "destination": "temp",
         "metaDetail": "categorical",
         "glob": "*.jpg",
-        "widths": [
-          640,
-          768,
-          1024,
-          1280,
-          1536
-        ],
+        "widths": [640, 768, 1024, 1280, 1536],
         "preBlur": true,
         "sidecarDetail": "none"
       }
     ],
-    "defaultWidths": [
-      640,
-      768,
-      1024,
-      1280,
-      1536
-    ],
+    "defaultWidths": [640, 768, 1024, 1280, 1536],
     "formatOptions": {
       "jpg": {
         "mozjpeg": true,
