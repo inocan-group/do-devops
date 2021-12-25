@@ -196,6 +196,7 @@ export function watch(watchList: IAutoindexWatchlist[], opts: Options<IAutoindex
       whitelist.on("remove", whitewatcher(repo, "remove", log));
     });
     const indexlist = w.watch(repo.indexglobs, {
+      ignored: repo.blackglobs,
       cwd: path.posix.join(process.cwd(), repo.dir),
     });
     indexlist.on("ready", () => {
