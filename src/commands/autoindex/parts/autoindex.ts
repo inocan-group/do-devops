@@ -31,14 +31,7 @@ export const BLACK_LIST_DEFAULTS = ["src/**/*.d.ts", "packages/**/*"];
  * signature. If found then it _rebuilds_ thes file based on files in
  * the file's current directory
  */
-export const handler: DoDevopsHandler<IAutoindexOptions> = async ({
-  opts,
-  observations,
-  argv,
-  raw,
-}) => {
-  console.log({ argv, raw, opts });
-
+export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observations, argv }) => {
   let projectConfig = getProjectConfig();
   // the sfc flag on CLI is inverted logically
   opts = { ...opts, sfc: opts.sfc === false ? false : true };
@@ -156,7 +149,13 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({
     if (isMonorepo) {
       log.shout(chalk`\n- ${emoji.party} all repos have been updated with {blue autoindex}`);
     } else {
-      log.shout(chalk`- ${emoji.party} {blue autoindex} updated successfully`);
+      log.shout(
+        chalk`- ${emoji.party} {blue autoindex} updated successfully ${
+          argv?.length > 0
+            ? chalk`{dim ({italic for ${argv.map((a) => highlightFilepath(a)).join(", ")})})}`
+            : ""
+        }`
+      );
     }
   }
 };

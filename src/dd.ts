@@ -11,11 +11,12 @@ import {
   proxyToPackageManager,
 } from "~/shared/core/index";
 import { help } from "./shared/core/help";
-import { inverted } from "./shared/ui";
+import { emoji, inverted } from "./shared/ui";
 import { getObservations } from "./shared/observations/getObserverations";
 import { doDevopsVersion, commandAnnouncement, hasArgv, getArgvOption } from "./shared/core/util";
 import { hasScript } from "./shared/npm";
 import { CommandParsing } from "./@types/global";
+import { isDevopsError } from "./@type-guards";
 
 (async () => {
   // pull off the command and stop there
@@ -86,13 +87,25 @@ import { CommandParsing } from "./@types/global";
   } else {
     // check if the command is an **npm** script name
     // and proxy to it if it is
-    if (hasScript(cmdName)) {
+    let useScriptProxy: boolean | undefined;
+    try {
+      useScriptProxy = hasScript(cmdName);
+    } catch (error) {
+      useScriptProxy =
+        isDevopsError(error) && error.classification === "not-ready/missing-package-json"
+          ? false
+          : undefined;
+    }
+
+    if (useScriptProxy) {
       proxyToPackageManager(cmdName, observations, mainCommand._unknown);
     } else {
+      const noPkgJsonMsg =
+        typeof useScriptProxy === "undefined"
+          ? ""
+          : chalk`\n\n{dim - Note: you're in a directory with no {italic package.json} file so if you\nwere trying to proxy a script please move to the right directory first.}`;
       console.log(
-        `${chalk.bold.red("Whoops! ")} ${chalk.italic.yellowBright(
-          cmdName
-        )} is an unknown command! \n\n` +
+        chalk`${emoji.poop} {italic {yellowBright ${cmdName}}} is an unknown command!${noPkgJsonMsg} \n\n` +
           `- Valid command syntax is: ${chalk.bold.inverse(
             " dd [command] <options> "
           )}\n  where valid commands are: ${chalk.italic(

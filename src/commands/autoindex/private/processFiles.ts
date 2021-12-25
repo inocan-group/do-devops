@@ -18,6 +18,7 @@ import { getFileComponents, getSubdirectories } from "~/shared/file";
 import { IAutoindexOptions } from "../parts";
 import { appendFile, writeFile } from "fs/promises";
 import { existsSync, readFileSync } from "fs";
+import { fileHasExports } from "~/shared/ast";
 
 export interface WhiteBlackList {
   whitelist: string[];
@@ -114,9 +115,12 @@ export async function processFiles(
     const orphans: string[] = [];
     const noIndexFile: string[] = [];
     const explicitDirRemoval: string[] = [];
+    const noExportDir: string[] = [];
 
     const dirs = getSubdirectories(dir).reduce((acc, d) => {
-      const child = path.posix.join(dir, d, "/index.ts");
+      const ts = path.posix.join(dir, d, "/index.ts");
+      const js = path.posix.join(dir, d, "/index.js");
+      const child = ts || js;
       if (!existsSync(child)) {
         log.whisper(
           chalk`{gray - autoindex file ${highlightFilepath(
@@ -141,6 +145,14 @@ export async function processFiles(
         );
         explicitDirRemoval.push(d);
         return acc;
+      } else if (!fileHasExports(child)) {
+        log.info(
+          chalk`{gray - autoindex file ${highlightFilepath(
+            ai
+          )} will not include the directory {blue ${d}} because it has {italic {red no exports}}}`
+        );
+        noExportDir.push(d);
+        return acc;
       }
 
       return [...acc, d];
@@ -157,6 +169,7 @@ export async function processFiles(
           orphans,
           noIndexFile,
           explicitDirRemoval,
+          noExportDir,
           sfc: opts.sfc || false,
         })
       ),

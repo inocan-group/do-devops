@@ -41,7 +41,7 @@ export async function determineProfile(
       return serverlessYaml.provider.profile;
     }
   } else {
-    console.log({ observations });
+    // console.log({ observations });
   }
 
   let doConfig: IIntegratedConfig | IProjectConfig | IUserConfig;
