@@ -40,6 +40,13 @@ const command: IDoDevopsCommand<IInfoOptions> = {
     "Summarized information about the current repo; or alternatively a set of external npm packages (if stated).",
   syntax: "dd info <repo1> <repo2> ... [options]",
   options: {
+    argv: {
+      type: String,
+      description: chalk`{italic optionally} pass in npm packages to get info on them`,
+      group: "local",
+      defaultOption: true,
+      multiple: true,
+    },
     allDeps: {
       type: Boolean,
       alias: "a",
