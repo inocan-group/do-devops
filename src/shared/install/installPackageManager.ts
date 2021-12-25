@@ -1,12 +1,12 @@
 import chalk from "chalk";
-import { IGlobalOptions, Observations, PackageManagerObservation } from "~/@types";
+import { Options, Observations, PackageManagerObservation } from "~/@types";
 import { DevopsError } from "~/errors";
 import { logger, proxyToPackageManager } from "~/shared/core";
 import { askListQuestion } from "~/shared/interactive";
 import { saveProjectConfig } from "~/shared/config";
 
 export async function installPackageManager(
-  opts: IGlobalOptions<{ silent: boolean; manager?: PackageManagerObservation }>,
+  opts: Options<{ silent: boolean; manager?: PackageManagerObservation }>,
   observations: Observations
 ) {
   const log = logger(opts);

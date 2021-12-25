@@ -35,7 +35,7 @@ export async function getServerlessBuildConfiguration(): Promise<IServerlessAcco
       "not-ready/missing-package-json"
     );
   }
-  const knownAccountInfo: Partial<IServerlessAccountInfo> = {
+  const knownAccountInfo = {
     ...(modern
       ? transformYeomanFormat(getYeomanConfig())
       : await getAccountInfoFromServerlessYaml()),
@@ -43,7 +43,7 @@ export async function getServerlessBuildConfiguration(): Promise<IServerlessAcco
     pluginsInstalled: Object.keys(pkg.devDependencies || {}).filter((i) =>
       i.startsWith("serverless-")
     ),
-  };
+  } as Partial<IServerlessAccountInfo>;
 
   const accountInfo = await askForAccountInfo(knownAccountInfo);
 

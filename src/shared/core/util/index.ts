@@ -7,6 +7,7 @@
 // files: commandAnnouncement, doDevopsVersion, finalizeCommandDefinition, formatCommandsSection, globalCommandDescriptions.
 
 // local file exports
+export * from "./argv";
 export * from "./commandAnnouncement";
 export * from "./doDevopsVersion";
 export * from "./finalizeCommandDefinition";

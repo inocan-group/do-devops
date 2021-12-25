@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { IDictionary } from "common-types";
 import {
   DoDevopObservation,
@@ -7,6 +8,7 @@ import {
   isDynamicCommandDefinition,
 } from "~/@types";
 import { globalOptions } from "~/shared/core";
+import { getArgvOption, hasArgv } from "./argv";
 
 /**
  * Gets _finalized_ meta information about the specific functions where being
@@ -32,10 +34,24 @@ export function finalizeCommandDefinition(
     ? cmdDefn.subCommands(observations, options)
     : cmdDefn.subCommands;
 
+  const argv = hasArgv(cmdDefn) ? chalk` {italic {dim argv[]}}` : "";
+  const argvDescription = getArgvOption(cmdDefn)?.description
+    ? chalk`\n\n\t\t{bold {blue [argv]:}} ${getArgvOption(cmdDefn)?.description}`
+    : "";
+
+  const subCommandSyntax =
+    subCommands && subCommands.length > 0
+      ? chalk` {bold <cmd:}{dim ${subCommands
+          .map((i) => i.name)
+          .join(chalk`{blue {bold |}}`)}}{bold >}`
+      : "";
+
   return {
     kind: cmdDefn.kind,
     handler: cmdDefn.handler,
-    syntax: cmdDefn.syntax || `dd ${cmdDefn.kind}${cmdDefn.subCommands ? " <cmd>" : ""} [options]`,
+    syntax:
+      cmdDefn.syntax ||
+      chalk`dd ${cmdDefn.kind}${subCommandSyntax}${argv} [{italic options}]${argvDescription}`,
     description,
     subCommands,
     options: { ...cmdDefn.options, ...globalOptions },

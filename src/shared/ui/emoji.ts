@@ -9,6 +9,8 @@ export const enum emoji {
   thumbsUp = "\uD83D\uDC4D",
   /** 😡 */
   angry = "\uD83D\uDE21",
+  /** 🤔 */
+  confused = "\u{1F914}",
   /** 🤖 */
   robot = "\uD83E\uDD16",
   /** 👁 */

@@ -7,9 +7,9 @@ import { getAwsProfile } from "~/shared/aws";
 import { getServerlessYaml } from "~/shared/serverless";
 import { DoDevopObservation } from "~/@types/observations";
 import { getIntegratedConfig, getUserConfig } from "~/shared/config";
-import { configIsReady, IGlobalOptions } from "~/@types";
+import { configIsReady, Options } from "~/@types";
 
-export interface IRegionOptions extends IGlobalOptions {
+export interface IRegionOptions extends Options {
   interactive?: boolean;
   region?: string;
   profile?: string;

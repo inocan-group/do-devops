@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { exec } from "shelljs";
-import { IGlobalOptions } from "~/@types";
+import { Options } from "~/@types";
 import { DevopsError } from "~/errors";
 import { logger } from "~/shared/core";
 import { emoji } from "~/shared/ui";
@@ -18,7 +18,7 @@ import { getFileComponents } from "./getFileComponents";
  * Errors:
  *  - `file/file-does-not-exist`
  */
-export function tscValidation(filename: string, opts: IGlobalOptions = {}): boolean {
+export function tscValidation(filename: string, opts: Options = {}): boolean {
   const log = logger(opts);
   const localTsc = currentDirectory("node_modules/.bin/tsc");
   const localExists = fileExists(localTsc);

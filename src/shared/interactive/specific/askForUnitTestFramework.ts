@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { equal } from "native-dash";
 
-import { ICommandConfig, IGlobalOptions, TestObservation } from "~/@types";
+import { ICommandConfig, Options, TestObservation } from "~/@types";
 import { TEST_FRAMEWORKS } from "~/constants";
 import { getUserConfig, saveUserConfig } from "~/shared/config";
 import { logger } from "~/shared/core";
@@ -14,7 +14,7 @@ import { askCheckboxQuestion, askConfirmQuestion, askListQuestion } from "~/shar
  * the **test** configuration requirements.
  */
 export async function askForUnitTestFramework(
-  opts: IGlobalOptions<{ unitTestFramework: TestObservation }> = {}
+  opts: Options<{ unitTestFramework: TestObservation }> = {}
 ): Promise<ICommandConfig["test"] | false> {
   const log = logger(opts);
 

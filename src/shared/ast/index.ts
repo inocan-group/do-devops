@@ -11,6 +11,7 @@ export * from "./astParseWithAcorn";
 export * from "./astParseWithTypescript";
 export * from "./findHandlerComments";
 export * from "./findHandlerConfig";
+export * from "./fileHasExports";
 export * from "./getDefaultExport";
 export * from "./getValidServerlessHandlers";
 export * from "./getValidStepFunctions";
@@ -44,7 +45,7 @@ export * from "./validateWebpackConfig";
 // below this file will not reference this autoindex file:
 //
 //    - autoindex:named, orphan
-// 
+//
 // Also be aware that all of your content outside the "// #region" section in this file
 // will be preserved in situations where you need to do something paricularly awesome.
 // Keep on being awesome.

@@ -1,12 +1,12 @@
 import chalk from "chalk";
 import { exec } from "shelljs";
-import { DoDevopObservation, IGlobalOptions } from "~/@types";
+import { DoDevopObservation, Options } from "~/@types";
 import { logger } from "~/shared/core";
 import { determinePackageManager } from "~/shared/observations";
 import { emoji } from "~/shared/ui";
 
 export async function installDevDep(
-  opts: IGlobalOptions,
+  opts: Options,
   observations: Set<DoDevopObservation>,
   ...packages: string[]
 ) {

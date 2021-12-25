@@ -1,8 +1,14 @@
-import { IGlobalOptions } from "~/@types";
+import { Options } from "~/@types";
 
-let options: IGlobalOptions;
+let options: Options;
 
-export function logger(opts?: IGlobalOptions) {
+export type ILogger = {
+  info(...args: any[]): void;
+  shout(...args: any[]): void;
+  whisper(...args: any[]): void;
+};
+
+export function logger(opts?: Options): ILogger {
   if (opts) {
     options = opts;
   } else if (!opts && !options) {

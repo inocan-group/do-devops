@@ -1,6 +1,6 @@
 // import chalk from "chalk";
 import { IScaffoldOptions } from "./meta";
-import { IGlobalOptions, DoDevopsHandler } from "~/@types";
+import { Options, DoDevopsHandler } from "~/@types";
 import {
   askCheckboxQuestion,
   askConfirmQuestion,
@@ -30,7 +30,7 @@ const scaffolds = [
   "vitesse-webext",
 ] as const;
 
-export const handler: DoDevopsHandler<IGlobalOptions<IScaffoldOptions>> = async ({
+export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
   opts,
   observations,
 }) => {

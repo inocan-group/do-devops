@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { omit } from "native-dash";
 import { exec } from "shelljs";
-import { DoDevopObservation, IGlobalOptions } from "~/@types";
+import { DoDevopObservation, Options } from "~/@types";
 import { logger } from "~/shared/core";
 import { determinePackageManager } from "~/shared/observations";
 import { emoji } from "~/shared/ui";
@@ -13,7 +13,7 @@ import { getPackageJson, savePackageJson } from "~/shared/npm";
  * The dep removed can be any of the dependency types: _prod, dev, optional, or peer_.
  */
 export async function removeDep(
-  opts: IGlobalOptions,
+  opts: Options,
   observations: Set<DoDevopObservation>,
   ...packages: string[]
 ) {

@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { IGlobalOptions } from "~/@types";
+import { Options } from "~/@types";
 import { logger } from "~/shared/core";
 import { currentDirectory, readFile, fileIncludes } from "~/shared/file";
 
@@ -9,7 +9,7 @@ import { currentDirectory, readFile, fileIncludes } from "~/shared/file";
  *  - that it is exported as a default export
  *  - no errors are thrown by `tsc --noEmit`
  */
-export function isValidServerlessTs(fn?: string, opts: IGlobalOptions = {}) {
+export function isValidServerlessTs(fn?: string, opts: Options = {}) {
   const log = logger(opts);
   const filename = fn || currentDirectory("serverless.ts");
   const contents = readFile(filename);

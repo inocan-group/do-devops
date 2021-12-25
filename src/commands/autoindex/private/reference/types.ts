@@ -1,23 +1,3 @@
-export interface IExportableSymbols {
-  /** files which being exported */
-  files: string[];
-  /** directories which have an index.ts in them */
-  dirs: string[];
-  /** base directory which search was done in */
-  base: string;
-  /**
-   * Any VueJS SFC files (aka, files ending in .vue which combine JS,CSS,Styles and result in a
-   * single JS default export when transpiled)
-   */
-  sfcs: string[];
-
-  /**
-   * sub-directories which do have an index file but have explicitly
-   * orphaned themselves
-   */
-  orphans?: string[];
-}
-
 export enum ExportAction {
   updated,
   added,
@@ -35,3 +15,13 @@ export enum ExportType {
 }
 
 export type IExportType = keyof typeof ExportType;
+
+export interface IAutoindexFile {
+  exportType: IExportType;
+  /** files which being exported */
+  files: string[];
+  /** directories which have an index.ts in them */
+  dirs: string[];
+  /** unique hash code for the given set of files, directories, and  */
+  hashCode: string;
+}

@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import commandLineUsage from "command-line-usage";
+import commandLineUsage, { OptionDefinition } from "command-line-usage";
 import { DoDevopObservation, Finalized, IDoDevopsCommand } from "~/@types";
 import { emoji } from "~/shared/ui";
-import { globalOptions, convertOptionsToArray } from "./index";
+import { globalOptions } from "./index";
 import {
   formatCommandsSection,
   finalizeCommandDefinition,
@@ -39,10 +39,20 @@ export function help(observations: Set<DoDevopObservation>, cmdDefn?: IDoDevopsC
     sections.push(formatCommandsSection(subCommands, kind));
   }
 
+  const defaultOptions: OptionDefinition[] = [];
+  const o = options || {};
+
   if (kind) {
     sections.push({
       header: "Options",
-      optionList: convertOptionsToArray(options || {}),
+      optionList: Object.keys(o).reduce((acc, key) => {
+        if (o[key].defaultOption) {
+          defaultOptions.push({ ...o[key], name: key });
+          return acc;
+        }
+
+        return [...acc, { ...o[key], name: key }] as OptionDefinition[];
+      }, [] as OptionDefinition[]),
     });
   }
 

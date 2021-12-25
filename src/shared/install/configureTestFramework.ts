@@ -1,4 +1,4 @@
-import { TestObservation, Observations, IGlobalOptions } from "~/@types";
+import { TestObservation, Observations, Options } from "~/@types";
 import { DevopsError } from "~/errors";
 import { templateDirCopy, templateFileCopy } from "~/shared/file";
 import { getProjectConfig } from "../config";
@@ -6,7 +6,7 @@ import { logger } from "../core";
 
 export async function configureTestFramework(
   framework: TestObservation,
-  opts: IGlobalOptions,
+  opts: Options,
   _observations: Observations
 ) {
   const log = logger(opts);

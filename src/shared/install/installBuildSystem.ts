@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { BundlerObservation, IGlobalOptions, Observations } from "~/@types";
+import { BundlerObservation, Options, Observations } from "~/@types";
 import { DevopsError } from "~/errors";
 import { installEsLint } from "~/shared/install";
 import { saveProjectConfig } from "~/shared/config";
@@ -10,7 +10,7 @@ import { logger } from "~/shared/core";
 import { templateDirCopy, templateFileCopy } from "../file";
 import { getObservations } from "../observations";
 
-export async function installBuildSystem(opts: IGlobalOptions, observations: Observations) {
+export async function installBuildSystem(opts: Options, observations: Observations) {
   const log = logger(opts);
 
   const confirm = await askConfirmQuestion(
