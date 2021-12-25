@@ -1,4 +1,5 @@
 import parse from "destr";
+import path from "path";
 import { currentDirectory, readFile } from "~/shared/file";
 import { IProjectConfig, IProjectConfigFilled } from "~/@types";
 import { CONFIG_FILE } from "~/shared/config/constants";
@@ -9,9 +10,11 @@ import { CONFIG_FILE } from "~/shared/config/constants";
  *
  * If not available on filesystem then it returns `IProjectConfigUnfilled`.
  */
-export function getProjectConfig(): IProjectConfig {
+export function getProjectConfig(offset?: string): IProjectConfig {
+  const filename = path.join(currentDirectory(), offset || ".", CONFIG_FILE);
+
   return (
-    (parse(readFile(currentDirectory(CONFIG_FILE))) as IProjectConfigFilled | false) || {
+    (parse(readFile(filename)) as IProjectConfigFilled | false) || {
       projectConfig: false,
       kind: "project",
     }

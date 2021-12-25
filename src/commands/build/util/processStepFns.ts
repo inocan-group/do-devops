@@ -1,11 +1,11 @@
 import chalk from "chalk";
-import { DoDevopObservation, IGlobalOptions } from "~/@types";
+import { DoDevopObservation, Options } from "~/@types";
 import { logger } from "~/shared/core";
 import { getValidStepFunctions } from "~/shared/ast";
 import { IBuildOptions } from "../parts";
 
 export async function processStepFns(
-  opts: IGlobalOptions<IBuildOptions>,
+  opts: Options<IBuildOptions>,
   _observations: Set<DoDevopObservation>
 ) {
   const log = logger(opts);

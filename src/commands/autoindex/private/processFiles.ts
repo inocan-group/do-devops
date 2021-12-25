@@ -1,38 +1,26 @@
+/* eslint-disable unicorn/numeric-separators-style */
+/* eslint-disable unicorn/number-literal-case */
 import chalk from "chalk";
-
+import { detectExportType, exclusions, createAutoindexContent } from "./index";
+import xxHash from "xxhash";
+import { IAutoindexFile } from "./reference";
 import {
-  END_REGION,
-  ExportAction,
-  START_REGION,
-  alreadyHasAutoindexBlock,
-  defaultExports,
-  detectExportType,
-  exclusions,
-  exportable,
-  namedExports,
+  getEmbeddedHashCode,
+  isNewAutoindexFile,
+  isOrphanedIndexFile,
   replaceRegion,
-  timestamp,
-  unexpectedContent,
-  namedOffsetExports,
-  createMetaInfo,
-  getExistingMetaInfo,
-  nonBlockContent,
-  noDifference,
-} from "./index";
-import { readFileSync, writeFileSync } from "fs";
-
-import { AUTOINDEX_INFO_MSG, ExportType } from "./reference";
-import { IDictionary } from "common-types";
-
-import { removeAllExtensions, cleanOldBlockFormat } from "./util";
-import { highlightFilepath } from "~/shared/ui";
-import { DevopsError } from "~/errors";
+} from "./util";
+import { emoji, highlightFilepath } from "~/shared/ui";
 import { logger } from "~/shared/core";
-import { Observations } from "~/@types";
+import { Options, Observations } from "~/@types";
 import path from "path";
+import { getFileComponents, getSubdirectories } from "~/shared/file";
+import { IAutoindexOptions } from "../parts";
+import { appendFile, writeFile } from "fs/promises";
+import { existsSync, readFileSync } from "fs";
 
 export interface WhiteBlackList {
-  whitelist?: string[];
+  whitelist: string[];
   blacklist: string[];
 }
 
@@ -41,168 +29,173 @@ export interface WhiteBlackList {
  * then create the autoindex.
  */
 export async function processFiles(
-  paths: string[],
-  opts: IDictionary,
+  autoindexFiles: string[],
+  opts: Options<IAutoindexOptions>,
   _o: Observations,
   scope: WhiteBlackList
 ) {
   const log = logger(opts);
-  const results: IDictionary<string> = {};
-  const defaultExclusions = ["index", "private"];
-  const baseExclusions = opts.add
-    ? [...defaultExclusions, ...(opts.add as string).split(",").map((i) => i.trim())]
-    : defaultExclusions;
-
-  for await (const path of paths) {
-    const fileString = readFileSync(path, { encoding: "utf-8" });
-    const isAutoIndex = /^\/\/\s*#autoindex/;
-    if (isAutoIndex.test(fileString)) {
-      results[path] = fileString;
-    }
+  if (autoindexFiles.length === 0) {
+    log.info(chalk`- ${emoji.confused} no {italic autoindex} files found in this package`);
+    return;
   }
-  if (Object.keys(results).length === 0) {
-    log.info(chalk`- No {italic autoindex} files found in this package`);
-  } else {
-    // iterate over each autoindex file
-    for (const filePath of Object.keys(results)) {
-      const fileContent = results[filePath];
-      const dir = path.posix.dirname(filePath);
-      const blacklist = scope.blacklist
-        .filter((i) => i.includes(dir))
-        .flatMap((i) =>
-          i
-            .replace(path.posix.dirname(i) + "/", "")
-            .split(".")
-            .slice(0, -1)
-        );
-      if (blacklist.length > 0) {
-        log.whisper(
-          chalk`{gray - index file {blue ${highlightFilepath(
-            filePath
-          )}} will exclude the following based on {italic blacklist} rules:}`
-        );
-        for (const item of blacklist) {
-          log.whisper(chalk`{dim   - ${item}}`);
-        }
-      }
-      const explicit = exclusions(fileContent);
-      if (explicit.some((i) => !["index", "private"].includes(i))) {
-        log.whisper(
-          chalk`{gray - index file {blue ${highlightFilepath(
-            filePath
-          )}} will exclude the following based on {italic explicit exclusions} in the file:}`
-        );
-        for (const item of explicit) {
-          log.whisper(chalk`{dim   - ${item}}`);
-        }
-      }
-      const excluded = [...new Set([...explicit, ...baseExclusions, ...blacklist])];
-      const exportableSymbols = await exportable(filePath, excluded);
-      const exportType = detectExportType(fileContent);
 
-      let autoIndexContent: string;
+  for (const ai of autoindexFiles) {
+    let action: "new-file" | "unchanged" | "updated";
+    /** Directory that given autoindex file is reponsible for */
+    const dir = path.posix.dirname(ai);
+    /** the file content of the autoindex file */
+    const aiContent = readFileSync(ai, "utf-8");
 
-      switch (exportType) {
-        case ExportType.default:
-          autoIndexContent = defaultExports(exportableSymbols, opts);
-          break;
-        case ExportType.namedOffset:
-          autoIndexContent = namedOffsetExports(exportableSymbols, opts);
-          break;
-        case ExportType.named:
-          autoIndexContent = namedExports(exportableSymbols, opts);
-          break;
-        default:
-          throw new DevopsError(`Unknown export type: ${exportType}!`, "invalid-export-type");
-      }
-      /** content that defines the full region owned by autoindex */
-      const blockContent = `${START_REGION}\n\n${timestamp()}\n${createMetaInfo(
-        exportType,
-        exportableSymbols,
-        excluded,
-        opts
-      )}\n${autoIndexContent}\n\n${AUTOINDEX_INFO_MSG}\n\n${END_REGION}`;
+    /** any _explicit_ excludes above and beyond the blacklist rules */
+    const explicitExcludes = exclusions(aiContent);
+    /** the type of _export_ to be in the autoindex file (aka, named, default, etc.) */
+    const exportType = detectExportType(aiContent);
 
-      const existingContentMeta = getExistingMetaInfo(fileContent);
+    /** only those in the immediate directory */
+    const whitelist = scope.whitelist.filter((f) => path.posix.dirname(f) === dir);
 
-      let exportAction: ExportAction | undefined;
-      const bracketedMessages: string[] = [];
-      if (exportType !== ExportType.named) {
-        bracketedMessages.push(chalk`{grey using }{italic ${exportType}} {grey export}`);
-      }
+    /**
+     * The record of black listed items grouped by "reason"
+     */
+    const blackBook: Record<string, { blacklist: []; explicit: []; dirs: [] }> = {};
 
-      const hasOldStyleBlock = /\/\/#region.*\/\/#endregion/s.test(fileContent);
+    const files = whitelist
+      // only those in current dir
+      .filter((f) => path.posix.dirname(f) === dir)
+      // based on blacklist or local exclusions
+      .filter((f) => {
+        if (scope.blacklist.includes(f)) {
+          typeof blackBook[f] === "object"
+            ? { blacklist: [...blackBook[f].blacklist, f], explict: blackBook[f].explicit }
+            : { blacklist: [f], explict: [] };
 
-      if (autoIndexContent && alreadyHasAutoindexBlock(fileContent)) {
-        if (
-          noDifference(existingContentMeta.files, removeAllExtensions(exportableSymbols.files)) &&
-          noDifference(existingContentMeta.dirs, removeAllExtensions(exportableSymbols.dirs)) &&
-          noDifference(existingContentMeta.sfcs, removeAllExtensions(exportableSymbols.sfcs)) &&
-          exportType === existingContentMeta.exportType &&
-          noDifference(existingContentMeta.exclusions, excluded)
+          return false;
+        } else if (
+          explicitExcludes.length > 0 &&
+          !explicitExcludes.every((ex) => !f.includes(ex))
         ) {
-          exportAction = hasOldStyleBlock ? ExportAction.refactor : ExportAction.noChange;
-        } else {
-          exportAction = ExportAction.updated;
+          typeof blackBook[f] === "object"
+            ? { blacklist: blackBook[f].blacklist, explict: [...blackBook[f].explicit, f] }
+            : { blacklist: [], explict: [f] };
+
+          return false;
         }
-      } else if (autoIndexContent) {
-        exportAction = ExportAction.added;
-      }
+        return true;
+      });
 
-      // BUILD UP CLI MESSAGE
-      const warnings = unexpectedContent(nonBlockContent(fileContent));
-      if (warnings) {
-        bracketedMessages.push(
-          chalk` {red unexpected content: {italic {dim ${Object.keys(warnings).join(", ")} }}}`
+    // verbose messaging on exclusions
+    for (const key of Object.keys(blackBook)) {
+      if (blackBook[key].explicit.length > 0) {
+        log.whisper(
+          chalk`{gray - autoindex file {blue ${highlightFilepath(
+            key
+          )}} will {italic exclude} the following based on {bold explicit exclusions} in the autoindex file: ${blackBook[
+            key
+          ].explicit
+            .map((ex) => getFileComponents(ex, process.cwd()))
+            .join("\t")}}`
         );
       }
 
-      const excludedWithoutBase = excluded.filter((i) => !baseExclusions.includes(i));
-      if (excludedWithoutBase.length > 0) {
-        bracketedMessages.push(chalk`{italic excluding:} {grey ${excludedWithoutBase.join(", ")}}`);
-      }
-
-      const bracketedMessage =
-        bracketedMessages.length > 0 ? chalk`{dim [ ${bracketedMessages.join(", ")} ]}` : "";
-
-      const changeMessage = chalk`- ${
-        exportAction === ExportAction.added ? "added" : "updated"
-      } ${highlightFilepath(filePath)} ${bracketedMessage}`;
-
-      const refactorMessage = chalk`- removing an old form of autoindex block style at ${highlightFilepath(
-        filePath
-      )}`;
-
-      const unchangedMessage = chalk`{dim - {italic no changes} to ${highlightFilepath(
-        filePath
-      )}} ${bracketedMessage}`;
-
-      if (!opts.quiet && exportAction === ExportAction.noChange) {
-        log.whisper(unchangedMessage);
-      } else if (exportAction === ExportAction.refactor) {
-        log.info(refactorMessage);
-        writeFileSync(
-          filePath,
-          cleanOldBlockFormat(
-            existingContentMeta.hasExistingMeta
-              ? replaceRegion(fileContent, blockContent)
-              : `${fileContent}\n${blockContent}\n`
-          )
-        );
-      } else {
-        console.log(changeMessage);
-        writeFileSync(
-          filePath,
-          cleanOldBlockFormat(
-            existingContentMeta.hasExistingMeta
-              ? replaceRegion(fileContent, blockContent)
-              : `${fileContent}\n${blockContent}\n`
-          )
+      if (blackBook[key].blacklist.length > 0) {
+        log.whisper(
+          chalk`{gray - autoindex file {blue ${highlightFilepath(
+            key
+          )}} will {italic exclude} the following based on the {bold blacklist}: ${blackBook[
+            key
+          ].explicit
+            .map((ex) => getFileComponents(ex, process.cwd()))
+            .join("\t")}}`
         );
       }
     }
-  }
-  if (!opts.quiet) {
-    console.log();
+
+    const orphans: string[] = [];
+    const noIndexFile: string[] = [];
+    const explicitDirRemoval: string[] = [];
+
+    const dirs = getSubdirectories(dir).reduce((acc, d) => {
+      const child = path.posix.join(dir, d, "/index.ts");
+      if (!existsSync(child)) {
+        log.whisper(
+          chalk`{gray - autoindex file ${highlightFilepath(
+            ai
+          )} will not include the {blue ${d}} directory because there is {italic {red no index file}}}`
+        );
+        noIndexFile.push(d);
+        return acc;
+      } else if (isOrphanedIndexFile(child)) {
+        log.whisper(
+          chalk`{gray - autoindex file ${highlightFilepath(
+            ai
+          )} will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
+        );
+        orphans.push(d);
+        return acc;
+      } else if (!explicitExcludes.every((e) => d !== e)) {
+        log.whisper(
+          chalk`{gray - autoindex file ${highlightFilepath(
+            ai
+          )} will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
+        );
+        explicitDirRemoval.push(d);
+        return acc;
+      }
+
+      return [...acc, d];
+    }, [] as string[]);
+    const fileSymbols = files.map((f) => getFileComponents(f).filename);
+
+    const priorHash = isNewAutoindexFile(aiContent) ? undefined : getEmbeddedHashCode(aiContent);
+    const hashCode = xxHash.hash(
+      Buffer.from(
+        JSON.stringify({
+          fileSymbols,
+          dirs,
+          explicitExcludes,
+          orphans,
+          noIndexFile,
+          explicitDirRemoval,
+          sfc: opts.sfc || false,
+        })
+      ),
+      0xcafebabe
+    );
+
+    const content: IAutoindexFile = {
+      exportType,
+      files: fileSymbols,
+      dirs,
+      hashCode,
+    };
+
+    // if change to hash code the re-write index file
+    if (priorHash !== hashCode) {
+      action = isNewAutoindexFile(aiContent) ? "new-file" : "updated";
+      const result = createAutoindexContent(content, opts);
+
+      await (action === "new-file"
+        ? appendFile(ai, result)
+        : writeFile(ai, replaceRegion(aiContent, result), "utf-8"));
+    } else {
+      action = "unchanged";
+    }
+
+    switch (action) {
+      case "new-file":
+        log.info(
+          chalk`- autoindex file ${highlightFilepath(ai)} is a {italic {bold new}} autoindex file`
+        );
+        break;
+      case "updated":
+        log.info(chalk`- autoindex file ${highlightFilepath(ai)} was {italic {bold updated}}.`);
+        break;
+      case "unchanged":
+        log.whisper(
+          chalk`{dim - autoindex file ${highlightFilepath(ai)} was left {italic {bold unchanged}}}.`
+        );
+        break;
+    }
   }
 }

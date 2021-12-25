@@ -74,14 +74,19 @@ export interface IGlobalConfig {
 export interface ICommandConfig {
   autoindex?: {
     /**
-     * Glob patterns used to find candidate autoindex files
+     * Glob patterns used to find candidate files to be included in autoindex
      */
     whitelistGlobs?: string[];
 
     /**
-     * Glob patterns to exclude autoindex files
+     * Glob patterns to exclude from autoindex files
      */
     blacklistGlobs: string[];
+
+    /**
+     * Glob patterns for identifying target _index_ files
+     */
+    indexGlobs: string[];
 
     /** include the VueJS SFC files and export the default export to a named export in index file */
     sfc: boolean;

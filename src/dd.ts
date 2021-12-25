@@ -13,8 +13,9 @@ import {
 import { help } from "./shared/core/help";
 import { inverted } from "./shared/ui";
 import { getObservations } from "./shared/observations/getObserverations";
-import { doDevopsVersion, commandAnnouncement } from "./shared/core/util";
+import { doDevopsVersion, commandAnnouncement, hasArgv, getArgvOption } from "./shared/core/util";
 import { hasScript } from "./shared/npm";
+import { CommandParsing } from "./@types/global";
 
 (async () => {
   // pull off the command and stop there
@@ -40,25 +41,29 @@ import { hasScript } from "./shared/npm";
   }
 
   if (!cmdName) {
-    commandAnnouncement(undefined, undefined, true);
+    commandAnnouncement();
     help(observations);
     process.exit();
   }
 
   if (isKnownCommand(cmdName)) {
     const cmdDefn = getCommand(cmdName);
-    const cmdInput = { ...parseCmdArgs(cmdDefn, remaining), observations };
+    let cmdInput: CommandParsing = { ...parseCmdArgs(cmdDefn, remaining), observations };
 
     if (cmdInput.opts.help) {
-      commandAnnouncement(cmdDefn, cmdInput.subCommand, true);
+      commandAnnouncement(cmdDefn, cmdInput);
       help(observations, cmdDefn);
       process.exit();
     }
 
     try {
-      commandAnnouncement(cmdDefn, cmdInput.subCommand);
+      commandAnnouncement(cmdDefn, cmdInput);
+      cmdInput = {
+        ...cmdInput,
+        argv: hasArgv(cmdDefn) ? cmdInput.opts[getArgvOption(cmdDefn)?.name as any] : [],
+      } as CommandParsing;
       await cmdDefn.handler(cmdInput);
-      if (cmdInput.unknown && cmdInput.unknown.filter((i) => i).length > 0) {
+      if (cmdInput.unknown && cmdInput.unknown?.filter((i) => i).length > 0) {
         const plural = cmdInput.unknown.length === 1 ? false : true;
         const preposition = cmdInput.unknown.length === 1 ? "was" : "were";
         console.log(

@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { IGlobalOptions, Observations } from "~/@types";
+import { Options, Observations } from "~/@types";
 import { installDevDep } from "~/shared/npm";
 import { askConfirmQuestion } from "~/shared/interactive";
 import { logger } from "~/shared/core";
@@ -10,7 +10,7 @@ import { templateDirCopy } from "~/shared/file";
  * Installs and configures both **eslint** and **prettier**
  */
 export async function installTypescript(
-  opts: IGlobalOptions<{ silent: boolean }>,
+  opts: Options<{ silent: boolean }>,
   observations: Observations
 ) {
   const log = logger(opts);

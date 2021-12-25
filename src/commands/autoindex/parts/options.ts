@@ -13,22 +13,20 @@ export interface IAutoindexOptions {
 }
 
 export const options: IOptionDefinition = {
+  // argv
+  explicitFiles: {
+    defaultOption: true,
+    multiple: true,
+    type: String,
+    group: "local",
+    description: chalk`{italic optionally} state one or more explicit autoindex files to evaluate instead of glob patterns`,
+    typeLabel: "string[]",
+  },
+
   config: {
     type: Boolean,
     group: "local",
     description: `configure autoindex for a project`,
-  },
-  add: {
-    type: String,
-    group: "local",
-    description:
-      "adds additional files to include as possible autoindex sources; you can comma delimit to add more than one",
-  },
-  glob: {
-    type: String,
-    group: "local",
-    description:
-      'replaces the glob file matching pattern with your own (however "node_modules" still excluded)',
   },
   sfc: {
     type: Boolean,
@@ -40,12 +38,6 @@ export const options: IOptionDefinition = {
     group: "local",
     description:
       'by default will look for files in the "src" directory but you can redirect this to a different directory',
-  },
-  all: {
-    alias: "a",
-    type: Boolean,
-    group: "local",
-    description: chalk`this option can be used in monorepos to avoid the interactive dialog and always set the scope of autoindex to ALL packages`,
   },
   watch: {
     alias: "w",

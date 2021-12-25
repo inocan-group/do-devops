@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { DoDevopObservation, IGlobalOptions, TestObservation } from "~/@types";
+import { DoDevopObservation, Options, TestObservation } from "~/@types";
 import { askForUnitTestFramework, askConfirmQuestion } from "~/shared/interactive";
 import { DevopsError } from "~/errors";
 import { getProjectConfig, saveProjectConfig } from "~/shared/config";
@@ -13,7 +13,7 @@ import { emoji } from "~/shared/ui";
  */
 export async function determineTestingFramework(
   observations: Set<DoDevopObservation>,
-  opts: IGlobalOptions<{ interactive?: boolean }>
+  opts: Options<{ interactive?: boolean }>
 ): Promise<TestObservation | false> {
   const log = logger(opts);
   const known: TestObservation[] = ["ava", "jasmine", "jest", "mocha", "qunit", "uvu"];

@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import type { IDoDevopsCommand } from "~/@types";
 import { IImageOptions, handler, options } from "./parts";
 
@@ -7,7 +6,6 @@ const command: IDoDevopsCommand<IImageOptions> = {
   handler,
   description:
     "Provides an image optimization solution leveraging image resizing, blurring, and more.",
-  syntax: chalk`dd image [ {italic sub-command} ] [ {italic options} ]`,
   greedy: false,
   options,
   subCommands: [

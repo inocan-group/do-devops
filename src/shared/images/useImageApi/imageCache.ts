@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
 import { keys } from "native-dash";
-import { IGlobalOptions, IImageCacheRef, IRefreshCacheOptions } from "~/@types";
+import { Options, IImageCacheRef, IRefreshCacheOptions } from "~/@types";
 import { IMAGE_CACHE } from "~/constants";
 import { logger } from "../../core";
 import { currentDirectory } from "../../file";
@@ -41,7 +41,7 @@ export function clearCache() {
   MEM_CACHE = {};
 }
 
-export function getFromImageCache(image: string, opts: IGlobalOptions) {
+export function getFromImageCache(image: string, opts: Options) {
   const log = logger(opts);
   if (MEM_CACHE[image]) {
     return MEM_CACHE[image];
@@ -57,10 +57,7 @@ export function getFromImageCache(image: string, opts: IGlobalOptions) {
  * then disk) but if not yet available it will create it and make sure
  * the memory and file caches are updated.
  */
-export async function refreshCache(
-  _images: string[],
-  _opts: IGlobalOptions<IRefreshCacheOptions> = {}
-) {
+export async function refreshCache(_images: string[], _opts: Options<IRefreshCacheOptions> = {}) {
   // TODO: bring back once compiling
   // const log = logger(opts);
   const cache = loadImageCache();

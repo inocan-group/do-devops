@@ -5,7 +5,7 @@ import { askListQuestion } from "~/shared/interactive";
 import { emoji } from "~/shared/ui";
 import { getProjectConfig, saveProjectConfig } from "~/shared/config";
 import { removeOtherLockFiles } from "~/shared/npm";
-import { IGlobalOptions } from "~/@types";
+import { Options } from "~/@types";
 import { installPackageManager } from "~/shared/install";
 
 /**
@@ -18,7 +18,7 @@ import { installPackageManager } from "~/shared/install";
  * Note: if there's no `package.json` in current directory it will throw an error.
  */
 export async function determinePackageManager(
-  opts: IGlobalOptions<{
+  opts: Options<{
     silent: boolean;
     manager?: PackageManagerObservation;
     interactive: boolean;

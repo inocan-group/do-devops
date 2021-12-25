@@ -6,6 +6,7 @@
 
 // local file exports
 export * from "./autoindex";
+export * from "./watch";
 export * from "./description";
 export * from "./options";
 

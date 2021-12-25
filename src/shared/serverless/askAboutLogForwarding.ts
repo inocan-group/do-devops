@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 import chalk from "chalk";
 
-import { IDictionary, IServerlessYaml } from "common-types";
+import { arn, IDictionary, IServerlessYaml } from "common-types";
 import { getLambdaFunctions } from "./index";
 import { determineStage } from "~/shared/observations";
 import { getPackageJson, hasDevDependency, savePackageJson } from "../npm";
@@ -83,8 +83,7 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
     ];
     answers = { ...answers, ...(await inquirer.prompt(questions)) };
     if (answers.shipper && answers.shipper !== "CANCEL") {
-      const arn = awsFunctions.find((i) => i.FunctionName === answers.shipper)
-        ?.FunctionArn as string;
+      const arn = awsFunctions.find((i) => i.FunctionName === answers.shipper)?.FunctionArn as arn;
       if (!config.custom) {
         config.custom = {};
       }

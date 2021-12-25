@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { DoDevopObservation, IDiscoveredConfig, IGlobalOptions } from "~/@types";
+import { DoDevopObservation, IDiscoveredConfig, Options } from "~/@types";
 import { currentDirectory, write, getFileComponents } from "~/shared/file";
 import { findHandlerConfig, getValidServerlessHandlers } from "~/shared/ast";
 import { logger } from "~/shared/core";
@@ -18,7 +18,7 @@ import { saveProjectConfig } from "~/shared/config";
  * - save config for all functions to project's config file
  */
 export async function processLambdaFns(
-  opts: IGlobalOptions<IBuildOptions>,
+  opts: Options<IBuildOptions>,
   observations: Set<DoDevopObservation>
 ) {
   /** handler functions list */

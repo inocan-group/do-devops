@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { IDictionary, INpmInfo, isNpmInfoRepository } from "common-types";
-import { DoDevopObservation, IGlobalOptions, INpmInfoTable } from "~/@types";
+import { DoDevopObservation, Options, INpmInfoTable } from "~/@types";
 import { convertGitUrlToHttp } from "~/shared/git";
 import { getExternalPackageJson } from "~/shared/npm";
 import { consoleDimensions, toTable } from "~/shared/ui";
@@ -57,7 +57,7 @@ function getExports(repo: INpmInfo) {
  */
 export async function otherPackages(
   pkgs: string[],
-  opts: IGlobalOptions,
+  opts: Options,
   _observations: Set<DoDevopObservation>
 ) {
   const info = await getNpmInfo(pkgs, opts);

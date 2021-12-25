@@ -7,7 +7,6 @@
 
 // local file exports
 export * from "./exclusions";
-export * from "./exportable";
 export * from "./processFiles";
 export * from "./watchHandler";
 

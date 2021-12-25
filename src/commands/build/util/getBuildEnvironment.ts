@@ -1,4 +1,4 @@
-import { DoDevopObservation, IGlobalOptions } from "~/@types";
+import { DoDevopObservation, Options } from "~/@types";
 import { DevopsError } from "~/errors";
 import { getAwsProfile } from "~/shared/aws";
 import {
@@ -16,7 +16,7 @@ import { IBuildOptions } from "../parts";
  * at a bare minimum: stage, region, profile, stack/app-name, partition, and account id.
  */
 export async function getBuildEnvironment(
-  opts: IGlobalOptions<IBuildOptions>,
+  opts: Options<IBuildOptions>,
   observations: Set<DoDevopObservation>
 ) {
   const profileName = await determineProfile({ ...opts, interactive: true }, observations);

@@ -6,8 +6,8 @@
 
 // local file exports
 export * from "./defaultExports";
-export * from "./exportTemplate";
 export * from "./namedExports";
+export * from "./generateSfcExports";
 export * from "./namedOffsetExports";
 
 // Note:

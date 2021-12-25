@@ -1,10 +1,10 @@
 import { AwsArnPartition } from "common-types";
-import { DoDevopObservation, IAwsOptions, IGlobalOptions } from "~/@types";
+import { DoDevopObservation, IAwsOptions, Options } from "~/@types";
 import { getProjectConfig, saveProjectConfig } from "~/shared/config";
 import { askListQuestion } from "~/shared/interactive";
 
 export async function determinePartition(
-  opts: IGlobalOptions<IAwsOptions>,
+  opts: Options<IAwsOptions>,
   _observations: Set<DoDevopObservation>
 ) {
   // const log = logger(opts);

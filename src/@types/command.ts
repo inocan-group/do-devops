@@ -3,7 +3,7 @@
 import { IDictionary, isNonNullObject } from "common-types";
 import { Observations } from ".";
 import { ICommandDescription } from "./general";
-import { IGlobalOptions } from "./global";
+import { Options } from "./global";
 import { DoDevopObservation } from "./observations";
 import { IOptionDefinition } from "./option-types";
 
@@ -63,7 +63,7 @@ export interface ICommandInput<T extends object = {}> {
    * All command line options defined locally by the command and/or globally defined
    * options.
    */
-  opts: Partial<T> & IGlobalOptions;
+  opts: Partial<T> & Options;
   /**
    * An array of observations about the environment that the user is running the
    * command in.
@@ -170,7 +170,7 @@ export interface IDoDevopsCommand<T extends {} = {}> {
    */
   hiddenCommand?: boolean;
 
-  config?: <T extends IGlobalOptions<any>, O extends Observations>(
+  config?: <T extends Options<any>, O extends Observations>(
     opts: T,
     observations: O
   ) => Promise<void>;

@@ -124,5 +124,5 @@ export default async function serverlessDeploy(argv: string[], opts: IDictionary
   };
 
   // argv values indicate function deployment
-  await (argv.length > 0 ? functionDeploy(argv, meta) : fullDeploy(meta));
+  await (argv?.length > 0 ? functionDeploy(argv, meta) : fullDeploy(meta));
 }
