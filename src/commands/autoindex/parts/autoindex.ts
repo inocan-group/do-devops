@@ -24,7 +24,13 @@ export const INDEX_LIST_DEFAULTS = [
   "!**/packages",
 ];
 export const WHITE_LIST_DEFAULTS = ["src/**/*.ts", "src/**/*.vue", "!node_modules"];
-export const BLACK_LIST_DEFAULTS = ["src/**/*.d.ts", "packages/**/*"];
+export const BLACK_LIST_DEFAULTS = [
+  "src/**/*.d.ts",
+  "packages/**/*",
+  "dist/**",
+  "lib/**",
+  ".webpack/**",
+];
 
 /**
  * Finds all `index.ts` and `index.js` files and looks for the `#autoindex`
