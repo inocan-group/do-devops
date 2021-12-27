@@ -38,7 +38,6 @@ const command: IDoDevopsCommand<IInfoOptions> = {
   },
   description:
     "Summarized information about the current repo; or alternatively a set of external npm packages (if stated).",
-  syntax: "dd info <repo1> <repo2> ... [options]",
   options: {
     argv: {
       type: String,
@@ -60,7 +59,6 @@ const command: IDoDevopsCommand<IInfoOptions> = {
       description: "List in tabular format all deps: deps, dev deps, optional and peer",
     },
   },
-  greedy: true,
 };
 
 export default command;
