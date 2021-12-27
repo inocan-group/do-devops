@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { exec } from "shelljs";
+import { spawnSync } from "child_process";
 import { Options } from "~/@types";
 import { DevopsError } from "~/errors";
 import { logger } from "~/shared/core";
@@ -33,17 +33,16 @@ export function tscValidation(filename: string, opts: Options = {}): boolean {
   log.whisper(
     chalk`{gray - validating the "${filename}" file with the Typescript {bold {yellow tsc}} compiler}`
   );
-  const outcome = exec(command, { silent: true });
-  if (outcome.code === 0) {
+  try {
+    spawnSync(command, { stdio: "inherit" });
     log.whisper(chalk`{dim - {bold {yellow tsc}} validation passed}`);
     return true;
-  } else {
+  } catch {
     log.shout(
       chalk`- ${emoji.poop} failed to transpile {blue serverless.ts}: {bold tsc ${
         getFileComponents(filename).filename
       } --noEmit}`
     );
-    log.shout(chalk`\n\t{red ${outcome.stderr}${outcome.stdout}}`);
     return false;
   }
 }

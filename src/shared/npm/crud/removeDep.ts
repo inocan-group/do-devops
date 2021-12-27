@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import { omit } from "native-dash";
-import { exec } from "shelljs";
 import { DoDevopObservation, Options } from "~/@types";
 import { logger } from "~/shared/core";
 import { determinePackageManager } from "~/shared/observations";
 import { emoji } from "~/shared/ui";
 import { getPackageJson, savePackageJson } from "~/shared/npm";
+import { spawnSync } from "child_process";
 
 /**
  * Removes a dependency from the repo's package.json file.
@@ -19,10 +19,14 @@ export async function removeDep(
 ) {
   const log = logger(opts);
   const pkgManager = await determinePackageManager({}, observations);
-  const cmd = `${pkgManager} remove ${packages}`;
-  log.whisper(chalk`- removing with {blue ${cmd}}`);
-  const response = exec(cmd);
-  if (response.code === 0) {
+  const cmd = ["remove", ...packages];
+  log.whisper(chalk`- removing with {blue ${pkgManager} ${cmd}}`);
+  if (!pkgManager) {
+    log.shout("package manager undetermined!");
+    process.exit(1);
+  }
+  try {
+    spawnSync(pkgManager, cmd, { stdio: "inherit" });
     log.info(
       chalk`- ${emoji.party} Packages [{italic {gray {dim ${packages.join(
         ", "
@@ -43,14 +47,12 @@ export async function removeDep(
     if (pkgChanged) {
       await savePackageJson(pkg);
     }
-  } else {
-    log.info(
-      chalk`- ${emoji.poop} failure while trying to remove npm packages: ${packages.join(", ")} [${
-        response.code
-      }]`
-    );
-    log.info(chalk`\n{gray ${response.stderr}}\n`);
-  }
 
-  return response.code === 0 ? true : false;
+    return true;
+  } catch {
+    log.info(
+      chalk`- ${emoji.poop} failure while trying to remove npm packages: ${packages.join(", ")}`
+    );
+    return false;
+  }
 }
