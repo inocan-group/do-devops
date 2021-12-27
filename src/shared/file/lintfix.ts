@@ -1,4 +1,4 @@
-import { exec } from "shelljs";
+import { spawnSync } from "child_process";
 import { DoDevopObservation } from "~/@types";
 
 /**
@@ -8,8 +8,10 @@ import { DoDevopObservation } from "~/@types";
  */
 export function lintfix(file: string, observations: Set<DoDevopObservation>) {
   if (observations.has("eslint")) {
-    const result = exec(`eslint ${file} --fix`, { silent: true });
-    return result.code === 0 ? true : false;
+    spawnSync("npx", ["eslint", file, "--fix"], {
+      stdio: "inherit",
+      cwd: process.cwd(),
+    });
   }
 
   return false;

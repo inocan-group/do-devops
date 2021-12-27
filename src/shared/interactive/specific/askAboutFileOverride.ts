@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { exec } from "shelljs";
+import { spawnSync } from "child_process";
 import { DoDevopObservation, Observations } from "~/@types";
 import { getUserConfig } from "~/shared/config";
 import { logger } from "~/shared/core";
@@ -46,10 +46,10 @@ export async function askAboutFileOverwrite(
         }
       }
       if (editorCommand) {
-        const open = exec(`${editorCommand} ${source} ${target} &`);
-        if (open.code === 0) {
+        try {
+          spawnSync(editorCommand, [source, target, "&"], { stdio: "inherit" });
           log.info(chalk`- check your editor for the two versions of the file`);
-        } else {
+        } catch {
           log.info(chalk`- ${emoji.poop} there was a problem openning the files in your editor`);
         }
       }

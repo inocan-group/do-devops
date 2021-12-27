@@ -1,7 +1,6 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@types/aws-sdk': ^2.7.0
   '@types/command-line-args': ^5.2.0
   '@types/command-line-usage': ^5.0.2
   '@types/diff': ^5.0.2
@@ -44,7 +43,7 @@ specifiers:
   js-yaml: ^4.1.0
   madge: ^5.0.1
   matcher: ^4.0.0
-  native-dash: ^1.21.1
+  native-dash: ^1.21.2
   npm-run-all: ^4.1.5
   play-sound: ^1.1.3
   pnpm: ^6.24.3
@@ -52,6 +51,7 @@ specifiers:
   recast: ^0.20.5
   rimraf: ^3.0.2
   sharp: ^0.29.3
+  shelljs: ^0.8.4
   simple-git: ^2.48.0
   smartwrap: ^2.0.2
   table: ^6.7.5
@@ -62,7 +62,7 @@ specifiers:
   tsup: ^5.11.9
   typed-mapper: ^0.4.1
   typescript: ^4.6.0-dev.20211227
-  typescript-transform-paths: 3.3.1
+  typescript-transform-paths: ^3.3.1
   xxhash: ^0.3.0
 
 dependencies:
@@ -89,20 +89,22 @@ dependencies:
   js-yaml: 4.1.0
   madge: 5.0.1
   matcher: 4.0.0
-  native-dash: 1.21.1
+  native-dash: 1.21.2
   play-sound: 1.1.3
   pnpm: 6.24.3
   recast: 0.20.5
   sharp: 0.29.3
+  shelljs: 0.8.4
   simple-git: 2.48.0
   smartwrap: 2.0.2
   table: 6.7.5
   ts-morph: 13.0.2
+  ts-patch: 2.0.1_typescript@4.6.0-dev.20211227
   typed-mapper: 0.4.1
+  typescript-transform-paths: 3.3.1_typescript@4.6.0-dev.20211227
   xxhash: 0.3.0
 
 devDependencies:
-  '@types/aws-sdk': 2.7.0
   '@types/command-line-args': 5.2.0
   '@types/command-line-usage': 5.0.2
   '@types/diff': 5.0.2
@@ -127,10 +129,8 @@ devDependencies:
   rimraf: 3.0.2
   ts-jest: 27.1.2_ac082959e7cbaa93ddd06a1e94fc8cf1
   ts-node: 10.4.0_62e2e80e334417921b4146010255c2d3
-  ts-patch: 2.0.1_typescript@4.6.0-dev.20211227
   tsup: 5.11.9_feb7b92b65c3f9a2d81219d17e8bac7f
   typescript: 4.6.0-dev.20211227
-  typescript-transform-paths: 3.3.1_typescript@4.6.0-dev.20211227
 
 packages:
 
@@ -804,13 +804,6 @@ packages:
     resolution: {integrity: sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==}
     dev: true
 
-  /@types/aws-sdk/2.7.0:
-    resolution: {integrity: sha1-g1iLPRTr3KHUzl4CM4dXdWjOgvM=}
-    deprecated: This is a stub types definition for aws-sdk (https://github.com/aws/aws-sdk-js). aws-sdk provides its own type definitions, so you don't need @types/aws-sdk installed!
-    dependencies:
-      aws-sdk: 2.1048.0
-    dev: true
-
   /@types/babel__core/7.1.17:
     resolution: {integrity: sha512-6zzkezS9QEIL8yCBvXWxPTJPNuMeECJVxSOhxNY/jfq9LxOTHivaYTqr37n9LknWWRTIkzqH2UilS5QFvfa90A==}
     dependencies:
@@ -1358,6 +1351,7 @@ packages:
       url: 0.10.3
       uuid: 3.3.2
       xml2js: 0.4.19
+    dev: false
 
   /aws-ssm/0.4.0:
     resolution: {integrity: sha512-+nk+Y44ZtFuKGKCgQZcdaSVxNeyHXq31jwJWJF/mAiQ6GcuRngRYawdcZaTVqEK8u0k8t0qqRRqWezEw2B+tvQ==}
@@ -1444,6 +1438,7 @@ packages:
 
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+    dev: false
 
   /batch-cluster/8.0.1:
     resolution: {integrity: sha512-F5Ni0YR1WwIMyaQOaqV9D+uFUQFVsdQA1C70Ob/qAtz0tLSL14nZNqBYLMYn5qvDNc+tdKhrCPUNlXdOreWMuQ==}
@@ -1549,6 +1544,7 @@ packages:
       base64-js: 1.5.1
       ieee754: 1.1.13
       isarray: 1.0.0
+    dev: false
 
   /buffer/5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
@@ -2657,6 +2653,7 @@ packages:
   /events/1.1.1:
     resolution: {integrity: sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=}
     engines: {node: '>=0.4.x'}
+    dev: false
 
   /execa/5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
@@ -3007,7 +3004,7 @@ packages:
       ini: 1.3.8
       kind-of: 6.0.3
       which: 1.3.1
-    dev: true
+    dev: false
 
   /globals/11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
@@ -3139,6 +3136,7 @@ packages:
 
   /ieee754/1.1.13:
     resolution: {integrity: sha512-4vf7I2LYV/HaWerSo3XmlMkp5eZ83i+/CDluXi/IGTs/O1sejBNhTtnxzmRZfvOUqj7lZjqHkeTvpgSFDlWZTg==}
+    dev: false
 
   /ieee754/1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -3203,7 +3201,7 @@ packages:
     dependencies:
       brilliant-errors: 0.5.4
       common-types: 1.31.0
-      native-dash: 1.21.1
+      native-dash: 1.21.2
     dev: false
 
   /inflight/1.0.6:
@@ -3217,6 +3215,7 @@ packages:
 
   /ini/1.3.8:
     resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
+    dev: false
 
   /inquirer/8.2.0:
     resolution: {integrity: sha512-0crLweprevJ02tTuA6ThpoAERAGyVILC4sS74uib58Xf/zSr1/ZWtmm7D5CI+bSQEaA04f0K7idaHpQbSWgiVQ==}
@@ -3249,6 +3248,7 @@ packages:
   /interpret/1.4.0:
     resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
     engines: {node: '>= 0.10'}
+    dev: false
 
   /is-arrayish/0.2.1:
     resolution: {integrity: sha1-d8mYQFJ6qOyxqLppe4BkWnqSap0=}
@@ -3413,6 +3413,7 @@ packages:
 
   /isarray/1.0.0:
     resolution: {integrity: sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=}
+    dev: false
 
   /isexe/2.0.0:
     resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=}
@@ -4006,6 +4007,7 @@ packages:
   /jmespath/0.15.0:
     resolution: {integrity: sha1-o/Iiqarp+Wb10nx5ZRDigJF2Qhc=}
     engines: {node: '>= 0.6.0'}
+    dev: false
 
   /joycon/3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -4116,7 +4118,7 @@ packages:
   /kind-of/6.0.3:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
-    dev: true
+    dev: false
 
   /kleur/3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
@@ -4431,9 +4433,9 @@ packages:
     resolution: {integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==}
     dev: false
 
-  /native-dash/1.21.1:
-    resolution: {integrity: sha512-55cCX27FbbzNrEu9M/YKAwuHi5VBWiOy07lcz9/3cBsjy40CZQ9oXvldPREMUwcqYvahMClPb6eozj+ao/Pm0A==}
-    optionalDependencies:
+  /native-dash/1.21.2:
+    resolution: {integrity: sha512-menLmtQJpewbIKq3UctBv+Awwo2e+cybFq6K3mtmhvsaeEHZlJQqkmV/pDYpECBm+ORz1BL+jWp8Y7jOoBtggg==}
+    dependencies:
       inferred-types: 0.18.1
     dev: false
 
@@ -4957,6 +4959,7 @@ packages:
 
   /punycode/1.3.2:
     resolution: {integrity: sha1-llOgNvt8HuQjQvIyXM7v6jkmxI0=}
+    dev: false
 
   /punycode/2.1.1:
     resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
@@ -4966,6 +4969,7 @@ packages:
     resolution: {integrity: sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=}
     engines: {node: '>=0.4.x'}
     deprecated: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+    dev: false
 
   /queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
@@ -5064,6 +5068,7 @@ packages:
     engines: {node: '>= 0.10'}
     dependencies:
       resolve: 1.20.0
+    dev: false
 
   /reduce-flatten/2.0.0:
     resolution: {integrity: sha512-EJ4UNY/U1t2P/2k6oqotuX2Cc3T6nxJwsM0N0asT7dhrtH1ltUxDn4NalSYmPE2rCkVpcf/X6R0wDwcFpzhd4w==}
@@ -5208,6 +5213,7 @@ packages:
 
   /sax/1.2.1:
     resolution: {integrity: sha1-e45lYZCyKOgaZq6nSEgNgozS03o=}
+    dev: false
 
   /saxes/5.0.1:
     resolution: {integrity: sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==}
@@ -5288,6 +5294,7 @@ packages:
       glob: 7.2.0
       interpret: 1.4.0
       rechoir: 0.6.2
+    dev: false
 
   /side-channel/1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -5808,7 +5815,7 @@ packages:
       shelljs: 0.8.4
       strip-ansi: 6.0.1
       typescript: 4.6.0-dev.20211227
-    dev: true
+    dev: false
 
   /tsconfig-paths/3.12.0:
     resolution: {integrity: sha512-e5adrnOYT6zqVnWqZu7i/BQ3BnhzvGbjEjejFXO20lKIKpwTaupkCPgEfv4GZK1IBciJUEhYs3J3p75FdaTFVg==}
@@ -5942,7 +5949,7 @@ packages:
     dependencies:
       minimatch: 3.0.4
       typescript: 4.6.0-dev.20211227
-    dev: true
+    dev: false
 
   /typescript/3.9.10:
     resolution: {integrity: sha512-w6fIxVE/H1PkLKcCPsFqKE7Kv7QUwhU8qQY2MueZXWx5cPZdwFupLgKK3vntcK98BtNHZtAF4LA/yl2a7k8R6Q==}
@@ -5997,6 +6004,7 @@ packages:
     dependencies:
       punycode: 1.3.2
       querystring: 0.2.0
+    dev: false
 
   /util-deprecate/1.0.2:
     resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
@@ -6006,6 +6014,7 @@ packages:
     resolution: {integrity: sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==}
     deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
     hasBin: true
+    dev: false
 
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
@@ -6104,7 +6113,6 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
-    dev: true
 
   /which/2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
@@ -6182,10 +6190,12 @@ packages:
     dependencies:
       sax: 1.2.1
       xmlbuilder: 9.0.7
+    dev: false
 
   /xmlbuilder/9.0.7:
     resolution: {integrity: sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=}
     engines: {node: '>=4.0'}
+    dev: false
 
   /xmlchars/2.2.0:
     resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
