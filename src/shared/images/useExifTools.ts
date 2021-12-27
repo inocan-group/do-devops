@@ -120,7 +120,7 @@ export function useExifTools(options: IExifToolOptions = {}) {
         );
       }
       await exiftool.write(file, { [tag]: value });
-      cache[file] = { ...cache[file], [tag]: value as IExifToolMetadata };
+      cache[file] = { ...cache[file], [tag]: value as unknown as IExifToolMetadata };
 
       if (!keepOriginalCopy) {
         removeOriginalFile(file);
