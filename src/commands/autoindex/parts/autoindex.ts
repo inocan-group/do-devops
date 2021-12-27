@@ -13,6 +13,8 @@ import { logger } from "~/shared/core";
 import { isAutoindexFile, processFiles } from "../private";
 import { IAutoindexWatchlist, watch } from "./watch";
 
+export const REQUIRED_BLACKLIST = ["**node_modules/**"];
+
 export const INDEX_LIST_DEFAULTS = ["**/index.ts", "**/index.js", "**/index.mjs", "**/index.cjs"];
 export const WHITE_LIST_DEFAULTS = ["src/**/*.ts", "src/**/*.vue", "!node_modules"];
 export const BLACK_LIST_DEFAULTS = [
@@ -92,7 +94,10 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
       log.info(chalk`{dim - Using explicit autoindex files passed into CLI}`);
     }
 
-    const blackglobs = projectConfig.autoindex?.blacklistGlobs || BLACK_LIST_DEFAULTS;
+    const blackglobs = [
+      ...(projectConfig.autoindex?.blacklistGlobs || BLACK_LIST_DEFAULTS),
+      ...REQUIRED_BLACKLIST,
+    ];
     const blacklist = await prepList(blackglobs);
 
     const indexlist = hasExplicitFiles

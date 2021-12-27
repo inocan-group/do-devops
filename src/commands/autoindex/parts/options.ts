@@ -7,6 +7,7 @@ export interface IAutoindexOptions {
   glob: string;
   sfc: boolean;
   dir: string;
+  force: boolean;
   all: boolean;
   watch: boolean;
   preserveExtension: boolean;
@@ -44,6 +45,13 @@ export const options: IOptionDefinition = {
     type: Boolean,
     group: "local",
     description: chalk`watches for changes and runs {italic autoindex} when detected`,
+  },
+  force: {
+    alias: "f",
+    type: Boolean,
+    group: "local",
+    description:
+      "forces a rebuild of all autoindex files even if the hash-code appears to be unchanged",
   },
   preserveExtension: {
     alias: "p",
