@@ -11,4 +11,9 @@ describe("fileHasExports() utility", () => {
     const t = fileHasExports(join(process.cwd(), "test/data/autoindex-example.txt"));
     expect(t).toBe(true);
   });
+
+  it("an autoindex file with only type exports", () => {
+    const t = fileHasExports(join(process.cwd(), "test/data/autoindex-example-type-export.txt"));
+    expect(t).toBe(true);
+  });
 });

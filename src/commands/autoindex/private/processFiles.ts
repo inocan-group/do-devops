@@ -184,7 +184,7 @@ export async function processFiles(
     };
 
     // if change to hash code the re-write index file
-    if (priorHash !== hashCode) {
+    if (priorHash !== hashCode || opts.force === true) {
       action = isNewAutoindexFile(aiContent) ? "new-file" : "updated";
       const result = createAutoindexContent(content, opts);
 
