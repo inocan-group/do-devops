@@ -1,4 +1,4 @@
-import { spawnSync } from "child_process";
+import { exec } from "async-shelljs";
 import chalk from "chalk";
 import { DoDevopObservation, PackageManagerObservation } from "~/@types/observations";
 import { saveProjectConfig } from "~/shared/config";
@@ -6,7 +6,6 @@ import { askListQuestion } from "~/shared/interactive";
 import { determinePackageManager } from "~/shared/observations";
 import { hasScript } from "../npm";
 import { emoji } from "../ui";
-import { cwd } from "process";
 
 const NON_PROXY = new Set(["install", "outdated", "update", "why", "ls"]);
 
@@ -85,7 +84,7 @@ export async function proxyToPackageManager(
             ? args && args.length > 0
               ? `yarn add ${args.join(" ")}`
               : "yarn"
-            : `${pkgManager} install ${args ? "" + args.join(" ") : ""}`;
+            : `${pkgManager} install${args ? " " + args.join(" ") : ""}`;
         break;
       case "outdated":
       case "upgrade":
@@ -100,10 +99,11 @@ export async function proxyToPackageManager(
         break;
       default:
         isScriptCmd = true;
-        pkgCmd =
+        pkgCmd = `${
           pkgManager === "yarn"
-            ? `yarn ${cmd} ${argv ? " " + argv.join(" ") : ""}`
-            : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""}`;
+            ? `yarn ${cmd}${argv ? " " + argv.join(" ") : ""}`
+            : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""}`
+        }`;
     }
 
     if (NON_PROXY.has(cmd)) {
@@ -121,13 +121,10 @@ export async function proxyToPackageManager(
       console.log(chalk`{gray - we will proxy {blue ${pkgCmd}} for you}\n`);
     }
 
-    const parts = pkgCmd.split(" ");
-    spawnSync(parts[0], parts.filter((i) => i).slice(1), { stdio: "inherit", cwd: cwd() });
-
-    // exec(pkgCmd, {
-    //   env: { ...process.env, TERM: "xterm-256color", FORCE_COLOR: "true" },
-    //   timeout: 0,
-    // });
+    exec(pkgCmd, {
+      env: { ...process.env, TERM: "xterm-256color", FORCE_COLOR: "true" },
+      timeout: 0,
+    });
   } else {
     console.log(chalk`- we can not currently tell {italic which} package manager you're using.`);
     const answer: PackageManagerObservation | "not now, thanks" = await askListQuestion(
