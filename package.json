@@ -1,6 +1,6 @@
 {
   "name": "dd",
-  "version": "0.16.14",
+  "version": "0.16.15",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",
@@ -94,9 +94,7 @@
     "smartwrap": "^2.0.2",
     "table": "^6.7.5",
     "ts-morph": "^13.0.2",
-    "ts-patch": "^2.0.1",
     "typed-mapper": "^0.4.1",
-    "typescript-transform-paths": "^3.3.1",
     "xxhash": "^0.3.0"
   },
   "devDependencies": {
@@ -125,7 +123,9 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^27.1.2",
     "ts-node": "^10.4.0",
+    "ts-patch": "^2.0.1",
     "tsup": "^5.11.9",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "typescript-transform-paths": "^3.3.1"
   }
 }
