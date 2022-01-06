@@ -2,7 +2,6 @@
 /* eslint-disable unicorn/number-literal-case */
 import chalk from "chalk";
 import { detectExportType, exclusions, createAutoindexContent } from "./index";
-import xxHash from "xxhash";
 import { IAutoindexFile } from "./reference";
 import {
   getEmbeddedHashCode,
@@ -19,6 +18,7 @@ import { IAutoindexOptions } from "../parts";
 import { appendFile, writeFile } from "fs/promises";
 import { existsSync, readFileSync } from "fs";
 import { fileHasExports } from "~/shared/ast";
+import xxhash from "xxhash-wasm";
 
 export interface WhiteBlackList {
   whitelist: string[];
@@ -36,6 +36,7 @@ export async function processFiles(
   scope: WhiteBlackList
 ) {
   const log = logger(opts);
+  const { h32 } = await xxhash();
   if (autoindexFiles.length === 0) {
     log.info(chalk`- ${emoji.confused} no {italic autoindex} files found in this package`);
     return;
@@ -160,8 +161,7 @@ export async function processFiles(
     const fileSymbols = files.map((f) => getFileComponents(f).filename);
 
     const priorHash = isNewAutoindexFile(aiContent) ? undefined : getEmbeddedHashCode(aiContent);
-    const hashCode = xxHash.hash(
-      Buffer.from(
+    const hashCode = h32(
         JSON.stringify({
           fileSymbols,
           dirs,
@@ -171,8 +171,7 @@ export async function processFiles(
           explicitDirRemoval,
           noExportDir,
           sfc: opts.sfc || false,
-        })
-      ),
+        }),
       0xcafebabe
     );
 
