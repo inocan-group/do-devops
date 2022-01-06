@@ -192,7 +192,7 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     longitudeReference: meta.GPSLongitudeRef?.toUpperCase() as "E" | "W" | undefined,
     destination:
       meta.GPSDestLatitude && meta.GPSDestLongitude
-        ? ([meta.GPSDestLatitude, meta.GPSDestLongitude] as [number, number])
+        ? ([Number(meta.GPSDestLatitude || 0), Number(meta.GPSDestLongitude || 0)] as [number, number])
         : undefined,
   };
 
