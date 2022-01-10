@@ -1,6 +1,6 @@
 {
   "name": "dd",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",
@@ -64,7 +64,7 @@
   "dependencies": {
     "ast-types": "^0.14.2",
     "async-shelljs": "^0.1.4",
-    "aws-sdk": "^2.1051.0",
+    "aws-sdk": "^2.1053.0",
     "aws-ssm": "^0.4.0",
     "bestzip": "^2.2.0",
     "callsites": "^3.1.0",
@@ -79,22 +79,22 @@
     "diff": "^5.0.0",
     "exiftool-vendored": "^15.9.2",
     "find-up": "^5.0.0",
-    "globby": "^11.0.4",
+    "globby": "^11.1.0",
     "inferred-types": "^0.18.3",
     "inquirer": "8.2.0",
     "js-yaml": "^4.1.0",
     "madge": "^5.0.1",
     "matcher": "^4.0.0",
     "native-dash": "^1.21.3",
-    "play-sound": "^1.1.4",
+    "play-sound": "^1.1.5",
     "recast": "^0.20.5",
     "sharp": "^0.29.3",
-    "shelljs": "^0.8.4",
+    "shelljs": "^0.8.5",
     "simple-git": "^2.48.0",
     "smartwrap": "^2.0.2",
     "table": "^6.8.0",
     "ts-morph": "^13.0.2",
-    "typed-mapper": "^0.4.1",
+    "typed-mapper": "^0.4.2",
     "xxhash-wasm": "^0.4.2"
   },
   "devDependencies": {
@@ -124,7 +124,7 @@
     "ts-jest": "^27.1.2",
     "ts-node": "^10.4.0",
     "ts-patch": "^2.0.1",
-    "tsup": "^5.11.10",
+    "tsup": "^5.11.11",
     "typescript": "^4.5.4",
     "typescript-transform-paths": "^3.3.1"
   }
