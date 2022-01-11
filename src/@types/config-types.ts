@@ -90,6 +90,19 @@ export interface ICommandConfig {
 
     /** include the VueJS SFC files and export the default export to a named export in index file */
     sfc: boolean;
+
+    /**
+     * flag indicating whether the SFC exports should be simple synchronous ones or
+     * asynchronous
+     */
+    asyncSfc?: boolean;
+
+    /**
+     * You can build a list of VueJS files which should _not_ be
+     * made Asynchronous (only useful if the `asyncSfc` is set to true)
+     */
+    asyncExceptions?: string[];
+
   };
   awsid?: {};
   build?: {

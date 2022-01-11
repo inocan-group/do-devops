@@ -5,7 +5,15 @@ export interface IAutoindexOptions {
   config: boolean;
   add: string;
   glob: string;
+  /** 
+   * boolean flag to indicate whether VueJS SFC files should have their default
+   * export added to the index file.
+   */
   sfc: boolean;
+  /**
+   * if set, will make all SFC files _asynchronous_ exports
+   */
+  async: boolean;
   dir: string;
   force: boolean;
   all: boolean;
