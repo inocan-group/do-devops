@@ -13,7 +13,7 @@ function syncExport(f: string, content: string) {
 function asyncExport(f: string, content: string) {
   content += `export const ${removeExtension(f)} = defineAsyncComponent({\n`;
   content += `  loader: async () => import("./${f}") /** webpackChunkName: "${removeExtension(f)}" */,\n`;
-  content += `});`;
+  content += `});\n`;
   return content;
 }
 
