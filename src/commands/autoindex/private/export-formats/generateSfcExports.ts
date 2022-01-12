@@ -5,6 +5,18 @@ import { IAutoindexFile, removeExtension } from "~/commands/autoindex/private";
 import { getProjectConfig } from "~/shared/config";
 import { logger } from "~/shared/core/logger";
 
+function syncExport(f: string, content: string) {
+  content += `export { default as ${removeExtension(f)} } from "./${f}";\n`;
+  return content;
+}
+
+function asyncExport(f: string, content: string) {
+  content += `export const ${removeExtension(f)} = defineAsyncComponent({\n`;
+  content += `  loader: async () => import("./${f}") /** webpackChunkName: "${removeExtension(f)}" */,\n`;
+  content += `});`;
+  return content;
+}
+
 /**
  * Checks to see that the **sfc** option has been turned on and if it has,
  * will export all the `.vue` files it finds in the appropriate format.
@@ -20,25 +32,26 @@ export function generateSfcExports(indexFile: IAutoindexFile, opts: Options<IAut
   // we are going to import SFC's but what type? Sync or Async?
   const pc = getProjectConfig();
   if(opts.async || pc.autoindex?.asyncSfc) {
-    content += `import { defineAsyncComponent } from "vue";\n`;
+    let asyncCount = 0;
     vueFiles.map(f => {
-      if(!(pc.autoindex?.asyncExceptions || []).includes(f)) {
-        content += `export const ${removeExtension(f)} = defineAsyncComponent({\n`;
-        content += `  loader: async () => import("./${f}") /** webpackChunkName: "${removeExtension(f)}" */,\n`;
-        content += `});`;
+      const isExcluded = !(pc.autoindex?.asyncExceptions || []).every(v => !f.includes(v));
+      if(isExcluded) {
+        content = syncExport(f, content);
+      } else {
+        content = asyncExport(f, content);
+        asyncCount++;
       }
+
+      return asyncCount > 0 
+        ? `import { defineAsyncComponent } from "vue";\n${content}`
+        : content;
     });
   } else {
     if(opts.sfc && pc.autoindex?.asyncSfc === undefined) {
       log.info(chalk`- you have stated that you want SFC exported but {italic not} if you want them to be asynchronous. Consider setting the {blue autoindex.asyncSfc} property in your do-devops config file.`);
     }
-    vueFiles.map((f) => {
-      content += `export { default as ${removeExtension(f)} } from "./${f}";\n`;
-    });
+    vueFiles.map((f) => syncExport(f, content));
   }
-
-
-
 
   return content;
 }
