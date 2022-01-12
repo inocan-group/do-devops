@@ -37,7 +37,7 @@ export function generateSfcExports(indexFile: IAutoindexFile, opts: Options<IAut
       const useAsync = !(pc.autoindex?.asyncExceptions || []).every(v => f.includes(v));
       if(useAsync) {
         content = asyncExport(f, content);
-        asyncCount++;
+        asyncCount += 1;
       } else {
         content = syncExport(f, content);
       }
