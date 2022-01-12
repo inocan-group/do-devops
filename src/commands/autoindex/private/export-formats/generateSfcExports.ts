@@ -34,12 +34,12 @@ export function generateSfcExports(indexFile: IAutoindexFile, opts: Options<IAut
   if(opts.async || pc.autoindex?.asyncSfc) {
     let asyncCount = 0;
     vueFiles.map(f => {
-      const isExcluded = !(pc.autoindex?.asyncExceptions || []).every(v => !f.includes(v));
-      if(isExcluded) {
-        content = syncExport(f, content);
-      } else {
+      const useAsync = !(pc.autoindex?.asyncExceptions || []).every(v => f.includes(v));
+      if(useAsync) {
         content = asyncExport(f, content);
         asyncCount++;
+      } else {
+        content = syncExport(f, content);
       }
 
       return asyncCount > 0 
