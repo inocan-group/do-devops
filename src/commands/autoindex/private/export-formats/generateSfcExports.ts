@@ -37,15 +37,15 @@ export function generateSfcExports(indexFile: IAutoindexFile, opts: Options<IAut
       const useAsync = !(pc.autoindex?.asyncExceptions || []).every(v => f.includes(v));
       if(useAsync) {
         content = asyncExport(f, content);
-        asyncCount += 1;
+        asyncCount = asyncCount + 1;
       } else {
         content = syncExport(f, content);
       }
-
-      return asyncCount > 0 
+      
+    });
+    return asyncCount > 0 
         ? `import { defineAsyncComponent } from "vue";\n${content}`
         : content;
-    });
   } else {
     if(opts.sfc && pc.autoindex?.asyncSfc === undefined) {
       log.info(chalk`- you have stated that you want SFC exported but {italic not} if you want them to be asynchronous. Consider setting the {blue autoindex.asyncSfc} property in your do-devops config file.`);
