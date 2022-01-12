@@ -1,4 +1,4 @@
-// #autoindex:named
+// #autoindex:named, exclude: recursiveNamed
 
 // #region autoindexed files
 // index last changed at: 1st Jan, 2022, 03:09 PM ( GMT-8 )
@@ -6,7 +6,6 @@
 
 // directory exports
 export * from "./fooNamed/index";
-export * from "./recursiveNamed/index";
 
 // #endregion
 
