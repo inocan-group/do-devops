@@ -34,7 +34,8 @@ export function generateSfcExports(indexFile: IAutoindexFile, opts: Options<IAut
   if(opts.async || pc.autoindex?.asyncSfc) {
     let asyncCount = 0;
     vueFiles.map(f => {
-      const useAsync = !(pc.autoindex?.asyncExceptions || []).every(v => f.includes(v));
+      const useAsync = (pc.autoindex?.asyncExceptions || []).every(v => !f.includes(v));
+      
       if(useAsync) {
         content = asyncExport(f, content);
         asyncCount = asyncCount + 1;

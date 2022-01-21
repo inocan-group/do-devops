@@ -59,7 +59,7 @@ export async function proxyToPackageManager(
 ) {
   // can't continue without package.json
   if (!observations.has("packageJson")) {
-    console.log(
+    console.error(
       chalk`- ${emoji.shocked} the {green ${cmd}} command is only meant to used in the root of NodeJS which has a {blue package.json} file in it.\n`
     );
     process.exit();
@@ -102,12 +102,12 @@ export async function proxyToPackageManager(
         pkgCmd = `${
           pkgManager === "yarn"
             ? `yarn ${cmd}${argv ? " " + argv.join(" ") : ""}`
-            : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""}`
+            : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""} --silent`
         }`;
     }
 
     if (NON_PROXY.has(cmd)) {
-      console.log(
+      console.error(
         chalk`{gray - we detected use of the {blue ${pkgManager}} in this repo and will {italic proxy} "${cmd}" to: {blue ${pkgCmd}}}\n`
       );
     } else {
@@ -118,7 +118,7 @@ export async function proxyToPackageManager(
         process.exit();
       }
 
-      console.log(chalk`{gray - we will proxy {blue ${pkgCmd}} for you}\n`);
+      console.error(chalk`{gray - we will proxy {blue ${pkgCmd}} for you}\n`);
     }
 
     exec(pkgCmd, {
