@@ -1,8 +1,8 @@
 // #autoindex:named, exclude: recursiveNamed
 
 // #region autoindexed files
-// index last changed at: 1st Jan, 2022, 03:09 PM ( GMT-8 )
-// hash-code: 4d71ce76
+// index last changed at: 1st Jan, 2022, 07:40 AM ( GMT-8 )
+// hash-code: 80ba9019
 
 // directory exports
 export * from "./fooNamed/index";

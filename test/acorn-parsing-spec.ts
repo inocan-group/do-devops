@@ -1,7 +1,7 @@
 import { currentDirectory } from "~/shared/file";
 import { getDefaultExport } from "~/shared/ast";
 
-describe("Acorn AST parsing", () => {
+describe("ast > Acorn AST parsing", () => {
   it("extract appropriate info from a direct export of the default export", () => {
     const defaultExport = getDefaultExport({
       filename: currentDirectory("test/data/acorn-test-data/defaultExport.ts"),

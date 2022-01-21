@@ -1,10 +1,11 @@
 // #autoindex
 
 // #region autoindexed files
-// index last changed at: 1st Jan, 2022, 03:09 PM ( GMT-8 )
-// hash-code: b8873c44
+// index last changed at: 1st Jan, 2022, 07:40 AM ( GMT-8 )
+// hash-code: 473c5e6e
 
 // file exports
+export * from "./aboutDefaultExport";
 export * from "./astParseWithAcorn";
 export * from "./astParseWithTypescript";
 export * from "./fileHasExports";

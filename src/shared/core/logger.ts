@@ -21,15 +21,15 @@ export function logger(opts?: Options): ILogger {
   return {
     info(...args: any[]) {
       if (!options.quiet) {
-        console.log(...args);
+        console.error(...args);
       }
     },
     shout(...args: any[]) {
-      console.log(...args);
+      console.error(...args);
     },
     whisper(...args: any[]) {
       if (options.verbose) {
-        console.log(...args);
+        console.error(...args);
       }
     },
   };

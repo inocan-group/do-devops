@@ -5,6 +5,8 @@ const c = defineComponent({
   },
 });
 
-export default defineAsyncComponent({
+const component = defineAsyncComponent({
   loader: async () => c,
 });
+
+export default component;

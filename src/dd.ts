@@ -67,7 +67,7 @@ import { isDevopsError } from "./@type-guards";
       if (cmdInput.unknown && cmdInput.unknown?.filter((i) => i).length > 0) {
         const plural = cmdInput.unknown.length === 1 ? false : true;
         const preposition = cmdInput.unknown.length === 1 ? "was" : "were";
-        console.log(
+        console.error(
           chalk`- Note: {italic there ${preposition} ${
             cmdInput.unknown.length
           } {italic unknown} parameter${
@@ -76,11 +76,11 @@ import { isDevopsError } from "./@type-guards";
         );
       }
     } catch (error) {
-      console.log(
+      console.error(
         chalk`\n{red An Error has occurred while running: {italic {bold do-devops ${cmdName}}}}`
       );
-      console.log(`- ${(error as Error).message}`);
-      console.log(chalk`{grey   ${(error as Error).stack}}\n`);
+      console.error(`- ${(error as Error).message}`);
+      console.error(chalk`{grey   ${(error as Error).stack}}\n`);
 
       process.exit();
     }
