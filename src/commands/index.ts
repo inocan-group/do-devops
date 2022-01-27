@@ -18,8 +18,6 @@ export { default as autoindex } from "./autoindex/index";
 
 export { default as awsid } from "./awsid/index";
 
-export { default as build } from "./build/index";
-
 export { default as deploy } from "./deploy/index";
 
 export { default as endpoints } from "./endpoints/index";
@@ -46,12 +44,9 @@ export { default as scaffold } from "./scaffold/index";
 
 export { default as ssm } from "./ssm/index";
 
-export { default as test } from "./test/index";
-
 export { default as upgrade } from "./upgrade/index";
 
 export { default as why } from "./why/index";
-
 
 // #endregion
 
@@ -76,7 +71,7 @@ export { default as why } from "./why/index";
 // below this file will not reference this autoindex file:
 //
 //    - autoindex:named, orphan
-// 
+//
 // All content outside the "// #region" section in this file will be
 // preserved in situations where you need to do something paricularly awesome.
 // Keep on being awesome.
