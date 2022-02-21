@@ -1,5 +1,6 @@
-import { exec } from "async-shelljs";
+// import { exec } from "async-shelljs";
 import chalk from "chalk";
+import { spawnSync } from "child_process";
 import { DoDevopObservation, PackageManagerObservation } from "~/@types/observations";
 import { saveProjectConfig } from "~/shared/config";
 import { askListQuestion } from "~/shared/interactive";
@@ -121,10 +122,16 @@ export async function proxyToPackageManager(
       console.error(chalk`{gray - we will proxy {blue ${pkgCmd}} for you}\n`);
     }
 
-    exec(pkgCmd, {
-      env: { ...process.env, TERM: "xterm-256color", FORCE_COLOR: "true" },
+    const cmdParts = pkgCmd.split(/\s+/g);
+    const thread = spawnSync(cmdParts[0], [...cmdParts.slice(1)], {
+      env: { ...process.env, FORCE_COLOR: "true", TERM: "xterm-256color" },
       timeout: 0,
+      stdio: "inherit",
     });
+
+    if (thread.error) {
+      throw new Error(`- ${emoji.poop} ran into problems running ${cmdParts.join(" ")}`);
+    }
   } else {
     console.log(chalk`- we can not currently tell {italic which} package manager you're using.`);
     const answer: PackageManagerObservation | "not now, thanks" = await askListQuestion(
