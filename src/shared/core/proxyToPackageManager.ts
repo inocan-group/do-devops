@@ -85,6 +85,8 @@ export async function proxyToPackageManager(
             ? args && args.length > 0
               ? `yarn add ${args.join(" ")}`
               : "yarn"
+            : (pkgManager === "pnpm" && args?.length) || 0 > 0
+            ? `${pkgManager} add${" " + args?.join(" ")}`
             : `${pkgManager} install${args ? " " + args.join(" ") : ""}`;
         break;
       case "outdated":
