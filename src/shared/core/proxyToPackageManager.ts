@@ -70,22 +70,18 @@ export async function proxyToPackageManager(
   if (pkgManager) {
     let pkgCmd: string;
     let isScriptCmd = false;
+    const args = argv?.map(
+      (a) =>
+        isPeerFlag(a, pkgManager) || isOptionalFlag(a, pkgManager) || isDevFlag(a, pkgManager) || a
+    );
 
     switch (cmd) {
       case "link":
       case "unlink":
-        pkgCmd = `${pkgManager} ${cmd}`;
+        pkgCmd = `${pkgManager} ${cmd} ${args?.join(" ")}`;
         break;
 
       case "install":
-        const args = argv?.map(
-          (a) =>
-            isPeerFlag(a, pkgManager) ||
-            isOptionalFlag(a, pkgManager) ||
-            isDevFlag(a, pkgManager) ||
-            a
-        );
-
         pkgCmd =
           pkgManager === "yarn"
             ? args && args.length > 0
