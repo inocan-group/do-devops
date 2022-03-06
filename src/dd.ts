@@ -89,7 +89,7 @@ import { isDevopsError } from "./@type-guards";
     // and proxy to it if it is
     let useScriptProxy: boolean | undefined;
     try {
-      useScriptProxy = hasScript(cmdName);
+      useScriptProxy = hasScript(cmdName) || ["link", "unlink"].includes(cmdName);
     } catch (error) {
       useScriptProxy =
         isDevopsError(error) && error.classification === "not-ready/missing-package-json"

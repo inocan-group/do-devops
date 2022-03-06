@@ -72,6 +72,11 @@ export async function proxyToPackageManager(
     let isScriptCmd = false;
 
     switch (cmd) {
+      case "link":
+      case "unlink":
+        pkgCmd = `${pkgManager} ${cmd}`;
+        break;
+
       case "install":
         const args = argv?.map(
           (a) =>
@@ -80,15 +85,15 @@ export async function proxyToPackageManager(
             isDevFlag(a, pkgManager) ||
             a
         );
-        
+
         pkgCmd =
-        pkgManager === "yarn"
-        ? args && args.length > 0
-        ? `yarn add ${args.join(" ")}`
-        : "yarn"
-        : (pkgManager === "pnpm" && (!args || args?.length === 0))
-        ? `${pkgManager} install${args ? " " + args.join(" ") : ""}`
-        : `${pkgManager} add${" " + args?.join(" ")}`;
+          pkgManager === "yarn"
+            ? args && args.length > 0
+              ? `yarn add ${args.join(" ")}`
+              : "yarn"
+            : pkgManager === "pnpm" && (!args || args?.length === 0)
+            ? `${pkgManager} install${args ? " " + args.join(" ") : ""}`
+            : `${pkgManager} add${" " + args?.join(" ")}`;
         break;
       case "outdated":
       case "upgrade":
@@ -109,7 +114,6 @@ export async function proxyToPackageManager(
             : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""} --silent`
         }`;
     }
-    
 
     if (NON_PROXY.has(cmd)) {
       console.error(
@@ -126,8 +130,8 @@ export async function proxyToPackageManager(
       console.error(chalk`{gray - we will proxy {blue ${pkgCmd}} for you}\n`);
     }
 
-    const cmdParts = pkgCmd.split(/\s+/g).filter(i => i);
-    
+    const cmdParts = pkgCmd.split(/\s+/g).filter((i) => i);
+
     const thread = spawnSync(cmdParts[0], [...cmdParts.slice(1)], {
       env: { ...process.env, FORCE_COLOR: "true", TERM: "xterm-256color" },
       timeout: 0,
