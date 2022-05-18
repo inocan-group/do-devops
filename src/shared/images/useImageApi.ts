@@ -79,7 +79,7 @@ export function useImageApi(rules: IImageRule[], options: IImageApiOptions = {})
     /**
      * Gets the metadata for an image using **ExifTool**. By default, the data returned is a pure
      * key/value pairing of all metadata but if you set `format` to "categorical" you'll get a more
-     * compact and dedupped set of tags.
+     * compact and de-dupped set of tags.
      */
     getMetaForImage: async (image: string, format: "tags" | "categorical" = "tags") => {
       return format === "tags" ? exif.getMetadata(image) : exif.categorizedMetadata(image);

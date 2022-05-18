@@ -3,10 +3,9 @@ import { PackageManagerObservation, DoDevopObservation } from "~/@types/observat
 import { DevopsError } from "~/errors";
 import { askListQuestion } from "~/shared/interactive";
 import { emoji } from "~/shared/ui";
-import { getProjectConfig, saveProjectConfig } from "~/shared/config";
+import { getProjectConfig, getUserConfig, saveProjectConfig, saveUserConfig } from "~/shared/config";
 import { removeOtherLockFiles } from "~/shared/npm";
 import { Options } from "~/@types";
-import { installPackageManager } from "~/shared/install";
 
 /**
  * Based on all observations made at startup, this function will try to
@@ -48,6 +47,8 @@ export async function determinePackageManager(
     }
   }
 
+  const userConfig =  getUserConfig();
+
   if (observations.has("yarn")) {
     return "yarn";
   }
@@ -58,19 +59,26 @@ export async function determinePackageManager(
     return "pnpm";
   }
 
+  if (userConfig.general?.pkgManager) {
+    return userConfig.general?.pkgManager;
+  }
+
   const config = getProjectConfig();
   if (config.general?.pkgManager) {
     return config.general.pkgManager;
   }
 
   if (opts.interactive) {
-    const manager = await askListQuestion<PackageManagerObservation>(
-      "We couldn't determine your default package manager, please choose from the list.",
-      ["npm", "pnpm", "yarn"],
-      { default: "npm" }
+    const manager = await askListQuestion<PackageManagerObservation | "no thanks">(
+      "We couldn't determine the package manager to use, would you like to add a default pkg manager to your user profile?",
+      ["npm", "pnpm", "yarn", "no thanks"],
+      { default: "pnpm" }
     );
-    await installPackageManager({ ...opts, manager }, observations);
-    return manager;
+    if (manager !== "no thanks") {
+      await saveUserConfig({ general: {pkgManager: manager} });
+      return manager;
+
+    } else {}
   }
 
   return false;

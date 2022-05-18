@@ -21,6 +21,6 @@ export async function saveUserConfig<T extends Partial<IUserConfigFilled>>(updat
   const newConfig: IUserConfig = { ...merge(current, updated), kind: "user", userConfig: true };
 
   writeFileSync(homeDirectory(CONFIG_FILE), JSON.stringify(newConfig, null, 2), {
-    encoding: "utf-8",
+    encoding: "utf8",
   });
 }
