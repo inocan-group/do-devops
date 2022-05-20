@@ -52,6 +52,9 @@ function getExports(repo: INpmInfo) {
   return repoExports.length > 0 ? chalk.italic(repoExports.join(", ")) : chalk.italic.dim("none");
 }
 
+/** approx width requirements for each column */
+const colPaddingRequirement = (cols: number) => cols * 4;
+
 /**
  * if user adds packages to the `pp info [p1] [p2]` this function will respond
  */
@@ -74,13 +77,15 @@ export async function otherPackages(
   }
   const { width: w } = consoleDimensions();
 
+  const padding = colPaddingRequirement(5);
+
   console.log(
     toTable(
       data,
       { name: "Repo", col: "repo", format: { width: 20 } },
       { name: "Latest", col: "latest", format: { width: 8, alignment: "center" } },
-      { name: "Exports", col: "exports", format: { width: 14 } },
-      { name: "Description", col: "description", format: { wrapWord: true, width: 50 } },
+      { name: "Exports", col: "exports", format: { width: 14, wrapWord: true } },
+      { name: "Description", col: "description", format: { wrapWord: true, width: w - (20+8+14 + padding ) } },
       {
         name: "URLs",
         col: "urls",
