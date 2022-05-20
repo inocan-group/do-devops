@@ -1,6 +1,6 @@
 {
   "name": "dd",
-  "version": "0.19.9",
+  "version": "0.20.0",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",
