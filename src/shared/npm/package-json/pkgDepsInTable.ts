@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { toTable } from "~/shared/ui";
+import {  toTable } from "~/shared/ui";
 import { getPackageJson, convertDepDictionaryToArray } from "~/shared/npm";
 
 function formatDependencies(deps: Array<{ name: string; version: string }>) {
@@ -26,6 +26,7 @@ export function pkgDepsInTable(opts: IPkgDepsInTableOptions = {}) {
     optionalDependencies,
     peerDependencies,
   } = getPackageJson();
+  
 
   const deps = [
     { name: "Dependencies", data: opts.ignoreDeps ? undefined : dependencies },
@@ -39,7 +40,6 @@ export function pkgDepsInTable(opts: IPkgDepsInTableOptions = {}) {
       data: formatDependencies(convertDepDictionaryToArray(i.data as IDictionary<string>)),
     }));
   const columns = deps.map((i) => i.name);
-
   const max = Math.max(...deps.map((d) => d.data.length));
 
   const data: any[] = [];

@@ -53,7 +53,7 @@ export async function convertStale(
       const changes = [...missing, ...outOfDate];
       const resized: Promise<IImageCacheRef[]>[] = [];
       for (const img of changes) {
-        resized.push(tools.sharp.resizeToWebFormats(img, rule.destination, rule.widths));
+        resized.push(tools.sharp.resizeToWebFormats(img, rule.destination, rule.widths, { ...rule.options, includePNG: rule.outputPNG}));
       }
       const resizedComplete = [...(await Promise.all(resized))].flat();
       log.whisper(

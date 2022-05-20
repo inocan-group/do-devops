@@ -20,8 +20,9 @@ function isDevFlag(flag: string, mngr: PackageManagerObservation) {
     case "pnpm":
       return "--save-dev";
     case "yarn":
-    default:
       return "--dev";
+    default:
+      throw new Error(`unknown package maanager: ${mngr}`);
   }
 }
 function isPeerFlag(flag: string, mngr: PackageManagerObservation) {
@@ -34,8 +35,9 @@ function isPeerFlag(flag: string, mngr: PackageManagerObservation) {
     case "pnpm":
       return "--save-peer";
     case "yarn":
-    default:
       return "--peer";
+    default:
+      throw new Error(`unknown package maanager: ${mngr}`);
   }
 }
 function isOptionalFlag(flag: string, mngr: PackageManagerObservation) {
@@ -48,8 +50,9 @@ function isOptionalFlag(flag: string, mngr: PackageManagerObservation) {
     case "pnpm":
       return "--save-optional";
     case "yarn":
-    default:
       return "--optional";
+    default:
+      throw new Error(`unknown package maanager: ${mngr}`);
   }
 }
 
@@ -126,7 +129,7 @@ export async function proxyToPackageManager(
       console.error(chalk`{gray - we will proxy {blue ${pkgCmd}} for you}\n`);
     }
 
-    const cmdParts = pkgCmd.split(/\s+/g).filter((i) => i);
+    const cmdParts = pkgCmd.split(/\s+/g).filter(Boolean);
 
     const thread = spawnSync(cmdParts[0], [...cmdParts.slice(1)], {
       env: { ...process.env, FORCE_COLOR: "true", TERM: "xterm-256color" },

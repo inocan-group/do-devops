@@ -289,6 +289,12 @@ export type IImageRule = {
   options?: ImageFormatOptions;
 
   /**
+   * By default only JPG, AVIF, and WEBP are output but PNG can be added
+   * by setting this flag to `true`
+   */
+  outputPNG?: boolean;
+
+  /**
    * A rule may state which meta properties it is interested in preserving in
    * the converted images.
    */

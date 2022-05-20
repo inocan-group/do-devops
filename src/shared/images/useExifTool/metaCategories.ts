@@ -1,3 +1,4 @@
+import { ExifDateTime } from "exiftool-vendored";
 import { ICategoricalMeta, IExifToolMetadata } from "~/@types/image-types";
 import { convertToExifDateTime, reduceFl35 } from "./conversion-tools";
 
@@ -6,10 +7,10 @@ import { convertToExifDateTime, reduceFl35 } from "./conversion-tools";
  * "core essentials".
  */
 export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
-  const populated = Object.keys(meta).filter((i) => i);
+  const populated = Object.keys(meta).filter(Boolean);
 
   const make = [meta.DeviceManufacturer, meta.CameraID, meta.Make, meta.VendorID]
-    .filter((i) => i)
+    .filter((i) => i ? true : false)
     .pop();
 
   const model = [
@@ -31,8 +32,8 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.SamsungModelID,
     meta.UniqueCameraModel,
   ]
-    .filter((i) => i)
-    .pop();
+    .filter(Boolean)
+    .pop() as string | undefined;
 
   const color = [
     meta.ProfileDescription,
@@ -40,10 +41,10 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.DeviceModel,
     meta.Look?.name ? String(meta.Look?.name) : undefined,
   ]
-    .filter((i) => i)
+    .filter(Boolean)
     .pop();
 
-  const software = [meta.Software, meta.CameraSoftware].filter((i) => i).pop();
+  const software = [meta.Software, meta.CameraSoftware].filter(Boolean).pop();
 
   const shutterSpeed = [
     meta.ShutterSpeed,
@@ -53,8 +54,8 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.SpeedY,
     meta.SpeedZ,
   ]
-    .filter((i) => i)
-    .pop();
+    .filter(Boolean)
+    .pop() as  string | undefined;
 
   const iso = [
     meta.ISO,
@@ -67,11 +68,10 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.SvISOSetting,
     meta.BaseISO,
   ]
-    .filter((i) => i)
+    .filter(Boolean)
     .pop();
 
-  const createDate = convertToExifDateTime(
-    [
+  const dateOptions = [
       meta.DateAcquired,
       meta.DateTime,
       meta.DateTime1,
@@ -85,12 +85,12 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
       meta.DateCreated,
       meta.Date,
     ]
-      .filter((i) => i)
-      .pop()
-  );
+      .filter(Boolean)
+      .pop() as string | ExifDateTime | undefined;
+  const createDate = convertToExifDateTime(dateOptions);
 
   const modifyDate = convertToExifDateTime(
-    [meta.ModifyDate, meta.ModificationDate].filter((i) => i).pop()
+    [meta.ModifyDate, meta.ModificationDate].filter(Boolean).pop()
   );
 
   const height = [
@@ -108,8 +108,8 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.PanasonicImageHeight,
     meta.RawImageFullHeight,
   ]
-    .filter((i) => i)
-    .pop();
+    .filter(Boolean)
+    .pop() as number | undefined;
 
   const width = [
     meta.ImageWidth,
@@ -125,31 +125,31 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.PanoramaFullWidth,
     meta.RawImageFullWidth,
   ]
-    .filter((i) => i)
-    .pop();
+    .filter(Boolean)
+    .pop() as number | undefined;
 
-  const aperture = [meta.Aperture, meta.ApertureSetting].filter((i) => i).pop();
+  const aperture = [meta.Aperture, meta.ApertureSetting].filter(Boolean).pop();
 
-  const lens = [meta.LensID, meta.Lens, meta.LensInfo, meta.LensModel].filter((i) => i).pop();
-  const lensMake = [meta.LensMake, meta.KodakMake].filter((i) => i).pop();
+  const lens = [meta.LensID, meta.Lens, meta.LensInfo, meta.LensModel].filter(Boolean).pop();
+  const lensMake = [meta.LensMake, meta.KodakMake].filter(Boolean).pop();
 
   const focalLength = [meta.FocalLength, [meta.FocalType, meta.FocalUnits].join("")]
-    .filter((i) => i)
+    .filter(Boolean)
     .pop();
 
   const focalLength35 = [meta.FocalLengthIn35mmFormat, reduceFl35(meta.FocalLength35efl)]
-    .filter((i) => i)
+    .filter(Boolean)
     .pop()
     ?.trim();
 
-  const exposureProgram = [meta.ExposureProgram, meta.AEProgramMode].filter((i) => i).pop();
+  const exposureProgram = [meta.ExposureProgram, meta.AEProgramMode].filter(Boolean).pop();
   const bracketing = meta.BracketProgram;
 
-  const exposureMode = [meta.ExposureMode].filter((i) => i).pop();
+  const exposureMode = [meta.ExposureMode].filter(Boolean).pop();
   const exposureBias = [meta.Exposure, meta.ExposureCompensation, meta.ExposureBracketValue]
-    .filter((i) => i)
+    .filter(Boolean)
     .pop();
-  const meteringMode = [meta.MeterMode, meta.Metering].filter((i) => i).pop();
+  const meteringMode = [meta.MeterMode, meta.Metering].filter(Boolean).pop();
   const flash = [
     meta.Flash,
     meta.FlashAction,
@@ -157,10 +157,10 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.FlashControl,
     meta.FlashFired,
   ]
-    .filter((i) => i)
+    .filter(Boolean)
     .pop();
-  const flashCompensation = [meta.FlashCompensation, meta.FlashBias].filter((i) => i).pop();
-  const brightness = [meta.Brightness, meta.BrightnessValue].filter((i) => i).pop();
+  const flashCompensation = [meta.FlashCompensation, meta.FlashBias].filter(Boolean).pop();
+  const brightness = [meta.Brightness, meta.BrightnessValue].filter(Boolean).pop();
   const scene = [
     meta.Scene,
     meta.SceneAssist,
@@ -169,12 +169,12 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.SceneModeUsed,
     `${String(meta.SceneDetect)} scene id`,
   ]
-    .filter((i) => i)
-    .pop();
+    .filter(Boolean)
+    .pop() as string | undefined;
   const subjectDistance = meta.SubjectDistance;
   const sharpness = String(
     [meta.Sharpness, meta.SharpnessFactor, meta.SharpnessSetting, meta.SharpnessRange]
-      .filter((i) => i)
+      .filter(Boolean)
       .pop()
   );
 
@@ -183,10 +183,10 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
 
   const gps: ICategoricalMeta["gps"] = {
     altitude: [meta.GPSAltitude ? String(meta.GPSAltitude) : undefined, meta.Altitude]
-      .filter((i) => i)
+      .filter(Boolean)
       .pop(),
     coordinates: [[meta.GPSLatitude, meta.GPSLongitude], meta.GPSCoordinates]
-      .filter((i) => i)
+      .filter(Boolean)
       .pop() as [number, number] | undefined,
     latitudeReference: meta.GPSLatitudeRef?.toUpperCase() as "N" | "S" | undefined,
     longitudeReference: meta.GPSLongitudeRef?.toUpperCase() as "E" | "W" | undefined,
@@ -197,18 +197,18 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
   };
 
   const title: string | undefined = [meta.Title, meta.XPTitle, meta["By-lineTitle"]]
-    .filter((i) => i)
+    .filter(Boolean)
     .pop();
   const caption = [meta["Caption-Abstract"], meta.LocalCaption, meta.CanonFileDescription]
-    .filter((i) => i)
+    .filter(Boolean)
     .pop();
 
-  const copyright = [meta.Copyright, meta.CopyrightNotice].filter((i) => i).pop();
+  const copyright = [meta.Copyright, meta.CopyrightNotice].filter(Boolean).pop();
 
   const megapixels = meta.Megapixels;
 
-  const rating = [meta.Rating, meta.RatingPercent].filter((i) => i).pop();
-  const subject = [meta.Subject?.pop(), meta.SubjectReference].filter((i) => i).pop();
+  const rating = [meta.Rating, meta.RatingPercent].filter(Boolean).pop();
+  const subject = [meta.Subject?.pop(), meta.SubjectReference].filter(Boolean).pop();
 
   const location = {
     city: meta.City,

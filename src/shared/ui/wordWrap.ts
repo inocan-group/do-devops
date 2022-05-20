@@ -1,4 +1,5 @@
 import smartwrap from "smartwrap"; // https://github.com/tecfu/smartwrap#readme
+import { consoleDimensions } from "./consoleDimensions";
 export interface IWordWrapOptions {
   /**
    * Remove any existing CR's in text before applying
@@ -17,6 +18,7 @@ export interface IWordWrapOptions {
  */
 export function wordWrap(text: string, options: IWordWrapOptions = {}) {
   text = options.removeExistingCR ? text.replace(/\n/g, "") : text;
+  const { width: w } = consoleDimensions();
 
-  return smartwrap(text, { width: options.wrapDistance || 80 });
+  return smartwrap(text, { width: options.wrapDistance || Math.min(80, w) });
 }
