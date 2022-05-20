@@ -1,5 +1,8 @@
 {
   "search.exclude": {
     "**/*.js": true
-  }
+  },
+  "cSpell.words": [
+    "Devop"
+  ]
 }

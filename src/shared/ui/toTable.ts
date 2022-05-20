@@ -49,7 +49,7 @@ function headerCol(name: string) {
  */
 export function toTable<T extends object, K extends keyof T & string = keyof T & string>(
   data: T[],
-  ...columns: Array<TableColumn<T, K>>
+  ...columns: TableColumn<T, K>[]
 ) {
   const ui = consoleDimensions();
   const hiddenColumns: string[] = [];

@@ -1,7 +1,7 @@
 import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
 import path from "path";
-import { IDictionary, INpmInfo } from "common-types";
+import { IDictionary, INpmInfo, IPackageJson } from "common-types";
 import { format, parseISO } from "date-fns";
 import { table, TableUserConfig } from "table";
 import { DoDevopObservation, Options } from "~/@types";
@@ -34,7 +34,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     (s) => !s.linkTo.startsWith(".pnpm/")
   );
   const pkgManagerConflict = observations.has("packageManagerConflict")
-    ? chalk`- {yellow {bold ${emoji.hazzard}}} there are conflicts in lock files from more than one package manager!`
+    ? chalk`- {yellow {bold ${emoji.hazard}}} there are conflicts in lock files from more than one package manager!`
     : false;
   if (pkgManagerConflict) {
     console.log(pkgManagerConflict);
@@ -57,7 +57,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
 
   const pkgExports = [
     { name: "commonjs", value: pkg.main },
-    { name: "es-module", value: pkg.module },
+    { name: "esm", value: pkg.module },
     { name: "typings", value: pkg.typings || pkg.types },
   ].filter((i) => i.value);
   const exportsRow =
@@ -88,6 +88,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     await asyncExec("git diff --name-only", {
       silent: true,
     })
+  // eslint-disable-next-line unicorn/no-await-expression-member
   ).split("\n").length;
   /**
    * NPM Info based on verbose flag
@@ -123,16 +124,22 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
         : "",
     ],
   ];
-  const depsSummary = `This repo has ${green(
+
+  const deps: {name: string; prop: keyof IPackageJson; count: number }[] = [
+    {name: "dependencies", prop: "dependencies", count:  Object.keys(pkg?.dependencies || {}).length},
+    {name: chalk`{italic dev} dependencies`, prop: "devDependencies",count:  Object.keys(pkg?.devDependencies || {}).length},
+    {name: chalk`{italic optional} dependencies`, prop: "optionalDependencies", count:  Object.keys(pkg?.optionalDependencies || {}).length},
+    {name: chalk`{italic peer} dependencies`, prop: "peerDependencies",count:  Object.keys(pkg?.peerDependencies || {}).length},
+  ].filter(d => d.count > 0);
+
+  const depsSummary = deps.length > 0
+    ? `This repo has ${deps.map(d => chalk`{green ${d.count}} ${d.name}`).join(", ")}`
+    : chalk`{italic {dim no dependencies}}`;
+  
+  
+  chalk`This repo has ${green(
     Object.keys(pkg?.dependencies || {}).length
-  )} dependencies${
-    npm
-      ? chalk`, with a total of ${green(npm.dist.fileCount)} files\nand a unpacked size of ${green(
-          npm.dist.unpackedSize / 1000,
-          chalk` {italic kb}`
-        )}.`
-      : "."
-  }`;
+  )} dependencies, and {green ${Object.keys(pkg?.devDependencies || {}).length}} {italic dev} dependencies`;
   const depDetails = `${depsSummary}\n\nThe dependencies are:\n - ${dim(
     Object.keys(pkg?.dependencies || {}).join("\n - ")
   )}`;
@@ -146,6 +153,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
           .map((i) => i[1])
           .join("");
 
+  // eslint-disable-next-line unicorn/no-await-expression-member
   const gitRemotes = (await getGitRemotes()).map((i) => chalk`- {bold ${i.name}:} ${i.refs.fetch}`);
 
   const repoInfo =
@@ -169,7 +177,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     ["NPM", npmInformation],
     [chalk.bold("Deps"), opts.verbose === true ? depDetails : depsSummary],
     ["Repo ", repoInfo],
-    ["Scripts", Object.keys(pkg?.scripts || {}).join(", ")],
+    ["Scripts", Object.keys(pkg?.scripts || {}).map(i => i.includes(":") ? chalk`{dim ${i.split(":")[0]}}:${i.split(":")[1]}` : i).join(", ")],
     [
       "GIT",
       gitInfo +

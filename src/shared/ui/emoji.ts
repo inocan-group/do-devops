@@ -30,5 +30,5 @@ export const enum emoji {
   /** ⚠️ */
   warn = "\u26A0\uFE0F",
   /** ☢️ */
-  hazzard = "\u2622\uFE0F",
+  hazard = "\u2622\uFE0F",
 }

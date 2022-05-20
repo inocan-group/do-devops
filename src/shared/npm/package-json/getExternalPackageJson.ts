@@ -1,4 +1,5 @@
 import { asyncExec } from "async-shelljs";
+import { INpmInfo } from "common-types";
 import parse from "destr";
 import { DevopsError } from "~/errors";
 
@@ -8,9 +9,9 @@ import { DevopsError } from "~/errors";
  * looks for the local package and throws an error
  * if not found
  */
-export async function getExternalPackageJson(pkg: string = "") {
+export async function getExternalPackageJson(pkg: string = ""): Promise<INpmInfo> {
   try {
-    return parse(await asyncExec(`npm info ${pkg} --json`, { silent: true }));
+    return parse(await asyncExec(`npm info ${pkg} --json`, { silent: true })) as INpmInfo;
   } catch {
     // appears NOT to be a NPM package
     throw new DevopsError(
