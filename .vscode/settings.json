@@ -3,6 +3,9 @@
     "**/*.js": true
   },
   "cSpell.words": [
-    "Devop"
+    "awsid",
+    "Devop",
+    "exiftool",
+    "smartwrap"
   ]
 }

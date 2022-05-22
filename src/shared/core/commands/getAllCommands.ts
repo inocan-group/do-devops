@@ -12,5 +12,6 @@ export function getAllCommands(
   opts: IDictionary = {}
 ) {
   const cmds = Object.keys(subCommands);
+  
   return cmds.map((cmd) => finalizeCommandDefinition(getCommand(cmd), observations, opts));
 }

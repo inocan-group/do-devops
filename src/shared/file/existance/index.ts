@@ -1,10 +1,11 @@
 // #autoindex
 
 // #region autoindexed files
-// index last changed at: 1st Jan, 2022, 03:09 PM ( GMT-8 )
-// hash-code: e7b4391c
+// index last changed at: 5th May, 2022, 02:20 PM ( GMT-7 )
+// hash-code: 262d3ba1
 
 // file exports
+export * from "./commandIsAvailable";
 export * from "./dirExists";
 export * from "./ensureDirectory";
 export * from "./fileExists";

@@ -42,7 +42,7 @@ export interface IHelpConfig {
 /**
  * Intended to type the _inline_ configuration of a function when using
  * the build system in **do-devops**. This is nothing more than a the `IServerlessFunction`
- * but _ommitting_ the `handler` property because that property -- which is required --
+ * but _omitting_ the `handler` property because that property -- which is required --
  * is managed automatically for you by the build process.
  */
 export type IFunctionConfig = Omit<IServerlessFunction, "handler">;
