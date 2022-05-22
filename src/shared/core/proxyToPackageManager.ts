@@ -21,10 +21,13 @@ function isDevFlag(flag: string, mngr: PackageManagerObservation) {
       return "--save-dev";
     case "yarn":
       return "--dev";
+    case "cargo":
+      return "";
     default:
-      throw new Error(`unknown package maanager: ${mngr}`);
+      throw new Error(`unknown package manager: ${mngr}`);
   }
 }
+
 function isPeerFlag(flag: string, mngr: PackageManagerObservation) {
   const matched = ["--save-peer", "--peer"].includes(flag);
   if (!matched) {
@@ -37,7 +40,7 @@ function isPeerFlag(flag: string, mngr: PackageManagerObservation) {
     case "yarn":
       return "--peer";
     default:
-      throw new Error(`unknown package maanager: ${mngr}`);
+      throw new Error(`unknown package manager: ${mngr}`);
   }
 }
 function isOptionalFlag(flag: string, mngr: PackageManagerObservation) {
@@ -52,7 +55,7 @@ function isOptionalFlag(flag: string, mngr: PackageManagerObservation) {
     case "yarn":
       return "--optional";
     default:
-      throw new Error(`unknown package maanager: ${mngr}`);
+      throw new Error(`unknown package manager: ${mngr}`);
   }
 }
 

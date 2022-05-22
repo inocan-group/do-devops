@@ -1,4 +1,5 @@
 import { IPackageJson } from "common-types";
+import { existsSync } from "fs";
 import { DoDevopObservation } from "~/@types/observations";
 import { IMAGE_CACHE } from "~/constants";
 import { getProjectConfig } from "../config";
@@ -26,6 +27,10 @@ export function getObservations() {
     pkgJson = getPackageJson();
   } catch {}
 
+  if(existsSync(currentDirectory("Cargo.toml"))) {
+    observations.add("cargo");
+  }
+
   if (pkgJson) {
     observations.add("packageJson");
 
@@ -40,9 +45,7 @@ export function getObservations() {
       // TS
       observations.add("typescript");
     }
-    if (hasDevDependency("ttypescript")) {
-      observations.add("ttypescript");
-    }
+
     if (hasDevDependency("typescript-transform-paths")) {
       observations.add("typescriptTransformPaths");
     }

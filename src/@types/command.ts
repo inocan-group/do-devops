@@ -29,6 +29,7 @@ export type KnownCommand<E extends string = never> =
   | "madge"
   | "scaffold"
   | "ssm"
+  | "tree"
   | "test"
   | "validate"
   | "install"
