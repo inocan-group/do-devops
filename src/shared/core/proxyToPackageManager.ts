@@ -113,7 +113,7 @@ export async function proxyToPackageManager(
         pkgCmd = `${
           pkgManager === "yarn"
             ? `yarn ${cmd}${argv ? " " + argv.join(" ") : ""}`
-            : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""} --silent`
+            : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""}`
         }`;
     }
 
