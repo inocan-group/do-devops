@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 // import { exec } from "async-shelljs";
 import chalk from "chalk";
 import { spawnSync } from "child_process";
@@ -113,7 +114,7 @@ export async function proxyToPackageManager(
         pkgCmd = `${
           pkgManager === "yarn"
             ? `yarn ${cmd}${argv ? " " + argv.join(" ") : ""}`
-            : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""} --silent`
+            : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""}`
         }`;
     }
 

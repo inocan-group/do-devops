@@ -45,6 +45,7 @@ specifiers:
   matcher: ^4.0.0
   native-dash: ^1.22.1
   npm-run-all: ^4.1.5
+  pathe: ^0.3.2
   play-sound: ^1.1.5
   prettier: ^2.6.2
   recast: ^0.20.5
@@ -90,6 +91,7 @@ dependencies:
   madge: 5.0.1
   matcher: 4.0.0
   native-dash: 1.22.1
+  pathe: 0.3.2
   play-sound: 1.1.5
   recast: 0.20.5
   sharp: 0.30.4
@@ -4884,6 +4886,10 @@ packages:
   /path-type/4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
+
+  /pathe/0.3.2:
+    resolution: {integrity: sha512-qhnmX0TOqlCvdWWTkoM83wh5J8fZ2yhbDEc9MlsnAEtEc+JCwxUKEwmd6pkY9hRe6JR1Uecbc14VcAKX2yFSTA==}
+    dev: false
 
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}

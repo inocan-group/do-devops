@@ -1,26 +1,23 @@
-// #autoindex:default
-
+// #autoindex: default
 // #region autoindexed files
-// index last changed at: 5th May, 2022, 02:24 PM ( GMT-7 )
-// hash-code: 3d99cb41
-
-// file exports
-export { default as add } from "./add";
-export { default as install } from "./install";
-export { default as ls } from "./ls";
-export { default as watch } from "./watch";
+// index last changed at: 7th Jul, 2022, 06:39 PM ( GMT-7 )
+// hash-code: ee51851e
 
 // directory exports
+export { default as add } from "./add/index";
 export { default as autoindex } from "./autoindex/index";
 export { default as awsid } from "./awsid/index";
+export { default as cert } from "./cert/index";
 export { default as deploy } from "./deploy/index";
 export { default as endpoints } from "./endpoints/index";
 export { default as fns } from "./fns/index";
 export { default as image } from "./image/index";
 export { default as info } from "./info/index";
+export { default as install } from "./install/index";
 export { default as invoke } from "./invoke/index";
 export { default as latest } from "./latest/index";
 export { default as layers } from "./layers/index";
+export { default as ls } from "./ls/index";
 export { default as madge } from "./madge/index";
 export { default as outdated } from "./outdated/index";
 export { default as pkg } from "./pkg/index";
@@ -28,8 +25,8 @@ export { default as scaffold } from "./scaffold/index";
 export { default as ssm } from "./ssm/index";
 export { default as tree } from "./tree/index";
 export { default as upgrade } from "./upgrade/index";
+export { default as watch } from "./watch/index";
 export { default as why } from "./why/index";
-
 
 // #endregion
 
@@ -54,7 +51,7 @@ export { default as why } from "./why/index";
 // below this file will not reference this autoindex file:
 //
 //    - autoindex:named, orphan
-// 
+//
 // All content outside the "// #region" section in this file will be
 // preserved in situations where you need to do something paricularly awesome.
 // Keep on being awesome.

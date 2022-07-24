@@ -1,6 +1,6 @@
 {
   "name": "dd",
-  "version": "0.20.1",
+  "version": "0.21.0",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",
@@ -85,6 +85,7 @@
     "madge": "^5.0.1",
     "matcher": "^4.0.0",
     "native-dash": "^1.22.1",
+    "pathe": "^0.3.2",
     "play-sound": "^1.1.5",
     "recast": "^0.20.5",
     "sharp": "^0.30.4",

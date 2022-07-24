@@ -1,8 +1,8 @@
 // #autoindex
 
 // #region autoindexed files
-// index last changed at: 1st Jan, 2022, 03:09 PM ( GMT-8 )
-// hash-code: 8a08f868
+// index last changed at: 7th Jul, 2022, 06:39 PM ( GMT-7 )
+// hash-code: a16b7c6b
 
 // file exports
 export * from "./determineAccountId";
@@ -17,6 +17,7 @@ export * from "./determineStage";
 export * from "./determineTestFramework";
 export * from "./getObserverations";
 export * from "./hasServerlessTsFile";
+export * from "./hasShellCommandInPath";
 export * from "./isServerless";
 export * from "./isTypescriptMicroserviceProject";
 

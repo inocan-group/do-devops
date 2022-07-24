@@ -9,7 +9,7 @@
   },
   "rules": {
     "prefer-const": "error",
-    "semi": "off",
+    "semi": ["error", "always"],
     "quotes": ["warn", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "no-unused-vars": "off",
     "curly": "error",
@@ -25,15 +25,8 @@
     "no-nested-ternary": "off",
     // doesn't play well with prettier
     "unicorn/no-nested-ternary": "off",
-    "unicorn/empty-brace-spaces": "warn",
-    "unicorn/import-style": "off",
     // this is kind of nice sometimes
     "unicorn/no-array-callback-reference": "off",
-    // only because this is a CLI
-    "unicorn/no-process-exit": "off",
-    "unicorn/prefer-node-protocol": "off",
-
-    "unicorn/number-literal-case": "off",
 
     // we need exceptions to be only "warn" because
     // there are valid use cases for generic variables being

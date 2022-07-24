@@ -1,5 +1,5 @@
 import { IPackageJson } from "common-types";
-import { existsSync } from "fs";
+import { existsSync } from "node:fs";
 import { DoDevopObservation } from "~/@types/observations";
 import { IMAGE_CACHE } from "~/constants";
 import { getProjectConfig } from "../config";

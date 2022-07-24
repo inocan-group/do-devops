@@ -1,7 +1,8 @@
+/* eslint-disable unicorn/no-process-exit */
 /* eslint-disable unicorn/no-await-expression-member */
 import chalk from "chalk";
 import globby from "globby";
-import { join } from "path";
+import { join } from "pathe";
 import { getMonoRepoPackages } from "~/shared/file";
 import { emoji, highlightFilepath } from "~/shared/ui";
 import { DoDevopsHandler } from "~/@types/command";
