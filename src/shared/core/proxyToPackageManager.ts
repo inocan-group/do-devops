@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 // import { exec } from "async-shelljs";
 import chalk from "chalk";
 import { spawnSync } from "child_process";

@@ -17,6 +17,7 @@ export type KnownCommand<E extends string = never> =
   | "bitbucket"
   | "build"
   | "deploy"
+  | "cert"
   | "endpoints"
   | "fns"
   | "image"

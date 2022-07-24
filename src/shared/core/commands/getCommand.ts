@@ -8,11 +8,12 @@ import { DevopsError } from "~/errors";
  */
 export function getCommand(cmd: string): IDoDevopsCommand {
   const defn = commands[cmd as keyof typeof commands];
+
   if (!isDoDevopsCommand(defn)) {
     throw new DevopsError(
       `The command "${cmd}" is not defined correctly! Make sure all commands export a valid 'IDoDevopsCommand' interface.`,
       "do-devops/invalid-command-definition"
     );
   }
-  return commands[cmd as keyof typeof commands] as IDoDevopsCommand;
+  return commands[cmd as keyof typeof commands] as unknown as IDoDevopsCommand;
 }

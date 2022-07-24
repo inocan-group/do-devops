@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import { spawn } from "child_process";
+import { spawn } from "node:child_process";
 import w from "chokidar";
-import { existsSync } from "fs";
-import path from "path";
+import { existsSync } from "node:fs";
+import path from "pathe";
 import { Options } from "~/@types";
 import { fileHasExports } from "~/shared/ast";
 import { ILogger, logger } from "~/shared/core/logger";
@@ -48,11 +48,11 @@ function recheck(autoindexFile: string, log: ILogger): Promise<boolean> {
 }
 
 function recheckAutoindexFile(changedFile: string, log: ILogger) {
-  const dir = path.posix.dirname(changedFile);
-  const autoindexFile = existsSync(path.posix.join(process.cwd(), dir, "/index.ts"))
-    ? path.posix.join(dir, "/index.ts")
-    : existsSync(path.posix.join(process.cwd(), dir, "/index.js"))
-    ? path.posix.join(dir, "/index.js")
+  const dir = path.dirname(changedFile);
+  const autoindexFile = existsSync(path.join(process.cwd(), dir, "/index.ts"))
+    ? path.join(dir, "/index.ts")
+    : existsSync(path.join(process.cwd(), dir, "/index.js"))
+    ? path.join(dir, "/index.js")
     : undefined;
   if (autoindexFile) {
     recheck(autoindexFile, log);
@@ -73,7 +73,7 @@ function whitewatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
             repo.name
           }} {italic added the file }${highlightFilepath(file)}}`
         );
-        if (fileHasExports(path.posix.join(process.cwd(), file))) {
+        if (fileHasExports(path.join(process.cwd(), file))) {
           recheckAutoindexFile(file, log);
         } else {
           deferredFiles.add(file);
@@ -91,7 +91,7 @@ function whitewatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
         recheckAutoindexFile(file, log);
         break;
       case "changed":
-        const hasExports = fileHasExports(path.posix.join(process.cwd(), file));
+        const hasExports = fileHasExports(path.join(process.cwd(), file));
         const wasDeferred = deferredFiles.has(file);
         if (hasExports && wasDeferred) {
           log.info(
@@ -121,9 +121,9 @@ function whitewatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
 }
 
 function getParentIndex(file: string) {
-  const dir = path.posix.dirname(file).split("/");
-  const ts = path.posix.join(dir.slice(0, -1).join("/"), "index.ts");
-  const js = path.posix.join(dir.slice(0, -1).join("/"), "index.js");
+  const dir = path.dirname(file).split("/");
+  const ts = path.join(dir.slice(0, -1).join("/"), "index.ts");
+  const js = path.join(dir.slice(0, -1).join("/"), "index.js");
   return existsSync(ts) ? ts : existsSync(js) ? js : undefined;
 }
 
@@ -187,7 +187,7 @@ export function watch(watchList: IAutoindexWatchlist[], opts: Options<IAutoindex
     );
     const whitelist = w.watch(repo.whiteglobs, {
       ignored: [...repo.blackglobs, ...repo.indexglobs, "node_modules/**"],
-      cwd: path.posix.join(process.cwd(), repo.dir),
+      cwd: path.join(process.cwd(), repo.dir),
     });
     whitelist.on("ready", () => {
       whitelist.on("add", whitewatcher(repo, "add", log));
@@ -197,7 +197,7 @@ export function watch(watchList: IAutoindexWatchlist[], opts: Options<IAutoindex
     });
     const indexlist = w.watch(repo.indexglobs, {
       ignored: repo.blackglobs,
-      cwd: path.posix.join(process.cwd(), repo.dir),
+      cwd: path.join(process.cwd(), repo.dir),
     });
     indexlist.on("ready", () => {
       indexlist.on("add", indexwatcher(repo, "add", log));
@@ -273,7 +273,7 @@ export function watch(watchList: IAutoindexWatchlist[], opts: Options<IAutoindex
 //         }
 
 //         const watchedDirs = Object.keys(watched);
-//         const dir = path.posix.dirname(filepath);
+//         const dir = path.dirname(filepath);
 
 //         switch (evt) {
 //           case "change":
