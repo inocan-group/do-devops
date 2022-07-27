@@ -1,3 +1,5 @@
+import { describe, it, expect } from "vitest";
+
 /* eslint-disable unicorn/prefer-module */
 import { exec } from "shelljs";
 import {
@@ -5,7 +7,7 @@ import {
   executionDirectory,
   getSubdirectories,
   homeDirectory,
-} from "~/shared/file";
+} from "src/shared/file";
 
 describe("directory utilities => ", () => {
   it("executionDirectory() resolves to current test file", () => {

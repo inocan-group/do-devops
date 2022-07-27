@@ -1,4 +1,5 @@
-import { findOrgFromGitRemote, getGitRemotes } from "~/shared/git";
+import { describe, it, expect } from "vitest";
+import { findOrgFromGitRemote, getGitRemotes } from "src/shared/git";
 
 describe("git shared functions", () => {
   it("getGitRemotes() has one remote", async () => {
@@ -16,7 +17,7 @@ describe("git shared functions", () => {
     }
   });
 
-  it("findOrgFromGitRemote() returns github organisation name", async () => {
+  it("findOrgFromGitRemote() returns github organization name", async () => {
     const org = await findOrgFromGitRemote();
     expect(org).toBe("inocan-group");
   });

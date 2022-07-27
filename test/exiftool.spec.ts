@@ -1,6 +1,7 @@
-import { copyFileSync } from "fs";
-import { removeFile } from "~/shared/file";
-import { useExifTools } from "~/shared/images/useExifTools";
+import { describe, it, expect } from "vitest";
+import { copyFileSync } from "node:fs";
+import { removeFile } from "src/shared/file";
+import { useExifTools } from "src/shared/images/useExifTools";
 
 enum images {
   fireHydrant = "./test/data/fire-hydrant.jpg",
