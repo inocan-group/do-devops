@@ -9,7 +9,7 @@ Provides a handy CLI for DevOps functionality on Typescript projects (and partic
 You can install `do-devops` both locally to a repo as well as globally. For a global install:
 
 ```sh
-npm install global do-devops
+npm install global dd
 ```
 
 With a global install the `dd` CLI command should be available to you. Global installs are in general the most convenient way to get started using this CLI.
@@ -18,9 +18,9 @@ Local installs to a repo are recommended if you are using any of the CLI command
 
 ```sh
 # using npm
-npm install --save-dev do-devops
+npm install --save-dev dd
 # using yarn
-yarn add --dev do-devops
+yarn add --dev dd
 ```
 
 ## Commands
