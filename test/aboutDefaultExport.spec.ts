@@ -1,5 +1,5 @@
 import { aboutDefaultExport } from "src/shared/ast/aboutDefaultExport";
-import { describe, it, expect } from "vitest";
+import { describe, it } from "vitest";
 
 describe.only("ast > aboutDefaultExport()", () => {
   it("string exported as default export", () => {
