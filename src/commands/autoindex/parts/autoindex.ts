@@ -35,7 +35,7 @@ export const BLACK_LIST_DEFAULTS = [
 export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observations, argv }) => {
   let projectConfig = getProjectConfig();
   // the sfc flag on CLI is inverted logically
-  opts = { ...opts, sfc: opts.sfc === false ? false : true };
+  opts = { ...opts, sfc: opts.sfc === false ? false : true, explicitFiles: argv.length > 0 };
 
   const log = logger(opts);
   if (opts.config) {
@@ -115,7 +115,7 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
         log.info(
           chalk`- found {yellow ${String(
             indexList.length
-          )}} index files, {bold {yellow {italic all}}} of which are setup to be auto-indexed.`
+          )}} index files, {bold {yellow {italic all}}} of which are setup to be auto-indexed.\n`
         );
       }
     } else {
@@ -134,6 +134,7 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
           log.info(chalk`{dim   - ${file}}`);
         }
       }
+      console.log();
     }
 
     if (autoIndexFiles.length > 0) {
@@ -162,13 +163,7 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
     if (isMonorepo) {
       log.shout(chalk`\n- ${emoji.party} all repos have been updated with {blue autoindex}`);
     } else {
-      log.shout(
-        chalk`- ${emoji.party} {blue autoindex} updated successfully ${
-          argv?.length > 0
-            ? chalk`{dim ({italic for ${argv.map((a) => highlightFilepath(a)).join(", ")})})}`
-            : ""
-        }`
-      );
+      log.shout(chalk`- ${emoji.party} {blue autoindex} job updated successfully`);
     }
   }
 };

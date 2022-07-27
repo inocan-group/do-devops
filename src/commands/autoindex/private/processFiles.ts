@@ -169,6 +169,7 @@ export async function processFiles(
         explicitExcludes,
         orphans,
         noIndexFile,
+        exportType,
         explicitDirRemoval,
         noExportDir,
         sfc: opts.sfc || false,
@@ -209,7 +210,8 @@ export async function processFiles(
         );
         break;
       case "unchanged":
-        log.whisper(
+        const talk = opts.explicitFiles ? log.info : log.whisper;
+        talk(
           chalk`{dim - autoindex file ${highlightFilepath(
             indexFilename
           )} was left {italic {bold unchanged}}}.`

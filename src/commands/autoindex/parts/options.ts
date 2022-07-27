@@ -5,7 +5,7 @@ export interface IAutoindexOptions {
   config: boolean;
   add: string;
   glob: string;
-  /** 
+  /**
    * boolean flag to indicate whether VueJS SFC files should have their default
    * export added to the index file.
    */
@@ -19,6 +19,8 @@ export interface IAutoindexOptions {
   all: boolean;
   watch: boolean;
   preserveExtension: boolean;
+
+  explicitFiles: boolean;
 }
 
 export const options: IOptionDefinition = {

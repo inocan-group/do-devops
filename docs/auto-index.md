@@ -1,3 +1,0 @@
-# Auto Indexing
-
-> `dd autoindex
