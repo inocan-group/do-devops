@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { BundlerObservation, Options, Observations } from "~/@types";
+import { Options, Observations } from "~/@types";
 import { DevopsError } from "~/errors";
 import { installEsLint } from "~/shared/install";
 import { saveProjectConfig } from "~/shared/config";
@@ -41,9 +41,9 @@ export async function installBuildSystem(opts: Options, observations: Observatio
     scripts["lint:tsc"] = "npx tsc --noEmit";
   }
 
-  const bundler = await askListQuestion<BundlerObservation>(
+  const bundler = await askListQuestion(
     chalk`Which transpiler/bundler will you use in this repo?`,
-    ["tsc", "rollup", "webpack", "vite", "esbuild", "swc"]
+    ["tsc", "rollup", "webpack", "vite", "esbuild", "swc"] as const
   );
   await saveProjectConfig({ general: { bundler } });
 

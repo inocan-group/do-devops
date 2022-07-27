@@ -1,8 +1,8 @@
 // #autoindex
 
 // #region autoindexed files
-// index last changed at: 7th Jul, 2022, 06:39 PM ( GMT-7 )
-// hash-code: 4636b721
+// index last changed at: 7th Jul, 2022, 06:48 PM ( GMT-7 )
+// hash-code: cbad75ae
 
 // file exports
 export * from "./ask";
@@ -13,6 +13,7 @@ export * from "./askInputQuestion";
 export * from "./askListQuestion";
 export * from "./checkboxQuestion";
 export * from "./confirmQuestion";
+export * from "./convertChoices";
 export * from "./inputQuestion";
 export * from "./listQuestion";
 

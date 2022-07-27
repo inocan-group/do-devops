@@ -1,6 +1,6 @@
-import { stat } from "fs";
-import path from "path";
-import { promisify } from "util";
+import { stat } from "node:fs";
+import path from "node:path";
+import { promisify } from "node:util";
 import { IFileInfo } from "~/@types/file-types";
 import { DevopsError } from "~/errors";
 import { getFileComponents } from ".";
@@ -18,7 +18,7 @@ export async function fileInfo(...files: string[]): Promise<IFileInfo[]> {
   let rememberFile: string | undefined;
   try {
     const promises: Promise<IFileInfo>[] = [];
-    for (const file of files.filter((i) => i)) {
+    for (const file of files.filter(Boolean)) {
       const parts = getFileComponents(file);
       promises.push(
         info(file).then((s) => {

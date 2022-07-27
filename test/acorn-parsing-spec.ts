@@ -1,5 +1,6 @@
-import { currentDirectory } from "~/shared/file";
-import { getDefaultExport } from "~/shared/ast";
+import { currentDirectory } from "src/shared/file";
+import { getDefaultExport } from "src/shared/ast";
+import { describe, it, expect } from "vitest";
 
 describe("ast > Acorn AST parsing", () => {
   it("extract appropriate info from a direct export of the default export", () => {

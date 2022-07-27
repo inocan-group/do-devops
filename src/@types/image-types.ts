@@ -303,9 +303,9 @@ export type IImageRule = {
   /**
    * How much meta information should be captured in images?
    *
-   * @default "basic"
+   * @default "none"
    */
-  sidecarDetail: "basic" | "categorical";
+  sidecarDetail: "none" | "per-image" | "per-rule";
 
   /**
    * If you want a copyright tag embedded into images you can

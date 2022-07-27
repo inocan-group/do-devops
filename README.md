@@ -1,6 +1,8 @@
-# DevOps CLI
+# Do Devops CLI
 
-Provides a handy CLI for DevOps functionality on Typescript projects (and particularly those also using the Serverless framework targetting the AWS cloud).
+> _found on **NPM** as `dd`_
+
+Provides a handy CLI for DevOps functionality on Typescript projects (and particularly those also using the Serverless framework targeting the AWS cloud).
 
 ## Install
 
@@ -20,13 +22,14 @@ npm install --save-dev do-devops
 # using yarn
 yarn add --dev do-devops
 ```
+
 ## Commands
 
 To get an up-to-date list of commands from `do-devops` just run `dd` by itself from the terminal and it will list out all commands. Furthermore, if you want more detail on a command you can just type `dd [command] --help`.
 
 That said we wanted to give you some idea of what you're getting here. It's not like we're running for political office and want to abstract everything to the point of saying nothing. :)
 
-Think of the commands you get as fitting into two camps ... well maybe three. We'll discuss the camps in the following two sections. 
+Think of the commands you get as fitting into two camps ... well maybe three. We'll discuss the camps in the following two sections.
 
 ### The Serverless Crowd
 
@@ -53,7 +56,7 @@ Ok the remaining commands are a little less attached to the idea of AWS and Serv
 
     it is quite common to spread a related set of functionality across files in a sub-directory and then to add a `index.ts` file which makes each of these files available in a more convenient fashion. The problem is that everytime you add, remove, or rename a file you also need to update the `index.ts` file. With this feature this can be done for you. You simply state your interest in the file to be autoindexed by dropping in `// #autoindex` into the file and then run `tt autoindex` in the repo and it'll autoindex all which have this hint.
 
-2. `latest` 
+2. `latest`
 
     Do you find yourself wonder what the _latest_ tagged version is in your repo? Just type `tt latest` to find out. You can also type `tt latest [pkg]` and it will tell you about another npm packages latest release.
 
@@ -70,7 +73,6 @@ Ok the remaining commands are a little less attached to the idea of AWS and Serv
     If you're in a serverless repo it will bring up a nice tabular view of all the serverless functions which are exposed by the repo. If you're not in a serverless repo it will switch to interactive mode and ask you which AWS _profile_ in your crentials file to use to report on the same information (it'll ask you which region too if that's not stated in the profile).
 
 There are plenty more functions but this should give you a flavor and hopefully let you decide if you're interested.
-
 
 ## Path Aliases
 

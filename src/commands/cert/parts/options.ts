@@ -58,6 +58,14 @@ export const options: IOptionDefinition = {
     group: "local",
     description: "the email you want to add to the end of the SSH cert",
   },
+
+  local_domain: {
+    type: String,
+    alias: "d",
+    typeLabel: "<local|home|etc>",
+    group: "local",
+    description: "the local DNS domain to use as a default (uses 'local' by default)",
+  },
 };
 
 export interface ICertOptions {
@@ -88,6 +96,18 @@ export interface ICertOptions {
   ssl_algo?: string;
 
   /**
+   * The signing algo used in CSR
+   *
+   * @default "sha256"
+   */
+  csr_algo?: string;
+
+  /**
+   * The number of days for which a certificate will be valid
+   */
+  days?: number;
+
+  /**
    * The algorithm used in SSH; defaults to "rsa" unless "--github" flag is used
    * in which case it will switch to "ed25519"
    *
@@ -95,6 +115,14 @@ export interface ICertOptions {
    * be set.
    */
   ssh_algo?: "rsa" | "dsa" | "ecdsa" | "ed25519";
+
+  /**
+   * When looking for a DNS name in your local DNS server (should it exist)
+   * we will look for the "name" you gave us with the suffix ".local" for a
+   * DNS domain but you can change that if you prefer "home" or something
+   * else.
+   */
+  local_domain?: string;
 
   /**
    * Allows specifying the key length you want

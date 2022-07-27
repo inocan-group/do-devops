@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { IImageRule, ImageMetaDetail, IProjectConfig, Observations } from "~/@types";
+import { IImageRule, IProjectConfig, Observations } from "~/@types";
 import { getProjectConfig, saveProjectConfig } from "~/shared/config";
 import { logger } from "~/shared/core/logger";
 import { csvParser } from "~/shared/data";
@@ -42,7 +42,7 @@ export async function askAddImageRule(o: Observations, api: ImageApi) {
     "custom",
   ];
 
-  const sizeName = await askListQuestion<string>(
+  const sizeName = await askListQuestion(
     wordWrap(`What are the sizes you want to convert to?`),
     sizeOptions,
     { default: "full-width [ 640, 768, 1024, 1280, 1536 ]" }
@@ -58,14 +58,14 @@ export async function askAddImageRule(o: Observations, api: ImageApi) {
     `Should images have a small blurred image produced for pre-loading?`
   );
 
-  rule.metaDetail = await askListQuestion<ImageMetaDetail>(
+  rule.metaDetail = await askListQuestion(
     `What level of detail will this rule need for metadata?`,
-    ["basic", "categorical", "tags"]
+    ["basic", "categorical", "tags"] as const
   );
 
-  rule.sidecarDetail = await askListQuestion<IImageRule["sidecarDetail"]>(
+  rule.sidecarDetail = await askListQuestion(
     wordWrap(`Choose whether you want a sidecar meta file:`),
-    ["none", "per-image", "per-rule"],
+    ["none", "per-image", "per-rule"] as const,
     { default: "none" }
   );
 

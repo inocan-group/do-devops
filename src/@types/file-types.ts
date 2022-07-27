@@ -1,4 +1,4 @@
-import type { Stats } from "fs";
+import type { Stats } from "node:fs";
 
 export interface IFilenameNotContent {
   /** the file's filename in the file system */

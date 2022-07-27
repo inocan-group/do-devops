@@ -1,5 +1,6 @@
 import { ListQuestion } from "inquirer";
-import { IInteractiveOptions } from "~/@types/interactive-types";
+import { Choices, IInteractiveOptions } from "~/@types/interactive-types";
+import { convertChoices } from "./convertChoices";
 
 /**
  * **listQuestion**
@@ -20,20 +21,22 @@ import { IInteractiveOptions } from "~/@types/interactive-types";
  * Note: choices can be an array of values or an array of `IChoice` which
  * requires the `name` and `value` and allows a `short` property as well.
  */
-export function listQuestion<T extends string | number | object>(
+export function listQuestion<T extends Choices>(
   name: string,
   question: string,
-  choices: ListQuestion<T[]>["choices"],
-  options: IInteractiveOptions<T[]> = {}
-): ListQuestion<T[]> {
-  const response: ListQuestion<T[]> = {
-    type: "list" as const,
-    name,
-    message: question,
-    choices,
-    default: options.default,
-    ...(options.when ? { when: options.when } : { when: () => true }),
+  choices: T,
+  options: IInteractiveOptions<T> = {}
+): ListQuestion<T> {
+  const defaultValues = {
+    when: options.when || (() => true),
+    default: options.default || convertChoices(choices)[0].value,
   };
 
-  return response;
+  return {
+    name,
+    type: "list" as const,
+    message: question,
+    choices: convertChoices(choices),
+    ...defaultValues,
+  };
 }

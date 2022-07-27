@@ -1,12 +1,24 @@
-import { Answers, Question } from "inquirer";
+import { Keys } from "inferred-types";
+
+export type ConfirmationChoice = {
+  true: string;
+  false: string;
+};
+
+export type Choices = readonly string[] | readonly number[] | Record<string, string>;
 
 /**
  * All interactive options should provide these optional parameters.
- *
+
  */
-export interface IInteractiveOptions<T extends Answers = Answers> {
+export interface IInteractiveOptions<
+  T extends Choices | ConfirmationChoice,
+  /** when set to true, default value should be an array */
+  A extends boolean = false
+> {
   when?: (...args: any[]) => boolean;
-  default?: Question<T>["default"];
+  default?: A extends true ? Keys<T>[] : T extends ConfirmationChoice ? boolean : Keys<T>;
+  choices?: T extends ConfirmationChoice ? ConfirmationChoice : never;
 }
 
 /**
@@ -19,5 +31,3 @@ export interface IChoice<T extends string | number | object> {
   value: T;
   short?: string;
 }
-
-export type Choices<T extends string | number | object> = T[] | Array<{ name: string; value: T }>;

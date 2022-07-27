@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { join, relative } from "path";
+import { join, relative } from "node:path";
 import { ensureDirectory, getSubdirectories, repoDirectory } from "~/shared/file";
 import { askListQuestion } from ".";
 
@@ -48,8 +48,8 @@ export async function askForNestedDirectory(ask: string, options: INestedDirOpti
     } else {
       choice =
         dirs.length === 0
-          ? await askListQuestion<string>(ask, [...subDirs, COMPLETED])
-          : await askListQuestion<string>(
+          ? await askListQuestion(ask, [...subDirs, COMPLETED])
+          : await askListQuestion(
               chalk`Thanks. The selected path so far is: {blue ${dirs.join(
                 "/"
               )}}\nNow choose either a subdirectory or "COMPLETED" to finish the selection.`,

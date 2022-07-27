@@ -1,5 +1,6 @@
-import { isDevopsError } from "~/@type-guards";
-import { getAwsProfile, getAwsProfileList, hasAwsProfileCredentialsFile } from "~/shared/aws";
+import { describe, it, expect } from "vitest";
+import { isDevopsError } from "src/@type-guards";
+import { getAwsProfile, getAwsProfileList, hasAwsProfileCredentialsFile } from "src/shared/aws";
 
 describe("AWS Credentials => ", () => {
   it("getAwsProfileList() finds credentials file and produces structured information", async () => {

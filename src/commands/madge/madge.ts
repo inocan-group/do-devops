@@ -1,5 +1,6 @@
 import { exec } from "async-shelljs";
 import chalk from "chalk";
+import { exit } from "node:process";
 import { IDoDevopsCommand } from "~/@types/command";
 import { logger } from "~/shared/core";
 import { askListQuestion } from "~/shared/interactive";
@@ -42,9 +43,9 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
     const dir = argv[0] || "src";
 
     if (!opts.circular && !opts.summary && !opts.orphans && !opts.leaves) {
-      const which = await askListQuestion<keyof typeof opts>(
+      const which = await askListQuestion(
         chalk`Which {italic Madge} command(s) would you like to run?`,
-        ["circular", "summary", "orphans", "leaves"]
+        ["circular", "summary", "orphans", "leaves"] as const
       );
       opts[which] = true as any;
     }
@@ -55,7 +56,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
       log.info(chalk`\n- running {bold madge} with following command: {blue ${cmd}}`);
       const response = exec(cmd);
       if (response.code !== 0) {
-        process.exit(response.code);
+        exit(response.code);
       }
     }
 
@@ -64,7 +65,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
       log.info(chalk`\n- running {bold madge} with following command: {blue ${cmd}}`);
       const response = exec(cmd);
       if (response.code !== 0) {
-        process.exit(response.code);
+        exit(response.code);
       }
     }
 
@@ -73,7 +74,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
       log.info(chalk`\n- running {bold madge} with following command: {blue ${cmd}}`);
       const response = exec(cmd);
       if (response.code !== 0) {
-        process.exit(response.code);
+        exit(response.code);
       }
     }
 
@@ -82,7 +83,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
       log.info(chalk`\n- running {bold madge} with following command: {blue ${cmd}}`);
       const response = exec(cmd);
       if (response.code !== 0) {
-        process.exit(response.code);
+        exit(response.code);
       }
     }
 

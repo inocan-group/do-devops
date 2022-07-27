@@ -3,7 +3,12 @@ import { PackageManagerObservation, DoDevopObservation } from "~/@types/observat
 import { DevopsError } from "~/errors";
 import { askListQuestion } from "~/shared/interactive";
 import { emoji } from "~/shared/ui";
-import { getProjectConfig, getUserConfig, saveProjectConfig, saveUserConfig } from "~/shared/config";
+import {
+  getProjectConfig,
+  getUserConfig,
+  saveProjectConfig,
+  saveUserConfig,
+} from "~/shared/config";
 import { removeOtherLockFiles } from "~/shared/npm";
 import { Options } from "~/@types";
 
@@ -35,11 +40,13 @@ export async function determinePackageManager(
     console.log(
       `- ${emoji.warn}} there are indications of {italic more} than one package manager being used!`
     );
-    const pkgManager = await askListQuestion<
-      Exclude<PackageManagerObservation, "packageManagerConflict">
-    >("Which package manager do you expect to use in this repo?", ["npm", "pnpm", "yarn"], {
-      default: observations.has("pnpm") ? "pnpm" : observations.has("yarn") ? "yarn" : "npm",
-    });
+    const pkgManager = await askListQuestion(
+      "Which package manager do you expect to use in this repo?",
+      ["npm", "pnpm", "yarn"] as const,
+      {
+        default: observations.has("pnpm") ? "pnpm" : observations.has("yarn") ? "yarn" : "npm",
+      }
+    );
     await saveProjectConfig({ general: { pkgManager } });
     const removed = await removeOtherLockFiles(pkgManager);
     if (removed.length > 0) {
@@ -47,7 +54,7 @@ export async function determinePackageManager(
     }
   }
 
-  const userConfig =  getUserConfig();
+  const userConfig = getUserConfig();
 
   if (observations.has("yarn")) {
     return "yarn";
@@ -69,15 +76,14 @@ export async function determinePackageManager(
   }
 
   if (opts.interactive) {
-    const manager = await askListQuestion<PackageManagerObservation | "no thanks">(
+    const manager = await askListQuestion(
       "We couldn't determine the package manager to use, would you like to add a default pkg manager to your user profile?",
-      ["npm", "pnpm", "yarn", "no thanks"],
+      ["npm", "pnpm", "yarn", "no thanks"] as const,
       { default: "pnpm" }
     );
     if (manager !== "no thanks") {
-      await saveUserConfig({ general: {pkgManager: manager} });
+      await saveUserConfig({ general: { pkgManager: manager } });
       return manager;
-
     } else {}
   }
 

@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { spawnSync } from "child_process";
+import { spawnSync } from "node:child_process";
 import { DoDevopObservation, Observations } from "~/@types";
 import { getUserConfig } from "~/shared/config";
 import { logger } from "~/shared/core";
@@ -9,12 +9,12 @@ import { emoji } from "~/shared/ui";
 
 export type FileAction = "show" | "diff" | "skip" | "copy";
 
-const answers = [
-  { name: "SKIP this file being from being copied", value: "skip" },
-  { name: "COPY the template file over repo's version", value: "copy" },
-  { name: "SHOW both files in editor", value: "show" },
-  { name: "Show DIFFERENCES between files in editor", value: "diff" },
-];
+const answers = {
+  skip: "SKIP this file being from being copied",
+  copy: "COPY the template file over repo's version",
+  show: "SHOW both files in editor",
+  diff: "Show DIFFERENCES between files in editor",
+};
 
 /**
  * If a file is being copied to a target location where the file already exists,
@@ -33,7 +33,7 @@ export async function askAboutFileOverwrite(
   log.shout(chalk`The file {blue ${filename}} already exists.\n`);
   let action: FileAction | undefined;
   while (action !== "copy" && action !== "skip") {
-    action = await askListQuestion<FileAction>("What do you want to do?", answers);
+    action = await askListQuestion("What do you want to do?", answers);
     if (action === "show") {
       let editorCommand = getUserConfig().general?.editorCommand;
       if (!editorCommand) {
@@ -50,7 +50,7 @@ export async function askAboutFileOverwrite(
           spawnSync(editorCommand, [source, target, "&"], { stdio: "inherit" });
           log.info(chalk`- check your editor for the two versions of the file`);
         } catch {
-          log.info(chalk`- ${emoji.poop} there was a problem openning the files in your editor`);
+          log.info(chalk`- ${emoji.poop} there was a problem opening the files in your editor`);
         }
       }
     }

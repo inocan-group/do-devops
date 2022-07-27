@@ -16,10 +16,10 @@ export type IAutoindexWatchlist = {
   /** relative directory off of CWD */
   dir: string;
   /** glob patterns used for matching autoindex files */
-  indexglobs: string[];
+  indexGlobs: string[];
   /** the whitelist of glob patterns */
-  whiteglobs: string[];
-  blackglobs: string[];
+  whiteGlobs: string[];
+  blackGlobs: string[];
 };
 
 const deferredFiles = new Set<string>();
@@ -185,8 +185,8 @@ export function watch(watchList: IAutoindexWatchlist[], opts: Options<IAutoindex
     log.info(
       chalk`- watching {blue ${repo.name}} ${watchList.length > 1 ? "package" : "repo"} for changes`
     );
-    const whitelist = w.watch(repo.whiteglobs, {
-      ignored: [...repo.blackglobs, ...repo.indexglobs, "node_modules/**"],
+    const whitelist = w.watch(repo.whiteGlobs, {
+      ignored: [...repo.blackGlobs, ...repo.indexGlobs, "node_modules/**"],
       cwd: path.join(process.cwd(), repo.dir),
     });
     whitelist.on("ready", () => {
@@ -195,8 +195,8 @@ export function watch(watchList: IAutoindexWatchlist[], opts: Options<IAutoindex
       whitelist.on("change", whitewatcher(repo, "changed", log));
       whitelist.on("remove", whitewatcher(repo, "remove", log));
     });
-    const indexlist = w.watch(repo.indexglobs, {
-      ignored: repo.blackglobs,
+    const indexlist = w.watch(repo.indexGlobs, {
+      ignored: repo.blackGlobs,
       cwd: path.join(process.cwd(), repo.dir),
     });
     indexlist.on("ready", () => {

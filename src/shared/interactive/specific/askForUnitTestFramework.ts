@@ -24,11 +24,9 @@ export async function askForUnitTestFramework(
 
   const framework = opts.unitTestFramework
     ? opts.unitTestFramework
-    : await askListQuestion<TestObservation>(
-        "Choose the unit test runner you'd like to use",
-        TEST_FRAMEWORKS,
-        { default: "jest" }
-      );
+    : await askListQuestion("Choose the unit test runner you'd like to use", TEST_FRAMEWORKS, {
+        default: "vitest",
+      });
 
   const wallaby =
     framework === "uvu"
@@ -39,9 +37,9 @@ export async function askForUnitTestFramework(
 
   const defaultDir = dirExists("./tests") ? "tests" : dirExists("./test") ? "test" : "tests";
 
-  const directory = await askListQuestion<string>(
+  const directory = await askListQuestion(
     "Which directory will you put your tests in?",
-    ["test", "tests", "src"],
+    ["test", "tests", "src"] as const,
     { default: defaultDir }
   );
 
@@ -50,7 +48,7 @@ export async function askForUnitTestFramework(
     ? user.test?.testFilePostfix
     : ["-spec", "-test"];
 
-  const postfix = await askCheckboxQuestion<string>(
+  const postfix = await askCheckboxQuestion(
     "Test files are typically distinguished by having a 'postfix' part of their name to distinguish them from other files in the same directory; choose as many as you like",
     ["-spec", "-test", ".spec", ".test"],
     { when: () => framework !== "uvu", default: defaultPostfix }

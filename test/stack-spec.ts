@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/prefer-module */
-import { getCaller } from "~/shared/stack";
+import { describe, it, expect } from "vitest";
+import { getCaller } from "src/shared/stack";
 
 function iAmALittleTeapot() {
   return getCaller();

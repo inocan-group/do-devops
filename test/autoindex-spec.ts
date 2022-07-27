@@ -1,3 +1,5 @@
+import { describe, it, expect } from "vitest";
+
 describe("autoindex => ", () => {
   it.todo("indexing work with named exports");
 

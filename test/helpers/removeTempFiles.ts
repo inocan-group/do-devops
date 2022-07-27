@@ -1,5 +1,5 @@
-import { join } from "path";
-import { directoryFiles, removeFile } from "~/shared/file";
+import { join } from "node:path";
+import { directoryFiles, removeFile } from "src/shared/file";
 
 export function removeTempFiles() {
   const files = directoryFiles("./test/data/temp")

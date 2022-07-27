@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/no-process-exit */
 // import { exec } from "async-shelljs";
 import chalk from "chalk";
-import { spawnSync } from "child_process";
+import { spawnSync } from "node:child_process";
 import { DoDevopObservation, PackageManagerObservation } from "~/@types/observations";
 import { saveProjectConfig } from "~/shared/config";
 import { askListQuestion } from "~/shared/interactive";
@@ -146,9 +146,9 @@ export async function proxyToPackageManager(
     }
   } else {
     console.log(chalk`- we can not currently tell {italic which} package manager you're using.`);
-    const answer: PackageManagerObservation | "not now, thanks" = await askListQuestion(
+    const answer = await askListQuestion(
       "Would you like save the package manager to this repo in a config file?",
-      ["not now, thanks", "npm", "pnpm", "yarn"]
+      ["not now, thanks", "npm", "pnpm", "yarn"] as const
     );
     if (answer !== "not now, thanks") {
       saveProjectConfig({ general: { pkgManager: answer } });

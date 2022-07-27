@@ -1,37 +1,13 @@
-// #autoindex:default
+// #autoindex: default
 
-// #region autoindexed files
-// index last changed at: 7th Jul, 2022, 06:39 PM ( GMT-7 )
-// hash-code: 20d5da5
+// #region auto-indexed files
+// index last changed at: 7th Jul, 2022, 12:56 PM ( GMT-7 )
+// hash-code: d711c4c9
 
 // directory exports
-export { default as defaultBaz } from "./defaultBaz/index";
+export * from "./defaultBaz/index";
 
+// #endregion auto-indexed files
 
-// #endregion
-
-// This file was created by running: "dd autoindex"; it assumes you have
-// the 'do-devops' pkg (that's "dd" on npm) installed as a dev dep.
-//
-// By default it assumes that exports are named exports but this can be changed by
-// adding a modifier to the '// #autoindex' syntax:
-//
-//    - autoindex:named     same as default, exports "named symbols"
-//    - autoindex:default   assumes each file is exporting a default export and
-//                          converts the default export to the name of the file
-//    - autoindex:offset    assumes files export "named symbols" but that each
-//                          file's symbols should be offset by the file's name
-//
-// You may also exclude certain files or directories by adding it to the
-// autoindex command. As an example:
-//
-//    - autoindex:named, exclude: foo,bar,baz
-//
-// Inversely, if you state a file to be an "orphan" then autoindex files
-// below this file will not reference this autoindex file:
-//
-//    - autoindex:named, orphan
-// 
-// All content outside the "// #region" section in this file will be
-// preserved in situations where you need to do something paricularly awesome.
-// Keep on being awesome.
+// see https://github.com/inocan-group/do-devops/docs/autoindex.md
+// for more info

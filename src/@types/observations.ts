@@ -1,13 +1,14 @@
-export type BaseObservations =
-  | "packageJson"
-  | "typescript"
-  | "tsNode"
-  | "typescriptTransformPaths";
+export type BaseObservations = "packageJson" | "typescript" | "tsNode" | "typescriptTransformPaths";
 
 export type GitObservation = "gitignore" | "git-init" | "git-parent-init";
 export type BundlerObservation = "webpack" | "rollup" | "vite" | "esbuild" | "tsc" | "swc";
-export type PackageManagerObservation = "yarn" | "npm" | "pnpm" | "packageManagerConflict" | "cargo";
-export type TestObservation = "mocha" | "jest" | "uvu" | "ava" | "jasmine" | "qunit";
+export type PackageManagerObservation =
+  | "yarn"
+  | "npm"
+  | "pnpm"
+  | "packageManagerConflict"
+  | "cargo";
+export type TestObservation = "mocha" | "jest" | "uvu" | "ava" | "jasmine" | "qunit" | "vitest";
 export type ExportObservation = "cjs" | "esm" | "typings";
 export type LintObservation =
   | "eslint"

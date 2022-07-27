@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/numeric-separators-style */
-import { IExifToolMetadata, IImageRule, ISharpMetadata } from "~/@types";
-import { checkCacheFreshness } from "~/shared/images/useImageApi/checkCacheFreshness";
+import { describe, it, expect } from "vitest";
+import { IExifToolMetadata, IImageRule, ISharpMetadata } from "src/@types";
+import { checkCacheFreshness } from "src/shared/images/useImageApi/checkCacheFreshness";
 
 describe("useImageApi()", () => {
   it("cache freshness with empty cache", async () => {

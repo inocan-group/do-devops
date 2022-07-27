@@ -1,3 +1,4 @@
+import { exit } from "node:process";
 import { IImageRule, Observations } from "~/@types";
 import { logger } from "~/shared/core/logger";
 import { ImageApi } from "~/shared/images/useImageApi";
@@ -10,7 +11,7 @@ export async function askChangeImageRule(o: Observations, api: ImageApi) {
   let rule: string | undefined | IImageRule =
     api.rules.length === 1
       ? api.rules[0]
-      : await askListQuestion<string>(
+      : await askListQuestion(
           `Which rule do you want to change?`,
           api.rules.map((i) => i.name)
         );
@@ -21,7 +22,7 @@ export async function askChangeImageRule(o: Observations, api: ImageApi) {
 
   if (!rule) {
     log.shout("No rule was selected! Exiting");
-    process.exit();
+    exit(1);
   }
 
   // TODO: finish editing of image rule
