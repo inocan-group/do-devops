@@ -10,7 +10,7 @@ export async function askRemoveImageRule(o: Observations, api: ImageApi) {
   const log = logger();
   const config = getProjectConfig().image as Exclude<IProjectConfig["image"], undefined>;
 
-  const rule = await askListQuestion<string>(
+  const rule = await askListQuestion(
     `Which rule do you want to remove?`,
     api.rules.map((i) => i.name)
   );

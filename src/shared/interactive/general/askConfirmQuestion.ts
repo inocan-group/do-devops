@@ -1,6 +1,7 @@
-import { ConfirmQuestion } from "inquirer";
-import { wordWrap } from "~/shared/ui";
+import { Answers, Question } from "inquirer";
+import { ConfirmationChoice, IInteractiveOptions } from "~/@types";
 import { ask } from "./ask";
+import { confirmQuestion } from "./confirmQuestion";
 
 /**
  * **confirmQuestionNow**
@@ -15,16 +16,12 @@ import { ask } from "./ask";
  * If you want to compose functions into an array of questions and then ask,
  * use `confirmQuestion()` instead.
  */
-export const askConfirmQuestion = async (
+export const askConfirmQuestion = async <T extends ConfirmationChoice & Answers>(
   question: string,
-  defaultAnswer: boolean = true
+  options: IInteractiveOptions<T> = { choices: { true: "Y", false: "N" } } as IInteractiveOptions<T>
 ): Promise<boolean> => {
-  const q: ConfirmQuestion = {
-    type: "confirm",
-    name: "yesOrNo",
-    message: wordWrap(question),
-    default: defaultAnswer,
-  };
+  const q = confirmQuestion<T>("confirmQuestion", question, options) as Question<Answers>;
+
   const answer = await ask(q);
   return answer.yesOrNo;
 };

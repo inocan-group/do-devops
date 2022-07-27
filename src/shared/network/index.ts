@@ -1,21 +1,10 @@
 // #autoindex
-
 // #region autoindexed files
 // index last changed at: 7th Jul, 2022, 06:48 PM ( GMT-7 )
-// hash-code: cbad75ae
+// hash-code: caa8058
 
 // file exports
-export * from "./ask";
-export * from "./askCheckboxQuestion";
-export * from "./askConfirmQuestion";
-export * from "./askForNestedDirectory";
-export * from "./askInputQuestion";
-export * from "./askListQuestion";
-export * from "./checkboxQuestion";
-export * from "./confirmQuestion";
-export * from "./convertChoices";
-export * from "./inputQuestion";
-export * from "./listQuestion";
+export * from "./nslookup";
 
 // #endregion
 
@@ -40,7 +29,7 @@ export * from "./listQuestion";
 // below this file will not reference this autoindex file:
 //
 //    - autoindex:named, orphan
-// 
+//
 // All content outside the "// #region" section in this file will be
 // preserved in situations where you need to do something paricularly awesome.
 // Keep on being awesome.

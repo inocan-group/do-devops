@@ -1,5 +1,5 @@
-import { homedir } from "os";
-import path from "path";
+import { homedir } from "node:os";
+import { join } from "pathe";
 
 /**
  * replaces filenames starting with `~/` to be in user's home directory, and
@@ -8,10 +8,10 @@ import path from "path";
  */
 export function interpolateFilePath(filename: string) {
   if (filename.slice(0, 2) === "~/") {
-    filename = path.posix.join(homedir(), filename.slice(1));
+    filename = join(homedir(), filename.slice(1));
   }
   if (filename.slice(0, 2) === "./") {
-    filename = path.posix.join(process.cwd(), filename.slice(2));
+    filename = join(process.cwd(), filename.slice(2));
   }
 
   return filename;

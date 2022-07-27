@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { exit } from "node:process";
 import { Options, Observations } from "~/@types";
 import { IAutoindexOptions } from "~/commands/autoindex/parts";
 import { getProjectConfig, saveProjectConfig } from "~/shared/config";
@@ -19,7 +20,7 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
       "You can still configure the root of the monorepo if there are index files, {italic not} in the individual packages. Otherwise there is no point. Shall we continue?"
     );
     if (!continueOn) {
-      process.exit();
+      exit(0);
     }
   }
 
@@ -72,7 +73,7 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
   const confirmBlacklist = blacklistGlobs
     ? !(await askConfirmQuestion(
         `- currently you have no files "blacklisted". Do you want to add any?`,
-        false
+        { default: false }
       ))
     : await askConfirmQuestion(
         `- you have blacklists in your configuration; can we keep these {italic as is}?`

@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 import { getValidServerlessHandlers } from "../ast/index";
 import { fileInfo, filesExist } from "../file";
-import path from "path";
+import path from "node:path";
 import { get } from "native-dash";
 import { IWebpackHandlerDates } from "~/@types";
 

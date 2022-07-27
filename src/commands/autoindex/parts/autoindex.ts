@@ -80,8 +80,8 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
         })
       ).map((i) => join(repo.path, i));
     };
-    const indexglobs = projectConfig.autoindex?.indexGlobs || INDEX_LIST_DEFAULTS;
-    const hasExplicitFiles = argv?.length > 0 && (await prepList(indexglobs)).includes(argv[0]);
+    const indexGlobs = projectConfig.autoindex?.indexGlobs || INDEX_LIST_DEFAULTS;
+    const hasExplicitFiles = argv?.length > 0 && (await prepList(indexGlobs)).includes(argv[0]);
     if (!hasExplicitFiles && argv?.length > 0) {
       log.shout(
         chalk`- ${emoji.confused} you have added ${
@@ -95,41 +95,41 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
       log.info(chalk`{dim - Using explicit autoindex files passed into CLI}`);
     }
 
-    const blackglobs = [
+    const blackGlobs = [
       ...(projectConfig.autoindex?.blacklistGlobs || BLACK_LIST_DEFAULTS),
       ...REQUIRED_BLACKLIST,
     ];
-    const blacklist = await prepList(blackglobs);
+    const blacklist = await prepList(blackGlobs);
 
-    const indexlist = hasExplicitFiles
+    const indexList = hasExplicitFiles
       ? argv
-      : (await prepList(indexglobs)).filter((i) => !blacklist.includes(i));
+      : (await prepList(indexGlobs)).filter((i) => !blacklist.includes(i));
 
-    const whiteglobs = [...(projectConfig.autoindex?.whitelistGlobs || WHITE_LIST_DEFAULTS)];
-    const whitelist = (await prepList(whiteglobs)).filter((w) => !indexlist.includes(w));
+    const whiteGlobs = [...(projectConfig.autoindex?.whitelistGlobs || WHITE_LIST_DEFAULTS)];
+    const whitelist = (await prepList(whiteGlobs)).filter((w) => !indexList.includes(w));
 
     /** those files known to be autoindex files */
-    const autoIndexFiles = indexlist.filter((fc) => isAutoindexFile(fc));
-    if (indexlist.length === autoIndexFiles.length) {
-      if (indexlist.length > 0) {
+    const autoIndexFiles = indexList.filter((fc) => isAutoindexFile(fc));
+    if (indexList.length === autoIndexFiles.length) {
+      if (indexList.length > 0) {
         log.info(
           chalk`- found {yellow ${String(
-            indexlist.length
-          )}} index files, {bold {yellow {italic all}}} of which are setup to be autoindexed.`
+            indexList.length
+          )}} index files, {bold {yellow {italic all}}} of which are setup to be auto-indexed.`
         );
       }
     } else {
       log.info(
         chalk`- found {yellow ${String(
-          indexlist.length
+          indexList.length
         )}} {italic candidate} files, of which {yellow ${String(
           autoIndexFiles.length
-        )}} have been setup to be autoindexed.`
+        )}} have been setup to be auto-indexed.`
       );
-      const diff = indexlist.length - autoIndexFiles.length;
+      const diff = indexList.length - autoIndexFiles.length;
       if (diff > 0) {
         log.info(chalk`- files {italic not} setup were:`);
-        const missing = indexlist.filter((i) => !autoIndexFiles.includes(i));
+        const missing = indexList.filter((i) => !autoIndexFiles.includes(i));
         for (const file of missing) {
           log.info(chalk`{dim   - ${file}}`);
         }
@@ -146,7 +146,13 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
     }
 
     if (opts.watch) {
-      watchlist.push({ name: repo.name, dir: repo.path, indexglobs, whiteglobs, blackglobs });
+      watchlist.push({
+        name: repo.name,
+        dir: repo.path,
+        indexGlobs,
+        whiteGlobs,
+        blackGlobs,
+      });
     }
   }
 

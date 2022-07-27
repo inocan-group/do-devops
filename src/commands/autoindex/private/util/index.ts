@@ -18,6 +18,7 @@ export * from "./noDifference";
 export * from "./nonBlockContent";
 export * from "./removeExtension";
 export * from "./replaceRegion";
+export * from "./replaceOldHelpContent";
 export * from "./structurePriorAutoindexContent";
 export * from "./timestamp";
 export * from "./unexpectedContent";
@@ -45,7 +46,7 @@ export * from "./unexpectedContent";
 // below this file will not reference this autoindex file:
 //
 //    - autoindex:named, orphan
-// 
+//
 // All content outside the "// #region" section in this file will be
 // preserved in situations where you need to do something paricularly awesome.
 // Keep on being awesome.

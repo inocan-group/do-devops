@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { Keys } from "inferred-types";
+import { exit } from "node:process";
 import { Observations } from "~/@types/observations";
 import { logger } from "~/shared/core/logger";
 import { ImageApi } from "~/shared/images/useImageApi";
@@ -19,22 +19,22 @@ export async function askImageConfiguration(o: Observations, api: ImageApi) {
     log.info();
   }
 
-  const actions = ["Add Rule", "Remove Rule", "Change Rule", "Manage Defaults", "Quit"] as const;
-  type Actions = Keys<typeof actions>;
+  const action = await askListQuestion(`What configuration operation are you interested in?`, [
+    "Add Rule",
+    "Remove Rule",
+    "Change Rule",
+    "Manage Defaults",
+    "Quit",
+  ] as const);
 
-  const action = await askListQuestion<Actions>(
-    `What configuration operation are you interested in?`,
-    actions
-  );
-
-  const actionMap: Record<Actions, (o: Observations, api: ImageApi) => Promise<any>> = {
+  const actionMap = {
     "Add Rule": askAddImageRule,
     "Remove Rule": askRemoveImageRule,
     "Change Rule": askChangeImageRule,
     "Manage Defaults": askImageDefaults,
     Quit: async () => {
       log.info("exiting ...");
-      process.exit();
+      exit(0);
     },
   };
 

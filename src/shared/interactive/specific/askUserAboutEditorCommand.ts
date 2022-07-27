@@ -10,12 +10,12 @@ import { askInputQuestion } from "../general/askInputQuestion";
  * returned to the caller.
  */
 export async function askUserAboutEditorCommand() {
-  let editor = await askListQuestion<string>("What editor command should we use to open files?", [
-    { name: "vs-code (using 'code' to open)", value: "code", short: "vs-code" },
-    { name: "vim", value: "vim" },
-    { name: "Sublime Text (using 'subl' to open)", value: "subl", short: "sublime" },
-    { name: "other", value: "other" },
-  ]);
+  let editor: string = await askListQuestion("What editor command should we use to open files?", {
+    code: "vs-code (using 'code' to open)",
+    vim: "vim",
+    subl: "Sublime Text (using 'subl' to open)",
+    other: "other",
+  });
   if (editor === "other") {
     editor = await askInputQuestion("what is the command for this editor?");
   }

@@ -102,7 +102,6 @@ export interface ICommandConfig {
      * made Asynchronous (only useful if the `asyncSfc` is set to true)
      */
     asyncExceptions?: string[];
-
   };
   awsid?: {};
   build?: {
@@ -156,7 +155,10 @@ export interface ICommandConfig {
     useWallaby?: boolean;
     /** the directory where test files are located; typically "test", "tests" or possibly "src" */
     testDirectory?: string;
-    /** the filename's ending pattern before which identifies a test file withing a directory structure*/
+    /**
+     * the filename's ending pattern before which identifies a test file
+     * withing a directory structure
+     **/
     testFilePostfix?: string[];
   };
 }

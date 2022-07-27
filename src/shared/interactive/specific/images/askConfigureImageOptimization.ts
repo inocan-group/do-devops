@@ -1,6 +1,6 @@
 import chalk from "chalk";
-import path from "path";
-import { IImageRule, ImageMetaDetail, Observations } from "~/@types";
+import path from "node:path";
+import { IImageRule, Observations } from "~/@types";
 import { saveProjectConfig } from "~/shared/config";
 import { csvParser } from "~/shared/data";
 import { currentDirectory } from "~/shared/file";
@@ -103,7 +103,7 @@ export async function askConfigureImageOptimization(_o: Observations) {
     "custom",
   ];
 
-  const sizeName = await askListQuestion<string>(
+  const sizeName = await askListQuestion(
     wordWrap(
       `When a source image is optimized it will be converted to JPG, AVIF, and WebP formats but it will also be done in different sizes. There are a number of default options listed below which largely trigger off of two variables:\n`
     ) +
@@ -125,16 +125,16 @@ export async function askConfigureImageOptimization(_o: Observations) {
     `Should images in this rule also generate a small blurred image for pre-loading?`
   );
 
-  rule.metaDetail = await askListQuestion<ImageMetaDetail>(
+  rule.metaDetail = await askListQuestion(
     `What level of detail will this rule need for metadata?`,
-    ["basic", "categorical", "tags"]
+    ["basic", "categorical", "tags"] as const
   );
 
-  rule.sidecarDetail = await askListQuestion<IImageRule["sidecarDetail"]>(
+  rule.sidecarDetail = await askListQuestion(
     wordWrap(
       `Sometimes it's helpful to have a "sidecar" file which has meta data as a JSON. This could be a JSON file per directory or one per file. If you don't need it though -- in most cases you won't -- then just choose "none":`
     ),
-    ["none", "per-image", "per-rule"],
+    ["none", "per-image", "per-rule"] as const,
     { default: "none" }
   );
 

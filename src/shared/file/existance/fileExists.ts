@@ -1,18 +1,17 @@
-import { existsSync } from "fs";
-import { homedir } from "os";
-import path from "path";
-import { interpolateFilePath } from "~/shared/file/helpers";
+import { existsSync } from "node:fs";
+import { interpolateFilePath } from "../helpers";
 
 /**
- * Checks for the existance of a file.
+ * Checks for the existence of a file.
  *
  * > `~/` and `./` shorthands will be converted to a full path
  */
 export function fileExists(file: string) {
-  file = interpolateFilePath(file);
-  if (file.slice(0, 1) === "~") {
-    file = path.posix.join(homedir(), file.slice(1));
-  }
+  try {
+    const f = interpolateFilePath(file);
 
-  return existsSync(file);
+    return existsSync(f);
+  } catch {
+    return false;
+  }
 }

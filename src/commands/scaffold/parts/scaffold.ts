@@ -18,7 +18,7 @@ import chalk from "chalk";
 import { asyncExec } from "async-shelljs";
 import { getSubdirectories } from "~/shared/file/utility";
 import { emoji, wordWrap } from "~/shared/ui";
-import { Keys } from "inferred-types";
+import { exit } from "node:process";
 
 const scaffolds = [
   "gitignore",
@@ -35,10 +35,7 @@ export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
   observations,
 }) => {
   opts = { ...opts, silent: true };
-  const which = await askCheckboxQuestion<Keys<typeof scaffolds>>(
-    "choose the scaffolds you want to use",
-    scaffolds
-  );
+  const which = await askCheckboxQuestion("choose the scaffolds you want to use", scaffolds);
 
   if (which.includes("gitignore")) {
     await installGitIgnore(opts);
@@ -73,7 +70,7 @@ export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
         ...getSubdirectories(process.cwd()),
         "(new subdirectory)",
       ];
-      const subOrCurrent = await askListQuestion<string>(
+      const subOrCurrent = await askListQuestion(
         wordWrap(
           chalk`- since you're not in a dir with a {italic package.json} we need to establish which directory you want to install the {bold blue Vitesse} start template into.`
         ),
@@ -100,7 +97,7 @@ export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
         }template installed and all deps are loaded \n`
       );
     } else {
-      process.exit();
+      exit(0);
     }
   }
 

@@ -1,6 +1,8 @@
+import { Keys } from "inferred-types";
 import { ListQuestion } from "inquirer";
-import { IInteractiveOptions } from "~/@types";
+import { Choices, IInteractiveOptions } from "~/@types";
 import { ask } from "./ask";
+import { convertChoices } from "./convertChoices";
 
 /**
  * **askListQuestion**
@@ -17,20 +19,24 @@ import { ask } from "./ask";
  * Alternatively, if you pass an array of _hashes_ where the hash
  * can have `name`, `value` and `disabled` properties.
  */
-export async function askListQuestion<T extends string | number | object>(
+export async function askListQuestion<T extends Choices>(
   question: string,
-  choices: ListQuestion<T[]>["choices"],
-  options: IInteractiveOptions<T[]> = {}
-): Promise<T> {
-  const q = {
+  choices: T,
+  options: IInteractiveOptions<T> = {}
+): Promise<Keys<T>> {
+  const defaultValues = {
+    when: options.when || (() => true),
+    default: options.default || convertChoices(choices)[0].value,
+  };
+
+  const q: ListQuestion = {
     type: "list",
     name: "listValue",
     message: question,
-    choices,
-    default: options.default,
-    ...(options.when ? { when: options.when } : { when: () => true }),
+    choices: convertChoices(choices),
+    ...defaultValues,
   };
   const answer = await ask(q);
 
-  return answer.listValue as T;
+  return answer.listValue;
 }

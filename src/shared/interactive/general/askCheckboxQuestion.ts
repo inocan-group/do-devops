@@ -1,6 +1,6 @@
-import { ListQuestion } from "inquirer";
-import { IInteractiveOptions } from "~/@types";
+import { Choices, IInteractiveOptions } from "~/@types";
 import { ask } from "./ask";
+import { convertChoices } from "./convertChoices";
 
 /**
  * **askCheckboxQuestion**
@@ -18,20 +18,24 @@ import { ask } from "./ask";
  * Alternatively, if you pass an array of _hashes_ where the hash
  * can have `name`, `value` and `disabled` properties.
  */
-export async function askCheckboxQuestion<T extends string | number | object>(
+export async function askCheckboxQuestion<T extends Choices>(
   question: string,
-  choices: ListQuestion<T[]>["choices"],
-  options: IInteractiveOptions<T[]> = {}
-): Promise<T[]> {
+  choices: T,
+  options: IInteractiveOptions<T, true> = {}
+): Promise<T> {
+  const defaultValues = {
+    when: options.when || (() => true),
+    default: options.default || convertChoices(choices)[0].value,
+  };
+
   const q = {
     type: "checkbox",
     name: "checkedValues",
     message: question,
     choices,
-    default: options.default,
-    ...(options.when ? { when: options.when } : { when: () => true }),
+    ...defaultValues,
   };
   const answer = await ask(q);
 
-  return answer.checkedValues as T[];
+  return answer.checkedValues as T;
 }

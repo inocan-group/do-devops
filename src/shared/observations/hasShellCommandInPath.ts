@@ -1,10 +1,10 @@
-import { execSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 
 export const hasShellCommandInPath = (cmd: string): boolean => {
   try {
-    cmd = `which $cmd`;
-    const results = execSync(cmd, { encoding: "utf8" });
-    return results.includes("not found") ? false : true;
+    const results = spawnSync("which", [cmd], { encoding: "utf8", stdio: "ignore" });
+
+    return results.status === 0 ? true : false;
   } catch {
     return false;
   }

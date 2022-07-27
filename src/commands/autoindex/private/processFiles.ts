@@ -5,6 +5,7 @@ import { detectExportType, exclusions, createAutoindexContent } from "./index";
 import { IAutoindexFile } from "./reference";
 import {
   getEmbeddedHashCode,
+  hasOldHelpContent,
   isNewAutoindexFile,
   isOrphanedIndexFile,
   replaceRegion,
@@ -12,11 +13,11 @@ import {
 import { emoji, highlightFilepath } from "~/shared/ui";
 import { logger } from "~/shared/core";
 import { Options, Observations } from "~/@types";
-import path from "path";
+import { dirname, join } from "pathe";
 import { getFileComponents, getSubdirectories } from "~/shared/file";
 import { IAutoindexOptions } from "../parts";
-import { appendFile, writeFile } from "fs/promises";
-import { existsSync, readFileSync } from "fs";
+import { appendFile, writeFile } from "node:fs/promises";
+import { existsSync, readFileSync } from "node:fs";
 import { fileHasExports } from "~/shared/ast";
 import xxhash from "xxhash-wasm";
 
@@ -42,20 +43,18 @@ export async function processFiles(
     return;
   }
 
-  for (const ai of autoindexFiles) {
+  for (const indexFilename of autoindexFiles) {
     let action: "new-file" | "unchanged" | "updated";
-    /** Directory that given autoindex file is reponsible for */
-    const dir = path.posix.dirname(ai);
+    /** Directory that given autoindex file is responsible for */
+    const dir = dirname(indexFilename);
     /** the file content of the autoindex file */
-    const aiContent = readFileSync(ai, "utf-8");
-
+    const fileContent = readFileSync(indexFilename, "utf8");
     /** any _explicit_ excludes above and beyond the blacklist rules */
-    const explicitExcludes = exclusions(aiContent);
+    const explicitExcludes = exclusions(fileContent);
     /** the type of _export_ to be in the autoindex file (aka, named, default, etc.) */
-    const exportType = detectExportType(aiContent);
-
+    const exportType = detectExportType(fileContent);
     /** only those in the immediate directory */
-    const whitelist = scope.whitelist.filter((f) => path.posix.dirname(f) === dir);
+    const whitelist = scope.whitelist.filter((f) => dirname(f) === dir);
 
     /**
      * The record of black listed items grouped by "reason"
@@ -64,13 +63,13 @@ export async function processFiles(
 
     const files = whitelist
       // only those in current dir
-      .filter((f) => path.posix.dirname(f) === dir)
+      .filter((f) => dirname(f) === dir)
       // based on blacklist or local exclusions
       .filter((f) => {
         if (scope.blacklist.includes(f)) {
           typeof blackBook[f] === "object"
-            ? { blacklist: [...blackBook[f].blacklist, f], explict: blackBook[f].explicit }
-            : { blacklist: [f], explict: [] };
+            ? { blacklist: [...blackBook[f].blacklist, f], explicit: blackBook[f].explicit }
+            : { blacklist: [f], explicit: [] };
 
           return false;
         } else if (
@@ -78,8 +77,8 @@ export async function processFiles(
           !explicitExcludes.every((ex) => !f.includes(ex))
         ) {
           typeof blackBook[f] === "object"
-            ? { blacklist: blackBook[f].blacklist, explict: [...blackBook[f].explicit, f] }
-            : { blacklist: [], explict: [f] };
+            ? { blacklist: blackBook[f].blacklist, explicit: [...blackBook[f].explicit, f] }
+            : { blacklist: [], explicit: [f] };
 
           return false;
         }
@@ -119,13 +118,13 @@ export async function processFiles(
     const noExportDir: string[] = [];
 
     const dirs = getSubdirectories(dir).reduce((acc, d) => {
-      const ts = path.posix.join(dir, d, "/index.ts");
-      const js = path.posix.join(dir, d, "/index.js");
+      const ts = join(dir, d, "/index.ts");
+      const js = join(dir, d, "/index.js");
       const child = ts || js;
       if (!existsSync(child)) {
         log.whisper(
           chalk`{gray - autoindex file ${highlightFilepath(
-            ai
+            indexFilename
           )} will not include the {blue ${d}} directory because there is {italic {red no index file}}}`
         );
         noIndexFile.push(d);
@@ -133,7 +132,7 @@ export async function processFiles(
       } else if (isOrphanedIndexFile(child)) {
         log.whisper(
           chalk`{gray - autoindex file ${highlightFilepath(
-            ai
+            indexFilename
           )} will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
         );
         orphans.push(d);
@@ -141,7 +140,7 @@ export async function processFiles(
       } else if (!explicitExcludes.every((e) => d !== e)) {
         log.whisper(
           chalk`{gray - autoindex file ${highlightFilepath(
-            ai
+            indexFilename
           )} will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
         );
         explicitDirRemoval.push(d);
@@ -149,7 +148,7 @@ export async function processFiles(
       } else if (!fileHasExports(child)) {
         log.info(
           chalk`{gray - autoindex file ${highlightFilepath(
-            ai
+            indexFilename
           )} will not include the directory {blue ${d}} because it has {italic {red no exports}}}`
         );
         noExportDir.push(d);
@@ -160,18 +159,20 @@ export async function processFiles(
     }, [] as string[]);
     const fileSymbols = files.map((f) => getFileComponents(f).filename);
 
-    const priorHash = isNewAutoindexFile(aiContent) ? undefined : getEmbeddedHashCode(aiContent);
+    const priorHash = isNewAutoindexFile(fileContent)
+      ? undefined
+      : getEmbeddedHashCode(fileContent);
     const hashCode = h32(
-        JSON.stringify({
-          fileSymbols,
-          dirs,
-          explicitExcludes,
-          orphans,
-          noIndexFile,
-          explicitDirRemoval,
-          noExportDir,
-          sfc: opts.sfc || false,
-        }),
+      JSON.stringify({
+        fileSymbols,
+        dirs,
+        explicitExcludes,
+        orphans,
+        noIndexFile,
+        explicitDirRemoval,
+        noExportDir,
+        sfc: opts.sfc || false,
+      }),
       0xcafebabe
     );
 
@@ -182,14 +183,14 @@ export async function processFiles(
       hashCode,
     };
 
-    // if change to hash code the re-write index file
-    if (priorHash !== hashCode || opts.force === true) {
-      action = isNewAutoindexFile(aiContent) ? "new-file" : "updated";
+    // if change to hash code or has the old help content then re-write index file
+    if (priorHash !== hashCode || opts.force === true || hasOldHelpContent(fileContent)) {
+      action = isNewAutoindexFile(fileContent) ? "new-file" : "updated";
       const result = createAutoindexContent(content, opts);
 
       await (action === "new-file"
-        ? appendFile(ai, result)
-        : writeFile(ai, replaceRegion(aiContent, result), "utf-8"));
+        ? appendFile(indexFilename, result)
+        : writeFile(indexFilename, replaceRegion(fileContent, result), "utf8"));
     } else {
       action = "unchanged";
     }
@@ -197,15 +198,21 @@ export async function processFiles(
     switch (action) {
       case "new-file":
         log.info(
-          chalk`- autoindex file ${highlightFilepath(ai)} is a {italic {bold new}} autoindex file`
+          chalk`- autoindex file ${highlightFilepath(
+            indexFilename
+          )} is a {italic {bold new}} autoindex file`
         );
         break;
       case "updated":
-        log.info(chalk`- autoindex file ${highlightFilepath(ai)} was {italic {bold updated}}.`);
+        log.info(
+          chalk`- autoindex file ${highlightFilepath(indexFilename)} was {italic {bold updated}}.`
+        );
         break;
       case "unchanged":
         log.whisper(
-          chalk`{dim - autoindex file ${highlightFilepath(ai)} was left {italic {bold unchanged}}}.`
+          chalk`{dim - autoindex file ${highlightFilepath(
+            indexFilename
+          )} was left {italic {bold unchanged}}}.`
         );
         break;
     }

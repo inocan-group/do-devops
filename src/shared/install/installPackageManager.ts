@@ -19,9 +19,9 @@ export async function installPackageManager(
   }
 
   if (!manager) {
-    manager = await askListQuestion<PackageManagerObservation>(
+    manager = await askListQuestion(
       "Which package manager would you like to use for this repo?",
-      ["npm", "pnpm", "yarn"],
+      ["npm", "pnpm", "yarn"] as const,
       { default: "npm" }
     );
   }
