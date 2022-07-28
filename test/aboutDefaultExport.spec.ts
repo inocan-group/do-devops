@@ -1,7 +1,7 @@
 import { aboutDefaultExport } from "src/shared/ast/aboutDefaultExport";
 import { describe, it } from "vitest";
 
-describe.only("ast > aboutDefaultExport()", () => {
+describe("ast > aboutDefaultExport()", () => {
   it("string exported as default export", () => {
     const t = aboutDefaultExport("./test/autoindex-test/default/stringValue.ts");
     // console.log("EXPORT", t?.defExport);

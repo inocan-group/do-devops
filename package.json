@@ -61,7 +61,7 @@
     "watch": "run-p watch:*",
     "watch:build": "tsc -p tsconfig.build.json -w",
     "audit:fix": "pnpm audit --fix",
-    "release": "run-s lint release:latest test audit:fix build:validation release:bump",
+    "release": "run-s lint release:latest audit:fix build test:ci release:bump",
     "release:latest": "pnpm install",
     "release:bump": "bumpp"
   },
@@ -115,6 +115,7 @@
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
     "@vitest/ui": "^0.19.1",
+    "bumpp": "^8.2.1",
     "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
