@@ -13,7 +13,7 @@ export const avoidDuplicationInExtFile = async (
   const data = readFileSync("extfile.cnf", "utf8");
   const locate = find(`.*DNS:${dns},IP:(.*)`, "ip");
   const { ip, found, next } = locate(data);
-  const { ip: nextIp, found: nextFound } = next();
+  const { ip: nextIp, found: nextFound } = next ? next() : { ip: undefined, found: false };
 
   if (found) {
     console.error(

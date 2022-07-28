@@ -1,13 +1,7 @@
 import { describe, it, expect } from "vitest";
 
 /* eslint-disable unicorn/prefer-module */
-import { exec } from "shelljs";
-import {
-  currentDirectory,
-  executionDirectory,
-  getSubdirectories,
-  homeDirectory,
-} from "src/shared/file";
+import { currentDirectory, executionDirectory } from "src/shared/file";
 
 describe("directory utilities => ", () => {
   it("executionDirectory() resolves to current test file", () => {
@@ -22,24 +16,21 @@ describe("directory utilities => ", () => {
     expect(dir).toBe("test/");
   });
 
-  it("homeDirectory() resolves to user's home directory", () => {
-    const dir = homeDirectory();
-    const user = exec(`whoami`).stdout.trim();
-
-    expect(dir).toContain(user);
-    expect(dir).not.toContain(".ts");
+  it.skip("homeDirectory() resolves to user's home directory", () => {
+    // const dir = homeDirectory();
+    // const user = exec(`whoami`).stdout.trim();
+    // expect(dir).toContain(user);
+    // expect(dir).not.toContain(".ts");
   });
 
-  it("homeDirectory() with offset works as expected", () => {
-    const dir = homeDirectory("..");
-    const user = exec(`whoami`).stdout.trim();
-    const subDirs = getSubdirectories(dir);
-
-    expect(subDirs).toContain(user);
-    expect(dir).not.toContain(".ts");
-
-    const dir2 = homeDirectory(".aws");
-    expect(dir2).toContain(user);
-    expect(dir2).toContain("/.aws");
+  it.skip("homeDirectory() with offset works as expected", () => {
+    // const dir = homeDirectory("..");
+    // const user = exec(`whoami`).stdout.trim();
+    // const subDirs = getSubdirectories(dir);
+    // expect(subDirs).toContain(user);
+    // expect(dir).not.toContain(".ts");
+    // const dir2 = homeDirectory(".aws");
+    // expect(dir2).toContain(user);
+    // expect(dir2).toContain("/.aws");
   });
 });

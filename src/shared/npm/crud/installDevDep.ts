@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { exec } from "shelljs";
+import { execSync } from "node:child_process";
 import { DoDevopObservation, Options } from "~/@types";
 import { logger } from "~/shared/core";
 import { determinePackageManager } from "~/shared/observations";
@@ -17,19 +17,19 @@ export async function installDevDep(
       ? `npm install --save-dev ${packages.join(" ")}`
       : `${pkgManager} add ${pkgManager === "yarn" ? "--dev" : "--save-dev"} ${packages.join(" ")}`;
   log.whisper(chalk`- installing with {blue ${cmd}}`);
-  const response = exec(cmd);
-  if (response.code === 0) {
+  try {
+    execSync(cmd);
     log.info(
       chalk`\n- ${emoji.checkmark} package${
         packages.length > 1 ? "s" : ""
-      } [ {italic {gray ${packages.join(", ")}}} ] {italic installed} as dev dependenc${
+      } [ {italic {gray ${packages.join(", ")}}} ] {italic installed} as dev dependency${
         packages.length > 1 ? "ies" : "y"
       }\n`
     );
-  } else {
+    return true;
+  } catch (error) {
     log.info(chalk`{gray - {red failure} trying to install npm packages: ${cmd}}`);
-    log.info(chalk`\n{gray ${response.stderr}}\n`);
+    log.info(chalk`\n{gray ${(error as Error).message}}\n`);
+    return false;
   }
-
-  return response.code === 0 ? true : false;
 }
