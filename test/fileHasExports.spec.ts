@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { join } from "pathe";
-import { fileHasExports } from "src/shared/ast";
+import { fileHasExports } from "src/shared/ast/fileHasExports";
 
 describe("fileHasExports() utility", () => {
   it("an autoindex file with file exports", () => {

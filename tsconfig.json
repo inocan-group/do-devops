@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "ES2018",
+    "target": "ES2020",
     "lib": [
       "ES2019.Array",
       "ES2020"
@@ -20,23 +20,6 @@
     "baseUrl": ".",
     "outDir": "bin",
     "tsBuildInfoFile": ".tsbuildinfo",
-    "paths": {
-      "src/*": [
-        "src/*"
-      ]
-    },
-    "plugins": [
-      // Transform paths in output .js files
-      {
-        "transform": "typescript-transform-paths"
-      },
-      // Transform paths in output .d.ts files
-      // (Include this line if you output declarations files)
-      {
-        "transform": "typescript-transform-paths",
-        "afterDeclarations": true
-      }
-    ]
   },
   "include": [
     "src",

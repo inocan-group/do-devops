@@ -1,8 +1,10 @@
 import parse from "destr";
 import path from "node:path";
-import { currentDirectory, readFile } from "src/shared/file";
+
 import { IProjectConfig, IProjectConfigFilled } from "src/@types";
 import { CONFIG_FILE } from "src/shared/config/constants";
+import { currentDirectory } from "../file/base-paths/currentDirectory";
+import { readFile } from "../file/crud/readFile";
 
 /**
  * Gets the project's configuration from the current

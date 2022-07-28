@@ -1,9 +1,9 @@
 /* eslint-disable unicorn/prefer-set-has */
 import { describe, it, expect } from "vitest";
 import chalk from "chalk";
-import { directoryFiles, getFileComponents } from "src/shared/file";
-import { useSharp } from "src/shared/images/useSharp";
-import { numberWithCommas } from "src/shared/ui";
+import { directoryFiles, getFileComponents } from "../src/shared/file";
+import { useSharp } from "../src/shared/images/useSharp";
+import { numberWithCommas } from "../src/shared/ui";
 import { removeTempFiles } from "./helpers/removeTempFiles";
 
 enum images {

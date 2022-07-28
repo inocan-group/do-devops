@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-await-expression-member */
 import chalk from "chalk";
 import { omit } from "native-dash";
 import { IDictionary } from "common-types";
@@ -11,8 +12,9 @@ import { getAwsLambdaFunctions } from "src/shared/aws";
 import type { FunctionConfiguration } from "aws-sdk/clients/lambda";
 import { determineRegion } from "src/shared/observations";
 import { functionsApiTable } from "./tables";
-import { write } from "src/shared/file";
 import { Options } from "src/@types";
+import { write } from "src/shared/file/crud/write";
+import { exit } from "node:process";
 
 export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
   unknown: argv,
@@ -58,7 +60,7 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
         chalk`{gray - if you want a list of functions, you can still get this by stating an AWS profile with the "--profile" option}\n`
       );
     }
-    process.exit();
+    exit();
   } else if (observations.has("serverlessTs")) {
     if (opts.forceBuild) {
       console.log(
@@ -126,6 +128,6 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
     console.log(output);
   } catch (error) {
     console.log(`- Error finding functions: ${(error as Error).message}\n`);
-    process.exit();
+    exit(1);
   }
 };

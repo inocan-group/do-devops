@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { readFileSync } from "node:fs";
 import { load } from "js-yaml";
 import { DevopsError } from "src/errors/DevopsError";
-import { filesExist } from "../existance/filesExist";
+import { filesExist } from "../existence/filesExist";
 import { interpolateFilePath } from "../helpers";
 
 /**

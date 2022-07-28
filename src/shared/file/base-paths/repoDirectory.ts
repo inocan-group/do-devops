@@ -2,9 +2,9 @@
 import chalk from "chalk";
 import path, { join } from "node:path";
 import { IDirectoryOptions } from "src/@types";
-import { DevopsError } from "src/errors";
-import { findPackageJson } from "src/shared/npm";
-import { fileExists } from "../existance/fileExists";
+import { DevopsError } from "../../../errors/DevopsError";
+import { findPackageJson } from "../../../shared/npm";
+import { fileExists } from "../existence/fileExists";
 import { toRelativePath } from "../relativePath";
 import { currentDirectory } from "./currentDirectory";
 import { parentDirectory } from "./parentDirectory";

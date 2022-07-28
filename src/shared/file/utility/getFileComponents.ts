@@ -1,5 +1,5 @@
 import { IFilenameComponents } from "src/@types/file-types";
-import { toRelativePath } from "src/shared/file";
+import { toRelativePath } from "../relativePath";
 
 /**
  * Breaks files into parts so that they can be treated separately

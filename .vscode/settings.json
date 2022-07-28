@@ -7,16 +7,19 @@
     "bestzip",
     "deepmerge",
     "degit",
+    "destr",
     "Devop",
     "exiftool",
     "extfile",
     "fullchain",
     "globby",
+    "mozjpeg",
     "nslookup",
     "smartwrap",
     "ttypescript",
     "Watchlist",
     "webext",
+    "webp",
     "xxhash"
   ]
 }

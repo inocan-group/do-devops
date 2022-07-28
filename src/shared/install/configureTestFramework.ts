@@ -1,8 +1,9 @@
 import { TestObservation, Observations, Options } from "src/@types";
 import { DevopsError } from "src/errors";
-import { templateDirCopy, templateFileCopy } from "src/shared/file";
 import { getProjectConfig } from "../config";
 import { logger } from "../core";
+import { templateDirCopy } from "../file/utility/templateDirCopy";
+import { templateFileCopy } from "../file/utility/templateFileCopy";
 
 export async function configureTestFramework(
   framework: TestObservation,

@@ -1,5 +1,6 @@
 import chalk from "chalk";
-import { fileExists, libraryDirectory } from "src/shared/file";
+import { libraryDirectory } from "src/shared/file/base-paths/libraryDirectory";
+import { fileExists } from "src/shared/file/existence/fileExists";
 import { getPackageJson } from "src/shared/npm";
 import { emoji } from "src/shared/ui";
 

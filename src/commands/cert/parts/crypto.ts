@@ -8,7 +8,7 @@ import { execSync } from "node:child_process";
 import { askInputQuestion } from "src/shared/interactive";
 import { nslookup } from "src/shared/network";
 import { handleDuplicateFile } from "./handleDuplicateFile";
-import { fileExists } from "src/shared/file/existance";
+import { fileExists } from "src/shared/file/existence/fileExists";
 import { avoidDuplicationInExtFile } from "./dnsAppearsInExtFile";
 import { readFileSync, writeFileSync } from "node:fs";
 

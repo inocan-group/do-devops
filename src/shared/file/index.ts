@@ -17,7 +17,7 @@ export * from "./stripFileExtension";
 // directory exports
 export * from "./base-paths/index";
 export * from "./crud/index";
-export * from "./existance/index";
+export * from "./existence/index";
 export * from "./utility/index";
 
 // #endregion
@@ -43,7 +43,7 @@ export * from "./utility/index";
 // below this file will not reference this autoindex file:
 //
 //    - autoindex:named, orphan
-// 
+//
 // All content outside the "// #region" section in this file will be
 // preserved in situations where you need to do something paricularly awesome.
 // Keep on being awesome.

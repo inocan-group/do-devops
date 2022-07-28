@@ -2,11 +2,11 @@ import chalk from "chalk";
 import { IDictionary } from "common-types";
 import path from "node:path";
 import { processFiles } from "./processFiles";
-import { directoryFiles } from "src/shared/file";
 import { isAutoindexFile } from "./util";
 import { highlightFilepath } from "src/shared/ui";
 import { Observations } from "src/@types";
 import { WhiteBlackList } from ".";
+import { directoryFiles } from "src/shared/file/utility/directoryFiles";
 
 /** to avoid circular events, we need to allow certain files to be ignored */
 let filesToIgnore: string[] = [];

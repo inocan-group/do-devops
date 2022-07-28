@@ -3,7 +3,7 @@ import { IDictionary } from "common-types";
 import { currentDirectory, libraryDirectory } from "../base-paths";
 import { DevopsError } from "src/errors";
 import { readFile, write } from "../crud";
-import { fileExists } from "../existance";
+import { fileExists } from "../existence";
 import { askAboutFileOverwrite } from "src/shared/interactive";
 
 /**

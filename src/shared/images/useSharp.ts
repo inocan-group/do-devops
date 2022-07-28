@@ -10,6 +10,7 @@ import sharp, {
 } from "sharp";
 import { IImageCacheRef, ISharpMetadata, SharpImageFormat } from "src/@types";
 import { getFileComponents } from "../file";
+import { ImageError } from "src/errors/ImageError";
 
 export function useSimd() {
   sharp.simd(true);
@@ -73,6 +74,7 @@ export function useSharp(options: ISharpOptions = {}) {
     ): Promise<IImageCacheRef> => {
       const name = getFileComponents(image).fileWithoutExt;
       const out = outFilename(outDir, name, width, format);
+
       return sharp(image)
         .toFormat(format, options)
         .resize(width)
@@ -94,7 +96,7 @@ export function useSharp(options: ISharpOptions = {}) {
           } as IImageCacheRef;
         })
         .catch((error) => {
-          throw new Error(`Problem writing file ${out}! ${error.message}`);
+          throw new ImageError(`Problem writing file ${out}! ${error.message}`, "io/saving-image");
         });
     },
     /**

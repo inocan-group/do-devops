@@ -1,6 +1,6 @@
 import { lstatSync, rmSync } from "node:fs";
 import { DevopsError } from "src/errors";
-import { fileExists } from "../existance";
+import { fileExists } from "../existence/fileExists";
 import { interpolateFilePath } from "../helpers/interpolateFilepath";
 
 /**

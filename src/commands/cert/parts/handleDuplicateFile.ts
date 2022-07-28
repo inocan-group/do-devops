@@ -1,7 +1,8 @@
-import { currentDirectory, fileExists } from "src/shared/file";
 import { askListQuestion } from "src/shared/interactive/general/askListQuestion";
 import { askInputQuestion } from "src/shared/interactive";
 import { exit } from "node:process";
+import { currentDirectory } from "src/shared/file/base-paths/currentDirectory";
+import { fileExists } from "src/shared/file/existence/fileExists";
 
 /**
  * Returns immediately if the file _does not_ exist, otherwise asks user for

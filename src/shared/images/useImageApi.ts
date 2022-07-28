@@ -3,12 +3,13 @@ import chalk from "chalk";
 import destr from "destr";
 import type { IImageCache, IImageRule } from "src/@types";
 import { IMAGE_CACHE } from "src/constants";
-import { useExifTools, useSharp } from "src/shared/images";
-import { logger } from "src/shared/core";
-import { readFile, fileExists } from "src/shared/file";
+import { logger } from "../core";
+import { readFile, fileExists } from "../file";
 import { convertStale } from "./useImageApi/convertStale";
 import { watchForChange } from "./useImageApi/watchForChange";
 import { summarize } from "./useImageApi/summarize";
+import { useExifTools } from "./useExifTools";
+import { useSharp } from "./useSharp";
 
 export interface IGetImageOptions {}
 

@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { readFileSync } from "node:fs";
 import { emoji } from "src/shared/ui";
-import { filesExist } from "../existance/filesExist";
+import { filesExist } from "../existence/filesExist";
 import { interpolateFilePath } from "../helpers";
 
 /**

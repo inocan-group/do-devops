@@ -1,6 +1,6 @@
 import { exiftool, Tags, WriteTags } from "exiftool-vendored";
 import { IExifToolMetadata, IptcCreatorContactInfo } from "src/@types/image-types";
-import { DevopsError } from "src/errors";
+import { DevopsError } from "../../errors";
 import { removeFile } from "../file";
 import { improveMetaResults } from "./useExifTool/conversion-tools";
 import { metaReducer } from "./useExifTool/metaCategories";

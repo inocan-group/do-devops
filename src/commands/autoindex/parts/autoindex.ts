@@ -3,7 +3,7 @@
 import chalk from "chalk";
 import globby from "globby";
 import { join } from "pathe";
-import { getMonoRepoPackages } from "src/shared/file";
+import { getMonoRepoPackages } from "src/shared/file/getMonoRepoPackages";
 import { emoji, highlightFilepath } from "src/shared/ui";
 import { DoDevopsHandler } from "src/@types/command";
 import { IAutoindexOptions } from "./options";

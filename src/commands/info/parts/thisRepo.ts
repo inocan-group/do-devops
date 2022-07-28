@@ -6,7 +6,6 @@ import { format, parseISO } from "date-fns";
 import { table, TableUserConfig } from "table";
 import { DoDevopObservation, Options } from "src/@types";
 import { getObservations } from "src/shared/observations";
-import { currentDirectory, symlinks } from "src/shared/file";
 import {
   convertGitUrlToHttp,
   getCurrentGitBranch,
@@ -17,6 +16,8 @@ import { askConfirmQuestion, resolvePackageManagerConflict } from "src/shared/in
 import { getExternalPackageJson, getPackageJson } from "src/shared/npm";
 import { dim, emoji, green } from "src/shared/ui";
 import { monorepoInfo } from "./components/monorepo";
+import { currentDirectory } from "src/shared/file/base-paths/currentDirectory";
+import { symlinks } from "src/shared/file/utility/symlinks";
 
 /**
  * if user adds packages to the `pp info [p1] [p2]` this function will respond

@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import diff from "diff";
-import { readFile } from "src/shared/file";
+import { readFile } from "../crud/readFile";
 
 export function diffFiles(file1: string, file2: string) {
   const content1 = readFile(file1);

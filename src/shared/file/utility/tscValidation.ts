@@ -5,7 +5,7 @@ import { DevopsError } from "src/errors";
 import { logger } from "src/shared/core";
 import { emoji } from "src/shared/ui";
 import { currentDirectory, libraryDirectory } from "../base-paths";
-import { fileExists } from "../existance";
+import { fileExists } from "../existence";
 import { getFileComponents } from "./getFileComponents";
 
 /**

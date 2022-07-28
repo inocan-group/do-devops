@@ -7,7 +7,7 @@
   "aws": {},
   "image": {
     "sourceDir": "test/data",
-    "destinationDir": "temp",
+    "destinationDir": "./temp",
     "metaDetail": "categorical",
     "rules": [
       {

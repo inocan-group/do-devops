@@ -4,7 +4,7 @@ import globby from "globby";
 import { join } from "node:path";
 import { IImageCache, IImageRule } from "src/@types/image-types";
 import { logger } from "src/shared/core";
-import { repoDirectory } from "src/shared/file";
+import { repoDirectory } from "src/shared/file/base-paths/repoDirectory";
 
 type IGlobResultWithStats = {
   name: string;

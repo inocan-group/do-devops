@@ -1,6 +1,7 @@
 import { IOptimizedImage } from "common-types";
 import { IImageRule } from "src/@types";
-import { getFileComponents, write } from "src/shared/file";
+import { write } from "src/shared/file/crud/write";
+import { getFileComponents } from "src/shared/file/utility/getFileComponents";
 import { IImageTools } from "..";
 
 export const TS_IMAGE_SUPPORT_FILE = `src/images/optimized-images.ts`;

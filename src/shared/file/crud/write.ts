@@ -1,11 +1,11 @@
 import { mkdirSync, writeFileSync } from "node:fs";
-import { DevopsError } from "src/errors";
-import { dirExists, fileExists } from "../existance";
+import { DevopsError } from "../../../errors/DevopsError";
+import { dirExists, fileExists } from "../existence";
 import { IWriteOptions } from "src/@types";
-import { interpolateFilePath } from "src/shared/file/helpers";
+import { interpolateFilePath } from "../../../shared/file/helpers";
 import chalk from "chalk";
 import path from "node:path";
-import { isClassification } from "src/@type-guards";
+import { isClassification } from "../../../@type-guards";
 
 /**
  * **write**
@@ -55,7 +55,7 @@ export function write(filename: string, data: any, options: IWriteOptions = {}) 
     }
 
     writeFileSync(filename, content, {
-      encoding: "utf-8",
+      encoding: "utf8",
     });
 
     return { filename, data };
