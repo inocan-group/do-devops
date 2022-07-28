@@ -9,7 +9,8 @@ import { askInputQuestion } from "~/shared/interactive";
 import { nslookup } from "~/shared/network";
 import { handleDuplicateFile } from "./handleDuplicateFile";
 import { fileExists } from "~/shared/file/existance";
-import { dnsAppearsInExtFile } from "./dnsAppearsInExtFile";
+import { avoidDuplicationInExtFile } from "./dnsAppearsInExtFile";
+import { readFileSync, writeFileSync } from "node:fs";
 
 export function validateOpenSsl() {
   const hasOpenSsl = hasShellCommandInPath("openssl");
@@ -43,7 +44,7 @@ export async function ssh(o: ICertOptions) {
 export async function rsa(o: ICertOptions) {
   const pemFile = await handleDuplicateFile(`${o.name}-key.pem`);
   if (!pemFile) {
-    console.error(chalk`- keep existing file [{dim ${o.name}-key.pem}}]`);
+    console.error(chalk`- keep existing file [{dim ${o.name}-key.pem}]`);
     return;
   }
   if (pemFile === "quit") {
@@ -66,23 +67,105 @@ export async function rsa(o: ICertOptions) {
 }
 
 async function appendAlternativeNames(o: ICertOptions) {
+  const filename = "extfile.cnf";
+
   // get good defaults
   let dns = o.name?.includes(`.${o.local_domain}`) ? o.name : `${o.name}.${o.local_domain}`;
-  if (dnsAppearsInExtFile(dns)) {
-    exit(0); // TODO
-  }
   let ip = nslookup(dns);
 
   dns = await askInputQuestion("What is the DNS entry for this server?", { default: dns });
   ip = await askInputQuestion("What is the DNS entry for this server?", { default: `${ip}` });
+  const resolution = await avoidDuplicationInExtFile(dns, ip || "");
 
-  const command = `echo "subjectAltName=DNS:${dns},IP:${ip}" >> extfile.cnf`;
-  console.error(chalk`- appending subject alternative name\n  {green ${command}}`);
+  switch (resolution) {
+    case "quit":
+      console.log("bye.\n");
+      exit(0);
+    case "skip":
+      console.error("- ok, skipping update to file [{dim extfile.cnf}]");
+      break;
+    case "overwrite":
+      console.error("- updating {green extfile.cnf} with the new info");
+      const data = readFileSync(filename, "utf8")
+        .split("\n")
+        .filter((i) => !i.includes(dns))
+        .join("\n");
+      writeFileSync(filename, data, "utf8");
+      break;
+
+    case "no-conflict":
+      const command = `echo "subjectAltName=DNS:${dns},IP:${ip}" >> extfile.cnf`;
+      console.error(chalk`- appending subject alternative name\n  {green ${command}}`);
+      try {
+        execSync(command, { encoding: "utf8", stdio: "inherit" });
+        console.error(chalk`\n- appended [{dim extfile.cnf}] ${emoji.rocket}`);
+      } catch {
+        console.error("- ${emoji.poop} problems appending to the 'extfile.cnf' file!");
+        exit(1);
+      }
+      break;
+  }
+}
+
+async function fullchain_cert(o: ICertOptions) {
+  const command = `openssl x509 -req -sha256 -days ${o.days} -in ${o.name}.csr -CA ca.pem -CAkey ca-key.pem -out ${o.name}.pem -extfile extfile.cnf -CAcreateserial`;
   try {
+    console.error(chalk`- generating {bold {blue SSL Certificate}} for ${o.name}`);
     execSync(command, { encoding: "utf8", stdio: "inherit" });
-    console.error(chalk`\n- appended [{dim extfile.cnf}] ${emoji.rocket}`);
-  } catch {
-    console.error("- ${emoji.poop} problems appending to the 'extfile.cnf' file!");
+    console.error(chalk`- SSL certificate created [${o.name}.pem] ${emoji.rocket}`);
+  } catch (error) {
+    console.error(chalk`- ${emoji.poop} ran into problems: ${(error as Error)?.message}`);
+    exit(1);
+  }
+
+  try {
+    console.error(
+      chalk`- merging the created cert [{dim ${o.name}.pem}] with CA certificate [{dim ca.pem}]\n  into a fullchain cert [{dim ${o.name}.fullchain.pem}]`
+    );
+    const command2 = `cat ${o.name}.pem > ${o.name}.fullchain.pem && cat ca.pem >> ${o.name}.fullchain.pem`;
+    console.error(chalk`  {bold {green ${command}}}\n`);
+    execSync(command2, { encoding: "utf8", stdio: "inherit" });
+    console.error(
+      chalk`- Full Chain certificate created [{dim ${o.name}.fullchain.pem}] ${emoji.rocket}`
+    );
+  } catch (error) {
+    console.error(chalk`- ${emoji.poop} ran into problems: ${(error as Error)?.message}`);
+    exit(1);
+  }
+}
+
+/**
+ * Convert ASCII `pem` format to binary `der` format
+ */
+export async function pem_to_der(pemFile: string, _o: ICertOptions) {
+  const derFile = `${pemFile.replace(".pem", "")}.der`;
+  const command = `openssl x509 -outform der -in ${pemFile} -out ${derFile}`;
+  try {
+    console.error(chalk`- generating {bold {DER}} file from PEM:\n  {green ${command}}`);
+    execSync(command, { encoding: "utf8", stdio: "inherit" });
+    console.error(chalk`- DER created [${derFile}] ${emoji.rocket}`);
+  } catch (error) {
+    console.error(
+      chalk`- ${emoji.poop} problems generating the DER file! ${(error as Error).message}`
+    );
+    exit(1);
+  }
+}
+
+/**
+ * Convert ASCII `pem` format to binary `pfx` format
+ */
+export async function pem_to_pfx(pemFile: string, _o: ICertOptions) {
+  const pfxFile = `${pemFile.replace(".pem", "")}.pfx`;
+  const command = `openssl x509 -outform pfx -in ${pemFile} -out ${pfxFile}`;
+  try {
+    console.error(chalk`- generating {bold {PFX}} file from PEM:\n  {green ${command}}`);
+    execSync(command, { encoding: "utf8", stdio: "inherit" });
+    console.error(chalk`- PFX created [${pfxFile}] ${emoji.rocket}`);
+  } catch (error) {
+    console.error(
+      chalk`- ${emoji.poop} problems generating the PFX file! ${(error as Error).message}`
+    );
     exit(1);
   }
 }
@@ -112,7 +195,13 @@ export async function cert_csr(o: ICertOptions) {
     : await askInputQuestion(
         "Typically you'd call this command in a directory which has your CA Certificate named 'ca-key.pem' but this file doesn't exist. Please let us know where to find this file"
       );
-  const command = `openssl req -new -${o.csr_algo} -subj "/CN=${o.name}" -key ${caKey} -out ${o.name}.csr`;
+  const csrFile = `${o.name}.csr`;
+  const resolve = await handleDuplicateFile(csrFile);
+  if (!resolve) {
+    console.error(chalk`- skipping CSR file creation [{dim ${resolve}}]`);
+    return;
+  }
+  const command = `openssl req -new -${o.csr_algo} -subj "/CN=${o.name}" -key ${caKey} -out ${csrFile}`;
   const ipAddress = nslookup(`${o.name}.local`);
   console.log("ipAddress:", ipAddress);
 
@@ -137,6 +226,16 @@ export async function createCA(o: Options<ICertOptions>) {
   await ca_csr(o);
 }
 
+export function verify_pem_cert(pemFile: string): [boolean, null | Error] {
+  const command = `openssl verify -CAfile ca.pem -verbose ${pemFile}`;
+  try {
+    execSync(command, { encoding: "utf8", stdio: "inherit" });
+    return [true, null];
+  } catch (error) {
+    return [false, error as Error];
+  }
+}
+
 export async function createCertificate(o: Options<ICertOptions>) {
   validateOpenSsl();
   o.name = o.name || (await askInputQuestion("what is the name of the server?"));
@@ -144,6 +243,10 @@ export async function createCertificate(o: Options<ICertOptions>) {
   await rsa(o);
   await cert_csr(o);
   await appendAlternativeNames(o);
+  await fullchain_cert(o);
+  const pemFile = `${o.name}.pem`;
+  await pem_to_der(pemFile, o);
+  // await pem_to_pfx(pemFile, o);
 }
 
 export async function createSSH(o: Options<ICertOptions>) {

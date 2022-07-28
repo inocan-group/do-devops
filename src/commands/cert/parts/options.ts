@@ -19,7 +19,6 @@ export const options: IOptionDefinition = {
   },
   days: {
     type: Number,
-    alias: "d",
     group: "local",
     description: "the number of days a certificate will valid for (default 3650)",
   },

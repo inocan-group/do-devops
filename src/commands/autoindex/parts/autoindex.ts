@@ -35,7 +35,11 @@ export const BLACK_LIST_DEFAULTS = [
 export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observations, argv }) => {
   let projectConfig = getProjectConfig();
   // the sfc flag on CLI is inverted logically
-  opts = { ...opts, sfc: opts.sfc === false ? false : true, explicitFiles: argv.length > 0 };
+  opts = {
+    ...opts,
+    sfc: opts.sfc === false ? false : true,
+    explicitFiles: (argv?.length || 0) > 0,
+  };
 
   const log = logger(opts);
   if (opts.config) {
