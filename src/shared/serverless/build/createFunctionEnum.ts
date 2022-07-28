@@ -1,12 +1,12 @@
 import chalk from "chalk";
-import path from "path";
+import path from "node:path";
 
-import { existsSync, mkdirSync, writeFile } from "fs";
+import { existsSync, mkdirSync, writeFile } from "node:fs";
 
 import { emoji } from "../../ui";
 import { findHandlerConfig } from "../../ast/findHandlerConfig";
-import { promisify } from "util";
-import { IWebpackHandlerDates } from "~/@types";
+import { promisify } from "node:util";
+import { IWebpackHandlerDates } from "src/@types";
 
 const write = promisify(writeFile);
 
@@ -33,9 +33,7 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
       );
     } else {
       const fn = handler.fn;
-      const comment = config.config.description
-        ? config.config.description
-        : `${fn} handler`;
+      const comment = config.config.description ? config.config.description : `${fn} handler`;
       body.push(
         `
   /**
@@ -51,12 +49,8 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
     mkdirSync(path.join(process.cwd(), "/src/@types"));
   }
 
-  await write(
-    path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")),
-    fileText,
-    {
-      encoding: "utf-8",
-    }
-  );
+  await write(path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")), fileText, {
+    encoding: "utf-8",
+  });
   return fileText;
 }

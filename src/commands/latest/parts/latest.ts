@@ -1,13 +1,13 @@
 import chalk from "chalk";
-import { git } from "~/shared/git";
-import { emoji } from "~/shared/ui";
-import { getPackageJson } from "~/shared/npm";
-import { DoDevopsHandler } from "~/@types/command";
+import { git } from "src/shared/git";
+import { emoji } from "src/shared/ui";
+import { getPackageJson } from "src/shared/npm";
+import { DoDevopsHandler } from "src/@types/command";
 
 export const handler: DoDevopsHandler = async ({ opts }) => {
   const g = git();
 
-  const latest = (await g.tags()).latest;
+  const { latest } = await g.tags();
   const status = await g.status();
   const pkg = getPackageJson();
   if (!pkg) {
@@ -39,9 +39,7 @@ export const handler: DoDevopsHandler = async ({ opts }) => {
       ? ""
       : chalk`\n- Locally you have {yellow ${
           status.not_added.length > 0 ? status.not_added.length : "zero"
-        }} {italic new} files and {yellow ${
-          status.modified.length
-        }} {italic modified} files`;
+        }} {italic new} files and {yellow ${status.modified.length}} {italic modified} files`;
 
   const conflicts =
     status.conflicted.length === 0

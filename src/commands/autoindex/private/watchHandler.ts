@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import path from "path";
+import path from "node:path";
 import { processFiles } from "./processFiles";
-import { directoryFiles } from "~/shared/file";
+import { directoryFiles } from "src/shared/file";
 import { isAutoindexFile } from "./util";
-import { highlightFilepath } from "~/shared/ui";
-import { Observations } from "~/@types";
+import { highlightFilepath } from "src/shared/ui";
+import { Observations } from "src/@types";
 import { WhiteBlackList } from ".";
 
 /** to avoid circular events, we need to allow certain files to be ignored */

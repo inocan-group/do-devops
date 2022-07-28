@@ -1,7 +1,7 @@
 import type { FunctionConfiguration } from "aws-sdk/clients/lambda";
 import chalk from "chalk";
 import { IServerlessFunctionConfig } from "common-types";
-import { toTable } from "~/shared/ui";
+import { toTable } from "src/shared/ui";
 
 export function functionsApiTable(fns: FunctionConfiguration[]) {
   return toTable<FunctionConfiguration>(
@@ -24,7 +24,7 @@ export function functionsApiTable(fns: FunctionConfiguration[]) {
     {
       col: "CodeSize",
       name: "Code Size",
-      formula: (cs) => chalk`${Math.floor(Number(cs) / 10000) * 10} {italic kb}`,
+      formula: (cs) => chalk`${Math.floor(Number(cs) / 10_000) * 10} {italic kb}`,
       format: { width: 12, alignment: "right" },
       minWidth: 130,
     },
@@ -50,9 +50,7 @@ export function functionsApiTable(fns: FunctionConfiguration[]) {
   );
 }
 
-export function functionsLocalTable(
-  fns: Array<IServerlessFunctionConfig & { name: string }>
-) {
+export function functionsLocalTable(fns: Array<IServerlessFunctionConfig & { name: string }>) {
   return toTable(
     fns,
     {
@@ -81,8 +79,7 @@ export function functionsLocalTable(
     {
       col: "events",
       name: "Events",
-      formula: (events) =>
-        Array.isArray(events) ? events.map((evt) => Object.keys(evt)) : [],
+      formula: (events) => (Array.isArray(events) ? events.map((evt) => Object.keys(evt)) : []),
       format: { width: 20, alignment: "center" },
       minWidth: 155,
     },

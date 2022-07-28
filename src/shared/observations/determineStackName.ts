@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { DoDevopObservation, IAwsOptions, Options } from "~/@types";
-import { DevopsError } from "~/errors";
-import { logger } from "~/shared/core";
+import { DoDevopObservation, IAwsOptions, Options } from "src/@types";
+import { DevopsError } from "src/errors";
+import { logger } from "src/shared/core";
 import { getProjectConfig, saveProjectConfig } from "../config";
 import { askInputQuestion } from "../interactive";
 import { getPackageJson } from "../npm";

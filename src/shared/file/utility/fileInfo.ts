@@ -1,8 +1,8 @@
 import { stat } from "node:fs";
 import path from "node:path";
 import { promisify } from "node:util";
-import { IFileInfo } from "~/@types/file-types";
-import { DevopsError } from "~/errors";
+import { IFileInfo } from "src/@types/file-types";
+import { DevopsError } from "src/errors";
 import { getFileComponents } from ".";
 
 const info = promisify(stat);

@@ -1,23 +1,23 @@
 // import chalk from "chalk";
 import { IScaffoldOptions } from "./meta";
-import { Options, DoDevopsHandler } from "~/@types";
+import { Options, DoDevopsHandler } from "src/@types";
 import {
   askCheckboxQuestion,
   askConfirmQuestion,
   askInputQuestion,
   askListQuestion,
-} from "~/shared/interactive";
+} from "src/shared/interactive";
 import {
   installEsLint,
   installGit,
   installGitIgnore,
   installTestFramework,
   installTypescript,
-} from "~/shared/install";
+} from "src/shared/install";
 import chalk from "chalk";
 import { asyncExec } from "async-shelljs";
-import { getSubdirectories } from "~/shared/file/utility";
-import { emoji, wordWrap } from "~/shared/ui";
+import { getSubdirectories } from "src/shared/file/utility";
+import { emoji, wordWrap } from "src/shared/ui";
 import { exit } from "node:process";
 
 const scaffolds = [

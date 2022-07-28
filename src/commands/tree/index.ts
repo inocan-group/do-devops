@@ -1,35 +1,40 @@
 import chalk from "chalk";
-import { spawnSync } from "child_process";
-import { IDoDevopsCommand } from "~/@types/command";
-import { commandIsAvailable } from "~/shared/file";
-import { emoji } from "~/shared/ui";
+import { spawnSync } from "node:child_process";
+import { IDoDevopsCommand } from "src/@types/command";
+import { commandIsAvailable } from "src/shared/file";
+import { emoji } from "src/shared/ui";
 
 const command: IDoDevopsCommand = {
   kind: "tree",
   handler: async ({ observations, raw, opts }) => {
-    if(observations.has("cargo")) {
-      const params = opts.verbose 
-      ? ["modules", "generate", "tree", "--with-types"]
-      : ["modules", "generate", "tree"];
-      console.error(chalk`- proxying the "tree" command to {blue {bold cargo} ${params.join(" ")}}`);
-      const thread = spawnSync("cargo", params, {stdio: "inherit"});
+    if (observations.has("cargo")) {
+      const params = opts.verbose
+        ? ["modules", "generate", "tree", "--with-types"]
+        : ["modules", "generate", "tree"];
+      console.error(
+        chalk`- proxying the "tree" command to {blue {bold cargo} ${params.join(" ")}}`
+      );
+      const thread = spawnSync("cargo", params, { stdio: "inherit" });
       if (thread.error) {
         throw new Error(`- ${emoji.poop} ran into problems using cargo's modules plugin}`);
       }
     } else {
-      if(commandIsAvailable("tree")) {
+      if (commandIsAvailable("tree")) {
         const thread = spawnSync("tree", raw);
         if (thread.error) {
           throw new Error(`- ${emoji.poop} ran into problems using cargo's modules plugin}`);
         }
       } else {
-        console.log(`- no "tree" binary was found in the path; if you're on Mac you can install with 'brew install tree'\n`);
+        console.log(
+          `- no "tree" binary was found in the path; if you're on Mac you can install with 'brew install tree'\n`
+        );
       }
     }
-    
+
     process.exit();
   },
-  description: "if in Cargo/Rust dir then tries cargo's module tree plugin; otherwise proxies an 'in-path' tree executable ",
+  description:
+    "if in Cargo/Rust dir then tries cargo's module tree plugin; otherwise proxies an 'in-path' tree executable ",
 };
 
 export default command;

@@ -1,12 +1,12 @@
 import chalk from "chalk";
 import { equal } from "native-dash";
 
-import { ICommandConfig, Options, TestObservation } from "~/@types";
-import { TEST_FRAMEWORKS } from "~/constants";
-import { getUserConfig, saveUserConfig } from "~/shared/config";
-import { logger } from "~/shared/core";
-import { dirExists } from "~/shared/file";
-import { askCheckboxQuestion, askConfirmQuestion, askListQuestion } from "~/shared/interactive";
+import { ICommandConfig, Options, TestObservation } from "src/@types";
+import { TEST_FRAMEWORKS } from "src/constants";
+import { getUserConfig, saveUserConfig } from "src/shared/config";
+import { logger } from "src/shared/core";
+import { dirExists } from "src/shared/file";
+import { askCheckboxQuestion, askConfirmQuestion, askListQuestion } from "src/shared/interactive";
 
 /**
  * Asks user about the testing framework they wish to use and other test meta-data.

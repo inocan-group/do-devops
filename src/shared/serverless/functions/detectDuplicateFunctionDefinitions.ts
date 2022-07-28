@@ -1,5 +1,5 @@
 import { IDictionary } from "common-types";
-import { emoji } from "~/shared/ui";
+import { emoji } from "src/shared/ui";
 
 export function detectDuplicateFunctionDefinitions(lookup: IDictionary<string>) {
   const vals = Object.values(lookup);

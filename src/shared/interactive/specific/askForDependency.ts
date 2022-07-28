@@ -1,7 +1,7 @@
-import { DoDevopObservation, INpmDep, INpmDependencies, INpmDepProperty } from "~/@types";
-import { askListQuestion } from "~/shared/interactive";
+import { DoDevopObservation, INpmDep, INpmDependencies, INpmDepProperty } from "src/@types";
+import { askListQuestion } from "src/shared/interactive";
 import chalk from "chalk";
-import { dependencies } from "~/shared/npm";
+import { dependencies } from "src/shared/npm";
 
 export const LOOKUP = (p: INpmDependencies) =>
   [

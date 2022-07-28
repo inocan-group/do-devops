@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-import { getDataFiles } from "~/shared/file";
+import { getDataFiles } from "src/shared/file";
 
 /**
  * Asks the user to choose an AWS region

@@ -2,12 +2,12 @@
 import chalk from "chalk";
 import { get } from "native-dash";
 import { determineProfile } from "./index";
-import { emoji } from "~/shared/ui";
-import { getAwsProfile } from "~/shared/aws";
-import { getServerlessYaml } from "~/shared/serverless";
-import { DoDevopObservation } from "~/@types/observations";
-import { getIntegratedConfig, getUserConfig } from "~/shared/config";
-import { configIsReady, Options } from "~/@types";
+import { emoji } from "src/shared/ui";
+import { getAwsProfile } from "src/shared/aws";
+import { getServerlessYaml } from "src/shared/serverless";
+import { DoDevopObservation } from "src/@types/observations";
+import { getIntegratedConfig, getUserConfig } from "src/shared/config";
+import { configIsReady, Options } from "src/@types";
 
 export interface IRegionOptions extends Options {
   interactive?: boolean;

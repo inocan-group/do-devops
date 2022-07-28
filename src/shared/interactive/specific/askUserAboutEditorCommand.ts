@@ -1,5 +1,5 @@
-import { saveUserConfig } from "~/shared/config";
-import { askListQuestion } from "~/shared/interactive";
+import { saveUserConfig } from "src/shared/config";
+import { askListQuestion } from "src/shared/interactive";
 import { askInputQuestion } from "../general/askInputQuestion";
 
 /**

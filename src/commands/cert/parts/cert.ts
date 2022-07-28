@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { exit } from "node:process";
-import { DoDevopsHandler, Options } from "~/@types";
+import { DoDevopsHandler, Options } from "src/@types";
 import { certInfo, createCA, createCertificate, createSSH } from "./crypto";
 import { ICertOptions } from "./options";
 

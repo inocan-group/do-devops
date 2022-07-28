@@ -1,10 +1,10 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import parse from "destr";
 import { IPackageJson } from "common-types";
 import { getPackageJsonfromCache, cacheLocalPackageJson } from "./cache/packageJsonCache";
-import { DevopsError } from "~/errors";
-import { fileExists } from "~/shared/file";
+import { DevopsError } from "src/errors";
+import { fileExists } from "src/shared/file";
 
 /**
  * **getPackageJson**

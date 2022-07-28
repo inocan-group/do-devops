@@ -1,5 +1,5 @@
-import { IFilenameComponents } from "~/@types/file-types";
-import { toRelativePath } from "~/shared/file";
+import { IFilenameComponents } from "src/@types/file-types";
+import { toRelativePath } from "src/shared/file";
 
 /**
  * Breaks files into parts so that they can be treated separately
@@ -16,5 +16,13 @@ export function getFileComponents(filepath: string, base?: string): IFilenameCom
 
   const fileWithoutExt = filename.replace(re, "");
 
-  return { start, mid, filename, fileWithoutExt, ext, filepath: [start, mid].join("/"), full: filepath };
+  return {
+    start,
+    mid,
+    filename,
+    fileWithoutExt,
+    ext,
+    filepath: [start, mid].join("/"),
+    full: filepath,
+  };
 }

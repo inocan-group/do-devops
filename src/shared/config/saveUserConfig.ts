@@ -1,8 +1,8 @@
 import merge from "deepmerge";
-import { writeFileSync } from "fs";
-import { IUserConfig, IUserConfigFilled } from "~/@types";
-import { getUserConfig } from "~/shared/config";
-import { homeDirectory } from "~/shared/file";
+import { writeFileSync } from "node:fs";
+import { IUserConfig, IUserConfigFilled } from "src/@types";
+import { getUserConfig } from "src/shared/config";
+import { homeDirectory } from "src/shared/file";
 import { CONFIG_FILE } from "./constants";
 
 /**

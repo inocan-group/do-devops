@@ -1,6 +1,6 @@
 import chalk from "chalk";
-import { Observations } from "~/@types";
-import { getLernaPackages } from "~/shared/monorepo/getLernaPackages";
+import { Observations } from "src/@types";
+import { getLernaPackages } from "src/shared/monorepo/getLernaPackages";
 
 export async function monorepoInfo(o: Observations): Promise<[string, string]> {
   if (o.has("monorepo")) {

@@ -1,7 +1,7 @@
-import { readdirSync, lstatSync } from "fs";
-import path from "path";
-import { IFileWithStats } from "~/@types";
-import { DevopsError } from "~/errors";
+import { readdirSync, lstatSync } from "node:fs";
+import path from "node:path";
+import { IFileWithStats } from "src/@types";
+import { DevopsError } from "src/errors";
 
 /**
  * Returns all files in the specified directory along with their "stats".

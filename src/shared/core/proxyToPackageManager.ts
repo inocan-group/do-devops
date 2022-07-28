@@ -2,10 +2,10 @@
 // import { exec } from "async-shelljs";
 import chalk from "chalk";
 import { spawnSync } from "node:child_process";
-import { DoDevopObservation, PackageManagerObservation } from "~/@types/observations";
-import { saveProjectConfig } from "~/shared/config";
-import { askListQuestion } from "~/shared/interactive";
-import { determinePackageManager } from "~/shared/observations";
+import { DoDevopObservation, PackageManagerObservation } from "src/@types/observations";
+import { saveProjectConfig } from "src/shared/config";
+import { askListQuestion } from "src/shared/interactive";
+import { determinePackageManager } from "src/shared/observations";
 import { hasScript } from "../npm";
 import { emoji } from "../ui";
 

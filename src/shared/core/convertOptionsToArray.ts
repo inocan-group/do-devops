@@ -1,5 +1,5 @@
 import { OptionDefinition } from "command-line-usage";
-import { IOptionDefinition } from "~/@types/option-types";
+import { IOptionDefinition } from "src/@types/option-types";
 
 /**
  * Takes a dictionary of CLI options and coverts it to an array of options

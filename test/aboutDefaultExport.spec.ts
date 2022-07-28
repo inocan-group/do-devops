@@ -4,30 +4,30 @@ import { describe, it } from "vitest";
 describe.only("ast > aboutDefaultExport()", () => {
   it("string exported as default export", () => {
     const t = aboutDefaultExport("./test/autoindex-test/default/stringValue.ts");
-    console.log("EXPORT", t?.defExport);
-    console.log("ASSIGNMENTS", t?.assignments);
-    console.log("FUNCTION", t?.fn);
-    console.log("TYPES", t?.types);
+    // console.log("EXPORT", t?.defExport);
+    // console.log("ASSIGNMENTS", t?.assignments);
+    // console.log("FUNCTION", t?.fn);
+    // console.log("TYPES", t?.types);
     console.log("VARIABLES", t?.variables);
   });
 
   it("string exported as default export and with explicit type", () => {
     const t = aboutDefaultExport("./test/autoindex-test/default/stringValueWithExplicitType.ts");
-    console.log("EXPORT", t?.defExport);
-    console.log("ASSIGNMENTS", t?.assignments);
-    console.log("SYM", t?.symbols);
-    console.log("FUNCTION", t?.fn);
-    console.log("TYPES", t?.types);
+    // console.log("EXPORT", t?.defExport);
+    // console.log("ASSIGNMENTS", t?.assignments);
+    // console.log("SYM", t?.symbols);
+    // console.log("FUNCTION", t?.fn);
+    // console.log("TYPES", t?.types);
     console.log("VARIABLES", t?.variables);
   });
 
   it("function returning string", () => {
     const t = aboutDefaultExport("./test/autoindex-test/default/functionReturningString.ts");
-    console.log("EXPORT", t?.defExport);
-    console.log("ASSIGNMENTS", t?.assignments);
-    console.log("SYM", t?.symbols);
-    console.log("FUNCTION", t?.fn);
-    console.log("TYPES", t?.types);
+    // console.log("EXPORT", t?.defExport);
+    // console.log("ASSIGNMENTS", t?.assignments);
+    // console.log("SYM", t?.symbols);
+    // console.log("FUNCTION", t?.fn);
+    // console.log("TYPES", t?.types);
     console.log("VARIABLES", t?.variables);
   });
 

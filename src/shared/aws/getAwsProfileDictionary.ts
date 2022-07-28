@@ -1,13 +1,13 @@
 /* eslint-disable unicorn/no-array-callback-reference */
-import { IAwsProfile } from "~/@types";
+import { IAwsProfile } from "src/@types";
 import { AwsRegion, IDictionary } from "common-types";
-import { hasAwsProfileCredentialsFile } from "~/shared/aws";
-import { readFile } from "~/shared/file";
+import { hasAwsProfileCredentialsFile } from "src/shared/aws";
+import { readFile } from "src/shared/file";
 
 /**
  * **getAwsProfileDictionary**
  *
- * Interogates the `~/.aws/credentials` file to get a hash of
+ * Interogates the `src/.aws/credentials` file to get a hash of
  * profiles (name/dictionary of values) the user has available.
  *
  * If the file isn't found then an empty object is returned.

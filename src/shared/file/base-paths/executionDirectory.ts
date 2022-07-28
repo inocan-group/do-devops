@@ -1,9 +1,9 @@
 /* eslint-disable unicorn/prefer-module */
-import path from "path";
-import { IDirectoryOptions } from "~/@types";
+import path from "node:path";
+import { IDirectoryOptions } from "src/@types";
 import { toRelativePath } from "../relativePath";
-import { DevopsError } from "~/errors";
-import { getCaller } from "~/shared/stack";
+import { DevopsError } from "src/errors";
+import { getCaller } from "src/shared/stack";
 
 /**
  * Returns the directory name of the currently executing

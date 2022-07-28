@@ -3,14 +3,14 @@
 import chalk from "chalk";
 import globby from "globby";
 import { join } from "pathe";
-import { getMonoRepoPackages } from "~/shared/file";
-import { emoji, highlightFilepath } from "~/shared/ui";
-import { DoDevopsHandler } from "~/@types/command";
+import { getMonoRepoPackages } from "src/shared/file";
+import { emoji, highlightFilepath } from "src/shared/ui";
+import { DoDevopsHandler } from "src/@types/command";
 import { IAutoindexOptions } from "./options";
-import { askForAutoindexConfig } from "~/shared/interactive";
-import { getProjectConfig } from "~/shared/config";
-import { getPackageJson } from "~/shared/npm";
-import { logger } from "~/shared/core";
+import { askForAutoindexConfig } from "src/shared/interactive";
+import { getProjectConfig } from "src/shared/config";
+import { getPackageJson } from "src/shared/npm";
+import { logger } from "src/shared/core";
 import { isAutoindexFile, processFiles } from "../private";
 import { IAutoindexWatchlist, watch } from "./watch";
 

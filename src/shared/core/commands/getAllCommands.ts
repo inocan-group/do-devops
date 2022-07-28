@@ -1,7 +1,7 @@
 import { IDictionary } from "common-types";
-import { DoDevopObservation } from "~/@types";
-import * as cmds from "~/commands/index";
-import { finalizeCommandDefinition } from "~/shared/core/util";
+import { DoDevopObservation } from "src/@types";
+import * as cmds from "src/commands/index";
+import { finalizeCommandDefinition } from "src/shared/core/util";
 import { getCommand } from "./getCommand";
 
 /**

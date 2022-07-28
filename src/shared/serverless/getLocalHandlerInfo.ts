@@ -3,7 +3,7 @@ import { getValidServerlessHandlers } from "../ast/index";
 import { fileInfo, filesExist } from "../file";
 import path from "node:path";
 import { get } from "native-dash";
-import { IWebpackHandlerDates } from "~/@types";
+import { IWebpackHandlerDates } from "src/@types";
 
 let _cache: IWebpackHandlerDates[];
 

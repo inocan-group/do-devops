@@ -1,6 +1,6 @@
-import { TestObservation, Observations, Options } from "~/@types";
-import { DevopsError } from "~/errors";
-import { templateDirCopy, templateFileCopy } from "~/shared/file";
+import { TestObservation, Observations, Options } from "src/@types";
+import { DevopsError } from "src/errors";
+import { templateDirCopy, templateFileCopy } from "src/shared/file";
 import { getProjectConfig } from "../config";
 import { logger } from "../core";
 

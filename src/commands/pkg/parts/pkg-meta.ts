@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { IOptionDefinition } from "~/@types/option-types";
+import { IOptionDefinition } from "src/@types/option-types";
 
 export const description = chalk`Package up resources for {bold Serverless} publishing but do not actually {italic deploy}.`;
 

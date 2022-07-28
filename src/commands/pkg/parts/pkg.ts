@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { asyncExec } from "async-shelljs";
-import { emoji } from "~/shared/ui";
-import { determineRegion, determineStage } from "~/shared/observations";
-import { DoDevopsHandler } from "~/@types/command";
+import { emoji } from "src/shared/ui";
+import { determineRegion, determineStage } from "src/shared/observations";
+import { DoDevopsHandler } from "src/@types/command";
 import { IPkgOptions } from "./pkg-meta";
 
 /**

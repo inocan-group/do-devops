@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import path from "path";
+import path from "node:path";
 
-import { DevopsError } from "~/errors";
-import { IServerlessAccountInfo } from "~/@types";
+import { DevopsError } from "src/errors";
+import { IServerlessAccountInfo } from "src/@types";
 import { asyncExec } from "async-shelljs";
 
 /**

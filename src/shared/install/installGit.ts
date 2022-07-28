@@ -1,9 +1,9 @@
 import chalk from "chalk";
-import { Options } from "~/@types";
-import { logger } from "~/shared/core";
-import { askConfirmQuestion, askInputQuestion } from "~/shared/interactive";
-import { git } from "~/shared/git";
-import { installGitIgnore } from "~/shared/install";
+import { Options } from "src/@types";
+import { logger } from "src/shared/core";
+import { askConfirmQuestion, askInputQuestion } from "src/shared/interactive";
+import { git } from "src/shared/git";
+import { installGitIgnore } from "src/shared/install";
 
 export async function installGit(opts: Options<{ silent: boolean }>) {
   const log = logger(opts);

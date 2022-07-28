@@ -1,6 +1,6 @@
-import path from "path";
+import path from "node:path";
 import { IDictionary } from "common-types";
-import { write } from "~/shared/file";
+import { write } from "src/shared/file";
 
 export interface IEntryData {
   fn: string;
@@ -9,10 +9,7 @@ export interface IEntryData {
 }
 
 export function useKey(key: "jsPath" | "tsPath") {
-  return (
-    agg: IDictionary<string>,
-    curr: { fn: string; tsPath: string; jsPath: string }
-  ) => {
+  return (agg: IDictionary<string>, curr: { fn: string; tsPath: string; jsPath: string }) => {
     agg[curr.fn] = curr[key];
     return agg;
   };

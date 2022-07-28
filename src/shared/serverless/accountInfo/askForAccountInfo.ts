@@ -7,10 +7,10 @@ import {
   getAwsProfile,
   getAwsProfileDictionary,
   userHasAwsProfile,
-} from "~/shared/aws";
-import { emoji } from "~/shared/ui";
-import { getServerlessYaml } from "~/shared/serverless";
-import { getPackageJson } from "~/shared/npm";
+} from "src/shared/aws";
+import { emoji } from "src/shared/ui";
+import { getServerlessYaml } from "src/shared/serverless";
+import { getPackageJson } from "src/shared/npm";
 
 /**
  * Allows the properties not yet defined in the configuration to be
@@ -32,9 +32,7 @@ export async function askForAccountInfo(
     config.pluginsInstalled &&
     (config.logForwarding ||
       (pkgJson &&
-        !Object.keys(pkgJson.devDependencies || {}).includes(
-          "serverless-log-forwarding"
-        )))
+        !Object.keys(pkgJson.devDependencies || {}).includes("serverless-log-forwarding")))
   ) {
     return config as IServerlessAccountInfo;
   }
@@ -48,12 +46,12 @@ export async function askForAccountInfo(
   const profileQuestion: inquirer.Question | inquirer.ListQuestion = profiles
     ? {
         ...baseProfileQuestion,
-        ...{
+        
           type: "list",
-          choices: Object.keys(profiles),
-        },
+          choices: Object.keys(profiles)
+        ,
       }
-    : { ...baseProfileQuestion, ...{ type: "input" } };
+    : { ...baseProfileQuestion,  type: "input"  };
 
   let questions: Array<inquirer.Question | inquirer.ListQuestion> = [
     {
@@ -76,7 +74,7 @@ export async function askForAccountInfo(
     console.log(
       chalk`- you are deploying with the {green ${merged.profile} AWS profile but you do not have this defined yet! ${emoji.angry}`
     );
-    console.log(chalk`{grey - AWS profiles must be added in {blue ~/.aws/credentials}}`);
+    console.log(chalk`{grey - AWS profiles must be added in {blue src/.aws/credentials}}`);
     console.log(
       chalk`{grey - if you want to override the default behavior you can state a different profile with the {blue --profile} tag}`
     );
@@ -91,9 +89,7 @@ export async function askForAccountInfo(
     console.log(
       chalk`- you do {bold NOT} have the credentials for the profile {blue ${merged.profile}}! Please add this before\n  trying again. ${emoji.angry}\n`
     );
-    console.log(
-      chalk`{grey - the credentials file is located at {blue ~/.aws/credentials}}\n`
-    );
+    console.log(chalk`{grey - the credentials file is located at {blue src/.aws/credentials}}\n`);
 
     process.exit();
   }

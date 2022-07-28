@@ -1,5 +1,5 @@
-import { KnownCommand } from "~/@types/command";
-import { getAllCommands } from "~/shared/core";
+import { KnownCommand } from "src/@types/command";
+import { getAllCommands } from "src/shared/core";
 
 /**
  * Uses `getCommands()` to get a list of valid commands

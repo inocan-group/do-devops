@@ -1,10 +1,10 @@
 import chalk from "chalk";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { dump } from "js-yaml";
 import { IServerlessYaml } from "common-types";
 import { emoji } from "../ui";
-import { isDevopsError } from "~/@type-guards";
+import { isDevopsError } from "src/@type-guards";
 
 export async function saveToServerlessYaml(data: IServerlessYaml) {
   try {

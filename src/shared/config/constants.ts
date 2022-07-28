@@ -1,4 +1,4 @@
-import { IProjectConfig, IUserConfig } from "~/@types";
+import { IProjectConfig, IUserConfig } from "src/@types";
 
 export const CONFIG_FILE = ".do-devops.json";
 export const DEFAULT_USER_CONFIG: IUserConfig = {

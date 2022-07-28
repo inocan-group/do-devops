@@ -1,4 +1,4 @@
-import type { IDoDevopsCommand } from "~/@types";
+import type { IDoDevopsCommand } from "src/@types";
 import { IImageOptions, handler, options } from "./parts";
 
 const command: IDoDevopsCommand<IImageOptions> = {

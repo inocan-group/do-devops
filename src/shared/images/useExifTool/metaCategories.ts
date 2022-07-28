@@ -1,5 +1,5 @@
 import { ExifDateTime } from "exiftool-vendored";
-import { ICategoricalMeta, IExifToolMetadata } from "~/@types/image-types";
+import { ICategoricalMeta, IExifToolMetadata } from "src/@types/image-types";
 import { convertToExifDateTime, reduceFl35 } from "./conversion-tools";
 
 /**
@@ -10,7 +10,7 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
   const populated = Object.keys(meta).filter(Boolean);
 
   const make = [meta.DeviceManufacturer, meta.CameraID, meta.Make, meta.VendorID]
-    .filter((i) => i ? true : false)
+    .filter((i) => (i ? true : false))
     .pop();
 
   const model = [
@@ -55,7 +55,7 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.SpeedZ,
   ]
     .filter(Boolean)
-    .pop() as  string | undefined;
+    .pop() as string | undefined;
 
   const iso = [
     meta.ISO,
@@ -72,21 +72,21 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     .pop();
 
   const dateOptions = [
-      meta.DateAcquired,
-      meta.DateTime,
-      meta.DateTime1,
-      meta.DateTimeCreated,
-      meta.DateTimeDigitized,
-      meta.DateTimeOriginal,
-      meta.GPSDateTime,
-      meta.SonyDateTime,
-      meta.PanasonicDateTime,
-      meta.RicohDate,
-      meta.DateCreated,
-      meta.Date,
-    ]
-      .filter(Boolean)
-      .pop() as string | ExifDateTime | undefined;
+    meta.DateAcquired,
+    meta.DateTime,
+    meta.DateTime1,
+    meta.DateTimeCreated,
+    meta.DateTimeDigitized,
+    meta.DateTimeOriginal,
+    meta.GPSDateTime,
+    meta.SonyDateTime,
+    meta.PanasonicDateTime,
+    meta.RicohDate,
+    meta.DateCreated,
+    meta.Date,
+  ]
+    .filter(Boolean)
+    .pop() as string | ExifDateTime | undefined;
   const createDate = convertToExifDateTime(dateOptions);
 
   const modifyDate = convertToExifDateTime(
@@ -192,7 +192,10 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     longitudeReference: meta.GPSLongitudeRef?.toUpperCase() as "E" | "W" | undefined,
     destination:
       meta.GPSDestLatitude && meta.GPSDestLongitude
-        ? ([Number(meta.GPSDestLatitude || 0), Number(meta.GPSDestLongitude || 0)] as [number, number])
+        ? ([Number(meta.GPSDestLatitude || 0), Number(meta.GPSDestLongitude || 0)] as [
+            number,
+            number
+          ])
         : undefined,
   };
 

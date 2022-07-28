@@ -1,5 +1,5 @@
 import { getPackageJson, hasDevDependency } from "../npm";
-import { LintObservation } from "~/@types/observations";
+import { LintObservation } from "src/@types/observations";
 import { IDictionary } from "common-types";
 import parse from "destr";
 import { fileExists, readFile } from "../file";

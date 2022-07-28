@@ -1,9 +1,9 @@
 /* eslint-disable unicorn/prefer-module */
 import chalk from "chalk";
-import path, { join } from "path";
-import { IDirectoryOptions } from "~/@types";
-import { DevopsError } from "~/errors";
-import { findPackageJson } from "~/shared/npm";
+import path, { join } from "node:path";
+import { IDirectoryOptions } from "src/@types";
+import { DevopsError } from "src/errors";
+import { findPackageJson } from "src/shared/npm";
 import { fileExists } from "../existance/fileExists";
 import { toRelativePath } from "../relativePath";
 import { currentDirectory } from "./currentDirectory";
@@ -15,7 +15,7 @@ import { parentDirectory } from "./parentDirectory";
  * by moving up directories until a directory is found which
  * has both a `package.json` file and is initialized with
  * git.
- * 
+ *
  * If this directory is not found a `directory/not-found`
  * error will be thrown.
  */
@@ -29,7 +29,10 @@ export function repoDirectory(offset?: string, opts: Omit<IDirectoryOptions, "of
 
   const dir = findPackageJson(parentDirectory());
   if (!dir) {
-    throw new DevopsError(chalk`Attempt to locate the root of the repo for the current directory failed. No "package.json" was found above the {blue ${start}} directory`, "directory/not-found");
+    throw new DevopsError(
+      chalk`Attempt to locate the root of the repo for the current directory failed. No "package.json" was found above the {blue ${start}} directory`,
+      "directory/not-found"
+    );
   }
   // const gitInitialized = dirExists(path.posix.join(path.dirname(dir), ".git"));
   // if (!gitInitialized) {

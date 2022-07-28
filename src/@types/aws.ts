@@ -1,7 +1,7 @@
 import { AwsArnPartition, AwsRegion, AwsStage } from "common-types";
 
 /**
- * The format of properties found in the `~/.aws/credentials` file
+ * The format of properties found in the `src/.aws/credentials` file
  */
 export interface IAwsProfile {
   aws_access_key_id: string;

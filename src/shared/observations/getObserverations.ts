@@ -1,7 +1,7 @@
 import { IPackageJson } from "common-types";
 import { existsSync } from "node:fs";
-import { DoDevopObservation } from "~/@types/observations";
-import { IMAGE_CACHE } from "~/constants";
+import { DoDevopObservation } from "src/@types/observations";
+import { IMAGE_CACHE } from "src/constants";
 import { getProjectConfig } from "../config";
 import { currentDirectory, dirExists, fileExists, repoDirectory } from "../file";
 import { TS_IMAGE_SUPPORT_FILE } from "../images/useImageApi/createTsSupportFile";
@@ -27,7 +27,7 @@ export function getObservations() {
     pkgJson = getPackageJson();
   } catch {}
 
-  if(existsSync(currentDirectory("Cargo.toml"))) {
+  if (existsSync(currentDirectory("Cargo.toml"))) {
     observations.add("cargo");
   }
 

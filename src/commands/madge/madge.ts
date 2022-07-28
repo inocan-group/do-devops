@@ -1,10 +1,10 @@
 import { exec } from "async-shelljs";
 import chalk from "chalk";
 import { exit } from "node:process";
-import { IDoDevopsCommand } from "~/@types/command";
-import { logger } from "~/shared/core";
-import { askListQuestion } from "~/shared/interactive";
-import { emoji } from "~/shared/ui";
+import { IDoDevopsCommand } from "src/@types/command";
+import { logger } from "src/shared/core";
+import { askListQuestion } from "src/shared/interactive";
+import { emoji } from "src/shared/ui";
 import { IMadgeOptions, options } from "./parts/options";
 
 const command: IDoDevopsCommand<IMadgeOptions> = {

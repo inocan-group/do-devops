@@ -1,11 +1,11 @@
 import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
-import { DoDevopsHandler } from "~/@types";
-import { DevopsError } from "~/errors";
-import { getProjectConfig } from "~/shared/config";
-import { logger } from "~/shared/core";
-import { useImageApi } from "~/shared/images";
-import { askConfigureImageOptimization, askImageConfiguration } from "~/shared/interactive";
+import { DoDevopsHandler } from "src/@types";
+import { DevopsError } from "src/errors";
+import { getProjectConfig } from "src/shared/config";
+import { logger } from "src/shared/core";
+import { useImageApi } from "src/shared/images";
+import { askConfigureImageOptimization, askImageConfiguration } from "src/shared/interactive";
 import { IImageOptions } from "./options";
 
 export const handler: DoDevopsHandler<IImageOptions> = async ({

@@ -1,6 +1,6 @@
 import { Keys } from "inferred-types";
 import { ListQuestion } from "inquirer";
-import { Choices, IInteractiveOptions } from "~/@types";
+import { Choices, IInteractiveOptions } from "src/@types";
 import { ask } from "./ask";
 import { convertChoices } from "./convertChoices";
 

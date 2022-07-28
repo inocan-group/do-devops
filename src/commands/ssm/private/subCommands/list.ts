@@ -1,12 +1,12 @@
 import chalk from "chalk";
-import process from "process";
+import process from "node:process";
 import { format } from "date-fns";
 import { table } from "table";
 import { SSM } from "aws-ssm";
 
-import { getAwsProfile } from "~/shared/aws";
-import { determineProfile, determineRegion } from "~/shared/observations";
-import { DoDevopsHandler } from "~/@types";
+import { getAwsProfile } from "src/shared/aws";
+import { determineProfile, determineRegion } from "src/shared/observations";
+import { DoDevopsHandler } from "src/@types";
 import { ISsmOptions } from "../../parts";
 
 export const execute: DoDevopsHandler<ISsmOptions> = async ({

@@ -1,4 +1,4 @@
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 
 export function isDevopsError(err: unknown): err is DevopsError {
   return typeof err === "object" && (err as any).kind === "DevopsError";

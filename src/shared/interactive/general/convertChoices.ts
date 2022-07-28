@@ -1,5 +1,5 @@
 import { ChoiceOptions } from "inquirer";
-import { Choices } from "~/@types";
+import { Choices } from "src/@types";
 
 export function convertChoices<C extends Choices>(choices: C): ChoiceOptions[] {
   return (

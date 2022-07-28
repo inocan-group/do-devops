@@ -1,5 +1,5 @@
 import { WriteTags } from "exiftool-vendored";
-import { IImageCache, IImageCacheRef } from "~/@types/image-types";
+import { IImageCache, IImageCacheRef } from "src/@types/image-types";
 
 /**
  * Creates a dictionary of name/value pairs from a source file's cache, given an

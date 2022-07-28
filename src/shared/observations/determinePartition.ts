@@ -1,6 +1,6 @@
-import { DoDevopObservation, IAwsOptions, Options } from "~/@types";
-import { getProjectConfig, saveProjectConfig } from "~/shared/config";
-import { askListQuestion } from "~/shared/interactive";
+import { DoDevopObservation, IAwsOptions, Options } from "src/@types";
+import { getProjectConfig, saveProjectConfig } from "src/shared/config";
+import { askListQuestion } from "src/shared/interactive";
 
 export async function determinePartition(
   opts: Options<IAwsOptions>,

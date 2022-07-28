@@ -1,5 +1,5 @@
-import { IServerlessAccountInfo } from "~/@types";
-import { DevopsError } from "~/errors";
+import { IServerlessAccountInfo } from "src/@types";
+import { DevopsError } from "src/errors";
 import { getServerlessYaml } from "./getServerlessYaml";
 
 /**

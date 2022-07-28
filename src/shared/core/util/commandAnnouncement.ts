@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/prefer-module */
 import chalk from "chalk";
-import { CommandParsing as ICommandParsing, IDoDevopsCommand } from "~/@types";
+import { CommandParsing as ICommandParsing, IDoDevopsCommand } from "src/@types";
 import { logger } from "../logger";
 import { doDevopsVersion } from "./doDevopsVersion";
 

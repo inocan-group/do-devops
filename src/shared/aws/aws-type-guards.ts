@@ -1,4 +1,4 @@
-import { IAwsCredentials, IAwsProfile } from "~/@types";
+import { IAwsCredentials, IAwsProfile } from "src/@types";
 
 /**
  * Type guard which detects whether a give input is a `IAwsProfile` object

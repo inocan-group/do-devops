@@ -1,11 +1,11 @@
 import chalk from "chalk";
-import { DoDevopObservation, Options, TestObservation } from "~/@types";
-import { askForUnitTestFramework, askConfirmQuestion } from "~/shared/interactive";
-import { DevopsError } from "~/errors";
-import { getProjectConfig, saveProjectConfig } from "~/shared/config";
-import { logger } from "~/shared/core";
-import { configureTestFramework, installTestFramework } from "~/shared/install";
-import { emoji } from "~/shared/ui";
+import { DoDevopObservation, Options, TestObservation } from "src/@types";
+import { askForUnitTestFramework, askConfirmQuestion } from "src/shared/interactive";
+import { DevopsError } from "src/errors";
+import { getProjectConfig, saveProjectConfig } from "src/shared/config";
+import { logger } from "src/shared/core";
+import { configureTestFramework, installTestFramework } from "src/shared/install";
+import { emoji } from "src/shared/ui";
 
 /**
  * Determines the unit testing framework being used in the current

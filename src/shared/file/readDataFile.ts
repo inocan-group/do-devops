@@ -1,6 +1,6 @@
-import path from "path";
-import * as process from "process";
-import { readFile } from "~/shared/file";
+import path from "node:path";
+import * as process from "node:process";
+import { readFile } from "src/shared/file";
 
 /**
  * Reads a file from the `test/data` directory

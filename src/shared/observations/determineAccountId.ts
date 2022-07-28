@@ -1,6 +1,6 @@
 import { isAwsAccountId } from "common-types";
-import { DoDevopObservation, IAwsOptions, Options } from "~/@types";
-import { DevopsError } from "~/errors";
+import { DoDevopObservation, IAwsOptions, Options } from "src/@types";
+import { DevopsError } from "src/errors";
 
 import { getAwsAccountId } from "../aws";
 import { getProjectConfig, saveProjectConfig } from "../config";

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import xxhash, { Exports } from "xxhash-wasm";
 
 describe("Validate that same inputs produce same hash", () => {

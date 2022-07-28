@@ -1,4 +1,4 @@
-import { IOptionDefinition } from "~/@types";
+import { IOptionDefinition } from "src/@types";
 
 export const description = "helps to scaffold a project with common features";
 

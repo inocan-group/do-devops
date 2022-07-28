@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { table, ColumnUserConfig } from "table";
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 import { emoji } from ".";
 import { consoleDimensions } from "./consoleDimensions";
 

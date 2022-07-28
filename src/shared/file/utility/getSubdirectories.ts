@@ -1,6 +1,6 @@
-import path from "path";
-import { readdirSync, lstatSync } from "fs";
-import { DevopsError } from "~/errors";
+import path from "node:path";
+import { readdirSync, lstatSync } from "node:fs";
+import { DevopsError } from "src/errors";
 
 /**
  * Lists all subdirectories directly under the passed in path.

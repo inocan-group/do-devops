@@ -1,5 +1,5 @@
 import { ConfirmQuestion } from "inquirer";
-import { ConfirmationChoice, IInteractiveOptions } from "~/@types/interactive-types";
+import { ConfirmationChoice, IInteractiveOptions } from "src/@types/interactive-types";
 
 /**
  * Builds a composable boolean/confirm based question. For example:

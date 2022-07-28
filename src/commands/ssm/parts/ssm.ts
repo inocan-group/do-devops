@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { buildLambdaTypescriptProject } from "~/shared/serverless";
-import { subCommands } from "~/commands/ssm/private";
-import { DoDevopsHandler } from "~/@types/command";
+import { buildLambdaTypescriptProject } from "src/shared/serverless";
+import { subCommands } from "src/commands/ssm/private";
+import { DoDevopsHandler } from "src/@types/command";
 import { ISsmOptions } from "./options";
 
 export const handler: DoDevopsHandler<ISsmOptions> = async (input) => {

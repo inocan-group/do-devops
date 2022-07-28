@@ -1,4 +1,4 @@
-import { globalOptions } from "~/shared/core";
+import { globalOptions } from "src/shared/core";
 import { DoDevopObservation } from "./observations";
 
 export type IDoDevopsGlobalOptions = typeof globalOptions;

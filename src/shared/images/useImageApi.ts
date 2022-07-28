@@ -1,11 +1,11 @@
 /* eslint-disable no-use-before-define */
 import chalk from "chalk";
 import destr from "destr";
-import type { IImageCache, IImageRule } from "~/@types";
-import { IMAGE_CACHE } from "~/constants";
-import { useExifTools, useSharp } from "~/shared/images";
-import { logger } from "~/shared/core";
-import { readFile, fileExists } from "~/shared/file";
+import type { IImageCache, IImageRule } from "src/@types";
+import { IMAGE_CACHE } from "src/constants";
+import { useExifTools, useSharp } from "src/shared/images";
+import { logger } from "src/shared/core";
+import { readFile, fileExists } from "src/shared/file";
 import { convertStale } from "./useImageApi/convertStale";
 import { watchForChange } from "./useImageApi/watchForChange";
 import { summarize } from "./useImageApi/summarize";

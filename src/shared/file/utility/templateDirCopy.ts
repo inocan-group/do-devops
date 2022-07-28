@@ -1,13 +1,13 @@
-import path from "path";
+import path from "node:path";
 import { IDictionary } from "common-types";
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 import {
   getFilesUnderPath,
   dirExists,
   currentDirectory,
   libraryDirectory,
   templateFileCopy,
-} from "~/shared/file";
+} from "src/shared/file";
 import { getFileComponents } from "./getFileComponents";
 
 /**

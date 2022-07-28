@@ -1,15 +1,15 @@
 import chalk from "chalk";
 
-import { getAwsProfile } from "~/shared/aws";
+import { getAwsProfile } from "src/shared/aws";
 import { fromBase64 } from "native-dash";
 import { SSM } from "aws-ssm";
 import { format } from "date-fns";
 import { table } from "table";
-import { determineProfile, determineRegion } from "~/shared/observations";
-import { DevopsError } from "~/errors";
-import { consoleDimensions } from "~/shared/ui";
+import { determineProfile, determineRegion } from "src/shared/observations";
+import { DevopsError } from "src/errors";
+import { consoleDimensions } from "src/shared/ui";
 import { ISsmOptions } from "../../parts";
-import { DoDevopsHandler } from "~/@types";
+import { DoDevopsHandler } from "src/@types";
 
 export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown }) => {
   const profile = await determineProfile({ ...opts, interactive: true });

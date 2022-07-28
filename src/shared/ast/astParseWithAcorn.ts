@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/prefer-module */
 import * as recast from "recast";
-import { IFileOrContent, isFilenameNotContent } from "~/@types";
+import { IFileOrContent, isFilenameNotContent } from "src/@types";
 import { readFile } from "../file";
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 
 /**
  * parses a given file into an AST tree using the recast **acorn** parser.

@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { readFileSync } from "node:fs";
 import { find } from "native-dash";
-import { emoji } from "~/shared/ui";
-import { askListQuestion } from "~/shared/interactive";
+import { emoji } from "src/shared/ui";
+import { askListQuestion } from "src/shared/interactive";
 
 export type ExtFileResolutions = "no-conflict" | "overwrite" | "skip" | "quit";
 

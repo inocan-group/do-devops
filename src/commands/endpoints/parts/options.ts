@@ -1,4 +1,4 @@
-import { IOptionDefinition } from "~/@types/option-types";
+import { IOptionDefinition } from "src/@types/option-types";
 
 export const options: IOptionDefinition = {
   profile: {

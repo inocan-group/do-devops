@@ -1,8 +1,8 @@
 import { IAwsLayerMeta, IDictionary } from "common-types";
 
-import { getPackageJson } from "~/shared/npm";
-import path from "path";
-import { DevopsError } from "~/errors";
+import { getPackageJson } from "src/shared/npm";
+import path from "node:path";
+import { DevopsError } from "src/errors";
 
 export type ILayerMetaLookups = IDictionary<IAwsLayerMeta>;
 
@@ -37,7 +37,7 @@ export function getLayersFromPackageJson(): IAwsLayerMeta[] {
   });
 
   return pkgJsonFiles
-    .filter((i) => i)
+    .filter(Boolean)
     .reduce((agg, d) => {
       const meta = require(path.join(process.cwd(), "node_modules", d)).meta as IAwsLayerMeta;
       const info: IAwsLayerMeta = meta

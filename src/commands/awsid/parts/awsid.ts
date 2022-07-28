@@ -1,8 +1,8 @@
 import chalk from "chalk";
 
-import { DoDevopsHandler } from "~/@types/command";
-import { getAwsIdentityFromProfile, getAwsProfileDictionary } from "~/shared/aws";
-import { emoji } from "~/shared/ui";
+import { DoDevopsHandler } from "src/@types/command";
+import { getAwsIdentityFromProfile, getAwsProfileDictionary } from "src/shared/aws";
+import { emoji } from "src/shared/ui";
 import { askUser } from "../private";
 
 export const handler: DoDevopsHandler<{ all: boolean }> = async ({ unknown: argv, opts }) => {

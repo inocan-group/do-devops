@@ -1,11 +1,11 @@
-import { mkdirSync, writeFileSync } from "fs";
-import { DevopsError } from "~/errors";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { DevopsError } from "src/errors";
 import { dirExists, fileExists } from "../existance";
-import { IWriteOptions } from "~/@types";
-import { interpolateFilePath } from "~/shared/file/helpers";
+import { IWriteOptions } from "src/@types";
+import { interpolateFilePath } from "src/shared/file/helpers";
 import chalk from "chalk";
-import path from "path";
-import { isClassification } from "~/@type-guards";
+import path from "node:path";
+import { isClassification } from "src/@type-guards";
 
 /**
  * **write**

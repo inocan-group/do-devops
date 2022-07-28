@@ -1,7 +1,7 @@
 import merge from "deepmerge";
 import { omit } from "native-dash";
-import { IIntegratedConfig } from "~/@types";
-import { getProjectConfig, getUserConfig } from "~/shared/config";
+import { IIntegratedConfig } from "src/@types";
+import { getProjectConfig, getUserConfig } from "src/shared/config";
 
 export interface IGetConfigOptions {
   exitIfNotFound: boolean;

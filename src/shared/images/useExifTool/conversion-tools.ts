@@ -1,6 +1,6 @@
 import { ExifDate, ExifDateTime, Tags } from "exiftool-vendored";
-import { isExifDate } from "~/@type-guards";
-import { IExifToolMetadata } from "~/@types";
+import { isExifDate } from "src/@type-guards";
+import { IExifToolMetadata } from "src/@types";
 
 /**
  * converts ExifDate to ExifDateTime, if not an ExifDate then just passes

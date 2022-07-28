@@ -10,15 +10,15 @@ import {
   isOrphanedIndexFile,
   replaceRegion,
 } from "./util";
-import { emoji, highlightFilepath } from "~/shared/ui";
-import { logger } from "~/shared/core";
-import { Options, Observations } from "~/@types";
+import { emoji, highlightFilepath } from "src/shared/ui";
+import { logger } from "src/shared/core";
+import { Options, Observations } from "src/@types";
 import { dirname, join } from "pathe";
-import { getFileComponents, getSubdirectories } from "~/shared/file";
+import { getFileComponents, getSubdirectories } from "src/shared/file";
 import { IAutoindexOptions } from "../parts";
 import { appendFile, writeFile } from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
-import { fileHasExports } from "~/shared/ast";
+import { fileHasExports } from "src/shared/ast";
 import xxhash from "xxhash-wasm";
 
 export interface WhiteBlackList {

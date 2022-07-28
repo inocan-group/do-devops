@@ -1,4 +1,4 @@
-import { IAwsCredentials, IAwsOptions } from "~/@types";
+import { IAwsCredentials, IAwsOptions } from "src/@types";
 import { convertProfileToApiCredential, getAwsProfile } from "../aws";
 import { determineProfile } from "./determineProfile";
 
@@ -17,7 +17,7 @@ export type ICredentialsWithMeta = {
  *
  * If the _profile_ can not be determined then this function returns `false`,
  * but if it can figure out a profile _name_ but the profile doesn't exist
- * in the user's `~/.aws/credentials` file, it will throw an error.
+ * in the user's `src/.aws/credentials` file, it will throw an error.
  *
  * **Errors:**
  * - `do-devops/invalid-profile-name`

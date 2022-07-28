@@ -1,9 +1,9 @@
 import chalk from "chalk";
 import { format } from "date-fns";
-import { IExifToolMetadata, IImageCacheRef, IImageRule } from "~/@types/image-types";
-import { DevopsError } from "~/errors";
-import { logger } from "~/shared/core/logger";
-import { emoji } from "~/shared/ui";
+import { IExifToolMetadata, IImageCacheRef, IImageRule } from "src/@types/image-types";
+import { DevopsError } from "src/errors";
+import { logger } from "src/shared/core/logger";
+import { emoji } from "src/shared/ui";
 import { IImageTools } from "../useImageApi";
 import { buildTagsFromCache } from "./buildTagsFromCache";
 import { saveImageCache } from "./saveImageCache";

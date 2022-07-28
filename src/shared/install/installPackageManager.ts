@@ -1,9 +1,9 @@
 import chalk from "chalk";
-import { Options, Observations, PackageManagerObservation } from "~/@types";
-import { DevopsError } from "~/errors";
-import { logger, proxyToPackageManager } from "~/shared/core";
-import { askListQuestion } from "~/shared/interactive";
-import { saveProjectConfig } from "~/shared/config";
+import { Options, Observations, PackageManagerObservation } from "src/@types";
+import { DevopsError } from "src/errors";
+import { logger, proxyToPackageManager } from "src/shared/core";
+import { askListQuestion } from "src/shared/interactive";
+import { saveProjectConfig } from "src/shared/config";
 
 export async function installPackageManager(
   opts: Options<{ silent: boolean; manager?: PackageManagerObservation }>,

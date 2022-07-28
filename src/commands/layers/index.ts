@@ -1,4 +1,4 @@
-import { IDoDevopsCommand } from "~/@types/command";
+import { IDoDevopsCommand } from "src/@types/command";
 import { handler, description } from "./parts/index";
 
 const command: IDoDevopsCommand = {

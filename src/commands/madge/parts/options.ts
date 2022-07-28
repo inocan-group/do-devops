@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { IOptionDefinition } from "~/@types";
+import { IOptionDefinition } from "src/@types";
 
 export interface IMadgeOptions {
   /** circular command */

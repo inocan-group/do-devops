@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { Options } from "~/@types";
-import { logger } from "~/shared/core";
-import { currentDirectory, readFile, fileIncludes } from "~/shared/file";
+import { Options } from "src/@types";
+import { logger } from "src/shared/core";
+import { currentDirectory, readFile, fileIncludes } from "src/shared/file";
 
 /**
  * Validates that:

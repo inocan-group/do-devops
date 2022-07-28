@@ -1,4 +1,4 @@
-import { getPackageJson } from "~/shared/npm";
+import { getPackageJson } from "src/shared/npm";
 
 export function hasDevDependency(dep: string, pathOveride?: string) {
   try {

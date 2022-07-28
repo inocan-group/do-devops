@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { join, relative } from "node:path";
-import { ensureDirectory, getSubdirectories, repoDirectory } from "~/shared/file";
+import { ensureDirectory, getSubdirectories, repoDirectory } from "src/shared/file";
 import { askListQuestion } from ".";
 
 export interface INestedDirOptions {

@@ -1,5 +1,5 @@
-import { IDoDevopsCommand } from "~/@types/command";
-import { askForAutoindexConfig } from "~/shared/interactive";
+import { IDoDevopsCommand } from "src/@types/command";
+import { askForAutoindexConfig } from "src/shared/interactive";
 import { handler, description, options } from "./parts/index";
 
 const command: IDoDevopsCommand = {

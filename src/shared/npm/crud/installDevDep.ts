@@ -1,9 +1,9 @@
 import chalk from "chalk";
 import { execSync } from "node:child_process";
-import { DoDevopObservation, Options } from "~/@types";
-import { logger } from "~/shared/core";
-import { determinePackageManager } from "~/shared/observations";
-import { emoji } from "~/shared/ui";
+import { DoDevopObservation, Options } from "src/@types";
+import { logger } from "src/shared/core";
+import { determinePackageManager } from "src/shared/observations";
+import { emoji } from "src/shared/ui";
 
 export async function installDevDep(
   opts: Options,

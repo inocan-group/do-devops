@@ -1,6 +1,6 @@
-import { DoDevopsHandler } from "~/@types/command";
-import { IOptionDefinition } from "~/@types/option-types";
-import { proxyToPackageManager } from "~/shared/core/proxyToPackageManager";
+import { DoDevopsHandler } from "src/@types/command";
+import { IOptionDefinition } from "src/@types/option-types";
+import { proxyToPackageManager } from "src/shared/core/proxyToPackageManager";
 
 export const defaultConfig = {
   preDeployHooks: ["clean"],

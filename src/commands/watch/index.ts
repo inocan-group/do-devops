@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { IDoDevopsCommand } from "~/@types/command";
-import { proxyToPackageManager } from "~/shared/core";
-import { hasScript } from "~/shared/npm";
+import { IDoDevopsCommand } from "src/@types/command";
+import { proxyToPackageManager } from "src/shared/core";
+import { hasScript } from "src/shared/npm";
 
 const command: IDoDevopsCommand = {
   kind: "watch",

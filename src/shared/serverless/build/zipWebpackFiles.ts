@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import path from "path";
+import path from "node:path";
 
 import { emoji } from "../../ui";
-import "~/@polyfills/bestzip";
+import "src/@polyfills/bestzip";
 import zip from "bestzip";
 /**
  * Zips up a number of

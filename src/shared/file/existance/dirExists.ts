@@ -1,6 +1,6 @@
-import { existsSync, lstatSync } from "fs";
-import { DevopsError } from "~/errors";
-import { interpolateFilePath } from "~/shared/file/helpers";
+import { existsSync, lstatSync } from "node:fs";
+import { DevopsError } from "src/errors";
+import { interpolateFilePath } from "src/shared/file/helpers";
 
 /**
  * Checks for the existance of a directory and returns

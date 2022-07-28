@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import * as os from "os";
+import * as os from "node:os";
 
 import { IDictionary, IServerlessAccountInfo, IServerlessYaml } from "common-types";
 import { asyncExec, rm } from "async-shelljs";
@@ -10,12 +10,12 @@ import {
   getLocalHandlerInfo,
   getServerlessBuildConfiguration,
   saveToServerlessYaml,
-} from "~/shared/serverless";
+} from "src/shared/serverless";
 
-import { IDoBuildConfig } from "~/@types";
-import { getYeomanScaffolds } from "~/shared/yeoman";
-import { filesExist, saveYamlFile } from "~/shared/file";
-import { emoji } from "~/shared/ui";
+import { IDoBuildConfig } from "src/@types";
+import { getYeomanScaffolds } from "src/shared/yeoman";
+import { filesExist, saveYamlFile } from "src/shared/file";
+import { emoji } from "src/shared/ui";
 
 const ACCOUNT_INFO_YAML = "./serverless-config/account-info.yml";
 

@@ -1,7 +1,7 @@
 import merge from "deepmerge";
-import { writeFileSync } from "fs";
+import { writeFileSync } from "node:fs";
 import { set } from "native-dash";
-import { IDoConfig, IProjectConfig, IProjectConfigFilled } from "~/@types";
+import { IDoConfig, IProjectConfig, IProjectConfigFilled } from "src/@types";
 import { logger } from "../core";
 import { currentDirectory } from "../file";
 import { CONFIG_FILE, DEFAULT_PROJECT_CONFIG } from "./constants";

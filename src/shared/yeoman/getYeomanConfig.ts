@@ -1,10 +1,10 @@
 import chalk from "chalk";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
 import parse from "destr";
 
 import { IDictionary } from "common-types";
-import { emoji } from "~/shared/ui";
-import path from "path";
+import { emoji } from "src/shared/ui";
+import path from "node:path";
 
 /**
  * returns the `.yo-rc.json` file combined with the

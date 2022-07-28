@@ -1,9 +1,9 @@
 import chalk from "chalk";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 import { IServerlessYaml } from "common-types";
-import { ensureDirectory } from "~/shared/file";
+import { ensureDirectory } from "src/shared/file";
 
 /**
  * Once a build is complete, this function will review the

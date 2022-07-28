@@ -1,5 +1,5 @@
-import { IDoDevopsCommand } from "~/@types/command";
-import { proxyToPackageManager } from "~/shared/core";
+import { IDoDevopsCommand } from "src/@types/command";
+import { proxyToPackageManager } from "src/shared/core";
 
 const command: IDoDevopsCommand = {
   kind: "upgrade",

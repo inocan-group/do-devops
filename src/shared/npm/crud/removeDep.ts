@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import { omit } from "native-dash";
-import { DoDevopObservation, Options } from "~/@types";
-import { logger } from "~/shared/core";
-import { determinePackageManager } from "~/shared/observations";
-import { emoji } from "~/shared/ui";
-import { getPackageJson, savePackageJson } from "~/shared/npm";
-import { spawnSync } from "child_process";
+import { DoDevopObservation, Options } from "src/@types";
+import { logger } from "src/shared/core";
+import { determinePackageManager } from "src/shared/observations";
+import { emoji } from "src/shared/ui";
+import { getPackageJson, savePackageJson } from "src/shared/npm";
+import { spawnSync } from "node:child_process";
 
 /**
  * Removes a dependency from the repo's package.json file.

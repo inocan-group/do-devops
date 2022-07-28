@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import { IImageCacheRef, IImageRule } from "~/@types/image-types";
-import { getProjectConfig } from "~/shared/config";
-import { logger } from "~/shared/core";
-import { emoji, wordWrap } from "~/shared/ui";
+import { IImageCacheRef, IImageRule } from "src/@types/image-types";
+import { getProjectConfig } from "src/shared/config";
+import { logger } from "src/shared/core";
+import { emoji, wordWrap } from "src/shared/ui";
 import { IImageApiOptions, IImageTools } from "../useImageApi";
 import { checkCacheFreshness } from "./checkCacheFreshness";
 import { refreshCache } from "./refreshCache";
@@ -53,7 +53,12 @@ export async function convertStale(
       const changes = [...missing, ...outOfDate];
       const resized: Promise<IImageCacheRef[]>[] = [];
       for (const img of changes) {
-        resized.push(tools.sharp.resizeToWebFormats(img, rule.destination, rule.widths, { ...rule.options, includePNG: rule.outputPNG}));
+        resized.push(
+          tools.sharp.resizeToWebFormats(img, rule.destination, rule.widths, {
+            ...rule.options,
+            includePNG: rule.outputPNG,
+          })
+        );
       }
       const resizedComplete = [...(await Promise.all(resized))].flat();
       log.whisper(

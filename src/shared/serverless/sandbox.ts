@@ -1,6 +1,6 @@
 import { asyncExec } from "async-shelljs";
-import { getCurrentGitBranch } from "~/shared/git";
-import { ISandboxStrategy } from "~/@types";
+import { getCurrentGitBranch } from "src/shared/git";
+import { ISandboxStrategy } from "src/@types";
 
 /**
  * Determines the `stage` to replace "dev" with a more

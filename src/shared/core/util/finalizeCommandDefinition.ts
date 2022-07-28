@@ -6,8 +6,8 @@ import {
   IDoDevopsCommand,
   isCommandDescriptor,
   isDynamicCommandDefinition,
-} from "~/@types";
-import { globalOptions } from "~/shared/core";
+} from "src/@types";
+import { globalOptions } from "src/shared/core";
 import { getArgvOption, hasArgv } from "./argv";
 
 /**

@@ -1,8 +1,8 @@
-import { IProjectConfig, Observations } from "~/@types";
-import { saveProjectConfig } from "~/shared/config";
-import { getProjectConfig } from "~/shared/config/getProjectConfig";
-import { logger } from "~/shared/core/logger";
-import { ImageApi } from "~/shared/images/useImageApi";
+import { IProjectConfig, Observations } from "src/@types";
+import { saveProjectConfig } from "src/shared/config";
+import { getProjectConfig } from "src/shared/config/getProjectConfig";
+import { logger } from "src/shared/core/logger";
+import { ImageApi } from "src/shared/images/useImageApi";
 import { askImageConfiguration } from ".";
 import { askListQuestion } from "../../general";
 

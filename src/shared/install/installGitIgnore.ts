@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import { Options } from "~/@types";
-import { logger } from "~/shared/core";
-import { templateFileCopy } from "~/shared/file";
-import { askConfirmQuestion } from "~/shared/interactive";
+import { Options } from "src/@types";
+import { logger } from "src/shared/core";
+import { templateFileCopy } from "src/shared/file";
+import { askConfirmQuestion } from "src/shared/interactive";
 
 /**
  * Installs a .gitignore file to current directory; if you want it to be confirmationless

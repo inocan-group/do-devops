@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { fileExists, libraryDirectory } from "~/shared/file";
-import { getPackageJson } from "~/shared/npm";
-import { emoji } from "~/shared/ui";
+import { fileExists, libraryDirectory } from "src/shared/file";
+import { getPackageJson } from "src/shared/npm";
+import { emoji } from "src/shared/ui";
 
 /**
  * Reports back the NPM version of the `do-devops` library

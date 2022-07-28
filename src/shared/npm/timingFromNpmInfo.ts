@@ -1,6 +1,6 @@
 import { INpmInfo } from "common-types";
 import { first, last } from "native-dash";
-import { INpmTiming } from "~/@types";
+import { INpmTiming } from "src/@types";
 
 /**
  * If you pass in the **npm** info data structure [`INpmInfo`] then this will

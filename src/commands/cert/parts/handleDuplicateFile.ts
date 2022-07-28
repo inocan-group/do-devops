@@ -1,6 +1,6 @@
-import { currentDirectory, fileExists } from "~/shared/file";
-import { askListQuestion } from "~/shared/interactive/general/askListQuestion";
-import { askInputQuestion } from "~/shared/interactive";
+import { currentDirectory, fileExists } from "src/shared/file";
+import { askListQuestion } from "src/shared/interactive/general/askListQuestion";
+import { askInputQuestion } from "src/shared/interactive";
 import { exit } from "node:process";
 
 /**

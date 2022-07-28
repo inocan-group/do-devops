@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import { spawnSync } from "node:child_process";
-import { DoDevopObservation, Observations } from "~/@types";
-import { getUserConfig } from "~/shared/config";
-import { logger } from "~/shared/core";
-import { getFileComponents, libraryDirectory, diffFiles } from "~/shared/file";
-import { askListQuestion, askUserAboutEditorCommand } from "~/shared/interactive";
-import { emoji } from "~/shared/ui";
+import { DoDevopObservation, Observations } from "src/@types";
+import { getUserConfig } from "src/shared/config";
+import { logger } from "src/shared/core";
+import { getFileComponents, libraryDirectory, diffFiles } from "src/shared/file";
+import { askListQuestion, askUserAboutEditorCommand } from "src/shared/interactive";
+import { emoji } from "src/shared/ui";
 
 export type FileAction = "show" | "diff" | "skip" | "copy";
 
@@ -42,7 +42,7 @@ export async function askAboutFileOverwrite(
           log.info(
             chalk`- the editor command "${editorCommand}" has been saved to your user configuration.`
           );
-          log.info(chalk`{gray - the user config file is located at {blue ~/.do-devops.json}}`);
+          log.info(chalk`{gray - the user config file is located at {blue src/.do-devops.json}}`);
         }
       }
       if (editorCommand) {

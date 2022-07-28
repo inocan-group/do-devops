@@ -1,16 +1,12 @@
 /* eslint-disable quotes */
 import chalk from "chalk";
-import path from "path";
-import { writeFileSync } from "fs";
-import {
-  IDictionary,
-  IServerlessFunction,
-  isServerlessFunctionHandler,
-} from "common-types";
-import { IWebpackHandlerDates } from "~/@types";
-import { toRelativePath } from "~/shared/file";
-import { emoji } from "~/shared/ui";
-import { findHandlerConfig } from "~/shared/ast";
+import path from "node:path";
+import { writeFileSync } from "node:fs";
+import { IDictionary, IServerlessFunction, isServerlessFunctionHandler } from "common-types";
+import { IWebpackHandlerDates } from "src/@types";
+import { toRelativePath } from "src/shared/file";
+import { emoji } from "src/shared/ui";
+import { findHandlerConfig } from "src/shared/ast";
 
 export interface IInlineExportConfig {
   interface: string;
@@ -45,9 +41,7 @@ function warnAboutMissingTyping(config: IInlineExportConfig[]) {
     );
     console.log(
       chalk`{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
-        .map((i) =>
-          isServerlessFunctionHandler(i.config) ? i.config.handler : i.config.image
-        )
+        .map((i) => (isServerlessFunctionHandler(i.config) ? i.config.handler : i.config.image))
         .join(", ")}}}`
     );
   }
@@ -89,10 +83,7 @@ export async function createInlineExports(handlers: IWebpackHandlerDates[]) {
 
   for (const handler of config) {
     if (isServerlessFunctionHandler(handler.config)) {
-      const fnName = (handler?.config?.handler.split("/").pop() || "").replace(
-        /\.[^.]+$/,
-        ""
-      );
+      const fnName = (handler?.config?.handler.split("/").pop() || "").replace(/\.[^.]+$/, "");
 
       exportSymbols.push(fnName);
       const symbol = `const ${fnName}: IServerlessFunction = { 
@@ -115,11 +106,7 @@ export default {
   ${exportSymbols.join(",\n\t")}
 }`;
 
-  writeFileSync(
-    path.join(process.env.PWD || "", "serverless-config/functions/inline.ts"),
-    file,
-    {
-      encoding: "utf-8",
-    }
-  );
+  writeFileSync(path.join(process.env.PWD || "", "serverless-config/functions/inline.ts"), file, {
+    encoding: "utf-8",
+  });
 }

@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { AwsRegion, AwsStage } from "common-types";
-import { IOptionDefinition } from "~/@types/option-types";
+import { IOptionDefinition } from "src/@types/option-types";
 
 export const options: IOptionDefinition = {
   forceBuild: {

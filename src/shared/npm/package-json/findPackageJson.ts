@@ -1,5 +1,5 @@
 import fu from "find-up";
-import { parentDirectory } from "~/shared/file";
+import { parentDirectory } from "src/shared/file";
 
 /**
  * Finds the closest `package.json` file starting from the _parent_ of the current working

@@ -1,14 +1,17 @@
 /* eslint-disable quotes */
 import chalk from "chalk";
-import { emoji } from "~/shared/ui";
+import { emoji } from "src/shared/ui";
 import { asyncExec } from "async-shelljs";
-import { getLocalServerlessFunctionsFromServerlessYaml, askForFunction } from "~/shared/serverless";
-import { isServerless } from "~/shared/observations";
-import { getDataFiles, readDataFile } from "~/shared/file";
-import { askForDataFile } from "~/shared/interactive";
-import { DoDevopsHandler } from "~/@types/command";
+import {
+  getLocalServerlessFunctionsFromServerlessYaml,
+  askForFunction,
+} from "src/shared/serverless";
+import { isServerless } from "src/shared/observations";
+import { getDataFiles, readDataFile } from "src/shared/file";
+import { askForDataFile } from "src/shared/interactive";
+import { DoDevopsHandler } from "src/@types/command";
 import { IInvokeOptions } from "./invoke-meta";
-import { proxyToPackageManager } from "~/shared/core";
+import { proxyToPackageManager } from "src/shared/core";
 
 export const handler: DoDevopsHandler<IInvokeOptions> = async ({
   observations,

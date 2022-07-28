@@ -3,8 +3,8 @@ import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
 import { semver } from "common-types";
 import parse from "destr";
-import { join } from "path";
-import { DevopsError } from "~/errors";
+import { join } from "node:path";
+import { DevopsError } from "src/errors";
 import { currentDirectory, fileExists } from "../file";
 
 export interface ILernaPackage {
@@ -24,9 +24,14 @@ export async function getLernaPackages(dir?: string) {
   dir = dir ? dir : currentDirectory();
   const lerna = join(dir, "node_modules/.bin/lerna");
   if (!fileExists(lerna)) {
-    throw new DevopsError(chalk`Attempt to get {bold green Lerna} package list failed as the Lerna command was not found locally at: {blue ${lerna}}`, "not-ready/lerna-missing");
+    throw new DevopsError(
+      chalk`Attempt to get {bold green Lerna} package list failed as the Lerna command was not found locally at: {blue ${lerna}}`,
+      "not-ready/lerna-missing"
+    );
   }
 
-  const pkgs = parse(stripExtraneous(await asyncExec(`node_modules/.bin/lerna list --json`, { silent: true }))) as ILernaPackage[];
+  const pkgs = parse(
+    stripExtraneous(await asyncExec(`node_modules/.bin/lerna list --json`, { silent: true }))
+  ) as ILernaPackage[];
   return pkgs || [];
 }

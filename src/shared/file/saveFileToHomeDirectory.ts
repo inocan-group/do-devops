@@ -1,8 +1,8 @@
-import { existsSync, writeFileSync } from "fs";
+import { existsSync, writeFileSync } from "node:fs";
 
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 import { IDictionary } from "common-types";
-import path from "path";
+import path from "node:path";
 
 export function saveFileToHomeDirectory(
   filename: string,

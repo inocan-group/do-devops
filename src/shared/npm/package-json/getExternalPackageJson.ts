@@ -1,7 +1,7 @@
 import { asyncExec } from "async-shelljs";
 import { INpmInfo } from "common-types";
 import parse from "destr";
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 
 /**
  * Calls on the network to get `yarn info [xxx]`;

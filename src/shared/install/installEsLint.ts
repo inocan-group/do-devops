@@ -1,10 +1,10 @@
 import chalk from "chalk";
-import { Options, Observations } from "~/@types";
-import { installDevDep } from "~/shared/npm";
-import { askConfirmQuestion } from "~/shared/interactive";
-import { logger } from "~/shared/core";
-import { emoji } from "~/shared/ui";
-import { templateFileCopy } from "~/shared/file";
+import { Options, Observations } from "src/@types";
+import { installDevDep } from "src/shared/npm";
+import { askConfirmQuestion } from "src/shared/interactive";
+import { logger } from "src/shared/core";
+import { emoji } from "src/shared/ui";
+import { templateFileCopy } from "src/shared/file";
 
 /**
  * Installs and configures both **eslint** and **prettier**

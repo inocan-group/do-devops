@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { IOptionDefinition } from "~/@types";
-import { convertOptionsToArray } from "~/shared/core";
+import { IOptionDefinition } from "src/@types";
+import { convertOptionsToArray } from "src/shared/core";
 
 // /**
 //  * Formats commands so that:
@@ -34,7 +34,7 @@ export async function getSyntax(fn?: string): Promise<string> {
     return "dd [command] <options>";
   }
 
-  const defn = await import(`~/commands/${fn}`);
+  const defn = await import(`src/commands/${fn}`);
   const hasSubCommands = defn.subCommands ? true : false;
 
   return defn.syntax ? defn.syntax : `do ${fn} ${hasSubCommands ? "[command] " : ""}<options>`;

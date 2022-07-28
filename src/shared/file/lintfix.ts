@@ -1,5 +1,5 @@
-import { spawnSync } from "child_process";
-import { DoDevopObservation } from "~/@types";
+import { spawnSync } from "node:child_process";
+import { DoDevopObservation } from "src/@types";
 
 /**
  * points `eslint` toward a file with the `--fix` flag turned on.

@@ -1,12 +1,12 @@
 import chalk from "chalk";
-import { Options, Observations } from "~/@types";
-import { DevopsError } from "~/errors";
-import { installEsLint } from "~/shared/install";
-import { saveProjectConfig } from "~/shared/config";
-import { getPackageJson, installDevDep, savePackageJson } from "~/shared/npm";
-import { askConfirmQuestion, askListQuestion } from "~/shared/interactive";
-import { removeTslint } from "~/shared/remove";
-import { logger } from "~/shared/core";
+import { Options, Observations } from "src/@types";
+import { DevopsError } from "src/errors";
+import { installEsLint } from "src/shared/install";
+import { saveProjectConfig } from "src/shared/config";
+import { getPackageJson, installDevDep, savePackageJson } from "src/shared/npm";
+import { askConfirmQuestion, askListQuestion } from "src/shared/interactive";
+import { removeTslint } from "src/shared/remove";
+import { logger } from "src/shared/core";
 import { templateDirCopy, templateFileCopy } from "../file";
 import { getObservations } from "../observations";
 

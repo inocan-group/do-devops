@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import { load } from "js-yaml";
-import { DevopsError } from "~/errors/DevopsError";
+import { DevopsError } from "src/errors/DevopsError";
 import { filesExist } from "../existance/filesExist";
 import { interpolateFilePath } from "../helpers";
 
@@ -19,7 +19,7 @@ import { interpolateFilePath } from "../helpers";
  *   - `homeDirectory()`,
  *   - `currentDirectory()`
  *
- * If, however, the filename starts with `~/` or `./` the appropriate base
+ * If, however, the filename starts with `src/` or `./` the appropriate base
  * will be deduced as well.
  */
 export function readYamlConfig<T extends object>(filename: string): T | undefined {

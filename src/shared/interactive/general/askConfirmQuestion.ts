@@ -1,5 +1,5 @@
 import { Answers, Question } from "inquirer";
-import { ConfirmationChoice, IInteractiveOptions } from "~/@types";
+import { ConfirmationChoice, IInteractiveOptions } from "src/@types";
 import { ask } from "./ask";
 import { confirmQuestion } from "./confirmQuestion";
 

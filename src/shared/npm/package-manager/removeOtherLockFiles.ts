@@ -1,5 +1,5 @@
-import { PackageManagerObservation } from "~/@types";
-import { currentDirectory, fileExists, removeFile } from "~/shared/file";
+import { PackageManagerObservation } from "src/@types";
+import { currentDirectory, fileExists, removeFile } from "src/shared/file";
 import { PACKAGE_MANAGERS, PKG_MGR_LOCK_FILE_LOOKUP } from "./pm-constants";
 
 /**

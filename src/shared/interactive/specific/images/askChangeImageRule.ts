@@ -1,7 +1,7 @@
 import { exit } from "node:process";
-import { IImageRule, Observations } from "~/@types";
-import { logger } from "~/shared/core/logger";
-import { ImageApi } from "~/shared/images/useImageApi";
+import { IImageRule, Observations } from "src/@types";
+import { logger } from "src/shared/core/logger";
+import { ImageApi } from "src/shared/images/useImageApi";
 import { askImageConfiguration } from ".";
 import { askListQuestion } from "../..";
 

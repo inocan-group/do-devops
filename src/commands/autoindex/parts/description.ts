@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { IDoDevopsCommand } from "~/@types";
+import { IDoDevopsCommand } from "src/@types";
 const autoindex = chalk`{bgWhite {black autoindex }}`;
 
 export const description: IDoDevopsCommand["description"] = {

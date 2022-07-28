@@ -1,5 +1,5 @@
-import { DoDevopObservation, ICommandDescription } from "~/@types";
-import { getAllCommands } from "~/shared/core";
+import { DoDevopObservation, ICommandDescription } from "src/@types";
+import { getAllCommands } from "src/shared/core";
 
 /**
  * Produces an array of `ICommandDescription` elements for

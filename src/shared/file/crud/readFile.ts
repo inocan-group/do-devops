@@ -1,6 +1,6 @@
 import chalk from "chalk";
-import { readFileSync } from "fs";
-import { emoji } from "~/shared/ui";
+import { readFileSync } from "node:fs";
+import { emoji } from "src/shared/ui";
 import { filesExist } from "../existance/filesExist";
 import { interpolateFilePath } from "../helpers";
 
@@ -17,7 +17,7 @@ import { interpolateFilePath } from "../helpers";
  *   - `homeDirectory()`,
  *   - `currentDirectory()`
  *
- * If, however, the filename starts with `~/` or `./` the appropriate base
+ * If, however, the filename starts with `src/` or `./` the appropriate base
  * will be deduced as well.
  */
 export function readFile(filename: string) {

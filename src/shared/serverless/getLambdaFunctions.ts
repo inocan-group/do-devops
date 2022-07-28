@@ -1,8 +1,8 @@
 import { Lambda } from "aws-sdk";
 import { AwsRegion } from "common-types";
 import { getAwsProfile, convertProfileToApiCredential } from "../aws";
-import { determineRegion, determineProfile } from "~/shared/observations";
-import { DevopsError } from "~/errors";
+import { determineRegion, determineProfile } from "src/shared/observations";
+import { DevopsError } from "src/errors";
 
 export interface ILambdaFunctionsOptions {
   /** explicitly state the region you are interested in */

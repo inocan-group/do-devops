@@ -3,10 +3,10 @@ import chalk from "chalk";
 
 import { arn, IDictionary, IServerlessYaml } from "common-types";
 import { getLambdaFunctions } from "./index";
-import { determineStage } from "~/shared/observations";
+import { determineStage } from "src/shared/observations";
 import { getPackageJson, hasDevDependency, savePackageJson } from "../npm";
 import inquirer from "inquirer";
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 /**
  * Checks whether the existing configuration has `logForwarding`
  * turned on in the **custom** section. If it _does_ then it just

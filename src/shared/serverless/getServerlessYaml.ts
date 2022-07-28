@@ -1,10 +1,10 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 import { IServerlessYaml } from "common-types";
 import { load } from "js-yaml";
-import { isDevopsError } from "~/@type-guards";
+import { isDevopsError } from "src/@type-guards";
 
 /**
  * Get the `serverless.yml` file in the root of the project

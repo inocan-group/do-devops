@@ -1,5 +1,5 @@
 import { ExifDate, ExifDateTime } from "exiftool-vendored";
-import { IImageCacheRef } from "~/@types";
+import { IImageCacheRef } from "src/@types";
 
 /**
  * A type guard which helps to distinguish between the ExifTool's

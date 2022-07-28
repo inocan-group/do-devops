@@ -1,6 +1,6 @@
 import chalk from "chalk";
-import { DevopsError } from "~/errors";
-import { askConfirmQuestion } from "~/shared/interactive";
+import { DevopsError } from "src/errors";
+import { askConfirmQuestion } from "src/shared/interactive";
 
 export interface ISsmNameHints {
   stage?: string;

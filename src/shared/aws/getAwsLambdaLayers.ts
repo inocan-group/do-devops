@@ -1,6 +1,6 @@
 import { Lambda } from "aws-sdk";
-import { IAwsOptions } from "~/@types/aws";
-import { DevopsError } from "~/errors/index";
+import { IAwsOptions } from "src/@types/aws";
+import { DevopsError } from "src/errors/index";
 import { determineProfile, determineRegion } from "../observations";
 import { convertProfileToApiCredential } from "./convertProfileToApiCredential";
 import { getAwsProfile } from "./getAwsProfile";

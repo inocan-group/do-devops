@@ -1,5 +1,5 @@
 import { Answers } from "inquirer";
-import { IInteractiveOptions } from "~/@types";
+import { IInteractiveOptions } from "src/@types";
 import { ask } from "./ask";
 
 export type InputQuestionOptions<T extends Answers = Answers> = IInteractiveOptions<T> & {

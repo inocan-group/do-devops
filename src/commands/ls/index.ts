@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
-import { IDoDevopsCommand } from "~/@types/command";
-import { proxyToPackageManager } from "~/shared/core";
-import { askForDependency } from "~/shared/interactive";
+import { IDoDevopsCommand } from "src/@types/command";
+import { proxyToPackageManager } from "src/shared/core";
+import { askForDependency } from "src/shared/interactive";
 
 const command: IDoDevopsCommand = {
   kind: "ls",

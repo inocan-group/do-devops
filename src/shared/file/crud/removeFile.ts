@@ -1,5 +1,5 @@
-import { lstatSync, rmSync } from "fs";
-import { DevopsError } from "~/errors";
+import { lstatSync, rmSync } from "node:fs";
+import { DevopsError } from "src/errors";
 import { fileExists } from "../existance";
 import { interpolateFilePath } from "../helpers/interpolateFilepath";
 
@@ -17,7 +17,7 @@ import { interpolateFilePath } from "../helpers/interpolateFilepath";
  *   - `homeDirectory()`,
  *   - `currentDirectory()`
  *
- * If, however, the filename starts with `~/` or `./` the appropriate base
+ * If, however, the filename starts with `src/` or `./` the appropriate base
  * will be deduced as well.
  */
 export function removeFile(filename: string) {

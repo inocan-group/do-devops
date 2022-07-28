@@ -1,5 +1,5 @@
-import path from "path";
-import { getPackageJson } from "~/shared/npm";
+import path from "node:path";
+import { getPackageJson } from "src/shared/npm";
 
 /**
  * Tests whether the package.json has a `module` export which

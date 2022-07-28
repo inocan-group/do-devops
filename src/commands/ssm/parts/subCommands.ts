@@ -1,4 +1,4 @@
-import { ICommandDescription } from "~/@types";
+import { ICommandDescription } from "src/@types";
 
 export const subCommands: ICommandDescription[] = [
   { name: "list", summary: "list all SSM secrets in a given AWS profile" },

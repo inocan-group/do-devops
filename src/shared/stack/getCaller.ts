@@ -1,5 +1,5 @@
 import callsites from "callsites";
-import { getFileComponents } from "~/shared/file";
+import { getFileComponents } from "src/shared/file";
 
 /**
  * Returns meta-data about the caller of the currently executing

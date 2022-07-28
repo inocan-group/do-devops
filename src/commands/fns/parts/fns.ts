@@ -3,16 +3,16 @@ import { omit } from "native-dash";
 import { IDictionary } from "common-types";
 import { table } from "table";
 
-import { consoleDimensions } from "~/shared/ui";
-import { buildLambdaTypescriptProject, getServerlessYaml } from "~/shared/serverless";
-import { DoDevopsHandler } from "~/@types/command";
+import { consoleDimensions } from "src/shared/ui";
+import { buildLambdaTypescriptProject, getServerlessYaml } from "src/shared/serverless";
+import { DoDevopsHandler } from "src/@types/command";
 import { IFnsOptions } from "./options";
-import { getAwsLambdaFunctions } from "~/shared/aws";
+import { getAwsLambdaFunctions } from "src/shared/aws";
 import type { FunctionConfiguration } from "aws-sdk/clients/lambda";
-import { determineRegion } from "~/shared/observations";
+import { determineRegion } from "src/shared/observations";
 import { functionsApiTable } from "./tables";
-import { write } from "~/shared/file";
-import { Options } from "~/@types";
+import { write } from "src/shared/file";
+import { Options } from "src/@types";
 
 export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
   unknown: argv,
@@ -113,14 +113,14 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
     if (width < 70) {
       // TODO: come back and use a consistent means of omitting columns
       tableConfig = { columns: omit(tableConfig.columns, "2", "3", "4") };
-      output = table(tableData.map((i) => i.slice(0, 2), tableConfig));
+      output = table(tableData.map((i) => i.slice(0, 2)));
     } else if (width < 80) {
       delete tableConfig.columns["3"];
       delete tableConfig.columns["4"];
-      output = table(tableData.map((i) => i.slice(0, 3), tableConfig));
+      output = table(tableData.map((i) => i.slice(0, 3)));
     } else if (width < 125) {
       delete tableConfig.columns["4"];
-      output = table(tableData.map((i) => i.slice(0, 4), tableConfig));
+      output = table(tableData.map((i) => i.slice(0, 4)));
     }
 
     console.log(output);

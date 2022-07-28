@@ -1,5 +1,5 @@
-import { ICommandDescription } from "~/@types";
-import { IDoDevopsCommand } from "~/@types/command";
+import { ICommandDescription } from "src/@types";
+import { IDoDevopsCommand } from "src/@types/command";
 import { handler, description, options } from "./parts";
 
 const subCommands: ICommandDescription[] = [

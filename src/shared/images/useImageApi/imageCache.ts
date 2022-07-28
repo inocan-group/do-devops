@@ -1,7 +1,7 @@
 import { IDictionary } from "common-types";
 import { keys } from "native-dash";
-import { Options, IImageCacheRef, IRefreshCacheOptions } from "~/@types";
-import { IMAGE_CACHE } from "~/constants";
+import { Options, IImageCacheRef, IRefreshCacheOptions } from "src/@types";
+import { IMAGE_CACHE } from "src/constants";
 import { logger } from "../../core";
 import { currentDirectory } from "../../file";
 import { repoDirectory } from "../../file/base-paths/repoDirectory";

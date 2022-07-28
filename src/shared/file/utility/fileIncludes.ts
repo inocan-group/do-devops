@@ -1,5 +1,5 @@
-import { DevopsError } from "~/errors";
-import { readFile } from "~/shared/file";
+import { DevopsError } from "src/errors";
+import { readFile } from "src/shared/file";
 
 /**
  * Looks at the contents of a file and then returns a boolean flag to indicate whether

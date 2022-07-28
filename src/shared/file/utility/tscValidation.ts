@@ -1,9 +1,9 @@
 import chalk from "chalk";
-import { spawnSync } from "child_process";
-import { Options } from "~/@types";
-import { DevopsError } from "~/errors";
-import { logger } from "~/shared/core";
-import { emoji } from "~/shared/ui";
+import { spawnSync } from "node:child_process";
+import { Options } from "src/@types";
+import { DevopsError } from "src/errors";
+import { logger } from "src/shared/core";
+import { emoji } from "src/shared/ui";
 import { currentDirectory, libraryDirectory } from "../base-paths";
 import { fileExists } from "../existance";
 import { getFileComponents } from "./getFileComponents";

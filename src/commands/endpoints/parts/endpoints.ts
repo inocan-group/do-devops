@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/import-style */
-import { getApiGatewayEndpoints } from "~/shared/aws";
-import { determineProfile, determineRegion } from "~/shared/observations";
-import { DoDevopsHandler } from "~/@types/command";
+import { getApiGatewayEndpoints } from "src/shared/aws";
+import { determineProfile, determineRegion } from "src/shared/observations";
+import { DoDevopsHandler } from "src/@types/command";
 import { IEndpointsOptions } from "./options";
 import { table } from "table";
 import chalk from "chalk";
@@ -44,7 +44,7 @@ export const handler: DoDevopsHandler<IEndpointsOptions> = async ({ opts }) => {
         : [];
       if (restApi.length > 0) {
         console.log("\nREST API Endpoints");
-        console.log(table([...[["id", "name", "description"]], ...restApi]));
+        console.log(table([["id", "name", "description"], ...restApi]));
         console.log();
       } else {
         console.log(chalk`{gray - no REST API endpoints found}`);
@@ -53,14 +53,14 @@ export const handler: DoDevopsHandler<IEndpointsOptions> = async ({ opts }) => {
 
       if (httpApi.length > 0) {
         console.log("HTTP API Endpoints");
-        const t = [...[["id", "name", "endpoint", "methods", "origins"]], ...httpApi];
+        const t = [["id", "name", "endpoint", "methods", "origins"], ...httpApi];
         console.log(table(t));
       }
     } else {
       console.log(
-        `- could not determine ${chalk.bold.yellow(
-          "AWS region"
-        )}; try using ${chalk.inverse(" --region ")} option to set it explicitly\n`
+        `- could not determine ${chalk.bold.yellow("AWS region")}; try using ${chalk.inverse(
+          " --region "
+        )} option to set it explicitly\n`
       );
     }
   } catch {}

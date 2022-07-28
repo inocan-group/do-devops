@@ -1,7 +1,7 @@
 import { IDictionary, IServerlessAccountInfo } from "common-types";
 import { TypedMapper } from "typed-mapper";
-import { DevopsError } from "~/errors";
-import { askForAccountInfo, getAccountInfoFromServerlessYaml } from "~/shared/serverless";
+import { DevopsError } from "src/errors";
+import { askForAccountInfo, getAccountInfoFromServerlessYaml } from "src/shared/serverless";
 import { getPackageJson } from "../npm";
 import { getYeomanConfig, getYeomanScaffolds } from "../yeoman";
 

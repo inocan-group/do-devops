@@ -1,7 +1,7 @@
-import { DoDevopObservation } from "~/@types";
-import { askListQuestion } from "~/shared/interactive";
-import { saveProjectConfig } from "~/shared/config";
-import { removeOtherLockFiles } from "~/shared/npm";
+import { DoDevopObservation } from "src/@types";
+import { askListQuestion } from "src/shared/interactive";
+import { saveProjectConfig } from "src/shared/config";
+import { removeOtherLockFiles } from "src/shared/npm";
 import chalk from "chalk";
 
 export async function resolvePackageManagerConflict(observations: Set<DoDevopObservation>) {

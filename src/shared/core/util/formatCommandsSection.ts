@@ -1,4 +1,4 @@
-import { ICommandDescription, KnownCommand } from "~/@types";
+import { ICommandDescription, KnownCommand } from "src/@types";
 import { Section } from "command-line-usage";
 import chalk from "chalk";
 import { isOdd } from "native-dash";

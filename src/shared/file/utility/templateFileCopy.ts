@@ -1,10 +1,10 @@
-import path from "path";
+import path from "node:path";
 import { IDictionary } from "common-types";
 import { currentDirectory, libraryDirectory } from "../base-paths";
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 import { readFile, write } from "../crud";
 import { fileExists } from "../existance";
-import { askAboutFileOverwrite } from "~/shared/interactive";
+import { askAboutFileOverwrite } from "src/shared/interactive";
 
 /**
  * **templateFileCopy**

@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { formatDistance } from "date-fns";
-import { IImageCacheRef, IImageRule } from "~/@types/image-types";
-import { logger } from "~/shared/core/logger";
-import { emoji, wordWrap } from "~/shared/ui";
+import { IImageCacheRef, IImageRule } from "src/@types/image-types";
+import { logger } from "src/shared/core/logger";
+import { emoji, wordWrap } from "src/shared/ui";
 import { IImageTools } from "../useImageApi";
 
 export function summarize(rules: IImageRule[], tools: IImageTools) {

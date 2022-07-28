@@ -1,12 +1,12 @@
-import { getAwsProfile, getAwsIdentityFromProfile } from "~/shared/aws";
+import { getAwsProfile, getAwsIdentityFromProfile } from "src/shared/aws";
 import chalk from "chalk";
 import { SSM } from "aws-ssm";
 import { completeSsmName } from "../index";
 import { toBase64 } from "native-dash";
-import { determineProfile, determineRegion } from "~/shared/observations";
-import { askForStage } from "~/shared/serverless";
-import { emoji } from "~/shared/ui";
-import { DoDevopsHandler } from "~/@types";
+import { determineProfile, determineRegion } from "src/shared/observations";
+import { askForStage } from "src/shared/serverless";
+import { emoji } from "src/shared/ui";
+import { DoDevopsHandler } from "src/@types";
 import { ISsmOptions } from "../../parts";
 
 export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: argv }) => {

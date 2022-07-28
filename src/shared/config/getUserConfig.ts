@@ -1,7 +1,7 @@
 import parse from "destr";
-import { IUserConfig, IUserConfigFilled } from "~/@types";
-import { CONFIG_FILE } from "~/shared/config/constants";
-import { homeDirectory, readFile } from "~/shared/file";
+import { IUserConfig, IUserConfigFilled } from "src/@types";
+import { CONFIG_FILE } from "src/shared/config/constants";
+import { homeDirectory, readFile } from "src/shared/file";
 
 /**
  * **getUserConfig**

@@ -1,10 +1,10 @@
 import chalk from "chalk";
-import { Stats } from "fs";
+import { Stats } from "node:fs";
 import globby from "globby";
-import { join } from "path";
-import { IImageCache, IImageRule } from "~/@types/image-types";
-import { logger } from "~/shared/core";
-import { repoDirectory } from "~/shared/file";
+import { join } from "node:path";
+import { IImageCache, IImageRule } from "src/@types/image-types";
+import { logger } from "src/shared/core";
+import { repoDirectory } from "src/shared/file";
 
 type IGlobResultWithStats = {
   name: string;

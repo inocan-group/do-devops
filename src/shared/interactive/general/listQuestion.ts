@@ -1,5 +1,5 @@
 import { ListQuestion } from "inquirer";
-import { Choices, IInteractiveOptions } from "~/@types/interactive-types";
+import { Choices, IInteractiveOptions } from "src/@types/interactive-types";
 import { convertChoices } from "./convertChoices";
 
 /**

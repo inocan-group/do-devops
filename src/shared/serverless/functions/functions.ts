@@ -1,8 +1,8 @@
-import path from "path";
-import { findInlineFunctionDefnFiles } from "~/shared/serverless";
+import path from "node:path";
+import { findInlineFunctionDefnFiles } from "src/shared/serverless";
 import { getFilePath, getNamespacedLookup, validateExports } from "./index";
-import { writeFileSync } from "fs";
-import { IServerlessFnDictionary } from "~/@types";
+import { writeFileSync } from "node:fs";
+import { IServerlessFnDictionary } from "src/@types";
 
 /**
  * **reduceToRelativePath**
@@ -25,9 +25,7 @@ export function getFilenameWithoutExtension(filePath: string) {
 
 export async function createFunctionDictionary(rootPath?: string) {
   const root = rootPath || process.env.PWD || "";
-  const fns = findInlineFunctionDefnFiles(
-    rootPath || path.join(process.env.PWD || "'", "/src")
-  );
+  const fns = findInlineFunctionDefnFiles(rootPath || path.join(process.env.PWD || "'", "/src"));
   const serverlessNameLookup = getNamespacedLookup(fns, root);
   const { valid } = await validateExports(fns);
   return fns.map((filePath) => {
@@ -100,7 +98,6 @@ export async function writeServerlessFunctionExports(basePath?: string, output?:
 
   writeFileSync(
     outputFilename,
-    "/**\n * DO NOT CHANGE THIS FILE\n * (this file is automatically created)\n **/\n\n" +
-      template
+    "/**\n * DO NOT CHANGE THIS FILE\n * (this file is automatically created)\n **/\n\n" + template
   );
 }

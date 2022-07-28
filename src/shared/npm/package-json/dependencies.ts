@@ -1,4 +1,4 @@
-import { INpmDependencies } from "~/@types";
+import { INpmDependencies } from "src/@types";
 import { convertDepDictionaryToArray } from "./convertDepDictionaryToArray";
 import { getPackageJson } from "./getPackageJson";
 

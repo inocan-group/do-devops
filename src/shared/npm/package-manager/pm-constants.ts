@@ -1,10 +1,10 @@
-import { PackageManagerObservation } from "~/@types";
+import { PackageManagerObservation } from "src/@types";
 
 export const PACKAGE_MANAGERS: Exclude<PackageManagerObservation, "packageManagerConflict">[] = [
   "npm",
   "pnpm",
   "yarn",
-  "cargo"
+  "cargo",
 ];
 
 export const PKG_MGR_LOCK_FILE_LOOKUP: Record<
@@ -14,5 +14,5 @@ export const PKG_MGR_LOCK_FILE_LOOKUP: Record<
   npm: "package-lock.json",
   pnpm: "pnpm-lock.yaml",
   yarn: "yarn.lock",
-  cargo: "Cargo.toml"
+  cargo: "Cargo.toml",
 };

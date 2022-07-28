@@ -1,8 +1,8 @@
-import { IFileOrContent, isFilenameNotContent } from "~/@types";
-import { DevopsError } from "~/errors";
+import { IFileOrContent, isFilenameNotContent } from "src/@types";
+import { DevopsError } from "src/errors";
 import { readFile } from "../file";
-import { astParseWithAcorn, isTypeBasedObject } from "~/shared/ast";
-import { IAcornDeclaration, IExportDeclaration } from "~/@types/ast-types";
+import { astParseWithAcorn, isTypeBasedObject } from "src/shared/ast";
+import { IAcornDeclaration, IExportDeclaration } from "src/@types/ast-types";
 
 function reduce(exp: IAcornDeclaration): IExportDeclaration {
   const symbols = new Set<string>(

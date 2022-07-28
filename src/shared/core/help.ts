@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import commandLineUsage, { OptionDefinition } from "command-line-usage";
-import { DoDevopObservation, Finalized, IDoDevopsCommand } from "~/@types";
-import { emoji } from "~/shared/ui";
+import { DoDevopObservation, Finalized, IDoDevopsCommand } from "src/@types";
+import { emoji } from "src/shared/ui";
 import { globalOptions } from "./index";
 import {
   formatCommandsSection,

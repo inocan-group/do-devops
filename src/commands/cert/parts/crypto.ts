@@ -1,14 +1,14 @@
 import chalk from "chalk";
-import { emoji } from "~/shared/ui";
-import { hasShellCommandInPath } from "~/shared/observations/hasShellCommandInPath";
+import { emoji } from "src/shared/ui";
+import { hasShellCommandInPath } from "src/shared/observations/hasShellCommandInPath";
 import { exit } from "node:process";
 import { ICertOptions } from "./options";
-import { Options } from "~/@types/global";
+import { Options } from "src/@types/global";
 import { execSync } from "node:child_process";
-import { askInputQuestion } from "~/shared/interactive";
-import { nslookup } from "~/shared/network";
+import { askInputQuestion } from "src/shared/interactive";
+import { nslookup } from "src/shared/network";
 import { handleDuplicateFile } from "./handleDuplicateFile";
-import { fileExists } from "~/shared/file/existance";
+import { fileExists } from "src/shared/file/existance";
 import { avoidDuplicationInExtFile } from "./dnsAppearsInExtFile";
 import { readFileSync, writeFileSync } from "node:fs";
 

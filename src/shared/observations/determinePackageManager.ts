@@ -1,16 +1,16 @@
 import chalk from "chalk";
-import { PackageManagerObservation, DoDevopObservation } from "~/@types/observations";
-import { DevopsError } from "~/errors";
-import { askListQuestion } from "~/shared/interactive";
-import { emoji } from "~/shared/ui";
+import { PackageManagerObservation, DoDevopObservation } from "src/@types/observations";
+import { DevopsError } from "src/errors";
+import { askListQuestion } from "src/shared/interactive";
+import { emoji } from "src/shared/ui";
 import {
   getProjectConfig,
   getUserConfig,
   saveProjectConfig,
   saveUserConfig,
-} from "~/shared/config";
-import { removeOtherLockFiles } from "~/shared/npm";
-import { Options } from "~/@types";
+} from "src/shared/config";
+import { removeOtherLockFiles } from "src/shared/npm";
+import { Options } from "src/@types";
 
 /**
  * Based on all observations made at startup, this function will try to

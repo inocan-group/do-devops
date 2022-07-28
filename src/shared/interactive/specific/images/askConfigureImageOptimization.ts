@@ -1,18 +1,18 @@
 import chalk from "chalk";
 import path from "node:path";
-import { IImageRule, Observations } from "~/@types";
-import { saveProjectConfig } from "~/shared/config";
-import { csvParser } from "~/shared/data";
-import { currentDirectory } from "~/shared/file";
-import { getImages } from "~/shared/images";
-import { wordWrap } from "~/shared/ui";
+import { IImageRule, Observations } from "src/@types";
+import { saveProjectConfig } from "src/shared/config";
+import { csvParser } from "src/shared/data";
+import { currentDirectory } from "src/shared/file";
+import { getImages } from "src/shared/images";
+import { wordWrap } from "src/shared/ui";
 import {
   askConfirmQuestion,
   askInputQuestion,
   askListQuestion,
   askForNestedDirectory,
-} from "~/shared/interactive";
-import { logger } from "~/shared/core";
+} from "src/shared/interactive";
+import { logger } from "src/shared/core";
 
 const filter = (v: string) => !v.startsWith(".") && v !== "node_modules";
 

@@ -1,6 +1,6 @@
 import { OptionDefinition } from "command-line-usage";
-import { IDoDevopsCommand } from "~/@types/command";
-import { IOptionDefinition } from "~/@types/option-types";
+import { IDoDevopsCommand } from "src/@types/command";
+import { IOptionDefinition } from "src/@types/option-types";
 
 /**
  * Determines if a given commmand has an `argv` parameter

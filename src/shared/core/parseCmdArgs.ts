@@ -1,6 +1,6 @@
 import commandLineArgs from "command-line-args";
-import { IOptionDefinition } from "~/@types";
-import { ICommandInput, IDoDevopsCommand } from "~/@types/command";
+import { IOptionDefinition } from "src/@types";
+import { ICommandInput, IDoDevopsCommand } from "src/@types/command";
 import { convertOptionsToArray, globalOptions } from "./index";
 
 /**
@@ -14,11 +14,11 @@ export function parseCmdArgs(cmd: IDoDevopsCommand, incomingArgv: string[]) {
   // command, we must build an "option" for it
   const subCommandDefn: IOptionDefinition = {
     command: {
-      ...{
+      
         type: String,
         group: "subCommand",
-        defaultOption: true,
-      },
+        defaultOption: true
+      ,
       ...(cmd.greedy ? { multiple: true } : {}),
     },
   };

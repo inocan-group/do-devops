@@ -1,10 +1,10 @@
 import chalk from "chalk";
-import { IImageRule, IProjectConfig, Observations } from "~/@types";
-import { getProjectConfig, saveProjectConfig } from "~/shared/config";
-import { logger } from "~/shared/core/logger";
-import { csvParser } from "~/shared/data";
-import { ImageApi } from "~/shared/images/useImageApi";
-import { wordWrap } from "~/shared/ui";
+import { IImageRule, IProjectConfig, Observations } from "src/@types";
+import { getProjectConfig, saveProjectConfig } from "src/shared/config";
+import { logger } from "src/shared/core/logger";
+import { csvParser } from "src/shared/data";
+import { ImageApi } from "src/shared/images/useImageApi";
+import { wordWrap } from "src/shared/ui";
 import {
   askConfirmQuestion,
   askForNestedDirectory,

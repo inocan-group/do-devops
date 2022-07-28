@@ -1,6 +1,6 @@
-import path from "path";
-import { homedir } from "os";
-import { IDirectoryOptions } from "~/@types";
+import path from "node:path";
+import { homedir } from "node:os";
+import { IDirectoryOptions } from "src/@types";
 import { toRelativePath } from "../relativePath";
 
 /**

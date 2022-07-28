@@ -3,10 +3,10 @@ import { spawn } from "node:child_process";
 import w from "chokidar";
 import { existsSync } from "node:fs";
 import path from "pathe";
-import { Options } from "~/@types";
-import { fileHasExports } from "~/shared/ast";
-import { ILogger, logger } from "~/shared/core/logger";
-import { emoji, highlightFilepath } from "~/shared/ui";
+import { Options } from "src/@types";
+import { fileHasExports } from "src/shared/ast";
+import { ILogger, logger } from "src/shared/core/logger";
+import { emoji, highlightFilepath } from "src/shared/ui";
 import { isAutoindexFile } from "../private/util";
 import { IAutoindexOptions } from "./options";
 

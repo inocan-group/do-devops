@@ -1,6 +1,6 @@
 import { getAwsProfileDictionary } from "./index";
-import { DevopsError } from "~/errors/index";
-import { IAwsProfile } from "~/@types";
+import { DevopsError } from "src/errors/index";
+import { IAwsProfile } from "src/@types";
 
 /**
  * Get a specific AWS _profile_ in the AWS _credentials_ file.

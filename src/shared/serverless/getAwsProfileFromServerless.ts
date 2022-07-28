@@ -1,9 +1,9 @@
 import chalk from "chalk";
 
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 import { IServerlessYaml } from "common-types";
 import { buildLambdaTypescriptProject } from "./index";
-import { emoji } from "~/shared/ui";
+import { emoji } from "src/shared/ui";
 import { getServerlessYaml } from "./getServerlessYaml";
 import { isServerless } from "../observations/isServerless";
 

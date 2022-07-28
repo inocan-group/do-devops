@@ -1,11 +1,11 @@
 import chalk from "chalk";
 import { exit } from "node:process";
-import { Options, Observations } from "~/@types";
-import { IAutoindexOptions } from "~/commands/autoindex/parts";
-import { getProjectConfig, saveProjectConfig } from "~/shared/config";
-import { logger } from "~/shared/core";
-import { askConfirmQuestion, askInputQuestion } from "~/shared/interactive";
-import { emoji } from "~/shared/ui";
+import { Options, Observations } from "src/@types";
+import { IAutoindexOptions } from "src/commands/autoindex/parts";
+import { getProjectConfig, saveProjectConfig } from "src/shared/config";
+import { logger } from "src/shared/core";
+import { askConfirmQuestion, askInputQuestion } from "src/shared/interactive";
+import { emoji } from "src/shared/ui";
 
 export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o: Observations) {
   const log = logger(opts);

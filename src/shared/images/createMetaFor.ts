@@ -1,4 +1,4 @@
-// import { IImageMetadata } from "~/@types";
+// import { IImageMetadata } from "src/@types";
 
 // Promise<IImageMetadata>
 

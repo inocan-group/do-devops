@@ -1,6 +1,6 @@
-import * as commands from "~/commands/index";
-import { IDoDevopsCommand, isDoDevopsCommand } from "~/@types";
-import { DevopsError } from "~/errors";
+import * as commands from "src/commands/index";
+import { IDoDevopsCommand, isDoDevopsCommand } from "src/@types";
+import { DevopsError } from "src/errors";
 
 /**
  * Pull off a specific _command's_ definition from a

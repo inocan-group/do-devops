@@ -1,5 +1,5 @@
 import { omit } from "native-dash";
-import { join } from "path";
+import { join } from "node:path";
 import sharp, {
   WebpOptions,
   JpegOptions,
@@ -8,7 +8,7 @@ import sharp, {
   PngOptions,
   OutputOptions,
 } from "sharp";
-import { IImageCacheRef, ISharpMetadata, SharpImageFormat } from "~/@types";
+import { IImageCacheRef, ISharpMetadata, SharpImageFormat } from "src/@types";
 import { getFileComponents } from "../file";
 
 export function useSimd() {
@@ -131,9 +131,9 @@ export function useSharp(options: ISharpOptions = {}) {
           api.resizeImage(source, outDir, w, "avif", { ...o.avif, ...options }),
           api.resizeImage(source, outDir, w, "webp", { ...o.webp, ...options })
         );
-        if(options.includePNG) {
-          promises.push(api.resizeImage(source, outDir, w, "png", {...o.png, ...options}));
-        };
+        if (options.includePNG) {
+          promises.push(api.resizeImage(source, outDir, w, "png", { ...o.png, ...options }));
+        }
       }
 
       return Promise.all(promises);

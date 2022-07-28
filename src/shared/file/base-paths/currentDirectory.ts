@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/prefer-module */
-import path from "path";
-import { IDirectoryOptions } from "~/@types";
+import path from "node:path";
+import { IDirectoryOptions } from "src/@types";
 import { toRelativePath } from "../relativePath";
 
 /**

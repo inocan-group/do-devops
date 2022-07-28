@@ -1,4 +1,4 @@
-import { DevopsError } from "~/errors";
+import { DevopsError } from "src/errors";
 import { IAutoindexOptions } from "../../parts";
 import {
   AUTOINDEX_INFO_MSG,
@@ -12,7 +12,7 @@ import {
   timestamp,
 } from "../index";
 import { generateSfcExports } from "../export-formats/generateSfcExports";
-import { Options } from "~/@types/global";
+import { Options } from "src/@types/global";
 
 export function createAutoindexContent(
   indexFile: IAutoindexFile,

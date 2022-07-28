@@ -1,9 +1,9 @@
 import chalk from "chalk";
-import { IProjectConfig, Observations } from "~/@types";
-import { CONFIG_FILE } from "~/shared/config/constants";
-import { getProjectConfig } from "~/shared/config/getProjectConfig";
-import { logger } from "~/shared/core/logger";
-import { ImageApi } from "~/shared/images/useImageApi";
+import { IProjectConfig, Observations } from "src/@types";
+import { CONFIG_FILE } from "src/shared/config/constants";
+import { getProjectConfig } from "src/shared/config/getProjectConfig";
+import { logger } from "src/shared/core/logger";
+import { ImageApi } from "src/shared/images/useImageApi";
 import { askImageConfiguration } from ".";
 import { askListQuestion } from "../..";
 

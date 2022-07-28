@@ -1,8 +1,8 @@
-import { IAwsProfile } from "~/@types";
+import { IAwsProfile } from "src/@types";
 import AWS from "aws-sdk";
 /**
  * Returns the `userId`, `accountId`, `arn`, and `user` when passed
- * the key/secret key found in a user's `~/.aws/credentials` file.
+ * the key/secret key found in a user's `src/.aws/credentials` file.
  *
  * @param profile a profile from a user's `credentials` file
  */

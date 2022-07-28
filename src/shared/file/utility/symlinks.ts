@@ -1,6 +1,6 @@
-import { readlinkSync } from "fs";
-import path from "path";
-import { directoryFiles } from "~/shared/file";
+import { readlinkSync } from "node:fs";
+import path from "node:path";
+import { directoryFiles } from "src/shared/file";
 
 /**
  * **symlinks**

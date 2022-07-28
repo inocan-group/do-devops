@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-import { askConfirmQuestion } from "~/shared/interactive";
+import { askConfirmQuestion } from "src/shared/interactive";
 import { getAwsProfileDictionary } from "./index";
 
 export interface IAskForProfileOptions {
@@ -24,7 +24,7 @@ export async function askForAwsProfile(opts?: IAskForProfileOptions): Promise<st
 
   if (!profiles) {
     const cont = askConfirmQuestion(
-      `Currently you don't have any AWS profiles (aka, profiles in ~/.aws/credentials).\nWould you like to create one now?`
+      `Currently you don't have any AWS profiles (aka, profiles in src/.aws/credentials).\nWould you like to create one now?`
     );
     if (!cont) {
       console.log(`- no problem, try this command again when you're ready.\n`);

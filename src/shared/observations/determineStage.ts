@@ -1,11 +1,11 @@
 import chalk from "chalk";
-import * as process from "process";
+import * as process from "node:process";
 
 import { askForStage, getServerlessYaml } from "../serverless/index";
 
 import { emoji } from "../ui";
 import { get } from "native-dash";
-import { DoDevopObservation, Observations } from "~/@types";
+import { DoDevopObservation, Observations } from "src/@types";
 
 export interface IStageOptions {
   interactive?: boolean;

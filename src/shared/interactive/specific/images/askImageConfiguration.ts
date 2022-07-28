@@ -1,9 +1,9 @@
 import chalk from "chalk";
 import { exit } from "node:process";
-import { Observations } from "~/@types/observations";
-import { logger } from "~/shared/core/logger";
-import { ImageApi } from "~/shared/images/useImageApi";
-import { emoji } from "~/shared/ui";
+import { Observations } from "src/@types/observations";
+import { logger } from "src/shared/core/logger";
+import { ImageApi } from "src/shared/images/useImageApi";
+import { emoji } from "src/shared/ui";
 import { askAddImageRule, askChangeImageRule, askImageDefaults, askRemoveImageRule } from ".";
 import { askListQuestion } from "../..";
 

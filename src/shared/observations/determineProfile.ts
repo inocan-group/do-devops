@@ -1,8 +1,8 @@
-import { getServerlessYaml } from "~/shared/serverless";
-import { configIsReady, Options, IIntegratedConfig, IProjectConfig, IUserConfig } from "~/@types";
-import { getIntegratedConfig, saveProjectConfig } from "~/shared/config";
-import { askForAwsProfile } from "~/shared/aws";
-import { DoDevopObservation } from "~/@types/observations";
+import { getServerlessYaml } from "src/shared/serverless";
+import { configIsReady, Options, IIntegratedConfig, IProjectConfig, IUserConfig } from "src/@types";
+import { getIntegratedConfig, saveProjectConfig } from "src/shared/config";
+import { askForAwsProfile } from "src/shared/aws";
+import { DoDevopObservation } from "src/@types/observations";
 
 /** ensure that during one CLI operation we cache this value */
 let profile: string;

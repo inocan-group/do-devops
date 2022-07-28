@@ -1,5 +1,5 @@
-import { Observations } from "~/@types";
-import path from "path";
+import { Observations } from "src/@types";
+import path from "node:path";
 import { readYamlConfig } from "../file/crud/readYamlConfig";
 import { sync } from "globby";
 

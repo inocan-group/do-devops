@@ -1,21 +1,21 @@
 import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
-import path from "path";
+import path from "node:path";
 import { IDictionary, INpmInfo, IPackageJson } from "common-types";
 import { format, parseISO } from "date-fns";
 import { table, TableUserConfig } from "table";
-import { DoDevopObservation, Options } from "~/@types";
-import { getObservations } from "~/shared/observations";
-import { currentDirectory, symlinks } from "~/shared/file";
+import { DoDevopObservation, Options } from "src/@types";
+import { getObservations } from "src/shared/observations";
+import { currentDirectory, symlinks } from "src/shared/file";
 import {
   convertGitUrlToHttp,
   getCurrentGitBranch,
   getGitLastCommit,
   getGitRemotes,
-} from "~/shared/git";
-import { askConfirmQuestion, resolvePackageManagerConflict } from "~/shared/interactive";
-import { getExternalPackageJson, getPackageJson } from "~/shared/npm";
-import { dim, emoji, green } from "~/shared/ui";
+} from "src/shared/git";
+import { askConfirmQuestion, resolvePackageManagerConflict } from "src/shared/interactive";
+import { getExternalPackageJson, getPackageJson } from "src/shared/npm";
+import { dim, emoji, green } from "src/shared/ui";
 import { monorepoInfo } from "./components/monorepo";
 
 /**
@@ -88,8 +88,9 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     await asyncExec("git diff --name-only", {
       silent: true,
     })
-  // eslint-disable-next-line unicorn/no-await-expression-member
-  ).split("\n").length;
+  )
+    // eslint-disable-next-line unicorn/no-await-expression-member
+    .split("\n").length;
   /**
    * NPM Info based on verbose flag
    */
@@ -125,21 +126,39 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     ],
   ];
 
-  const deps: {name: string; prop: keyof IPackageJson; count: number }[] = [
-    {name: "dependencies", prop: "dependencies", count:  Object.keys(pkg?.dependencies || {}).length},
-    {name: chalk`{italic dev} dependencies`, prop: "devDependencies",count:  Object.keys(pkg?.devDependencies || {}).length},
-    {name: chalk`{italic optional} dependencies`, prop: "optionalDependencies", count:  Object.keys(pkg?.optionalDependencies || {}).length},
-    {name: chalk`{italic peer} dependencies`, prop: "peerDependencies",count:  Object.keys(pkg?.peerDependencies || {}).length},
-  ].filter(d => d.count > 0);
+  const deps: { name: string; prop: keyof IPackageJson; count: number }[] = [
+    {
+      name: "dependencies",
+      prop: "dependencies",
+      count: Object.keys(pkg?.dependencies || {}).length,
+    },
+    {
+      name: chalk`{italic dev} dependencies`,
+      prop: "devDependencies",
+      count: Object.keys(pkg?.devDependencies || {}).length,
+    },
+    {
+      name: chalk`{italic optional} dependencies`,
+      prop: "optionalDependencies",
+      count: Object.keys(pkg?.optionalDependencies || {}).length,
+    },
+    {
+      name: chalk`{italic peer} dependencies`,
+      prop: "peerDependencies",
+      count: Object.keys(pkg?.peerDependencies || {}).length,
+    },
+  ].filter((d) => d.count > 0);
 
-  const depsSummary = deps.length > 0
-    ? `This repo has ${deps.map(d => chalk`{green ${d.count}} ${d.name}`).join(", ")}`
-    : chalk`{italic {dim no dependencies}}`;
-  
-  
+  const depsSummary =
+    deps.length > 0
+      ? `This repo has ${deps.map((d) => chalk`{green ${d.count}} ${d.name}`).join(", ")}`
+      : chalk`{italic {dim no dependencies}}`;
+
   chalk`This repo has ${green(
     Object.keys(pkg?.dependencies || {}).length
-  )} dependencies, and {green ${Object.keys(pkg?.devDependencies || {}).length}} {italic dev} dependencies`;
+  )} dependencies, and {green ${
+    Object.keys(pkg?.devDependencies || {}).length
+  }} {italic dev} dependencies`;
   const depDetails = `${depsSummary}\n\nThe dependencies are:\n - ${dim(
     Object.keys(pkg?.dependencies || {}).join("\n - ")
   )}`;
@@ -177,7 +196,12 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     ["NPM", npmInformation],
     [chalk.bold("Deps"), opts.verbose === true ? depDetails : depsSummary],
     ["Repo ", repoInfo],
-    ["Scripts", Object.keys(pkg?.scripts || {}).map(i => i.includes(":") ? chalk`{dim ${i.split(":")[0]}}:${i.split(":")[1]}` : i).join(", ")],
+    [
+      "Scripts",
+      Object.keys(pkg?.scripts || {})
+        .map((i) => (i.includes(":") ? chalk`{dim ${i.split(":")[0]}}:${i.split(":")[1]}` : i))
+        .join(", "),
+    ],
     [
       "GIT",
       gitInfo +

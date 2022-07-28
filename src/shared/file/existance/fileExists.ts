@@ -4,7 +4,7 @@ import { interpolateFilePath } from "../helpers";
 /**
  * Checks for the existence of a file.
  *
- * > `~/` and `./` shorthands will be converted to a full path
+ * > `src/` and `./` shorthands will be converted to a full path
  */
 export function fileExists(file: string) {
   try {

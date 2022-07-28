@@ -1,4 +1,4 @@
-import { getGitRemotes } from "~/shared/git";
+import { getGitRemotes } from "src/shared/git";
 
 /**
  * Looks in the **git** remotes and -- favoring "origin" -- trys to determine
