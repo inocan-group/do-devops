@@ -1,6 +1,6 @@
 {
   "name": "dd",
-  "version": "0.23.0",
+  "version": "0.23.1",
   "description": "Devops commands for your nodejs and serverless projects",
   "keywords": [
     "devops",
@@ -40,7 +40,7 @@
     "build": "run-s clean build:bundle",
     "build:bin": "tsup src/dd.ts --format=cjs -d bin --clean && chmod +x bin/dd.js",
     "build:bundle": "run-p build:bin build:dist",
-    "build:dist": "pnpm tsup src/shared/index.ts --dts --format='cjs,esm'",
+    "build:dist": "pnpm tsup src/shared/index.ts --dts --format=cjs,esm",
     "circular": "pnpm madge src --extensions ts --circular",
     "clean": "rimraf src/**/*.js dist/**/* bin/**/*",
     "dd": "./bin/dd.js",
