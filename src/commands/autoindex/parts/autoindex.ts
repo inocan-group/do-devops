@@ -29,7 +29,7 @@ export const BLACK_LIST_DEFAULTS = [
 
 /**
  * Finds all `index.ts` and `index.js` files and looks for the `#autoindex`
- * signature. If found then it _rebuilds_ thes file based on files in
+ * signature. If found then it _rebuilds_ these file based on files in
  * the file's current directory
  */
 export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observations, argv }) => {
@@ -48,7 +48,7 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
   }
 
   const monoRepoPackages = await getMonoRepoPackages(process.cwd());
-  if (monoRepoPackages.length > 0 && !opts.quiet) {
+  if (monoRepoPackages.length > 0 && !opts.quiet && argv.length === 0) {
     console.log(
       chalk`- ${emoji.eyeballs} monorepo detected with {yellow ${String(
         monoRepoPackages.length
