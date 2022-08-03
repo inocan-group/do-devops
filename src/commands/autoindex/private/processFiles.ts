@@ -23,9 +23,11 @@ import { getFileComponents } from "src/shared/file/utility/getFileComponents";
 import { getSubdirectories } from "src/shared/file/utility/getSubdirectories";
 import { AutoindexGroupDefinition } from "../parts/getGlobs";
 import { cwd } from "node:process";
-import { directoryFiles, getFilesUnderPath } from "src/shared/file";
+import { directoryFiles, repoDirectory } from "src/shared/file";
 import { relative } from "node:path";
 import prettier from "prettier";
+import { hasDependency, hasDevDependency } from "src/shared/npm";
+import { spawnSync } from "node:child_process";
 
 /**
  * Reach into each file and look to see if it is a "autoindex" file; if it is
@@ -88,7 +90,7 @@ export async function processFiles(
     );
 
     if (contentFiles.length === 0) {
-      log.info(chalk`- there are no files which were found to export symbols!`);
+      log.whisper(chalk`- there are no files in ${dir} which were found to export symbols!`);
       return;
     }
 
@@ -192,7 +194,6 @@ export async function processFiles(
       action = isNewAutoindexFile(indexFileContent) ? "new-file" : "updated";
       const result = createAutoindexContent(content, opts);
       const prettierConfig = await prettier.resolveConfig(join(cwd(), indexFilename));
-      console.log({ options: prettierConfig, indexFilename });
 
       const fileContent = action === "new-file" ? result : replaceRegion(indexFileContent, result);
 
@@ -200,6 +201,14 @@ export async function processFiles(
         writeFile(indexFilename, prettier.format(fileContent, prettierConfig), "utf8");
       } else {
         writeFile(indexFilename, fileContent, "utf8");
+        if (hasDependency("eslint") || hasDevDependency("eslint")) {
+          spawnSync("eslint", [indexFilename, "--fix"], {
+            cwd: repoDirectory()
+          });
+          // console.log(`eslint status:`, result.status);
+        } else {
+          log.info("- neither prettier or eslint found to ensure consistent style");
+        }
       }
     } else {
       action = "unchanged";
