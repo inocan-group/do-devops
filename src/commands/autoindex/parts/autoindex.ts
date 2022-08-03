@@ -1,31 +1,18 @@
 /* eslint-disable unicorn/no-process-exit */
 /* eslint-disable unicorn/no-await-expression-member */
 import chalk from "chalk";
-import globby from "globby";
-import { join } from "pathe";
-import { getMonoRepoPackages } from "src/shared/file/getMonoRepoPackages";
-import { emoji, highlightFilepath } from "src/shared/ui";
+import { dirname } from "pathe";
+import { emoji } from "src/shared/ui";
 import { DoDevopsHandler } from "src/@types/command";
 import { IAutoindexOptions } from "./options";
 import { askForAutoindexConfig } from "src/shared/interactive";
-import { getProjectConfig } from "src/shared/config";
-import { getPackageJson } from "src/shared/npm";
 import { logger } from "src/shared/core";
-import { isAutoindexFile, processFiles } from "../private";
-import { IAutoindexWatchlist, watch } from "./watch";
-
-export const REQUIRED_BLACKLIST = ["**node_modules/**"];
-
-export const INDEX_LIST_DEFAULTS = ["**/index.ts", "**/index.js", "**/index.mjs", "**/index.cjs"];
-export const WHITE_LIST_DEFAULTS = ["src/**/*.ts", "src/**/*.vue", "!node_modules"];
-export const BLACK_LIST_DEFAULTS = [
-  "src/**/*.d.ts",
-  "packages/**/*",
-  "dist/**",
-  "lib/**",
-  ".webpack/**",
-  "node_modules/**",
-];
+import { processFiles } from "../private";
+import { watch } from "./watch";
+import { getPackageJson } from "src/shared/npm/package-json";
+import { exit } from "node:process";
+import { AutoindexGroupDefinition, getContent, getIndex } from "./getGlobs";
+import { getMonoRepoPackages, getSubdirectories } from "src/shared/file";
 
 /**
  * Finds all `index.ts` and `index.js` files and looks for the `#autoindex`
@@ -33,7 +20,6 @@ export const BLACK_LIST_DEFAULTS = [
  * the file's current directory
  */
 export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observations, argv }) => {
-  let projectConfig = getProjectConfig();
   // the sfc flag on CLI is inverted logically
   opts = {
     ...opts,
@@ -47,127 +33,126 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
     process.exit();
   }
 
-  const monoRepoPackages = await getMonoRepoPackages(process.cwd());
-  if (monoRepoPackages.length > 0 && !opts.quiet && argv.length === 0) {
-    console.log(
-      chalk`- ${emoji.eyeballs} monorepo detected with {yellow ${String(
-        monoRepoPackages.length
-      )}} packages`
-    );
-    for (const pkg of monoRepoPackages) {
-      console.log(chalk`{gray   - {bold ${pkg.name}} {italic at} {dim ${pkg.path}}}`);
-    }
-    console.log(chalk`- ⚡️ will run each package separately based on it's own configuration`);
+  const kind = opts.explicitFiles
+    ? "explicit-files"
+    : observations.has("monorepo")
+    ? "monorepo"
+    : "repo";
+
+  /**
+   * The "packages" we will use to iterate over if no explicit
+   * index files are provided.
+   */
+  const groups: AutoindexGroupDefinition[] = [];
+
+  switch (kind) {
+    case "explicit-files":
+      log.info(
+        chalk`- you have passed in specific {italic index} files to evaluate [{dim ${argv.length}}]; we will group by each file ...`
+      );
+      // note: it seems argv params -- if in a "glob" format are automatically converted
+      // to literal filenames
+      for (const file of argv) {
+        const baseDir = dirname(file);
+        const indexFiles = [file];
+        const { contentGlobs, contentFiles } = await getContent(baseDir, opts);
+
+        const pkg: AutoindexGroupDefinition = {
+          kind: "explicit-files",
+          path: ".",
+          name: `index file: ${file}`,
+          indexGlobs: [file],
+          indexFiles,
+          contentGlobs,
+          contentFiles,
+          nonAutoindexFiles: [],
+        };
+
+        groups.push(pkg);
+      }
+      break;
+    case "repo":
+      const { indexGlobs, indexFiles, nonAutoindexFiles } = await getIndex(".", opts);
+      const { contentGlobs, contentFiles } = await getContent(".", opts);
+
+      log.info(chalk`{dim - no monorepo was detected so will run just once using glob patterns}`);
+
+      groups.push({
+        kind: "repo",
+        path: ".",
+        name: getPackageJson(process.cwd()).name || "unnamed",
+        contentGlobs,
+        indexGlobs,
+        contentFiles,
+        indexFiles,
+        nonAutoindexFiles,
+      });
+      break;
+
+    case "monorepo":
+      const subDirs = getSubdirectories(".");
+      const hasSrcOrLibAtRoot = subDirs.includes("src") || subDirs.includes("lib");
+
+      const repos = hasSrcOrLibAtRoot
+        ? [
+            { path: ".", name: getPackageJson(process.cwd()).name || "unnamed" },
+            ...(await getMonoRepoPackages(".", opts.exclude)),
+          ]
+        : await getMonoRepoPackages(".", opts.exclude);
+
+      for (const r of repos) {
+        const { indexGlobs, indexFiles, nonAutoindexFiles } = await getIndex(r.path, opts);
+        const { contentGlobs, contentFiles } = await getContent(r.path, opts);
+
+        const group: AutoindexGroupDefinition = {
+          kind: "monorepo",
+          ...r,
+          indexFiles,
+          indexGlobs,
+          contentFiles,
+          contentGlobs,
+          nonAutoindexFiles,
+        };
+
+        groups.push(group);
+      }
+
+      if (groups.length > 0) {
+        log.info(
+          chalk`- ${emoji.eyeballs} monorepo detected with {yellow ${String(
+            groups.length
+          )}} packages`
+        );
+        for (const pkg of groups) {
+          log.info(chalk`{gray   - {bold ${pkg.name}} {italic at} {dim ${pkg.path}}}`);
+        }
+        log.info(chalk`- ⚡️ will run each package separately based on it's own configuration`);
+      } else {
+        log.info(
+          chalk`- after excluding packages -- {gray ${opts.exclude?.join(
+            ", "
+          )}} -- no packages were left to run {bold autoindex} on\n`
+        );
+        exit(0);
+      }
   }
 
-  monoRepoPackages.push({ path: ".", name: getPackageJson(process.cwd()).name });
-  const isMonorepo = monoRepoPackages.length > 1;
-  const watchlist: IAutoindexWatchlist[] = [];
+  const watchlist: AutoindexGroupDefinition[] = [];
 
-  // ITERATE OVER EACH REPO
-  for (const repo of monoRepoPackages) {
-    const isRoot = isMonorepo && repo.path === ".";
-    if (isMonorepo) {
-      projectConfig = getProjectConfig(repo.path);
-      opts = opts.sfc === undefined ? { ...opts, sfc: projectConfig.autoindex?.sfc } : opts;
-    }
-    const name = isRoot ? `${repo.name} (ROOT)` : repo.name;
-    if (isMonorepo) {
-      log.info(chalk`\n- ${emoji.run} running {blue autoindex} on repo {bold {yellow ${name}}}`);
+  for (const group of groups) {
+    if (groups.length > 1) {
+      log.info(chalk`\n- ${emoji.run} starting analysis of {blue ${group.name}}`);
     }
 
-    const prepList = async (globs: string[]) => {
-      return (
-        await globby(globs, {
-          cwd: join(process.cwd(), repo.path),
-          onlyFiles: true,
-        })
-      ).map((i) => join(repo.path, i));
-    };
-    const indexGlobs = projectConfig.autoindex?.indexGlobs || INDEX_LIST_DEFAULTS;
-    const hasExplicitFiles = argv?.length > 0 && (await prepList(indexGlobs)).includes(argv[0]);
-    if (!hasExplicitFiles && argv?.length > 0) {
-      log.shout(
-        chalk`- ${emoji.confused} you have added ${
-          argv?.length > 1 ? "files" : "a file"
-        } to your autoindex file which doesn't appear to be a valid autoindex file ({italic {dim aka, it doesn't fit your index glob patterns}})`
-      );
-      log.shout(chalk`- files: ${argv?.map((i) => highlightFilepath(i)).join(", ")}`);
-      process.exit();
-    }
-    if (hasExplicitFiles) {
-      log.info(chalk`{dim - Using explicit autoindex files passed into CLI}`);
-    }
-
-    const blackGlobs = [
-      ...(projectConfig.autoindex?.blacklistGlobs || BLACK_LIST_DEFAULTS),
-      ...REQUIRED_BLACKLIST,
-    ];
-    const blacklist = await prepList(blackGlobs);
-
-    const indexList = hasExplicitFiles
-      ? argv
-      : (await prepList(indexGlobs)).filter((i) => !blacklist.includes(i));
-
-    const whiteGlobs = [...(projectConfig.autoindex?.whitelistGlobs || WHITE_LIST_DEFAULTS)];
-    const whitelist = (await prepList(whiteGlobs)).filter((w) => !indexList.includes(w));
-
-    /** those files known to be autoindex files */
-    const autoIndexFiles = indexList.filter((fc) => isAutoindexFile(fc));
-    if (indexList.length === autoIndexFiles.length) {
-      if (indexList.length > 0) {
-        log.info(
-          chalk`- found {yellow ${String(
-            indexList.length
-          )}} index files, {bold {yellow {italic all}}} of which are setup to be auto-indexed.\n`
-        );
-      }
+    if (group.indexFiles.length > 0) {
+      await processFiles(group, opts, observations);
     } else {
-      log.info(
-        chalk`- found {yellow ${String(
-          indexList.length
-        )}} {italic candidate} files, of which {yellow ${String(
-          autoIndexFiles.length
-        )}} have been setup to be auto-indexed.`
-      );
-      const diff = indexList.length - autoIndexFiles.length;
-      if (diff > 0) {
-        log.info(chalk`- files {italic not} setup were:`);
-        const missing = indexList.filter((i) => !autoIndexFiles.includes(i));
-        for (const file of missing) {
-          log.info(chalk`{dim   - ${file}}`);
-        }
-      }
-      console.log();
-    }
-
-    if (autoIndexFiles.length > 0) {
-      await processFiles(autoIndexFiles, opts, observations, {
-        whitelist,
-        blacklist,
-      });
-    } else {
-      log.info(chalk`- ${emoji.confused} no {italic index} files found in this package`);
+      log.info(chalk`- ${emoji.confused} no {italic index} files found in {blue ${group.name}}`);
     }
 
     if (opts.watch) {
-      watchlist.push({
-        name: repo.name,
-        dir: repo.path,
-        indexGlobs,
-        whiteGlobs,
-        blackGlobs,
-      });
-    }
-  }
-
-  if (opts.watch) {
-    watch(watchlist, opts);
-  } else {
-    if (isMonorepo) {
-      log.shout(chalk`\n- ${emoji.party} all repos have been updated with {blue autoindex}`);
-    } else {
-      log.shout(chalk`- ${emoji.party} {blue autoindex} job updated successfully`);
+      watchlist.push(group);
+      watch(group, opts);
     }
   }
 };

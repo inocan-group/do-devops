@@ -17,4 +17,14 @@ describe("fileHasExports() utility", () => {
     const t = fileHasExports(join(process.cwd(), "test/data/autoindex-example-type-export.txt"));
     expect(t).toBe(true);
   });
+
+  it("a utility file which exports a known function", () => {
+    const t = fileHasExports(join(process.cwd(), "src/shared/file/utility/diffFiles.ts"));
+    expect(t).toBe(true);
+  });
+
+  it("a file which exports a const as a named export", () => {
+    const t = fileHasExports(join(process.cwd(), "src/shared/file/saveYamlFile.ts"));
+    expect(t).toBe(true);
+  });
 });

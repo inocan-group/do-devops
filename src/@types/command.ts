@@ -78,7 +78,7 @@ export interface ICommandInput<T extends object = {}> {
  * **IDoDevopsHandler**
  *
  * Every recognized **command** in `do-devops` must provide an
- * ansynchronous _handler_ function that matches this format.
+ * asynchronous _handler_ function that matches this format.
  */
 export type DoDevopsHandler<T extends object = {}> = (input: ICommandInput<T>) => Promise<any>;
 

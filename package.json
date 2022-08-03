@@ -66,6 +66,7 @@
     "release:bump": "bumpp"
   },
   "dependencies": {
+    "@types/prettier": "^2.6.4",
     "ast-types": "^0.14.2",
     "async-shelljs": "^0.1.4",
     "aws-sdk": "^2.1183.0",

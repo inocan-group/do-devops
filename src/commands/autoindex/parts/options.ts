@@ -16,6 +16,10 @@ export interface IAutoindexOptions {
   async: boolean;
   dir: string;
   force: boolean;
+  /**
+   * Allows for excluding certain monorepos if not all are desired
+   */
+  exclude: string[];
   all: boolean;
   watch: boolean;
   preserveExtension: boolean;
@@ -49,6 +53,13 @@ export const options: IOptionDefinition = {
     group: "local",
     description:
       'by default will look for files in the "src" directory but you can redirect this to a different directory',
+  },
+  exclude: {
+    type: String,
+    alias: "e",
+    group: "local",
+    multiple: true,
+    description: "allow certain monorepos to be filtered out",
   },
   watch: {
     alias: "w",

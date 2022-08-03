@@ -5,7 +5,6 @@
 // file exports
 export * from "./exclusions";
 export * from "./processFiles";
-export * from "./watchHandler";
 // directory exports
 export * from "./export-formats/index";
 export * from "./reference/index";
@@ -34,7 +33,7 @@ export * from "./util/index";
 // below this file will not reference this autoindex file:
 //
 //    - autoindex:named, orphan
-// 
+//
 // All content outside the "// #region" section in this file will be
 // preserved in situations where you need to do something paricularly awesome.
 // Keep on being awesome.

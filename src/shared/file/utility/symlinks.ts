@@ -23,7 +23,7 @@ export function symlinks(dir: string, filter?: "only-files" | "only-dirs") {
     })
     .map((lnk) => {
       const fullPath = path.posix.join(dir, lnk.file);
-      const linkTo = readlinkSync(fullPath, { encoding: "utf-8" });
+      const linkTo = readlinkSync(fullPath, { encoding: "utf8" });
       return { ...lnk, linkTo };
     });
 }

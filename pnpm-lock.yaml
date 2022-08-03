@@ -14,6 +14,7 @@ specifiers:
   '@types/jest': ^27.5.2
   '@types/js-yaml': ^4.0.5
   '@types/node': ^14.18.22
+  '@types/prettier': ^2.6.4
   '@types/sharp': ^0.30.4
   '@typescript-eslint/eslint-plugin': ^5.31.0
   '@typescript-eslint/parser': ^5.31.0
@@ -71,6 +72,7 @@ specifiers:
   xxhash-wasm: ^0.4.2
 
 dependencies:
+  '@types/prettier': 2.6.4
   ast-types: 0.14.2
   async-shelljs: 0.1.4
   aws-sdk: 2.1183.0
@@ -329,6 +331,10 @@ packages:
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
     dev: true
+
+  /@types/prettier/2.6.4:
+    resolution: {integrity: sha512-fOwvpvQYStpb/zHMx0Cauwywu9yLDmzWiiQBC7gJyq5tYLUXFZvDG7VK1B7WBxxjBJNKFOZ0zLoOQn8vmATbhw==}
+    dev: false
 
   /@types/sharp/0.30.4:
     resolution: {integrity: sha512-6oJEzKt7wZeS7e+6x9QFEOWGs0T/6of00+0onZGN1zSmcSjcTDZKgIGZ6YWJnHowpaKUCFBPH52mYljWqU32Eg==}

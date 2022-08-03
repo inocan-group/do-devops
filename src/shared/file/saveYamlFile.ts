@@ -1,20 +1,21 @@
 import chalk from "chalk";
-import path from "path";
+import path from "node:path";
 
 import { IDictionary } from "common-types";
 import { emoji } from "../ui";
-import { promisify } from "util";
+import { promisify } from "node:util";
 import { dump } from "js-yaml";
-import { writeFile } from "fs";
+import { writeFile } from "node:fs";
+import { exit } from "node:process";
 const write = promisify(writeFile);
 
-export async function saveYamlFile(filename: string, data: IDictionary) {
+export const saveYamlFile = async (filename: string, data: IDictionary) => {
   try {
     console.log(data);
 
     const yamlData = dump(data);
     const fqFilename = path.join(process.cwd(), filename);
-    await write(fqFilename, yamlData, { encoding: "utf-8" });
+    await write(fqFilename, yamlData, { encoding: "utf8" });
     return;
   } catch (error) {
     console.log(
@@ -22,6 +23,6 @@ export async function saveYamlFile(filename: string, data: IDictionary) {
     );
     console.log((error as Error).message);
     console.log(chalk`{dim ${(error as Error).stack}}`);
-    process.exit();
+    exit(1);
   }
-}
+};

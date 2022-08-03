@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { spawn } from "node:child_process";
-import w from "chokidar";
+import w, { WatchOptions } from "chokidar";
 import { existsSync } from "node:fs";
 import path from "pathe";
 import { Options } from "src/@types";
@@ -9,6 +9,9 @@ import { ILogger, logger } from "src/shared/core/logger";
 import { emoji, highlightFilepath } from "src/shared/ui";
 import { isAutoindexFile } from "../private/util";
 import { IAutoindexOptions } from "./options";
+import { AutoindexGroupDefinition } from "./getGlobs";
+import { join } from "node:path";
+import { cwd } from "node:process";
 
 export type IAutoindexWatchlist = {
   /** name of the repo */
@@ -64,13 +67,13 @@ function recheckAutoindexFile(changedFile: string, log: ILogger) {
 }
 
 /** watcher for whitelisted files */
-function whitewatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
+function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogger) {
   return (file: string) => {
     switch (op) {
       case "add":
         log.info(
           chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            repo.name
+            group.name
           }} {italic added the file }${highlightFilepath(file)}}`
         );
         if (fileHasExports(path.join(process.cwd(), file))) {
@@ -85,7 +88,7 @@ function whitewatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
       case "unlink":
         log.info(
           chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            repo.name
+            group.name
           }} {italic removed the file }${highlightFilepath(file)}}`
         );
         recheckAutoindexFile(file, log);
@@ -96,7 +99,7 @@ function whitewatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
         if (hasExports && wasDeferred) {
           log.info(
             chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-              repo.name
+              group.name
             }} {italic changed }${highlightFilepath(file)} {italic which now has exports}}`
           );
           deferredFiles.delete(file);
@@ -104,7 +107,7 @@ function whitewatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
         } else if (!hasExports) {
           log.info(
             chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-              repo.name
+              group.name
             }} {italic changed }${highlightFilepath(file)} {italic and no longer has exports}}`
           );
           recheckAutoindexFile(file, log);
@@ -113,7 +116,7 @@ function whitewatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
       default:
         log.info(
           chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            repo.name
+            group.name
           }} {italic did "${op}" to }${highlightFilepath(file)}}`
         );
     }
@@ -127,14 +130,14 @@ function getParentIndex(file: string) {
   return existsSync(ts) ? ts : existsSync(js) ? js : undefined;
 }
 
-function indexwatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
+function idxWatcher(group: AutoindexGroupDefinition, op: string, log: ILogger) {
   return (file: string) => {
     switch (op) {
       case "add":
         if (isAutoindexFile(file)) {
           log.info(
             chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-              repo.name
+              group.name
             }} {italic added a new autoindex file }${highlightFilepath(file)}}`
           );
           recheck(file, log).then((successful: boolean) => {
@@ -154,7 +157,7 @@ function indexwatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
       case "unlink":
         log.info(
           chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            repo.name
+            group.name
           }} {italic removed an autoindex file }${highlightFilepath(file)}}`
         );
         const parentIndex = getParentIndex(file);
@@ -166,162 +169,75 @@ function indexwatcher(repo: IAutoindexWatchlist, op: string, log: ILogger) {
       case "change":
         log.info(
           chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            repo.name
+            group.name
           }} {italic changed an autoindex file }${highlightFilepath(file)}}`
         );
         recheck(file, log);
         break;
 
       default:
-        log.info(`Unexpected operation [${op}] passed to the indexwatcher`);
+        log.info(`Unexpected operation [${op}] passed to the index watcher`);
     }
   };
 }
 
-export function watch(watchList: IAutoindexWatchlist[], opts: Options<IAutoindexOptions>) {
-  const log = logger(opts);
-  log.info();
-  for (const repo of watchList) {
-    log.info(
-      chalk`- watching {blue ${repo.name}} ${watchList.length > 1 ? "package" : "repo"} for changes`
-    );
-    const whitelist = w.watch(repo.whiteGlobs, {
-      ignored: [...repo.blackGlobs, ...repo.indexGlobs, "node_modules/**"],
-      cwd: path.join(process.cwd(), repo.dir),
-    });
-    whitelist.on("ready", () => {
-      whitelist.on("add", whitewatcher(repo, "add", log));
-      whitelist.on("unlink", whitewatcher(repo, "unlink", log));
-      whitelist.on("change", whitewatcher(repo, "changed", log));
-      whitelist.on("remove", whitewatcher(repo, "remove", log));
-    });
-    const indexlist = w.watch(repo.indexGlobs, {
-      ignored: repo.blackGlobs,
-      cwd: path.join(process.cwd(), repo.dir),
-    });
-    indexlist.on("ready", () => {
-      indexlist.on("add", indexwatcher(repo, "add", log));
-      indexlist.on("unlink", indexwatcher(repo, "unlink", log));
-      indexlist.on("change", indexwatcher(repo, "change", log));
-    });
+const groups: AutoindexGroupDefinition[] = [];
+
+function addWatcher(
+  group: AutoindexGroupDefinition,
+  opts: WatchOptions,
+  type: "index" | "content",
+  log: ILogger
+) {
+  const watcher = w.watch(type === "index" ? group.indexGlobs : group.contentGlobs, opts);
+
+  switch (type) {
+    case "content":
+      watcher.on("ready", () => {
+        watcher.on("add", contentWatcher(group, "add", log));
+        watcher.on("unlink", contentWatcher(group, "unlink", log));
+        watcher.on("change", contentWatcher(group, "changed", log));
+        watcher.on("remove", contentWatcher(group, "remove", log));
+      });
+      break;
+    case "index":
+      watcher.on("ready", () => {
+        watcher.on("add", idxWatcher(group, "add", log));
+        watcher.on("unlink", idxWatcher(group, "unlink", log));
+        watcher.on("change", idxWatcher(group, "change", log));
+      });
+      break;
   }
 
-  log.info();
+  return watcher;
 }
 
-/**
- * Watches for changes in any file where an autoindex file resides
- */
-// function setupWatcherDir(
-//   dir: string,
-//   ignored: string[] = [],
-//   opts: IDictionary,
-//   o: Observations,
-//   scope: WhiteBlackList
-// ) {
-//   const EVENTS: string[] = ["add", "change", "unlink", "link"];
+export function watch(group: AutoindexGroupDefinition, opts: Options<IAutoindexOptions>) {
+  const log = logger(opts);
+  // add watcher for index files
+  const indexWatcher = addWatcher(
+    group,
+    {
+      cwd: join(cwd(), group.path),
+    },
+    "index",
+    log
+  );
+  // add watcher for content files
+  const contentWatcher = addWatcher(
+    group,
+    {
+      cwd: join(cwd(), group.path),
+    },
+    "content",
+    log
+  );
 
-//   const h = watchHandler(dir, opts, o, scope);
+  groups.push({ ...group, indexWatcher, contentWatcher });
 
-//   const watcher = watch(dir, {
-//     ignored,
-//     persistent: true,
-//     usePolling: true,
-//     interval: 100,
-//   });
-//   watcher.on("ready", () => {
-//     watcher.on("error", (e) => {
-//       console.log(chalk`{red Error occurred watching "${dir}":} ${e.message}\n`);
-//     });
-
-//     for (const evt of EVENTS) {
-//       watcher.on(
-//         evt,
-//         h((evt.includes("Dir") ? `${evt}ed directory` : `${evt}ed`).replace("ee", "e"))
-//       );
-//     }
-//   });
-
-//   return watcher;
-// }
-
-/**
- * Watch for changes to autoindex files and add/remove file watchers in response
- */
-// async function setupAutoIndexWatcher(
-//   watched: IDictionary<FSWatcher>,
-//   opts: IDictionary,
-//   o: Observations,
-//   scope: WhiteBlackList
-// ) {
-//   const log = console.log.bind(console);
-//   const watcher = watch("**/index.[jt]s", {
-//     ignored: "node_modules/*",
-//     persistent: true,
-//     usePolling: true,
-//     interval: 100,
-//   });
-//   watcher.on("error", (e) => {
-//     log(chalk`{red Error occurred watching for changes to autoindex files:} ${e.message}\n`);
-//   });
-
-//   watcher.on("ready", () => {
-//     const handlerForAutoIndexFiles = (evt: string) => {
-//       return async (filepath: string) => {
-//         if (!/(index|private)\.[jt]s/.test(filepath)) {
-//           return;
-//         }
-
-//         const watchedDirs = Object.keys(watched);
-//         const dir = path.dirname(filepath);
-
-//         switch (evt) {
-//           case "change":
-//             if (watchedDirs.includes(dir) && !isAutoindexFile(filepath)) {
-//               log(
-//                 chalk`- index file ${highlightFilepath(
-//                   filepath
-//                 )} is no longer an {italic autoindex} file`
-//               );
-//               if (watched[filepath]) {
-//                 await watched[filepath].close();
-//                 // watched[filepath] = undefined;
-//               } else {
-//                 log(
-//                   chalk`- {red Warn:} an autoindex file was converted to a non autoindexed file but when trying remove the watcher on that directory it appears it doesn't exist. This should not happen.`
-//                 );
-//               }
-//             }
-//           case "add":
-//           case "link":
-//             if (!watchedDirs.includes(dir) && isAutoindexFile(filepath)) {
-//               log(`- new autoindex file detected: ${highlightFilepath(filepath)}; watcher started`);
-//               watched[filepath] = setupWatcherDir(dir, [], opts, o, scope);
-//               processFiles([filepath], opts, o, scope);
-//             }
-//             break;
-//           case "unlink":
-//             log({ dir, filepath, watched: Object.keys(watched) });
-//             if (watchedDirs.includes(dir)) {
-//               log(`- the autoindex file ${highlightFilepath(filepath)} has been removed`);
-//               if (watched[dir]) {
-//                 await watched[dir].close();
-//                 // watched[dir] = undefined;
-//               } else {
-//                 log(
-//                   chalk`- {red Warn:} an autoindex file was removed but there was no existing watcher on that directory.`
-//                 );
-//               }
-//             }
-//         }
-//       };
-//     };
-
-//     for (const evt of ["add", "change", "unlink", "link"]) {
-//       watcher.on(evt, handlerForAutoIndexFiles(evt));
-//     }
-//     log(chalk`{grey - watcher events for autoindex discovery in place}`);
-//   });
-
-//   return watcher;
-// }
+  log.info();
+  log.info(chalk`Watching ${group.name}:`);
+  log.info(chalk` - this includes {yellow ${group.indexFiles.length}} index files`);
+  log.info(chalk` - and {yellow ${group.contentFiles.length}} content files`);
+  log.info();
+}
