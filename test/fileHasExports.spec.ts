@@ -27,4 +27,9 @@ describe("fileHasExports() utility", () => {
     const t = fileHasExports(join(process.cwd(), "src/shared/file/saveYamlFile.ts"));
     expect(t).toBe(true);
   });
+
+  it("a file which exports just types", () => {
+    const t = fileHasExports(join(process.cwd(), "src/@types/npm-types.ts"));
+    expect(t).toBe(true);
+  });
 });
