@@ -27,6 +27,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "typings": "./dist/index.d.ts",
+  "type": "module",
   "bin": {
     "dd": "./bin/dd.js",
     "do": "./bin/dd.js"
@@ -37,10 +38,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "run-s clean build:bundle",
-    "build:bin": "tsup src/dd.ts --format=cjs -d bin --clean && chmod +x bin/dd.js",
-    "build:bundle": "run-p build:bin build:dist",
-    "build:dist": "pnpm tsup src/shared/index.ts --dts --format=cjs,esm",
+    "build": "tsup src/dd.ts --format=esm -d bin --clean && chmod +x bin/dd.js",
     "circular": "pnpm madge src --extensions ts --circular",
     "clean": "rimraf src/**/*.js dist/**/* bin/**/*",
     "dd": "./bin/dd.js",
@@ -70,7 +68,6 @@
     "sharp": "^0.31.2"
   },
   "dependencies": {
-    "ast-types": "^0.14.2",
     "async-shelljs": "^0.1.4",
     "aws-sdk": "^2.1253.0",
     "aws-ssm": "^0.4.0",

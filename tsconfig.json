@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
     "target": "ES2020",
     "lib": [
-      "ES2019.Array",
       "ES2020"
     ],
     "moduleResolution": "node",
@@ -17,6 +16,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "types": [
+      "vite"
+    ],
     "baseUrl": ".",
     "outDir": "bin",
     "tsBuildInfoFile": ".tsbuildinfo",

@@ -8,7 +8,7 @@ import { toRelativePath } from "../relativePath";
  * library directory which it is being executed in.
  */
 export function libraryDirectory(offset?: string, opts: Omit<IDirectoryOptions, "offset"> = {}) {
-  const base = __filename.replace(/(\/(do-devops|dd)\/).*/, "$1");
+  const base = import.meta.url.replace(/(\/(do-devops|dd)\/).*/, "$1");
   const dir = offset ? path.posix.join(base, offset) : base;
 
   return opts.base ? toRelativePath(dir, opts.base) : dir;
