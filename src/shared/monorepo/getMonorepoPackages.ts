@@ -1,7 +1,7 @@
 import { Observations } from "src/@types";
 import path from "node:path";
 import { readYamlConfig } from "../file/crud/readYamlConfig";
-import { sync } from "globby";
+import { globbySync as sync } from "globby";
 
 export function getMonorepoPackages(o: Observations, dir?: string) {
   dir = dir ? dir : process.cwd();

@@ -1,5 +1,5 @@
-import { sync } from "globby";
-import path from "path";
+import { globbySync as sync } from "globby";
+import path from "pathe";
 
 /**
  * Returns a list of files of a particular type/extention. This list of files will
@@ -9,6 +9,6 @@ import path from "path";
  * @param dir the directory to look in; by default will look in `src` off the repo's roote
  */
 export function getAllFilesOfType(type: string, dir: string = "src") {
-  const directory = dir.slice(0, 1) === "/" ? dir : path.posix.join(process.cwd(), dir);
+  const directory = dir.slice(0, 1) === "/" ? dir : path.join(process.cwd(), dir);
   return sync([`${directory}/**/*.${type}`]);
 }

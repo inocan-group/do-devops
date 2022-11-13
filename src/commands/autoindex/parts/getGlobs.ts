@@ -1,5 +1,5 @@
 import { FSWatcher } from "chokidar";
-import globby from "globby";
+import { globby } from "globby";
 import { join } from "node:path";
 import { cwd } from "node:process";
 import { getProjectConfig } from "src/shared/config/getProjectConfig";

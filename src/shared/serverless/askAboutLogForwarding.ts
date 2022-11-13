@@ -5,7 +5,8 @@ import { arn, IDictionary, IServerlessYaml } from "common-types";
 import { getLambdaFunctions } from "./index";
 import { determineStage } from "src/shared/observations";
 import { getPackageJson, hasDevDependency, savePackageJson } from "../npm";
-import inquirer from "inquirer";
+import inquirer, { ListQuestion, Question } from "inquirer";
+
 import { DevopsError } from "src/errors";
 /**
  * Checks whether the existing configuration has `logForwarding`
@@ -51,7 +52,7 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
     shipper?: string;
   };
 
-  let questions: Array<inquirer.Question | inquirer.ListQuestion> = [
+  let questions: Array<Question | ListQuestion> = [
     {
       type: "list",
       name: "action",

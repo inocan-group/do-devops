@@ -1,4 +1,4 @@
-import inquirer from "inquirer";
+import inquirer, { Question } from "inquirer";
 
 /**
  * Provides a simple wrapping of the actual "asking" aspect of
@@ -6,6 +6,6 @@ import inquirer from "inquirer";
  *
  * @param question the question to ask
  */
-export async function ask(question: inquirer.Question) {
+export async function ask(question: Question) {
   return inquirer.prompt([question]);
 }

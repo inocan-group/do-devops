@@ -12,13 +12,14 @@ export async function saveToServerlessYaml(data: IServerlessYaml) {
     console.log({ filename, data });
     const yamlData = dump(data);
 
-    fs.writeFileSync(filename, yamlData, { encoding: "utf-8" });
+    fs.writeFileSync(filename, yamlData, { encoding: "utf8" });
   } catch (error) {
     console.log(chalk`- {red writing the {bold serverless.yml} file has failed!} ${emoji.poop}`);
-    expect(isDevopsError(error)).toBeTruthy();
+
     if (isDevopsError(error)) {
       console.log(error.message);
       console.log(chalk`{dim ${error.stack}}`);
+      // eslint-disable-next-line unicorn/no-process-exit
       process.exit();
     }
   }

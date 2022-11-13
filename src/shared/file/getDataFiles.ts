@@ -1,6 +1,6 @@
-import globby from "globby";
-import path from "path";
-import process from "process";
+import { globby } from "globby";
+import path from "node:path";
+import process from "node:process";
 
 export interface IDataFileOptions {
   /** allows filtering by a particular file type (aka, file extension) */

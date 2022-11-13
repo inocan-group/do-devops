@@ -1,5 +1,5 @@
-import { sync } from "globby";
-import path from "path";
+import { globbySync as sync } from "globby";
+import path from "node:path";
 
 /**
  * **findInlineFunctionDefnFiles**

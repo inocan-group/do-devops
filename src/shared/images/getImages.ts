@@ -1,4 +1,4 @@
-import { sync } from "globby";
+import { globbySync as sync } from "globby";
 
 export function getImages(dir: string) {
   return sync(

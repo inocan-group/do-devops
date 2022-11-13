@@ -1,4 +1,5 @@
-import inquirer from "inquirer";
+/* eslint-disable unicorn/no-process-exit */
+import inquirer, { ListQuestion } from "inquirer";
 import { askConfirmQuestion } from "src/shared/interactive";
 import { getAwsProfileDictionary } from "./index";
 
@@ -34,7 +35,7 @@ export async function askForAwsProfile(opts?: IAskForProfileOptions): Promise<st
 
   const defaultProfile = opts.defaultProfile ? profiles[opts.defaultProfile] : profiles[0];
 
-  const question: inquirer.ListQuestion = {
+  const question: ListQuestion = {
     name: "profile",
     type: "list",
     choices: Object.keys(profiles),

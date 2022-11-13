@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/no-await-expression-member */
-import globby from "globby";
+import { globby } from "globby";
 import { dirname } from "pathe";
 import { getPackageJson } from "../npm";
 

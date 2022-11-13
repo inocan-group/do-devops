@@ -1,5 +1,5 @@
 import { checkboxQuestion } from "../../../shared/interactive";
-import { prompt } from "inquirer";
+import inquirer from "inquirer";
 
 export async function askUser(profiles: string[]) {
   const question = checkboxQuestion({
@@ -7,6 +7,6 @@ export async function askUser(profiles: string[]) {
     message: "Choose the profiles you want ID's for",
     choices: profiles,
   });
-  const answer = await prompt([question]);
+  const answer = await inquirer.prompt([question]);
   return answer.profiles;
 }

@@ -1,4 +1,4 @@
-import inquirer from "inquirer";
+import inquirer, { ListQuestion } from "inquirer";
 import { getDataFiles } from "src/shared/file";
 
 /**
@@ -6,7 +6,7 @@ import { getDataFiles } from "src/shared/file";
  */
 export async function askForDataFile(listOfFiles?: string[]): Promise<string> {
   const files = listOfFiles ? listOfFiles : await getDataFiles();
-  const question: inquirer.ListQuestion = {
+  const question: ListQuestion = {
     type: "list",
     name: "file",
     message: "What data file would you like?",

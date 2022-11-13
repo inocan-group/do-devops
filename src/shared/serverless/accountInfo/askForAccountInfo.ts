@@ -1,6 +1,7 @@
+/* eslint-disable unicorn/no-process-exit */
 import { AWS_REGIONS, IPackageJson, IServerlessAccountInfo } from "common-types";
 
-import inquirer from "inquirer";
+import inquirer, { ListQuestion, Question } from "inquirer";
 import chalk from "chalk";
 import {
   getAwsIdentityFromProfile,
@@ -43,17 +44,16 @@ export async function askForAccountInfo(
     default: config.profile,
     when: () => !config.profile,
   };
-  const profileQuestion: inquirer.Question | inquirer.ListQuestion = profiles
+  const profileQuestion: Question | ListQuestion = profiles
     ? {
         ...baseProfileQuestion,
-        
-          type: "list",
-          choices: Object.keys(profiles)
-        ,
-      }
-    : { ...baseProfileQuestion,  type: "input"  };
 
-  let questions: Array<inquirer.Question | inquirer.ListQuestion> = [
+        type: "list",
+        choices: Object.keys(profiles),
+      }
+    : { ...baseProfileQuestion, type: "input" };
+
+  let questions: Array<Question | ListQuestion> = [
     {
       type: "input",
       name: "name",
@@ -102,6 +102,7 @@ export async function askForAccountInfo(
   if (!merged.accountId) {
     console.log(chalk`- looking up the Account ID for the given profile`);
     try {
+      // eslint-disable-next-line unicorn/no-await-expression-member
       merged.accountId = (await getAwsIdentityFromProfile(awsProfile)).accountId;
     } catch {}
   }

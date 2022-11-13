@@ -1,4 +1,4 @@
-import inquirer from "inquirer";
+import inquirer, { CheckboxQuestion, ListQuestion } from "inquirer";
 import { getLocalServerlessFunctionsFromServerlessYaml } from "./getLocalServerlessFunctionsFromServerlessYaml";
 
 /**
@@ -9,7 +9,7 @@ export async function askForFunctions(
   defaults: string[] = []
 ): Promise<string[]> {
   const fns = Object.keys((await getLocalServerlessFunctionsFromServerlessYaml()) || {});
-  const question: inquirer.CheckboxQuestion = {
+  const question: CheckboxQuestion = {
     type: "checkbox",
     message,
     name: "fns",
@@ -27,7 +27,7 @@ export async function askForFunction(
   message: string = "Which function do you want to use?"
 ): Promise<string> {
   const fns = Object.keys((await getLocalServerlessFunctionsFromServerlessYaml()) || {});
-  const question: inquirer.ListQuestion = {
+  const question: ListQuestion = {
     type: "list",
     message,
     name: "fn",

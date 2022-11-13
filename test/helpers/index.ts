@@ -107,7 +107,7 @@ export function ignoreBoth() {
 export function valuesOf<T = any>(listOf: IDictionary<T>, property: string) {
   const keys: any[] = Object.keys(listOf);
   return keys.map((key: any) => {
-    const item: IDictionary = listOf[key];
+    const item = listOf[key] as IDictionary;
     return item[property];
   });
 }

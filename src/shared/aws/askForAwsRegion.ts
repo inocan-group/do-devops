@@ -1,10 +1,10 @@
-import inquirer from "inquirer";
+import inquirer, { ListQuestion } from "inquirer";
 
 /**
  * Asks the user to choose an AWS region
  */
 export async function askForAwsRegion(): Promise<string> {
-  const question: inquirer.ListQuestion = {
+  const question: ListQuestion = {
     type: "list",
     name: "region",
     message: "What AWS region do you want to target?",
