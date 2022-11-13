@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import commandLineUsage, { OptionDefinition } from "command-line-usage";
 import { DoDevopObservation, Finalized, IDoDevopsCommand } from "src/@types";
@@ -13,7 +14,11 @@ import {
  * Provide help on **do-devops**, either in a global sense or for a
  * particular function.
  */
-export function help(observations: Set<DoDevopObservation>, cmdDefn?: IDoDevopsCommand) {
+export function help(
+  observations: Set<DoDevopObservation>,
+  /** optionally pass in the command which help is being asked for */
+  cmdDefn?: IDoDevopsCommand
+) {
   const { kind, subCommands, description, syntax, options } = cmdDefn
     ? finalizeCommandDefinition(cmdDefn, observations)
     : ({
@@ -65,5 +70,5 @@ export function help(observations: Set<DoDevopObservation>, cmdDefn?: IDoDevopsC
     console.log(chalk.grey((error as Error).stack));
   }
   console.log();
-  process.exit();
+  process.exit(-1);
 }

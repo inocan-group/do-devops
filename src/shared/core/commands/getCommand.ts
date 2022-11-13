@@ -1,4 +1,4 @@
-import { IDoDevopsCommand, isDoDevopsCommand } from "src/@types";
+import { CommandDefinitions, IDoDevopsCommand, isDoDevopsCommand, KnownCommand } from "src/@types";
 import { DevopsError } from "src/errors";
 import commands from "src/commands";
 
@@ -6,7 +6,9 @@ import commands from "src/commands";
  * Pull off a specific _command's_ definition from a
  * subdirectory of `src/commands`.
  */
-export function getCommand(cmd: string): IDoDevopsCommand {
+export function getCommand<C extends KnownCommand>(
+  cmd: C
+): IDoDevopsCommand<CommandDefinitions[C]> {
   const defn = commands[cmd as keyof typeof commands];
 
   if (!isDoDevopsCommand(defn)) {

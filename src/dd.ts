@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 import chalk from "chalk";
 import commandLineArgs from "command-line-args";
+import { keys } from "inferred-types";
 
 import {
   getCommand,
   getAllCommands,
-  isKnownCommand,
   parseCmdArgs,
   proxyToPackageManager,
+  isKnownCommand,
 } from "src/shared/core/index";
 import { help } from "./shared/core/help";
 import { emoji, inverted } from "./shared/ui";
@@ -16,7 +17,10 @@ import { doDevopsVersion, commandAnnouncement, hasArgv, getArgvOption } from "./
 import { hasScript } from "./shared/npm";
 import { CommandParsing } from "./@types/global";
 import { isDevopsError } from "./@type-guards";
+import commands from "./commands";
+import { KnownCommand } from "./@types";
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {
   // pull off the command and stop there
   const mainCommand = commandLineArgs([{ name: "command", defaultOption: true, type: String }], {
@@ -50,12 +54,14 @@ import { isDevopsError } from "./@type-guards";
     const cmdDefn = getCommand(cmdName);
     let cmdInput: CommandParsing = { ...parseCmdArgs(cmdDefn, remaining), observations };
 
+    // Show help on the command
     if (cmdInput.opts.help) {
       commandAnnouncement(cmdDefn, cmdInput);
       help(observations, cmdDefn);
       process.exit();
     }
 
+    // Try to execute the command
     try {
       commandAnnouncement(cmdDefn, cmdInput);
       cmdInput = {

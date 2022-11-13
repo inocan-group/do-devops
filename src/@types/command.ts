@@ -1,45 +1,16 @@
 /* eslint-disable no-use-before-define */
 
 import { IDictionary, isNonNullObject } from "common-types";
+import { Keys } from "inferred-types";
 import { Observations } from ".";
 import { ICommandDescription } from "./general";
 import { Options } from "./global";
 import { DoDevopObservation } from "./observations";
 import { IOptionDefinition } from "./option-types";
+import commands from "src/commands";
 
-/**
- * The set of registered commands recognized by `do-devops`
- */
-export type KnownCommand<E extends string = never> =
-  | "add"
-  | "autoindex"
-  | "awsid"
-  | "bitbucket"
-  | "build"
-  | "deploy"
-  | "cert"
-  | "endpoints"
-  | "fns"
-  | "image"
-  | "info"
-  | "invoke"
-  | "latest"
-  | "layers"
-  | "ls"
-  | "pkg"
-  | "madge"
-  | "scaffold"
-  | "ssm"
-  | "tree"
-  | "test"
-  | "validate"
-  | "install"
-  | "update"
-  | "upgrade"
-  | "outdated"
-  | "watch"
-  | "why"
-  | E;
+export type KnownCommand = Keys<typeof commands>;
+export type CommandDefinitions = typeof commands;
 
 /**
  * When a command is kicked off by `do-devops` it is provided the following
