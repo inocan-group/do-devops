@@ -1,5 +1,5 @@
 import { IAwsProfile } from "src/@types";
-import AWS from "aws-sdk";
+import { STS } from "src/shared/aws/aws-proxy";
 /**
  * Returns the `userId`, `accountId`, `arn`, and `user` when passed
  * the key/secret key found in a user's `src/.aws/credentials` file.
@@ -7,7 +7,7 @@ import AWS from "aws-sdk";
  * @param profile a profile from a user's `credentials` file
  */
 export async function getAwsIdentityFromProfile(profile: IAwsProfile) {
-  const sts = new AWS.STS({
+  const sts = new STS({
     accessKeyId: profile.aws_access_key_id,
     secretAccessKey: profile.aws_secret_access_key,
   });

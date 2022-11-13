@@ -1,4 +1,4 @@
-import { IAM } from "aws-sdk";
+import { IAM } from "src/shared/aws/aws-proxy";
 import { getAwsProfile } from "./getAwsProfile";
 import { IAwsProfile } from "../../@types";
 
@@ -7,9 +7,7 @@ import { IAwsProfile } from "../../@types";
  *
  * @param awsProfile you may pass in the _string_ name of the profile or the profile itself
  */
-export async function getAwsUserProfile(
-  awsProfile: IAwsProfile | string
-): Promise<IAM.GetUserResponse["User"]> {
+export async function getAwsUserProfile(awsProfile: IAwsProfile | string) {
   if (typeof awsProfile === "string") {
     awsProfile = await getAwsProfile(awsProfile);
   }

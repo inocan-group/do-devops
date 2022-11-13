@@ -1,11 +1,11 @@
 import chalk from "chalk";
-import { APIGateway, ApiGatewayV2 } from "aws-sdk";
+import { APIGateway, ApiGatewayV2 } from "./aws-proxy";
 import { convertProfileToApiCredential, getAwsProfile } from "./index";
 import { emoji } from "../ui";
 import { userHasAwsProfile } from "./userHasAwsProfile";
 
 /**
- * Gets all API Gatway _endpoints_ defined in a given
+ * Gets all API Gateway _endpoints_ defined in a given
  * AWS profile/account.
  */
 export async function getApiGatewayEndpoints(profileName: string, region: string) {
@@ -13,6 +13,7 @@ export async function getApiGatewayEndpoints(profileName: string, region: string
     console.log(
       chalk`- attempt to get {italics endpoints} not possible with the profile {blue ${profileName}} as you do not have credentials defined for this profile! ${emoji.angry}\n`
     );
+    // eslint-disable-next-line unicorn/no-process-exit
     process.exit();
   }
   const profile = await getAwsProfile(profileName);

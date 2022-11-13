@@ -1,4 +1,4 @@
-import { Lambda } from "aws-sdk";
+import { Lambda } from "./aws-proxy";
 import { IAwsOptions } from "src/@types/aws";
 import { DevopsError } from "src/errors/index";
 import { determineProfile, determineRegion } from "../observations";

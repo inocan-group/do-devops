@@ -1,8 +1,9 @@
 import { IAwsLayerMeta, IDictionary } from "common-types";
-
 import { getPackageJson } from "src/shared/npm";
-import path from "node:path";
+import { join } from "pathe";
+import { cwd } from "node:process";
 import { DevopsError } from "src/errors";
+import { readFileSync } from "node:fs";
 
 export type ILayerMetaLookups = IDictionary<IAwsLayerMeta>;
 
@@ -25,7 +26,7 @@ export function getLayersFromPackageJson(): IAwsLayerMeta[] {
   const devDeps = Object.keys(pkg.devDependencies || {});
   // get deps with appropriate tagging
   const pkgJsonFiles = devDeps.filter((d) => {
-    const foreignPkg = getPackageJson(path.join(process.cwd(), "node_modules", d));
+    const foreignPkg = getPackageJson(join(process.cwd(), "node_modules", d));
     if (!foreignPkg) {
       throw new DevopsError(
         `Attempt to get info on package info on "" requires that it be installed in the repo. Make sure to install deps before running this command.`,
@@ -36,15 +37,15 @@ export function getLayersFromPackageJson(): IAwsLayerMeta[] {
     return keywords ? keywords.includes("aws-layer-meta") || keywords.includes("aws-layer") : false;
   });
 
-  return pkgJsonFiles
-    .filter(Boolean)
-    .reduce((agg, d) => {
-      const meta = require(path.join(process.cwd(), "node_modules", d)).meta as IAwsLayerMeta;
-      const info: IAwsLayerMeta = meta
-        ? { ...meta, name: meta.name }
-        : { name: d, namespace: "unknown", versions: [] };
+  return pkgJsonFiles.filter(Boolean).reduce((agg, d) => {
+    const file = join(cwd(), "node_modules", d);
+    const meta = JSON.parse(readFileSync(file, "utf8")) as IAwsLayerMeta;
 
-      agg.push(info);
-      return agg;
-    }, [] as IAwsLayerMeta[]);
+    const info: IAwsLayerMeta = meta
+      ? { ...meta, name: meta.name }
+      : { name: d, namespace: "unknown", versions: [] };
+
+    agg.push(info);
+    return agg;
+  }, [] as IAwsLayerMeta[]);
 }

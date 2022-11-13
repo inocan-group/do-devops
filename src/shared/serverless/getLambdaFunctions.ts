@@ -1,4 +1,4 @@
-import { Lambda } from "aws-sdk";
+import { Lambda } from "src/shared/aws/aws-proxy";
 import { AwsRegion } from "common-types";
 import { getAwsProfile, convertProfileToApiCredential } from "../aws";
 import { determineRegion, determineProfile } from "src/shared/observations";
@@ -21,9 +21,7 @@ export interface ILambdaFunctionsOptions {
  * skip this then an attempt will be made to figure it out based on
  * ENV variables and files in the working directory.
  */
-export async function getLambdaFunctions(
-  opts: ILambdaFunctionsOptions = {}
-): Promise<Lambda.FunctionConfiguration[]> {
+export async function getLambdaFunctions(opts: ILambdaFunctionsOptions = {}): Promise<any[]> {
   const region = opts.region ? opts.region : await determineRegion(opts);
   const profileName = await determineProfile(opts);
   if (!profileName) {

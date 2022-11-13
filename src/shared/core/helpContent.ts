@@ -1,7 +1,17 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
-import { IOptionDefinition } from "src/@types";
+import {
+  DynamicCommandDefinition,
+  ICommandDescriptor,
+  IDoDevopsCommand,
+  IOptionDefinition,
+  isCommandDescriptor,
+  isDynamicCommandDefinition,
+} from "src/@types";
 import { convertOptionsToArray } from "src/shared/core";
+import commands from "src/commands/index";
+import { keys } from "inferred-types";
+import { getObservations } from "../observations";
 
 // /**
 //  * Formats commands so that:
@@ -29,72 +39,52 @@ import { convertOptionsToArray } from "src/shared/core";
  * can be manually set by providing a `syntax` symbol on the
  * command. If not provided a default syntax will be used.
  */
-export async function getSyntax(fn?: string): Promise<string> {
+export function getSyntax(fn?: string): string {
   if (!fn) {
     return "dd [command] <options>";
+  } else {
+    const validCommands = keys(commands);
+    if ((validCommands as string[]).includes(fn)) {
+      const defn: IDoDevopsCommand<any> = commands[fn as keyof typeof commands];
+      const hasSubCommands = defn?.subCommands ? true : false;
+      return defn.syntax ? defn.syntax : `do ${fn} ${hasSubCommands ? "[command] " : ""}`;
+    } else {
+      return chalk`dd [command] <options>\nnote: the command {red ${fn}} is not recognized!`;
+    }
   }
-
-  const defn = await import(`src/commands/${fn}`);
-  const hasSubCommands = defn.subCommands ? true : false;
-
-  return defn.syntax ? defn.syntax : `do ${fn} ${hasSubCommands ? "[command] " : ""}<options>`;
 }
 
 /**
  * Gets the "description" content for the help area
  */
-export async function getDescription(opts: IDictionary, fn?: string) {
+export function getDescription(opts: IDictionary, fn?: keyof typeof commands) {
   if (!fn) {
     return `DevOps toolkit [ ${chalk.bold.italic(
       "dd"
     )} ] is a simple CLI interface intended to automate most of the highly repeatable tasks on your team.`;
   }
 
-  const defn = await import(`../../commands/${fn}`);
-  const hasDescription = defn.description ? true : false;
-  const defnIsFunction = typeof defn.description === "function";
+  const desc = commands[fn].description;
 
-  return hasDescription
-    ? defnIsFunction
-      ? await defn.description(opts)
-      : defn.description
+  return desc
+    ? isDynamicCommandDefinition(desc)
+      ? desc(getObservations(), opts)
+      : isCommandDescriptor(desc)
+      ? desc.complete
+      : desc
     : `Help content for the {bold do}'s ${chalk.bold.green.italic(fn)} command.`;
 }
 
-/**
- *
- * @param opts
- * @param fn
- */
-export async function getExamples(opts: IDictionary, fn?: string) {
+export function getExamples(opts: IOptionDefinition, fn?: keyof typeof commands) {
   // nothing to do if no function is chosen
   if (fn) {
-    const defn = await import(`../../commands/${fn}`);
-    const hasExamples = defn.examples ? true : false;
-    const defnIsFunction = typeof defn.examples === "function";
-
-    if (hasExamples && !defnIsFunction && !Array.isArray(defn.examples)) {
-      throw new Error(
-        `Getting help on "${fn}" has failed because the examples section -- while configured -- is of the wrong format! Should be a function returning an array or an array of .`
-      );
-    }
-    // const examples = defnIsFunction ? defn.examples(opts) : defn.examples;
-
-    return hasExamples ? (defnIsFunction ? await defn.description(opts) : defn.description) : "";
+    const defn = commands[fn];
+    return defn.examples || ([] as string[]);
   }
+
+  return [] as string[];
 }
 
 export async function getOptions(opts: IOptionDefinition, _fn?: string) {
   return convertOptionsToArray(opts);
-  // let options: OptionDefinition[] = [];
-  // if (fn) {
-  //   const defn = await import(`../../commands/${fn}`);
-  //   if (defn.options) {
-  //     options = options.concat(typeof defn.options === "function" ? await defn.options(opts) : defn.options);
-  //   }
-  // }
-  // options = options.concat(globalOptions);
-
-  // return options;
-  // return globalAndLocalOptions(opts, fn);
 }

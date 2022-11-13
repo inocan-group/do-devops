@@ -66,23 +66,7 @@ export interface IDeployOptions {
  */
 export const handler: DoDevopsHandler<IDeployOptions> = async ({ observations }) => {
   // const { deploy, global } = await getConfig();
-  if (observations.has("serverlessFramework")) {
-    // let { target } = await detectTarget(opts);
-    // if (target === "both") {
-    //   const ask = (await import(`./deploy-helpers/deploy-${target}`)).default;
-    //   target = await ask(opts);
-    // }
-    // if (!target) {
-    //   console.log(
-    //     `  - ${emoji.poop} You must state a valid "target" [ ${
-    //       target ? target + "{italic not valid}" : "no target stated"
-    //     } ]`
-    //   );
-    // }
-    // await runHooks(deploy.preDeployHooks);
-    // const helper = (await import(`./deploy-helpers/deploy-${target}`)).default;
-    // await helper(argv, opts);
-  } else {
+  if (observations.has("serverlessFramework")) {} else {
     await proxyToPackageManager("deploy", observations);
   }
 };

@@ -2,9 +2,6 @@ import { astParseWithTypescript, namedExports } from "./index";
 import { NamedTypes } from "ast-types/gen/namedTypes";
 export type CommentLine = NamedTypes["CommentLine"];
 
-// const types = recast.types.namedTypes;
-// const builders = recast.types.builders;
-
 /**
  * Given a file, it will look for the `handler` export
  * and return the comments associated with it. Alternatively

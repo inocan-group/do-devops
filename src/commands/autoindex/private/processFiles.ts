@@ -25,7 +25,6 @@ import { AutoindexGroupDefinition } from "../parts/getGlobs";
 import { cwd } from "node:process";
 import { directoryFiles, repoDirectory } from "src/shared/file";
 import { relative } from "node:path";
-import prettier from "prettier";
 import { hasDependency, hasDevDependency } from "src/shared/npm";
 import { spawnSync } from "node:child_process";
 
@@ -193,22 +192,15 @@ export async function processFiles(
     if (hasChanged) {
       action = isNewAutoindexFile(indexFileContent) ? "new-file" : "updated";
       const result = createAutoindexContent(content, opts);
-      const prettierConfig = await prettier.resolveConfig(join(cwd(), indexFilename));
+      // const prettierConfig = await prettier.resolveConfig(join(cwd(), indexFilename));
 
       const fileContent = action === "new-file" ? result : replaceRegion(indexFileContent, result);
 
-      if (prettierConfig) {
-        writeFile(indexFilename, prettier.format(fileContent, prettierConfig), "utf8");
-      } else {
-        writeFile(indexFilename, fileContent, "utf8");
-        if (hasDependency("eslint") || hasDevDependency("eslint")) {
-          spawnSync("eslint", [indexFilename, "--fix"], {
-            cwd: repoDirectory()
-          });
-          // console.log(`eslint status:`, result.status);
-        } else {
-          log.info("- neither prettier or eslint found to ensure consistent style");
-        }
+      writeFile(indexFilename, fileContent, "utf8");
+      if (hasDependency("eslint") || hasDevDependency("eslint")) {
+        spawnSync("eslint", [indexFilename, "--fix"], {
+          cwd: repoDirectory(),
+        });
       }
     } else {
       action = "unchanged";

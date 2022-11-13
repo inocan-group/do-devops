@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { spawn } from "node:child_process";
 import w, { WatchOptions } from "chokidar";
 import { existsSync } from "node:fs";
-import path from "pathe";
+import { dirname, join } from "pathe";
 import { Options } from "src/@types";
 import { fileHasExports } from "src/shared/ast";
 import { ILogger, logger } from "src/shared/core/logger";
@@ -51,11 +51,11 @@ function recheck(autoindexFile: string, log: ILogger): Promise<boolean> {
 }
 
 function recheckAutoindexFile(changedFile: string, log: ILogger) {
-  const dir = path.dirname(changedFile);
-  const autoindexFile = existsSync(path.join(process.cwd(), dir, "/index.ts"))
-    ? path.join(dir, "/index.ts")
-    : existsSync(path.join(process.cwd(), dir, "/index.js"))
-    ? path.join(dir, "/index.js")
+  const dir = dirname(changedFile);
+  const autoindexFile = existsSync(join(process.cwd(), dir, "/index.ts"))
+    ? join(dir, "/index.ts")
+    : existsSync(join(process.cwd(), dir, "/index.js"))
+    ? join(dir, "/index.js")
     : undefined;
   if (autoindexFile) {
     recheck(autoindexFile, log);
@@ -76,7 +76,7 @@ function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogge
             group.name
           }} {italic added the file }${highlightFilepath(file)}}`
         );
-        if (fileHasExports(path.join(process.cwd(), file))) {
+        if (fileHasExports(join(process.cwd(), file))) {
           recheckAutoindexFile(file, log);
         } else {
           deferredFiles.add(file);
@@ -94,7 +94,7 @@ function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogge
         recheckAutoindexFile(file, log);
         break;
       case "changed":
-        const hasExports = fileHasExports(path.join(process.cwd(), file));
+        const hasExports = fileHasExports(join(process.cwd(), file));
         const wasDeferred = deferredFiles.has(file);
         if (hasExports && wasDeferred) {
           log.info(
@@ -124,9 +124,9 @@ function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogge
 }
 
 function getParentIndex(file: string) {
-  const dir = path.dirname(file).split("/");
-  const ts = path.join(dir.slice(0, -1).join("/"), "index.ts");
-  const js = path.join(dir.slice(0, -1).join("/"), "index.js");
+  const dir = dirname(file).split("/");
+  const ts = join(dir.slice(0, -1).join("/"), "index.ts");
+  const js = join(dir.slice(0, -1).join("/"), "index.js");
   return existsSync(ts) ? ts : existsSync(js) ? js : undefined;
 }
 

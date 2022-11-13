@@ -1,8 +1,6 @@
 /* eslint-disable unicorn/import-style */
-import chalk, { Modifiers, ForegroundColor } from "chalk";
-
-export type ModifiedForegroundColor = [typeof Modifiers | undefined, typeof ForegroundColor];
-export type ForegroundColor = typeof ForegroundColor;
+import chalk from "chalk";
+import type { ForegroundColorName, BackgroundColorName } from "chalk";
 
 /**
  * Uses `chalk` to present a nicely formatted
@@ -10,8 +8,11 @@ export type ForegroundColor = typeof ForegroundColor;
  */
 export function highlightFilepath(
   fp: string,
-  color: ModifiedForegroundColor | ForegroundColor = ["dim", "blueBright"],
-  highlight: ModifiedForegroundColor | ForegroundColor = ["bold", "blueBright"]
+  color: [ForegroundColorName | undefined, BackgroundColorName | undefined] = ["blue", undefined],
+  highlight: [ForegroundColorName | undefined, BackgroundColorName | undefined] = [
+    "blueBright",
+    undefined,
+  ]
 ) {
   if (!Array.isArray(color)) {
     color = [undefined, color];

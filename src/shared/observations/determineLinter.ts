@@ -3,7 +3,6 @@ import { LintObservation } from "src/@types/observations";
 import { IDictionary } from "common-types";
 import parse from "destr";
 import { fileExists, readFile } from "../file";
-import { String } from "aws-sdk/clients/acm";
 
 export interface ILinterInfo {
   config: IDictionary;
@@ -18,7 +17,7 @@ export interface IObservedLinters {
 }
 
 /**
- * Looks for linters by interogating the `package.json` as well as looking for
+ * Looks for linters by interrogating the `package.json` as well as looking for
  * configuration files.
  *
  * The two linters we're looking for are `eslint` and `tslint`. The return type

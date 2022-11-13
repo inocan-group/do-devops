@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/prefer-module */
-import * as recast from "recast";
-import { readFileSync } from "fs";
+import { parse } from "recast";
+import { readFileSync } from "node:fs";
+// import parser from "recast/parsers/typescript.js";
 
 /**
  * parses a given file into an AST tree
@@ -8,12 +9,12 @@ import { readFileSync } from "fs";
  */
 export function astParseWithTypescript(filename: string) {
   const fileContents: string = readFileSync(filename, {
-    encoding: "utf-8",
+    encoding: "utf8",
   });
 
   return filename.includes(".ts")
-    ? recast.parse(fileContents, {
-        parser: require("recast/parsers/typescript"),
+    ? parse(fileContents, {
+        // parser,
       })
-    : recast.parse(fileContents);
+    : parse(fileContents);
 }

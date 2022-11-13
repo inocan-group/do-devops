@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import chalk from "chalk";
 import commandLineArgs from "command-line-args";
-import * as process from "node:process";
 
 import {
   getCommand,
@@ -12,7 +11,7 @@ import {
 } from "src/shared/core/index";
 import { help } from "./shared/core/help";
 import { emoji, inverted } from "./shared/ui";
-import { getObservations } from "./shared/observations/getObserverations";
+import { getObservations } from "./shared/observations/getObservations";
 import { doDevopsVersion, commandAnnouncement, hasArgv, getArgvOption } from "./shared/core/util";
 import { hasScript } from "./shared/npm";
 import { CommandParsing } from "./@types/global";

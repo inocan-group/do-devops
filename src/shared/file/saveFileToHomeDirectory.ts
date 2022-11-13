@@ -1,16 +1,15 @@
 import { existsSync, writeFileSync } from "node:fs";
-
+import { homedir } from "node:os";
+import { join } from "pathe";
 import { DevopsError } from "src/errors";
 import { IDictionary } from "common-types";
-import path from "node:path";
 
 export function saveFileToHomeDirectory(
   filename: string,
   data: string | IDictionary,
   overwrite: boolean = true
 ) {
-  const homedir = require("os").homedir();
-  const fqName = path.join(homedir, filename);
+  const fqName = join(homedir(), filename);
   const allowWrite = overwrite || !existsSync(fqName);
   if (!allowWrite) {
     throw new DevopsError(

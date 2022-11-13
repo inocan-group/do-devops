@@ -11,16 +11,5 @@ export async function findAllHandlerFiles() {
   const handlers: any[] = [];
   console.log(files);
 
-  // const project = new Project();
-  // project.addSourceFilesAtPaths(files);
-
-  // TODO:
-
-  // for await (const file of files) {
-  // const ref = await import(file);
-  // if (ref.handler) {
-  //   handlers.push({ file, ref });
-  // }
-  // }
   console.log(handlers.map((i) => i.file));
 }

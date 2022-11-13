@@ -1,6 +1,7 @@
-import path from "node:path";
+import { homedir } from "node:os";
 import { appendFileSync, readFileSync } from "node:fs";
-import { IAwsProfile } from "../../@types";
+import { IAwsProfile } from "src/@types";
+import { join } from "pathe";
 
 /**
  * **addAwsProfile**
@@ -8,9 +9,8 @@ import { IAwsProfile } from "../../@types";
  * adds a new profile to a user's `src/.aws/credentials` file
  */
 export function addAwsProfile(name: string, profile: IAwsProfile) {
-  const homedir = require("os").homedir();
-  const filePath = path.join(homedir, ".aws/credentials");
-  const fileContents = readFileSync(filePath, "utf-8");
+  const filePath = join(homedir(), ".aws/credentials");
+  const fileContents = readFileSync(filePath, "utf8");
   if (fileContents.includes(`[${name}]`)) {
     throw new Error(`The AWS profile "${name}" already exists, attempt to add it has failed!`);
   }

@@ -1,4 +1,4 @@
-import { EC2 } from "aws-sdk";
+import { EC2 } from "./aws-proxy";
 import { DevopsError } from "src/errors";
 import { convertProfileToApiCredential } from "./convertProfileToApiCredential";
 import { getAwsProfile } from "./getAwsProfile";
