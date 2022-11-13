@@ -1,6 +1,6 @@
 import chalk from "chalk";
-import { sync } from "globby";
-import path from "path";
+import { globbySync } from "globby";
+import path from "pathe";
 import { IDictionary } from "common-types";
 import { describe } from "native-dash";
 
@@ -13,32 +13,32 @@ import { getDefaultExport } from "./getDefaultExport";
  * directory that have a `handlers` export.
  */
 export function getValidStepFunctions(opts: IDictionary = {}) {
-  const allFiles = sync(path.join(process.env.PWD || "", "/src/**/*.ts"));
+  const allFiles = globbySync(path.join(process.env.PWD || "", "/src/**/*.ts"));
   return allFiles
     .filter((f) => fileIncludes(f, "StateMachine"))
-    .reduce((agg: string[], curr) => {
+    .reduce((agg: string[], cur: any) => {
       let ast;
       let status = "starting";
       try {
         write(
-          getFileComponents(curr).fileWithoutExt + "-acorn.json",
-          astParseWithAcorn({ filename: curr }).program.body.map((i: any) => ({
+          getFileComponents(cur).fileWithoutExt + "-acorn.json",
+          astParseWithAcorn({ filename: cur }).program.body.map((i: any) => ({
             type: i.type,
             description: Object.keys(i).map((k) => describe(k)),
           })),
           { allowOverwrite: true }
         );
         console.log({
-          file: curr,
-          parsed: getDefaultExport({ filename: curr }),
+          file: cur,
+          parsed: getDefaultExport({ filename: cur }),
         });
-        ast = astParseWithTypescript(curr);
+        ast = astParseWithTypescript(cur);
         status = "file-parsed";
         if (!ast.program.body[0].source) {
           if (opts.verbose) {
             console.log(
               chalk`{grey - the file {blue ${toRelativePath(
-                curr
+                cur
               )}} has no source content; will be ignored}`
             );
           }
@@ -56,13 +56,13 @@ export function getValidStepFunctions(opts: IDictionary = {}) {
               `Found a Step Function but the file aggregation is not an array! ${handler}`
             );
           }
-          agg.push(curr);
+          agg.push(cur);
         }
 
         return agg;
       } catch (error) {
         console.log(
-          chalk`- Error processing  {red ${toRelativePath(curr)}} [s: ${status}]: {grey ${
+          chalk`- Error processing  {red ${toRelativePath(cur)}} [s: ${status}]: {grey ${
             (error as Error).message
           }}`
         );

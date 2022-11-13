@@ -1,6 +1,6 @@
 import chalk from "chalk";
-import { sync } from "globby";
-import path from "path";
+import { globbySync as sync } from "globby";
+import path from "node:path";
 
 import { astParseWithTypescript } from "./astParseWithTypescript";
 import { toRelativePath } from "../file";
@@ -12,7 +12,7 @@ import { IDictionary } from "common-types";
  */
 export function getValidServerlessHandlers(opts: IDictionary = {}) {
   const allFiles = sync(path.join(process.env.PWD || "", "/src/**/*.ts"));
-  return allFiles.reduce((agg: string[], curr) => {
+  return allFiles.reduce((agg: string[], curr: any) => {
     let ast;
     let status = "starting";
     try {
