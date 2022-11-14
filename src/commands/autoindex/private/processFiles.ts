@@ -47,11 +47,9 @@ export async function processFiles(
     return;
   } else {
     log.info(
-      `- {yellow ${indexFiles.length}} autoindex files found ({dim out of {yellow ${
-        indexFiles.length + nonAutoindexFiles.length
-      }} candidates})`
+      `- ${chalk.yellow.bold(indexFiles.length)} autoindex files found (${chalk.dim`out of ${chalk.yellow(indexFiles.length + nonAutoindexFiles.length)} candidates`})`
     );
-    log.whisper(`- index files were: {gray ${indexFiles.join(", ")}}`);
+    log.whisper(`- index files were: ${chalk.gray`${indexFiles.join(", ")}}`}`);
   }
 
   // Iterate by Index File
@@ -85,7 +83,7 @@ export async function processFiles(
     const remaining = contentFiles.length - noExports.length;
 
     log.whisper(
-      `- processing the {bold {italic autoindex}} file in {blue ${dir}} [{dim ${exportType} {italic export}, ${remaining} of ${contentFiles.length} {italic files}, ${subDirs.length} {italic sub directories}}]`
+      `- processing the ${chalk.bold.italic`autoindex`} file in ${chalk.blue(dir)} [${chalk.dim(exportType)} ${chalk.italic`export`}, ${remaining} of ${contentFiles.length} ${chalk.italic`files`}, ${subDirs.length} ${chalk.italic`sub directories`}]`
     );
 
     if (contentFiles.length === 0) {
@@ -103,15 +101,15 @@ export async function processFiles(
 
     if (noExports.length > 0) {
       for (const f of noExports) {
-        log.whisper(`- the file {red ${f}} will be ignored because it has no exports`);
+        log.whisper(`- the file ${chalk.red(f)} will be ignored because it has no exports`);
       }
       if (contentFiles.length === noExports.length) {
         log.info(
-          `- the directory {blue ${dir}} had  {yellow ${contentFiles.length}} files which {italic could} have exported symbols but {bold none did}.`
+          `- the directory ${chalk.blue(dir)} had  ${chalk.yellow(contentFiles.length)} files which {italic could} have exported symbols but {bold none did}.`
         );
       } else {
         log.info(
-          `- the directory {blue ${dir}} had {yellow ${contentFiles.length}} files which {italic could} have had export symbols but {yellow ${noExports.length}} {bold did not}.`
+          `- the directory ${chalk.blue(dir)} had ${chalk.yellow(contentFiles.length)} files which ${chalk`could`} have had export symbols but ${chalk.yellow(noExports.length)} ${chalk.bold`did not`}.`
         );
       }
     }

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import { git } from "src/shared/git";
 import { emoji } from "src/shared/ui";
@@ -37,19 +38,17 @@ export const handler: DoDevopsHandler = async ({ opts }) => {
   const changes =
     status.not_added.length === 0 && status.modified.length === 0
       ? ""
-      : `\n- Locally you have {yellow ${
-          status.not_added.length > 0 ? status.not_added.length : "zero"
-        }} {italic new} files and {yellow ${status.modified.length}} {italic modified} files`;
+      : `\n- Locally you have ${chalk.yellow(status.not_added.length > 0 ? status.not_added.length : "zero")} ${chalk.italic`new`} files and ${chalk.yellow(status.modified.length)} ${chalk.italic`modified`} files`;
 
   const conflicts =
     status.conflicted.length === 0
       ? ""
-      : `- ${emoji.poop} There are {bold {red ${status.conflicted.length}}} conflicted files!`;
+      : `- ${emoji.poop} There are ${chalk.bold.red(status.conflicted.length)} conflicted files!`;
 
   if (opts.verbose) {
     console.log(
-      `The remote repo's latest version is {bold {yellow ${latest}}}; {blue package.json} is ${
-        pkgVersion === latest ? "the same" : `is {bold ${pkgVersion}}`
+      `The remote repo's latest version is ${chalk.bold.yellow(latest)}; ${chalk.blue`package.json`} is ${
+        pkgVersion === latest ? "the same" : `is ${chalk.bold(pkgVersion)}`
       }.${aheadBehind}${changes}${conflicts}`
     );
 

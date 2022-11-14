@@ -9,8 +9,8 @@ import { askListQuestion } from "../..";
 
 export async function askImageConfiguration(o: Observations, api: ImageApi) {
   const log = logger();
-  log.info(`Welcome back, your {bold {yellow image}} configuration summary is:\n`);
-  log.info(`{bold {yellow Rules:}}`);
+  log.info(`Welcome back, your ${chalk.bold.yellow`image`} configuration summary is:\n`);
+  log.info(chalk.bold.yellow`Rules:`);
   // const api: ImageApi = useImageApi(config.rules);
   if (!o.has("image-cache")) {
     log.info(`- ${emoji.eyeballs} there is no image cache yet so no summary info is available.`);

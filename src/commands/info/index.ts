@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import { IDoDevopsCommand } from "src/@types/command";
 import { getPackageJson, pkgDepsInTable } from "src/shared/npm";
@@ -25,9 +26,7 @@ const command: IDoDevopsCommand<IInfoOptions> = {
       }
 
       console.log(
-        `- ${emoji.run} getting NPM info for {bold {yellow ${String(
-          deps.length
-        )}}} dependencies`
+        `- ${emoji.run} getting NPM info for ${chalk.bold.yellow(String(deps.length))} dependencies`
       );
 
       return otherPackages(deps, opts, observations);

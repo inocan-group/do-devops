@@ -40,7 +40,7 @@ export function summarize(rules: IImageRule[], tools: IImageTools) {
   log.info(`{bold Summary of Image Configuration}`);
   log.info(`{bold ------------------------------}\n`);
 
-  log.info(`- there are {yellow {bold ${sourceImages.length}}} source images in the cache`);
+  log.info(`- there are ${chalk.yellow.bold(sourceImages.length)} source images in the cache`);
   log.info(`- the last detected change in these source images was ${lastUpdate}`);
   log.info(
     chalk.dim(` - the rules ${chalk.italic("plus")} source images have produced ${chalk.yellowBright(convertedImages.length)} optimized images})`)
@@ -54,7 +54,7 @@ export function summarize(rules: IImageRule[], tools: IImageTools) {
     const sourceFromRule = sourceImages.filter((i) => i?.rule === r.name);
     const convertedFromRule = convertedImages.filter((i) => i?.rule === r.name);
     log.info(
-      `    - ${r.name}: {dim source: {gray "}${r.source}{gray "}, destination: {gray "}${r.destination}{gray "}, glob: {gray "}${r.glob}{gray "}, source images: ${sourceFromRule.length}, optimized images: ${convertedFromRule.length}}`
+      `    - ${r.name}: {dim source: {gray "}${r.source}}${chalk.gray`"`}, destination: }${chalk.gray`"`}${r.destination}}${chalk.gray`"`}, glob: }${chalk.gray`"`}${r.glob}${chalk.gray`"`}, source images: ${sourceFromRule.length}, optimized images: ${convertedFromRule.length}}`
     );
   }
 }

@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { IDictionary } from "common-types";
 import { keys } from "native-dash";
 import { Options, IImageCacheRef, IRefreshCacheOptions } from "src/@types";
@@ -46,7 +47,7 @@ export function getFromImageCache(image: string, opts: Options) {
   if (MEM_CACHE[image]) {
     return MEM_CACHE[image];
   }
-  log.shout(`{gray - {yellow {bold ${keys(MEM_CACHE).length}}} images retrieved from image cache}`);
+  log.shout(chalk.gray`- ${chalk.yellow.bold(keys(MEM_CACHE).length)} images retrieved from image cache`);
   loadImageCache();
   return MEM_CACHE[image];
 }

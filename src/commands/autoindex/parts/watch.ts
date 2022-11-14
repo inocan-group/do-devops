@@ -236,7 +236,7 @@ export function watch(group: AutoindexGroupDefinition, opts: Options<IAutoindexO
 
   log.info();
   log.info(`Watching ${group.name}:`);
-  log.info(` - this includes {yellow ${group.indexFiles.length}} index files`);
-  log.info(` - and {yellow ${group.contentFiles.length}} content files`);
+  log.info(` - this includes ${chalk.yellow(group.indexFiles.length)} index files`);
+  log.info(` - and${chalk.yellow(group.contentFiles.length)} content files`);
   log.info();
 }

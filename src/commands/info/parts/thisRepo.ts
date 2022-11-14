@@ -35,7 +35,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     (s) => !s.linkTo.startsWith(".pnpm/")
   );
   const pkgManagerConflict = observations.has("packageManagerConflict")
-    ? `- {yellow {bold ${emoji.hazard}}} there are conflicts in lock files from more than one package manager!`
+    ? `- ${chalk.yellow.bold`${emoji.hazard}`} there are conflicts in lock files from more than one package manager!`
     : false;
   if (pkgManagerConflict) {
     console.log(pkgManagerConflict);
@@ -51,7 +51,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
       ? [
           "Linked\nRepos",
           linkedRepos
-            .map((r) => `{bold ${r.file} -} {dim ${path.posix.resolve(r.linkTo)}}`)
+            .map((r) => `${chalk.bold`${r.file} -`} ${chalk.dim`${path.posix.resolve(r.linkTo)}`}`)
             .join("\n"),
         ]
       : undefined;
@@ -206,9 +206,9 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     [
       "GIT",
       gitInfo +
-        `\n\n- {yellow ${String(
+        `\n\n- ${chalk.yellow`${String(
           localFilesChanged
-        )}} files changed locally on {yellow ${await getCurrentGitBranch()}}`,
+        )}`} files changed locally on {yellow ${await getCurrentGitBranch()}}`,
     ],
     ["Tags ", pkg.keywords ? pkg.keywords.join(", ") : chalk.italic.dim("none")],
   ].filter((i) => Array.isArray(i) && i[0]) as unknown[][];

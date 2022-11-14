@@ -121,19 +121,15 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
 
       if (groups.length > 0) {
         log.info(
-          `- ${emoji.eyeballs} monorepo detected with {yellow ${String(
-            groups.length
-          )}} packages`
+          `- ${emoji.eyeballs} monorepo detected with${chalk.yellow(String(groups.length))} packages`
         );
         for (const pkg of groups) {
-          log.info(`{gray   - {bold ${pkg.name}} {italic at} {dim ${pkg.path}}}`);
+          log.info(chalk.gray`  - ${chalk.bold(pkg.name)} ${chalk.italic("at")} ${chalk.dim(pkg.path)}`);
         }
         log.info(`- ⚡️ will run each package separately based on it's own configuration`);
       } else {
         log.info(
-          `- after excluding packages -- {gray ${opts.exclude?.join(
-            ", "
-          )}} -- no packages were left to run {bold autoindex} on\n`
+          `- after excluding packages -- ${chalk.gray(opts.exclude?.join(", "))} -- no packages were left to run ${chalk.bold`autoindex`} on\n`
         );
         exit(0);
       }
@@ -150,7 +146,7 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
     if (group.indexFiles.length > 0) {
       await processFiles(group, opts, observations);
     } else {
-      log.info(`- ${emoji.confused} no {italic index} files found in {blue ${group.name}}`);
+      log.info(`- ${emoji.confused} no ${chalk.italic`index`} files found in ${chalk.blue(group.name)}`);
     }
 
     if (opts.watch) {

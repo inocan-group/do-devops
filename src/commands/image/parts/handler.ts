@@ -19,7 +19,7 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
 
   switch (subCommand?.trim()) {
     case "config":
-    case "configure":
+    case "configure": {
       // eslint-disable-next-line unicorn/prefer-ternary
       if (!config) {
         await askConfigureImageOptimization(observations);
@@ -27,9 +27,10 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
         await askImageConfiguration(observations, api);
       }
       break;
+    }
 
     case "optimize":
-    case "convert":
+    case "convert": {
       if (config && config.rules) {
         await api.convert();
       } else {
@@ -39,8 +40,9 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
         );
       }
       break;
+    }
 
-    case "watch":
+    case "watch": {
       if (config && config.rules) {
         const api = useImageApi(config.rules);
         await api.watch();
@@ -51,27 +53,31 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
         );
       }
       break;
+    }
 
     case "summarize":
-    case "summary":
+    case "summary": {
       await api.summarize();
       break;
+    }
 
-    case "":
+    case "": {
       if (config) {
         log.info(
-          `- the valid sub-commands for {blue dd image} are: {italic config, optimize,} and {italic watch}`
+          `- the valid sub-commands for {blue dd image} are: ${chalk.italic`config, optimize,`} and ${chalk.italic`watch`}`
         );
       }
       break;
+    }
 
-    default:
+    default: {
       log.shout(
         subCommand
           ? `the subcommand '${subCommand}' is not known!`
-          : `the {bold {yellow image}} command expects a {italic sub-command}`
+          : `the ${chalk.bold.yellow`image`} command expects a ${chalk.italic`sub-command`}`
       );
       await asyncExec(`dd image --help`);
+    }
   }
 
   await api.close();

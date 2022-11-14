@@ -25,7 +25,7 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
   }
 
   log.info(
-    `- configuring this project for {bold {yellow do-devops}}'s {blue autoindex} command\n`
+    `- configuring this project for ${chalk.bold.yellow`do-devops`}'s {blue autoindex} command\n`
   );
   if (hasProjectConfig) {
     log.info(`- ${emoji.eyeballs} has existing project configuration to work from`);

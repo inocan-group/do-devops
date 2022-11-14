@@ -34,12 +34,9 @@ export function repoDirectory(offset?: string, opts: Omit<IDirectoryOptions, "of
       "directory/not-found"
     );
   }
-  // const gitInitialized = dirExists(path.posix.join(path.dirname(dir), ".git"));
-  // if (!gitInitialized) {
-  //   throw new DevopsError(`Attempt to locate the root of the repo for the current directory failed. A "package.json" was found above the {blue ${start}} directory but it was {italic not} initialized with {bold {yellow git}}.`, "directory/not-found");
-  // }
 
-  const filename = join(dir, offset ? offset : "");
+
+  const filename = join(dir, offset ?? "");
 
   return opts.base ? toRelativePath(filename, opts.base) : filename;
 }

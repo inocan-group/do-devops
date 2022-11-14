@@ -159,7 +159,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     }
     await Promise.all(cpPromises);
     log.whisper(
-      `- copyright notices have been applied to the {yellow {bold ${optimized.length}}} images which were created as a result of recent changes to source files`
+      `- copyright notices have been applied to the ${chalk.yellow.bold(optimized.length)} images which were created as a result of recent changes to source files`
     );
   }
 

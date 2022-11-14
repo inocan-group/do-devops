@@ -110,7 +110,7 @@ import { isDevopsError } from "./@type-guards";
           ? ""
           : `\n\n{dim - Note: you're in a directory with no {italic package.json} file so if you\nwere trying to proxy a script please move to the right directory first.}`;
       console.log(
-        `${emoji.poop} {italic {yellowBright ${cmdName}}} is an unknown command!${noPkgJsonMsg} \n\n` +
+        `${emoji.poop} ${chalk.italic.yellowBright`${cmdName}`}} is an unknown command!${noPkgJsonMsg} \n\n` +
           `- Valid command syntax is: ${chalk.bold.inverse(
             " dd [command] <options> "
           )}\n  where valid commands are: ${chalk.italic(
