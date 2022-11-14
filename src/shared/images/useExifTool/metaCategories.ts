@@ -137,7 +137,7 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     .filter(Boolean)
     .pop();
 
-  const focalLength35 = [meta.FocalLengthIn35mmFormat, reduceFl35(meta.FocalLength35efl)]
+  const focalLength35 = [meta.FocalLengthIn35mmFormat, reduceFl35(meta.FocalLengthIn35mmFormat)]
     .filter(Boolean)
     .pop()
     ?.trim();
@@ -182,7 +182,7 @@ export function metaReducer(meta: IExifToolMetadata): ICategoricalMeta {
     meta.XResolution && meta.YResolution ? [meta.XResolution, meta.YResolution] : undefined;
 
   const gps: ICategoricalMeta["gps"] = {
-    altitude: [meta.GPSAltitude ? String(meta.GPSAltitude) : undefined, meta.Altitude]
+    altitude: [meta.GPSAltitude ? String(meta.GPSAltitude) : undefined, meta.GPSAltitudeRef]
       .filter(Boolean)
       .pop(),
     coordinates: [[meta.GPSLatitude, meta.GPSLongitude], meta.GPSCoordinates]

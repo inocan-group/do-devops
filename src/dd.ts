@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import chalk from "chalk";
 import commandLineArgs from "command-line-args";
-import { keys } from "inferred-types";
 
 import {
   getCommand,
@@ -17,8 +16,6 @@ import { doDevopsVersion, commandAnnouncement, hasArgv, getArgvOption } from "./
 import { hasScript } from "./shared/npm";
 import { CommandParsing } from "./@types/global";
 import { isDevopsError } from "./@type-guards";
-import commands from "./commands";
-import { KnownCommand } from "./@types";
 
 // eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {

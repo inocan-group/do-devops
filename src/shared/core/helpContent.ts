@@ -53,7 +53,7 @@ export function getDescription(opts: IDictionary, fn?: keyof typeof commands) {
     : `Help content for the {bold do}'s ${chalk.bold.green.italic(fn)} command.`;
 }
 
-export function getExamples(opts: IOptionDefinition, fn?: keyof typeof commands) {
+export function getExamples(_opts: IOptionDefinition, fn?: keyof typeof commands) {
   // nothing to do if no function is chosen
   if (fn) {
     const defn = commands[fn];

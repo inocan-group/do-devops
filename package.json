@@ -43,7 +43,7 @@
     "clean": "rimraf src/**/*.js dist/**/* bin/**/*",
     "dd": "./bin/dd.js",
     "leaves": "pnpm madge src --extensions ts --leaves",
-    "lint": "run-s lint:*",
+    "lint": "run-p lint:*",
     "lint:src": "yarn eslint src/**/*.ts --fix ",
     "lint:test": "yarn eslint test/**/*.ts --fix",
     "lint:tsc": "yarn tsc --noEmit",

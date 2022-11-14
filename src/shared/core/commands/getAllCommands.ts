@@ -2,6 +2,7 @@ import { IDictionary } from "common-types";
 import { DoDevopObservation } from "src/@types";
 import { finalizeCommandDefinition } from "src/shared/core/util";
 import { getCommand } from "./getCommand";
+import { keys } from "inferred-types";
 import commands from "src/commands";
 
 /**
@@ -11,7 +12,7 @@ export function getAllCommands(
   observations: Set<DoDevopObservation> = new Set<DoDevopObservation>(),
   opts: IDictionary = {}
 ) {
-  return Object.keys(commands).map((cmd) =>
+  return keys(commands).map((cmd) =>
     finalizeCommandDefinition(getCommand(cmd), observations, opts)
   );
 }

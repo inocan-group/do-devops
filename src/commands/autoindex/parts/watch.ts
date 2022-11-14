@@ -10,7 +10,6 @@ import { emoji, highlightFilepath } from "src/shared/ui";
 import { isAutoindexFile } from "../private/util";
 import { IAutoindexOptions } from "./options";
 import { AutoindexGroupDefinition } from "./getGlobs";
-import { join } from "node:path";
 import { cwd } from "node:process";
 
 export type IAutoindexWatchlist = {
