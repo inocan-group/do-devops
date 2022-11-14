@@ -19,7 +19,7 @@ export async function askForUnitTestFramework(
   const log = logger(opts);
 
   log.shout(
-    chalk`- we have not been able to determine which {italic unit testing} framework you're using.`
+    `- we have not been able to determine which {italic unit testing} framework you're using.`
   );
 
   const framework = opts.unitTestFramework

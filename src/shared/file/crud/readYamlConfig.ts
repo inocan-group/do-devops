@@ -30,7 +30,7 @@ export function readYamlConfig<T extends object>(filename: string): T | undefine
       : undefined;
   } catch (error) {
     throw new DevopsError(
-      chalk`Problem loading YAML config from file {blue ${filename}}: ${(error as Error).message}`,
+      `Problem loading YAML config from file {blue ${filename}}: ${(error as Error).message}`,
       "read-yaml-config/unknown"
     );
   }

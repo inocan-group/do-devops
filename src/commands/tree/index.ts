@@ -12,7 +12,7 @@ const command: IDoDevopsCommand = {
         ? ["modules", "generate", "tree", "--with-types"]
         : ["modules", "generate", "tree"];
       console.error(
-        chalk`- proxying the "tree" command to {blue {bold cargo} ${params.join(" ")}}`
+        `- proxying the "tree" command to {blue {bold cargo} ${params.join(" ")}}`
       );
       const thread = spawnSync("cargo", params, { stdio: "inherit" });
       if (thread.error) {

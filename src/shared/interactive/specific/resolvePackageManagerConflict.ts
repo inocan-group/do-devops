@@ -16,7 +16,7 @@ export async function resolvePackageManagerConflict(observations: Set<DoDevopObs
   const removed = await removeOtherLockFiles(pkgManager);
   if (removed.length > 0) {
     console.log(
-      chalk`- removed ${removed.length} redundant lock file${
+      `- removed ${removed.length} redundant lock file${
         removed.length > 1 ? "s" : ""
       }: {italic {dim ${removed.join(", ")}}}`
     );

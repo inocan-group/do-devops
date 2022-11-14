@@ -34,12 +34,12 @@ export const options: IOptionDefinition = {
     alias: "f",
     type: Boolean,
     group: "local",
-    description: chalk`force a {italic set} operation to complete even when the variable being set alread exists`,
+    description: `force a {italic set} operation to complete even when the variable being set alread exists`,
   },
   base64: {
     type: Boolean,
     group: "local",
-    description: chalk`adding this flag will encode with base64 when adding and decode from base64 to utf-8 when getting`,
+    description: `adding this flag will encode with base64 when adding and decode from base64 to utf-8 when getting`,
   },
 };
 

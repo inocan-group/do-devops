@@ -27,7 +27,7 @@ export function getSyntax(fn?: string): string {
       const hasSubCommands = defn?.subCommands ? true : false;
       return defn.syntax ?? `do ${fn} ${hasSubCommands ? "[command] " : ""}`;
     } else {
-      return chalk`dd [command] <options>\nnote: the command {red ${fn}} is not recognized!`;
+      return `dd [command] <options>\nnote: the command {red ${fn}} is not recognized!`;
     }
   }
 }

@@ -60,7 +60,7 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
     case "":
       if (config) {
         log.info(
-          chalk`- the valid sub-commands for {blue dd image} are: {italic config, optimize,} and {italic watch}`
+          `- the valid sub-commands for {blue dd image} are: {italic config, optimize,} and {italic watch}`
         );
       }
       break;
@@ -68,8 +68,8 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
     default:
       log.shout(
         subCommand
-          ? chalk`the subcommand '${subCommand}' is not known!`
-          : chalk`the {bold {yellow image}} command expects a {italic sub-command}`
+          ? `the subcommand '${subCommand}' is not known!`
+          : `the {bold {yellow image}} command expects a {italic sub-command}`
       );
       await asyncExec(`dd image --help`);
   }

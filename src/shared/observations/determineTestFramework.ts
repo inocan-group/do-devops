@@ -26,14 +26,14 @@ export async function determineTestingFramework(
   if (config.test?.unitTestFramework) {
     if (!opts.interactive) {
       log.info(
-        chalk`- the test framework is configured as "${config.test.unitTestFramework}" in your do-devops config file but we {italic don't detect} the npm deps!`
+        `- the test framework is configured as "${config.test.unitTestFramework}" in your do-devops config file but we {italic don't detect} the npm deps!`
       );
       return config.test.unitTestFramework;
     } else {
       log.shout(
-        chalk`- in the past, this project was setup to use the {yellow {bold ${config.test.unitTestFramework}}} unit test framework.`
+        `- in the past, this project was setup to use the {yellow {bold ${config.test.unitTestFramework}}} unit test framework.`
       );
-      log.shout(chalk`- however, we can't detect the {bold npm} dependencies ${emoji.shocked}`);
+      log.shout(`- however, we can't detect the {bold npm} dependencies ${emoji.shocked}`);
       const install = await askConfirmQuestion("Install them now?");
       if (!install) {
         return config.test.unitTestFramework;
@@ -56,7 +56,7 @@ export async function determineTestingFramework(
       );
     }
     const installAndConfig = await askConfirmQuestion(
-      chalk`Install and configure {italic ${config.test.unitTestFramework}} test framework for you?`
+      `Install and configure {italic ${config.test.unitTestFramework}} test framework for you?`
     );
     if (!installAndConfig) {
       return config?.test?.unitTestFramework || false;
@@ -75,7 +75,7 @@ export async function determineTestingFramework(
 
       if (installed && configured) {
         log.info(
-          chalk`\n- ${emoji.party} {green ${config.test.unitTestFramework}} setup and ready to use in this repo!\n`
+          `\n- ${emoji.party} {green ${config.test.unitTestFramework}} setup and ready to use in this repo!\n`
         );
       }
     }

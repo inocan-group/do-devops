@@ -20,7 +20,7 @@ export async function removeDep(
   const log = logger(opts);
   const pkgManager = await determinePackageManager({}, observations);
   const cmd = ["remove", ...packages];
-  log.whisper(chalk`- removing with {blue ${pkgManager} ${cmd}}`);
+  log.whisper(`- removing with {blue ${pkgManager} ${cmd}}`);
   if (!pkgManager) {
     log.shout("package manager undetermined!");
     process.exit(1);
@@ -28,7 +28,7 @@ export async function removeDep(
   try {
     spawnSync(pkgManager, cmd, { stdio: "inherit" });
     log.info(
-      chalk`- ${emoji.party} Packages [{italic {gray {dim ${packages.join(
+      `- ${emoji.party} Packages [{italic {gray {dim ${packages.join(
         ", "
       )}}}}] {italic removed}`
     );
@@ -51,7 +51,7 @@ export async function removeDep(
     return true;
   } catch {
     log.info(
-      chalk`- ${emoji.poop} failure while trying to remove npm packages: ${packages.join(", ")}`
+      `- ${emoji.poop} failure while trying to remove npm packages: ${packages.join(", ")}`
     );
     return false;
   }

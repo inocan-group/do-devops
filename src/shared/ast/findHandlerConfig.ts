@@ -30,7 +30,7 @@ export function findHandlerConfig(
     if (isWebpackZip) {
       if (hash.package) {
         console.log(
-          chalk`{grey - the handler function "${fn}" had a defined package config but it will be replaced by a {italic artifact} reference}`
+          `{grey - the handler function "${fn}" had a defined package config but it will be replaced by a {italic artifact} reference}`
         );
       }
       hash.package = { artifact: `.webpack/${fn}.zip` };

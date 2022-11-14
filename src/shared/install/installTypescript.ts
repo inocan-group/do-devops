@@ -17,7 +17,7 @@ export async function installTypescript(
 
   const proceed = opts.silent
     ? opts.silent
-    : await askConfirmQuestion(chalk`Would you like to install and configure {blue typescript}?`);
+    : await askConfirmQuestion(`Would you like to install and configure {blue typescript}?`);
 
   if (!proceed) {
     return false;
@@ -35,13 +35,13 @@ export async function installTypescript(
     log.shout(`- ${emoji.poop} there was a problem installing the Typescript dev dependencies`);
     return false;
   }
-  log.whisper(chalk`{gray - all {italic typescript} dependencies have been installed}`);
+  log.whisper(`{gray - all {italic typescript} dependencies have been installed}`);
 
   await templateDirCopy("typescript", "/");
 
-  log.whisper(chalk`{gray - tsconfig file saved to root}`);
+  log.whisper(`{gray - tsconfig file saved to root}`);
 
-  log.info(chalk`- ${emoji.party} {blue typescript} has been installed and configured\n`);
+  log.info(`- ${emoji.party} {blue typescript} has been installed and configured\n`);
 
   return true;
 }

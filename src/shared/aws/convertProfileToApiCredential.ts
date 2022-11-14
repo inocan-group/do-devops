@@ -17,7 +17,7 @@ export function convertProfileToApiCredential(profile: IAwsProfile): IAwsCredent
   if (!isAwsProfile(profile)) {
     const isObject = typeof profile === "object" && profile !== null;
     throw new DevopsError(
-      chalk`The {bold {red IAwsProfile}} information which was passed in to be converted to {bold IAwsCredentials} data was malformed and can not be converted! To be valid a key it must have both {green aws_access_key_id} and {green aws_secret_access_key} defined. [${
+      `The {bold {red IAwsProfile}} information which was passed in to be converted to {bold IAwsCredentials} data was malformed and can not be converted! To be valid a key it must have both {green aws_access_key_id} and {green aws_secret_access_key} defined. [${
         isObject
           ? "keys found were " + Object.keys(profile).join(", ")
           : `wrong type: ${typeof profile}`

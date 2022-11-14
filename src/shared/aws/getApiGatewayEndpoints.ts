@@ -11,7 +11,7 @@ import { userHasAwsProfile } from "./userHasAwsProfile";
 export async function getApiGatewayEndpoints(profileName: string, region: string) {
   if (!userHasAwsProfile(profileName)) {
     console.log(
-      chalk`- attempt to get {italics endpoints} not possible with the profile {blue ${profileName}} as you do not have credentials defined for this profile! ${emoji.angry}\n`
+      `- attempt to get {italics endpoints} not possible with the profile {blue ${profileName}} as you do not have credentials defined for this profile! ${emoji.angry}\n`
     );
     // eslint-disable-next-line unicorn/no-process-exit
     process.exit();

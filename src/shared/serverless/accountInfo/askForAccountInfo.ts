@@ -72,24 +72,24 @@ export async function askForAccountInfo(
 
   if (merged.profile && !userHasAwsProfile(merged.profile)) {
     console.log(
-      chalk`- you are deploying with the {green ${merged.profile} AWS profile but you do not have this defined yet! ${emoji.angry}`
+      `- you are deploying with the {green ${merged.profile} AWS profile but you do not have this defined yet! ${emoji.angry}`
     );
-    console.log(chalk`{grey - AWS profiles must be added in {blue src/.aws/credentials}}`);
+    console.log(`{grey - AWS profiles must be added in {blue src/.aws/credentials}}`);
     console.log(
-      chalk`{grey - if you want to override the default behavior you can state a different profile with the {blue --profile} tag}`
+      `{grey - if you want to override the default behavior you can state a different profile with the {blue --profile} tag}`
     );
     process.exit();
   }
 
   if (!merged.profile) {
-    console.log(chalk`- you have not provided an AWS {bold profile}; exiting ...`);
+    console.log(`- you have not provided an AWS {bold profile}; exiting ...`);
     process.exit();
   }
   if (!(await userHasAwsProfile(merged.profile))) {
     console.log(
-      chalk`- you do {bold NOT} have the credentials for the profile {blue ${merged.profile}}! Please add this before\n  trying again. ${emoji.angry}\n`
+      `- you do {bold NOT} have the credentials for the profile {blue ${merged.profile}}! Please add this before\n  trying again. ${emoji.angry}\n`
     );
-    console.log(chalk`{grey - the credentials file is located at {blue src/.aws/credentials}}\n`);
+    console.log(`{grey - the credentials file is located at {blue src/.aws/credentials}}\n`);
 
     process.exit();
   }
@@ -100,7 +100,7 @@ export async function askForAccountInfo(
     config.region = awsProfile.region;
   }
   if (!merged.accountId) {
-    console.log(chalk`- looking up the Account ID for the given profile`);
+    console.log(`- looking up the Account ID for the given profile`);
     try {
       // eslint-disable-next-line unicorn/no-await-expression-member
       merged.accountId = (await getAwsIdentityFromProfile(awsProfile)).accountId;

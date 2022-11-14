@@ -52,36 +52,36 @@ export async function buildLambdaTypescriptProject(
   }
 
   console.log(
-    chalk`- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`
+    `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`
   );
 
   const handlerInfo = await getLocalHandlerInfo();
   console.log(
-    chalk`{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`
+    `{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`
   );
 
   await createInlineExports(handlerInfo);
   console.log(
-    chalk`{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`
+    `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`
   );
 
   await createFunctionEnum(handlerInfo);
   console.log(
-    chalk`{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`
+    `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`
   );
 
   if (!hasWebpackPlugin) {
     // the preferred means of bundling using webpack
     await createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
     console.log(
-      chalk`{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
+      `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
     );
   } else {
     const exist = filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
     if (exist) {
       rm(...exist);
       console.log(
-        chalk`- ${emoji.eyeballs} removed webpack entry point files so as not to confuse with what the {italic serverless-webpack} plugin is doing}`
+        `- ${emoji.eyeballs} removed webpack entry point files so as not to confuse with what the {italic serverless-webpack} plugin is doing}`
       );
     }
   }
@@ -91,7 +91,7 @@ export async function buildLambdaTypescriptProject(
     await saveToServerlessYaml(serverless);
   } else {
     console.log(
-      chalk`- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`
+      `- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`
     );
 
     await asyncExec("yarn ts-node serverless-config/build.ts --color=always", {
@@ -102,10 +102,10 @@ export async function buildLambdaTypescriptProject(
       },
     });
     rm(ACCOUNT_INFO_YAML);
-    console.log(chalk`{grey - removed the temporary {blue account-info.yml} file from the repo}`);
+    console.log(`{grey - removed the temporary {blue account-info.yml} file from the repo}`);
   }
 
   console.log(
-    chalk`{green - {bold serverless.yml} has been updated successfully ${emoji.rocket}}\n`
+    `{green - {bold serverless.yml} has been updated successfully ${emoji.rocket}}\n`
   );
 }

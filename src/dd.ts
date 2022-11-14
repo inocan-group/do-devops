@@ -73,7 +73,7 @@ import { isDevopsError } from "./@type-guards";
         const plural = cmdInput.unknown.length === 1 ? false : true;
         const preposition = cmdInput.unknown.length === 1 ? "was" : "were";
         console.error(
-          chalk`- Note: {italic there ${preposition} ${
+          `- Note: {italic there ${preposition} ${
             cmdInput.unknown.length
           } {italic unknown} parameter${
             plural ? "s" : ""
@@ -82,10 +82,10 @@ import { isDevopsError } from "./@type-guards";
       }
     } catch (error) {
       console.error(
-        chalk`\n{red An Error has occurred while running: {italic {bold do-devops ${cmdName}}}}`
+        `\n{red An Error has occurred while running: {italic {bold do-devops ${cmdName}}}}`
       );
       console.error(`- ${(error as Error).message}`);
-      console.error(chalk`{grey   ${(error as Error).stack}}\n`);
+      console.error(`{grey   ${(error as Error).stack}}\n`);
 
       process.exit();
     }
@@ -108,9 +108,9 @@ import { isDevopsError } from "./@type-guards";
       const noPkgJsonMsg =
         typeof useScriptProxy === "undefined"
           ? ""
-          : chalk`\n\n{dim - Note: you're in a directory with no {italic package.json} file so if you\nwere trying to proxy a script please move to the right directory first.}`;
+          : `\n\n{dim - Note: you're in a directory with no {italic package.json} file so if you\nwere trying to proxy a script please move to the right directory first.}`;
       console.log(
-        chalk`${emoji.poop} {italic {yellowBright ${cmdName}}} is an unknown command!${noPkgJsonMsg} \n\n` +
+        `${emoji.poop} {italic {yellowBright ${cmdName}}} is an unknown command!${noPkgJsonMsg} \n\n` +
           `- Valid command syntax is: ${chalk.bold.inverse(
             " dd [command] <options> "
           )}\n  where valid commands are: ${chalk.italic(
@@ -119,7 +119,7 @@ import { isDevopsError } from "./@type-guards";
               .sort()
               .join(", ")
           )}\n\n` +
-          chalk`{dim - If you want more help with a specific command, use} ${inverted(
+          `{dim - If you want more help with a specific command, use} ${inverted(
             " dd [cmd] --help "
           )}\n`
       );

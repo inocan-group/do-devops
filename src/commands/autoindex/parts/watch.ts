@@ -60,7 +60,7 @@ function recheckAutoindexFile(changedFile: string, log: ILogger) {
     recheck(autoindexFile, log);
   } else {
     log.info(
-      chalk`- ${emoji.confused} there was a problem identifying the right {italic autoindex} file for {blue ${changedFile}}`
+      `- ${emoji.confused} there was a problem identifying the right {italic autoindex} file for {blue ${changedFile}}`
     );
   }
 }
@@ -69,35 +69,33 @@ function recheckAutoindexFile(changedFile: string, log: ILogger) {
 function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogger) {
   return (file: string) => {
     switch (op) {
-      case "add":
+      case "add": {
         log.info(
-          chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            group.name
-          }} {italic added the file }${highlightFilepath(file)}}`
+          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} {italic added the file }${highlightFilepath(file)}}`
         );
         if (fileHasExports(join(process.cwd(), file))) {
           recheckAutoindexFile(file, log);
         } else {
           deferredFiles.add(file);
           log.info(
-            chalk`{dim - {bold Autoindex:} the file has no {italic exports} yet so deferring update}`
+            `{dim - ${chalk.bold("Autoindex:")} the file has no {italic exports} yet so deferring update}`
           );
         }
         break;
-      case "unlink":
+      }
+      case "unlink": {
         log.info(
-          chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            group.name
-          }} {italic removed the file }${highlightFilepath(file)}}`
+          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} {italic removed the file }${highlightFilepath(file)}}`
         );
         recheckAutoindexFile(file, log);
         break;
-      case "changed":
+      }
+      case "changed": {
         const hasExports = fileHasExports(join(process.cwd(), file));
         const wasDeferred = deferredFiles.has(file);
         if (hasExports && wasDeferred) {
           log.info(
-            chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
+            `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} {blue ${
               group.name
             }} {italic changed }${highlightFilepath(file)} {italic which now has exports}}`
           );
@@ -105,19 +103,19 @@ function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogge
           recheckAutoindexFile(file, log);
         } else if (!hasExports) {
           log.info(
-            chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
+            `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} {blue ${
               group.name
             }} {italic changed }${highlightFilepath(file)} {italic and no longer has exports}}`
           );
           recheckAutoindexFile(file, log);
         }
         break;
-      default:
+      }
+      default: {
         log.info(
-          chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            group.name
-          }} {italic did "${op}" to }${highlightFilepath(file)}}`
+          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} {italic did "${op}" to }${highlightFilepath(file)}}`
         );
+      }
     }
   };
 }
@@ -132,10 +130,10 @@ function getParentIndex(file: string) {
 function idxWatcher(group: AutoindexGroupDefinition, op: string, log: ILogger) {
   return (file: string) => {
     switch (op) {
-      case "add":
+      case "add": {
         if (isAutoindexFile(file)) {
           log.info(
-            chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
+            `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} {blue ${
               group.name
             }} {italic added a new autoindex file }${highlightFilepath(file)}}`
           );
@@ -147,35 +145,35 @@ function idxWatcher(group: AutoindexGroupDefinition, op: string, log: ILogger) {
               }
             } else {
               log.info(
-                chalk`{dim {red - autoindex update failed to update ${highlightFilepath(file)}}}`
+                chalk.dim.red` - autoindex update failed to update ${highlightFilepath(file)}`
               );
             }
           });
         }
         break;
-      case "unlink":
+      }
+      case "unlink": {
         log.info(
-          chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            group.name
-          }} {italic removed an autoindex file }${highlightFilepath(file)}}`
+          `- ${chalk.bold("Autoindex:")} ${chalk.italic("repo")} ${chalk.blue(group.name)} ${chalk.italic("removed an autoindex file ")}${highlightFilepath(file)}}""`
         );
         const parentIndex = getParentIndex(file);
         if (parentIndex) {
           recheck(parentIndex, log);
         }
         break;
+      }
 
-      case "change":
+      case "change": {
         log.info(
-          chalk`- {bold Autoindex:} {dim {italic repo} {blue ${
-            group.name
-          }} {italic changed an autoindex file }${highlightFilepath(file)}}`
+          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} ${chalk.italic("changed an autoindex file ")}${highlightFilepath(file)}}`
         );
         recheck(file, log);
         break;
+      }
 
-      default:
+      default: {
         log.info(`Unexpected operation [${op}] passed to the index watcher`);
+      }
     }
   };
 }
@@ -191,7 +189,7 @@ function addWatcher(
   const watcher = w.watch(type === "index" ? group.indexGlobs : group.contentGlobs, opts);
 
   switch (type) {
-    case "content":
+    case "content": {
       watcher.on("ready", () => {
         watcher.on("add", contentWatcher(group, "add", log));
         watcher.on("unlink", contentWatcher(group, "unlink", log));
@@ -199,13 +197,15 @@ function addWatcher(
         watcher.on("remove", contentWatcher(group, "remove", log));
       });
       break;
-    case "index":
+    }
+    case "index": {
       watcher.on("ready", () => {
         watcher.on("add", idxWatcher(group, "add", log));
         watcher.on("unlink", idxWatcher(group, "unlink", log));
         watcher.on("change", idxWatcher(group, "change", log));
       });
       break;
+    }
   }
 
   return watcher;
@@ -235,8 +235,8 @@ export function watch(group: AutoindexGroupDefinition, opts: Options<IAutoindexO
   groups.push({ ...group, indexWatcher, contentWatcher });
 
   log.info();
-  log.info(chalk`Watching ${group.name}:`);
-  log.info(chalk` - this includes {yellow ${group.indexFiles.length}} index files`);
-  log.info(chalk` - and {yellow ${group.contentFiles.length}} content files`);
+  log.info(`Watching ${group.name}:`);
+  log.info(` - this includes {yellow ${group.indexFiles.length}} index files`);
+  log.info(` - and {yellow ${group.contentFiles.length}} content files`);
   log.info();
 }

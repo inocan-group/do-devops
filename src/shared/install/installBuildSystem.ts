@@ -14,7 +14,7 @@ export async function installBuildSystem(opts: Options, observations: Observatio
   const log = logger(opts);
 
   const confirm = await askConfirmQuestion(
-    chalk`You do not currently have a {blue build} {italic system} defined. Would you like to have one setup?`
+    `You do not currently have a {blue build} {italic system} defined. Would you like to have one setup?`
   );
   if (!confirm) {
     return false;
@@ -42,7 +42,7 @@ export async function installBuildSystem(opts: Options, observations: Observatio
   }
 
   const bundler = await askListQuestion(
-    chalk`Which transpiler/bundler will you use in this repo?`,
+    `Which transpiler/bundler will you use in this repo?`,
     ["tsc", "rollup", "webpack", "vite", "esbuild", "swc"] as const
   );
   await saveProjectConfig({ general: { bundler } });
@@ -50,13 +50,14 @@ export async function installBuildSystem(opts: Options, observations: Observatio
   let devDeps: string[] = [];
 
   switch (bundler) {
-    case "tsc":
+    case "tsc": {
       devDeps = [];
       scripts.build = `run-s clean lint build:bundle`;
       scripts["build:bundle"] = `ttsc -P tsconfig.build.json`;
       scripts.watch = scripts.watch ? scripts.watch : `ttsc -P tsconfig.build.json -w`;
       break;
-    case "rollup":
+    }
+    case "rollup": {
       devDeps = [
         "rollup",
         "@ampproject/rollup-plugin-closure-compiler",
@@ -76,23 +77,28 @@ export async function installBuildSystem(opts: Options, observations: Observatio
       await templateFileCopy("bundlers/rollup/build.single-entry.js", "/devops/build.js");
 
       break;
-    case "webpack":
+    }
+    case "webpack": {
       devDeps = ["webpack"];
       break;
-    case "esbuild":
+    }
+    case "esbuild": {
       devDeps = ["esbuild"];
       break;
-    case "swc":
+    }
+    case "swc": {
       devDeps = ["@swc/core", "@swc/cli"];
       break;
-    case "vite":
+    }
+    case "vite": {
       devDeps = ["vite", "vite-plugin-md", "vite-plugin-components", "vite-ssg", "vite-plugin-pwa"];
       break;
+    }
   }
   // https://swc.rs/
 
   await templateDirCopy("typescript", "/");
-  log.whisper(chalk`{gray - {blue tsconfig} files transferred}`);
+  log.whisper(`{gray - {blue tsconfig} files transferred}`);
 
   const installed = await installDevDep(
     opts,
@@ -108,7 +114,7 @@ export async function installBuildSystem(opts: Options, observations: Observatio
   if (!installed) {
     throw new DevopsError(`Problem installing dev dependencies for "tsc" build/bundle solution`);
   }
-  log.whisper(chalk`{gray - dev dependencies for {blue ${bundler}} are installed}`);
+  log.whisper(`{gray - dev dependencies for {blue ${bundler}} are installed}`);
   pkg = getPackageJson(undefined, true);
   pkg.scripts = scripts;
   await savePackageJson(pkg);

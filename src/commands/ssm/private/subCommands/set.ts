@@ -12,10 +12,10 @@ import { ISsmOptions } from "../../parts";
 export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: argv }) => {
   if (argv.length < 2) {
     console.log(
-      chalk`The "dd ssm set" command expects the variable name and value as parameters on the command line: {blue {bold do ssm set} <{italic name}> <{italic value}>}\n`
+      `The "dd ssm set" command expects the variable name and value as parameters on the command line: {blue {bold do ssm set} <{italic name}> <{italic value}>}\n`
     );
     console.log(
-      chalk`{grey {bold - Note:} you can include a {italic partial name} for the variable and things like the AWS profile, region, stage, and version number\n  will be filled in where possible}\n`
+      `{grey {bold - Note:} you can include a {italic partial name} for the variable and things like the AWS profile, region, stage, and version number\n  will be filled in where possible}\n`
     );
 
     process.exit(1);
@@ -25,10 +25,10 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: arg
   const profile = await determineProfile({ ...opts, interactive: true });
   if (!profile) {
     console.log(
-      chalk`- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
+      `- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
     );
     console.log(
-      chalk`- alternatively use the {inverse --interactive } option to have the CLI interactively let you select`
+      `- alternatively use the {inverse --interactive } option to have the CLI interactively let you select`
     );
     process.exit();
   }
@@ -40,7 +40,7 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: arg
     process.env.AWS_STAGE ||
     process.env.NODE_ENV ||
     (await askForStage(
-      chalk`SSM variables should be namespaced to a STAGE, what stage are you setting for {dim [ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]}?`
+      `SSM variables should be namespaced to a STAGE, what stage are you setting for {dim [ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]}?`
     ));
 
   const ssm = new SSM({ profile, region });
@@ -56,16 +56,16 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: arg
       override: opts.force,
     });
     console.log(
-      chalk`\n- ${emoji.party} the {bold {yellow ${name}}} variable was set successfully to the {italic ${region}} region {dim [ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]}\n`
+      `\n- ${emoji.party} the {bold {yellow ${name}}} variable was set successfully to the {italic ${region}} region {dim [ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]}\n`
     );
   } catch (error) {
     console.log();
     if ((error as any)?.code === "ParameterAlreadyExists") {
       console.log(
-        chalk`- {red {bold Paramater Already Exists!}} to overwrite a parameter which already exists you must add {blue --force} to the CLI command`
+        `- {red {bold Paramater Already Exists!}} to overwrite a parameter which already exists you must add {blue --force} to the CLI command`
       );
     } else {
-      console.log(chalk`{red {bold Error:}} ${(error as Error).message}`);
+      console.log(`{red {bold Error:}} ${(error as Error).message}`);
     }
 
     console.log();

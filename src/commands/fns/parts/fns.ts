@@ -25,7 +25,7 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
   const isServerlessProject = observations.has("serverlessFramework");
   const region = opts.region ? opts.region : await determineRegion(opts);
   const stageFilterMsg = opts.stage
-    ? chalk`, filtered down to only those in the {bold ${opts.stage.toUpperCase()}} stage.`
+    ? `, filtered down to only those in the {bold ${opts.stage.toUpperCase()}} stage.`
     : "";
 
   if (!isServerlessProject) {
@@ -37,11 +37,11 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
 
       if (fns) {
         console.log(
-          chalk`- AWS functions found using {blue {bold ${opts.profile}}} profile {dim [ ${region} ]}${stageFilterMsg}\n`
+          `- AWS functions found using {blue {bold ${opts.profile}}} profile {dim [ ${region} ]}${stageFilterMsg}\n`
         );
         if (opts.json) {
           console.log(
-            chalk`{gray - using {inverse  json } output directly from AWS api instead of a table}`
+            `{gray - using {inverse  json } output directly from AWS api instead of a table}`
           );
           console.log(fns);
         } else {
@@ -52,12 +52,12 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
         }
       }
       console.log(
-        chalk`{gray - the AWS CLI provides access to data like this with} {bold aws lambda list-functions --profile ${opts.profile}}`
+        `{gray - the AWS CLI provides access to data like this with} {bold aws lambda list-functions --profile ${opts.profile}}`
       );
     } else {
       console.log("- this project does not appear to be a Serverless project!");
       console.log(
-        chalk`{gray - if you want a list of functions, you can still get this by stating an AWS profile with the "--profile" option}\n`
+        `{gray - if you want a list of functions, you can still get this by stating an AWS profile with the "--profile" option}\n`
       );
     }
     exit();
@@ -71,7 +71,7 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
       await buildLambdaTypescriptProject();
     } else {
       console.log(
-        chalk`- detected use of the {blue typescript-microservice} template; use {bold {blue --forceBuild}} to rebuild prior to listing functions.\n`
+        `- detected use of the {blue typescript-microservice} template; use {bold {blue --forceBuild}} to rebuild prior to listing functions.\n`
       );
     }
   }

@@ -46,7 +46,7 @@ export async function askForDependency(
   }
 
   const kind = (await askListQuestion(
-    chalk`Which {italic type} of dependency`,
+    `Which {italic type} of dependency`,
     choices
   )) as keyof typeof deps;
 
@@ -56,8 +56,8 @@ export async function askForDependency(
   const depChoices = deps[kind] as INpmDep[];
 
   const answer = await askListQuestion(
-    chalk`- Choose the {italic specific} dependency to run "ls" on`,
-    Object.fromEntries(depChoices.map((i) => [i.name, chalk`${i.name} {dim - ${i.version}}`]))
+    `- Choose the {italic specific} dependency to run "ls" on`,
+    Object.fromEntries(depChoices.map((i) => [i.name, `${i.name} {dim - ${i.version}}`]))
   );
 
   return answer;

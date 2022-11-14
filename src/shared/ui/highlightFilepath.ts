@@ -3,7 +3,7 @@ import chalk from "chalk";
 import type { ForegroundColorName, BackgroundColorName } from "chalk";
 
 /**
- * Uses `chalk` to present a nicely formatted
+ * Uses `` to present a nicely formatted
  * filepath and file where the file name itself is highlighted
  */
 export function highlightFilepath(
@@ -29,12 +29,14 @@ export function highlightFilepath(
   const path = parts.join("/").replace(/^(\S)/, "./$1");
 
   const filePath = modifier
-    ? chalk`{${modifier} {${foreground} ${path + "/"}}}`
-    : chalk`{${foreground} ${path + "/"}}`;
+    ? chalk[modifier]`{${foreground} ${path + "/"}}`
+    : `{${foreground} ${path + "/"}}`;
 
   const fileName = highModifier
-    ? chalk`{${highModifier} {${highForeground} ${file}}}`
-    : chalk`{${highForeground} ${file}}`;
+    ? chalk[highModifier]`{${highForeground} ${file}}`
+    : highForeground 
+      ? chalk[highForeground]`${file}}`
+      : `${file}}`;
 
   return `${filePath}${fileName}`;
 }

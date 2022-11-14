@@ -35,12 +35,12 @@ function warnAboutMissingTyping(config: IInlineExportConfig[]) {
   const incorrectOrMissingTyping = config.filter((i) => i.interface !== "IHandlerConfig");
   if (incorrectOrMissingTyping.length > 0) {
     console.log(
-      chalk`- there were ${String(
+      `- there were ${String(
         incorrectOrMissingTyping.length
       )} handler functions who defined a {italic config} but did not type it as {bold IHandlerConfig}`
     );
     console.log(
-      chalk`{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
+      `{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
         .map((i) => (isServerlessFunctionHandler(i.config) ? i.config.handler : i.config.image))
         .join(", ")}}}`
     );
@@ -71,7 +71,7 @@ export async function createInlineExports(handlers: IWebpackHandlerDates[]) {
       config.push(handlerConfig as IInlineExportConfig);
     } else {
       console.log(
-        chalk`- ${emoji.poop} the {red ${toRelativePath(
+        `- ${emoji.poop} the {red ${toRelativePath(
           handler.source
         )}} file will be ignored as a handler as it has no CONFIG section defined. This is probably a mistake!`
       );

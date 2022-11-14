@@ -17,7 +17,7 @@ export async function installEsLint(
 
   const proceed = opts.silent
     ? opts.silent
-    : await askConfirmQuestion(chalk`Would you like to install and configure {blue eslint}?`);
+    : await askConfirmQuestion(`Would you like to install and configure {blue eslint}?`);
 
   if (!proceed) {
     return false;
@@ -41,17 +41,17 @@ export async function installEsLint(
     return false;
   }
   log.whisper(
-    chalk`{gray - all {italic eslint} and {italic prettier} dependencies have been installed}`
+    `{gray - all {italic eslint} and {italic prettier} dependencies have been installed}`
   );
 
   await templateFileCopy("eslint/.eslintrc", "/.eslintrc");
   await templateFileCopy("eslint/.prettierrc.js", "/.prettierrc.js");
 
   log.whisper(
-    chalk`{gray - configuration files for both {italic eslint} and {italic prettier} have been saved}`
+    `{gray - configuration files for both {italic eslint} and {italic prettier} have been saved}`
   );
 
-  log.info(chalk`- ${emoji.party} {blue eslint} has been installed and configured\n`);
+  log.info(`- ${emoji.party} {blue eslint} has been installed and configured\n`);
 
   return true;
 }

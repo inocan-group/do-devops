@@ -57,8 +57,8 @@ function getLatest(repo: INpmInfo) {
 function getUrls(npm: INpmInfo): { homepage?: string; repo?: string } {
   const homepage = npm.homepage;
   const repo = isNpmInfoRepository(npm.repository)
-    ? npm?.repository?.url || chalk`{red no repo found!}`
-    : npm.repository || chalk`{red no repo found!}`;
+    ? npm?.repository?.url || `{red no repo found!}`
+    : npm.repository || `{red no repo found!}`;
 
   return {
     homepage,
@@ -113,17 +113,17 @@ export async function otherPackages(
 
     const license = repo.value.license
       ? repo.value.license.slice(0, 8)
-      : chalk`{red {italic missing}}`;
-    const urlDescription = chalk`{bold Repo:} ${urls.repo}${
-      urls.homepage ? chalk`\n{bold Homepage:} ${urls.homepage}` : ""
-    }${author ? chalk`\n{bold Author:} ${author}` : ""}`;
+      : `{red {italic missing}}`;
+    const urlDescription = `{bold Repo:} ${urls.repo}${
+      urls.homepage ? `\n{bold Homepage:} ${urls.homepage}` : ""
+    }${author ? `\n{bold Author:} ${author}` : ""}`;
 
     data.push({
       repo: repo.name,
       latest: opts.verbose
-        ? chalk`${latest?.version} - {italic ${latest?.timing.replace("about ", "")}}${
+        ? `${latest?.version} - {italic ${latest?.timing.replace("about ", "")}}${
             prior
-              ? chalk`\n{dim ${prior?.version} - {italic ${prior?.timing.replace("about ", "")}}}`
+              ? `\n{dim ${prior?.version} - {italic ${prior?.timing.replace("about ", "")}}}`
               : ""
           }`
         : getLatest(repo.value),

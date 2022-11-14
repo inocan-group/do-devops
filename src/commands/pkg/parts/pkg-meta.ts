@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { IOptionDefinition } from "src/@types/option-types";
 
-export const description = chalk`Package up resources for {bold Serverless} publishing but do not actually {italic deploy}.`;
+export const description = `Package up resources for {bold Serverless} publishing but do not actually {italic deploy}.`;
 
 export const options: IOptionDefinition = {
   stage: {
@@ -27,12 +27,12 @@ export const options: IOptionDefinition = {
     type: String,
     typeLabel: "<directory>",
     group: "local",
-    description: chalk`by default assets are saved to the {italic .serverless} directory but you can change this to a different directory if you like.`,
+    description: `by default assets are saved to the {italic .serverless} directory but you can change this to a different directory if you like.`,
   },
   validate: {
     type: Boolean,
     group: "local",
-    description: chalk`after the package is completed the {bold cloudformation} template can be validated`,
+    description: `after the package is completed the {bold cloudformation} template can be validated`,
   },
 };
 

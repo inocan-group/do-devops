@@ -37,7 +37,7 @@ export function getValidStepFunctions(opts: IDictionary = {}) {
         if (!ast.program.body[0].source) {
           if (opts.verbose) {
             console.log(
-              chalk`{grey - the file {blue ${toRelativePath(
+              `{grey - the file {blue ${toRelativePath(
                 cur
               )}} has no source content; will be ignored}`
             );
@@ -62,7 +62,7 @@ export function getValidStepFunctions(opts: IDictionary = {}) {
         return agg;
       } catch (error) {
         console.log(
-          chalk`- Error processing  {red ${toRelativePath(cur)}} [s: ${status}]: {grey ${
+          `- Error processing  {red ${toRelativePath(cur)}} [s: ${status}]: {grey ${
             (error as Error).message
           }}`
         );

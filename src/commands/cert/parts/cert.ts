@@ -7,7 +7,7 @@ import { ICertOptions } from "./options";
 export const handler: DoDevopsHandler<Options<ICertOptions>> = async ({ opts, subCommand }) => {
   if (!subCommand) {
     console.log(
-      chalk`{red - no {bold cert} sub-command found;} valid options are:\n    - {green ca} or {green ssl} for SSL certs\n    - {green ssh} to create an SSH key pair, and\n    - {green info} for information on a particular certificate\n\n- type {blue dd cert --help} for more info`
+      `{red - no {bold cert} sub-command found;} valid options are:\n    - {green ca} or {green ssl} for SSL certs\n    - {green ssh} to create an SSH key pair, and\n    - {green info} for information on a particular certificate\n\n- type {blue dd cert --help} for more info`
     );
     exit(1);
   }
@@ -30,26 +30,33 @@ export const handler: DoDevopsHandler<Options<ICertOptions>> = async ({ opts, su
         : undefined
       : o.keyLength || 4096;
 
+  const dimQuote = chalk.dim("\"");
+
   switch (subCommand.toLowerCase()) {
-    case "ca":
-      console.error(chalk`- creating a {italic local} {green CA Certificate} pairing`);
+    case "ca": {
+      console.error(`- creating a {italic local} {green CA Certificate} pairing`);
       await createCA(o);
       break;
+    }
     case "cert":
     case "certificate":
-    case "ssl":
-      console.error(chalk`- creating a local {green SSL Certificate} pairing`);
+    case "ssl": {
+      console.error(`- creating a local {green SSL Certificate} pairing`);
       await createCertificate(o);
       break;
-    case "ssh":
+    }
+    case "ssh": {
       await createSSH(o);
       break;
-    case "info":
+    }
+    case "info": {
       await certInfo(o);
       break;
-    default:
-      console.error(chalk`{red - unknown sub command {dim "}{bold ${subCommand}}{dim "} }`);
+    }
+    default: {
+      console.error(`{red - unknown sub command ${dimQuote}${chalk.bold(subCommand)}${dimQuote} }`);
       exit(1);
+    }
   }
 
   exit(0);

@@ -18,7 +18,7 @@ export const handler: DoDevopsHandler = async ({ opts }) => {
       `   however it appears you're in directory without a package.json file! ${emoji.shocked}\n`
     );
     console.log(
-      chalk`- please move to a new directory or pass in the optional '--repo [repo]' parameter to name a repo`
+      `- please move to a new directory or pass in the optional '--repo [repo]' parameter to name a repo`
     );
 
     process.exit();
@@ -37,18 +37,18 @@ export const handler: DoDevopsHandler = async ({ opts }) => {
   const changes =
     status.not_added.length === 0 && status.modified.length === 0
       ? ""
-      : chalk`\n- Locally you have {yellow ${
+      : `\n- Locally you have {yellow ${
           status.not_added.length > 0 ? status.not_added.length : "zero"
         }} {italic new} files and {yellow ${status.modified.length}} {italic modified} files`;
 
   const conflicts =
     status.conflicted.length === 0
       ? ""
-      : chalk`- ${emoji.poop} There are {bold {red ${status.conflicted.length}}} conflicted files!`;
+      : `- ${emoji.poop} There are {bold {red ${status.conflicted.length}}} conflicted files!`;
 
   if (opts.verbose) {
     console.log(
-      chalk`The remote repo's latest version is {bold {yellow ${latest}}}; {blue package.json} is ${
+      `The remote repo's latest version is {bold {yellow ${latest}}}; {blue package.json} is ${
         pkgVersion === latest ? "the same" : `is {bold ${pkgVersion}}`
       }.${aheadBehind}${changes}${conflicts}`
     );

@@ -26,9 +26,9 @@ export async function zipWebpackFiles(fns: string[]) {
 
     return Promise.all(promises);
   } catch (error) {
-    console.log(chalk`{red - Problem zipping webpack files! ${emoji.angry}}`);
+    console.log(`{red - Problem zipping webpack files! ${emoji.angry}}`);
     console.log(`- ${(error as Error).message}`);
-    console.log(chalk`{grey \n${(error as Error).stack}}\n`);
+    console.log(`{grey \n${(error as Error).stack}}\n`);
     process.exit();
   }
 }

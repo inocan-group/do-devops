@@ -17,9 +17,9 @@ export function isAutoindexFile(filename: string) {
   const isEmpty = file.trim() === "";
   const hasSignature = /\/\/\s*#autoindex/.test(file);
   if (isEmpty) {
-    log.shout(chalk`- ${emoji.shocked} the index file {blue ${filename}} was EMPTY!`);
+    log.shout(`- ${emoji.shocked} the index file {blue ${filename}} was EMPTY!`);
     writeFileSync(filename, NEW_AUTOINDEX_CONTENT);
-    log.shout(chalk`- ${emoji.robot} made this file into an {italic autoindex} file\n`);
+    log.shout(`- ${emoji.robot} made this file into an {italic autoindex} file\n`);
     return true;
   }
   return isEmpty || hasSignature;

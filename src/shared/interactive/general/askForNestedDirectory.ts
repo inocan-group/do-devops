@@ -50,7 +50,7 @@ export async function askForNestedDirectory(ask: string, options: INestedDirOpti
         dirs.length === 0
           ? await askListQuestion(ask, [...subDirs, COMPLETED])
           : await askListQuestion(
-              chalk`Thanks. The selected path so far is: {blue ${dirs.join(
+              `Thanks. The selected path so far is: {blue ${dirs.join(
                 "/"
               )}}\nNow choose either a subdirectory or "COMPLETED" to finish the selection.`,
               [COMPLETED, ...subDirs]
@@ -62,7 +62,7 @@ export async function askForNestedDirectory(ask: string, options: INestedDirOpti
         const created = await ensureDirectory(operatingDir);
         if (created) {
           console.log(
-            chalk`{dim - the {bold ${choice}} directory {italic didn't exist} so we've created it for you.}`
+            `{dim - the {bold ${choice}} directory {italic didn't exist} so we've created it for you.}`
           );
           choice = COMPLETED;
         }
@@ -71,7 +71,7 @@ export async function askForNestedDirectory(ask: string, options: INestedDirOpti
   } // end while loop
 
   const relativeDirectory = relative(repoDirectory(), operatingDir);
-  console.log(chalk`{bold {yellow ${options.name || "Selected Directory"}:} ${relativeDirectory}}`);
+  console.log(`{bold {yellow ${options.name || "Selected Directory"}:} ${relativeDirectory}}`);
 
   return relativeDirectory;
 }

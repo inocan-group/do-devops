@@ -25,7 +25,7 @@ const command: IDoDevopsCommand<IInfoOptions> = {
       }
 
       console.log(
-        chalk`- ${emoji.run} getting NPM info for {bold {yellow ${String(
+        `- ${emoji.run} getting NPM info for {bold {yellow ${String(
           deps.length
         )}}} dependencies`
       );
@@ -41,7 +41,7 @@ const command: IDoDevopsCommand<IInfoOptions> = {
   options: {
     argv: {
       type: String,
-      description: chalk`{italic optionally} pass in npm packages to get info on them`,
+      description: `{italic optionally} pass in npm packages to get info on them`,
       group: "local",
       defaultOption: true,
       multiple: true,

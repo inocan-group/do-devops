@@ -34,7 +34,7 @@ export const options: IOptionDefinition = {
     multiple: true,
     type: String,
     group: "local",
-    description: chalk`{italic optionally} state one or more explicit autoindex files to evaluate instead of glob patterns`,
+    description: `{italic optionally} state one or more explicit autoindex files to evaluate instead of glob patterns`,
     typeLabel: "string[]",
   },
 
@@ -46,7 +46,7 @@ export const options: IOptionDefinition = {
   sfc: {
     type: Boolean,
     group: "local",
-    description: chalk`by default VueJS SFC files will be extracted as a default import but this can be turned off with this flag`,
+    description: `by default VueJS SFC files will be extracted as a default import but this can be turned off with this flag`,
   },
   dir: {
     type: String,
@@ -65,7 +65,7 @@ export const options: IOptionDefinition = {
     alias: "w",
     type: Boolean,
     group: "local",
-    description: chalk`watches for changes and runs {italic autoindex} when detected`,
+    description: `watches for changes and runs {italic autoindex} when detected`,
   },
   force: {
     alias: "f",
@@ -78,6 +78,6 @@ export const options: IOptionDefinition = {
     alias: "p",
     type: Boolean,
     group: "local",
-    description: chalk`exports -- by default -- will {italic not} include the file's {blue .js} extension but sometimes with ES modules you want to include this. If you do then you should set this flag.`,
+    description: `exports -- by default -- will {italic not} include the file's {blue .js} extension but sometimes with ES modules you want to include this. If you do then you should set this flag.`,
   },
 };

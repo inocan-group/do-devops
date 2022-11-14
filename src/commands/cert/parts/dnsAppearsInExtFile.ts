@@ -17,34 +17,34 @@ export const avoidDuplicationInExtFile = async (
 
   if (found) {
     console.error(
-      chalk`- it appears that a DNS entry of {bold {green ${dns}}} (with IP of {green ${ip}}) already exists in your "extfile.cnf" file.`
+      `- it appears that a DNS entry of {bold {green ${dns}}} (with IP of {green ${ip}}) already exists in your "extfile.cnf" file.`
     );
     if (ipAddress.trim() === ip.trim()) {
       console.error(
-        chalk`- using {blue nslookup} we see that the IP address does match that DNS entry ${emoji.thumbsUp}`
+        `- using {blue nslookup} we see that the IP address does match that DNS entry ${emoji.thumbsUp}`
       );
     } else if (ipAddress.trim() === "") {
       console.error(
-        chalk`- using {blue nslookup} was of no use as {green ${dns}} didn't produce any results ${emoji.poop}`
+        `- using {blue nslookup} was of no use as {green ${dns}} didn't produce any results ${emoji.poop}`
       );
     } else {
       console.error(
-        chalk`- using {blue nslookup} came back with an IP address of ${ipAddress}, which in case you weren't paying attention doesn't match your file where the record is ${emoji.shocked}`
+        `- using {blue nslookup} came back with an IP address of ${ipAddress}, which in case you weren't paying attention doesn't match your file where the record is ${emoji.shocked}`
       );
     }
 
     if (nextFound) {
       console.error(
-        chalk`- {red crikey mate}, you've got MORE than one entry for {green ${dns}}; the second reference points to ${nextIp}`
+        `- {red crikey mate}, you've got MORE than one entry for {green ${dns}}; the second reference points to ${nextIp}`
       );
     }
 
     const resolution = await askListQuestion(
       `What do you want to do?`,
       {
-        overwrite: chalk`{bold overwrite} the entry for ${dns} to an IP of ${ipAddress}`,
-        skip: chalk`{bold skip} modifying the file; i'm happy with where it's at`,
-        quit: chalk`{bold quit} out of this process`,
+        overwrite: `{bold overwrite} the entry for ${dns} to an IP of ${ipAddress}`,
+        skip: `{bold skip} modifying the file; i'm happy with where it's at`,
+        quit: `{bold quit} out of this process`,
       },
       { default: "skip" }
     );

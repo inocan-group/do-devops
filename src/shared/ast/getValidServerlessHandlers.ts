@@ -21,7 +21,7 @@ export function getValidServerlessHandlers(opts: IDictionary = {}) {
       if (!ast.program.body[0].source) {
         if (opts.verbose) {
           console.log(
-            chalk`{grey - the file {blue ${toRelativePath(
+            `{grey - the file {blue ${toRelativePath(
               curr
             )}} has no source content; will be ignored}`
           );
@@ -46,7 +46,7 @@ export function getValidServerlessHandlers(opts: IDictionary = {}) {
       return agg;
     } catch (error) {
       console.log(
-        chalk`- Error processing  {red ${toRelativePath(curr)}} [s: ${status}]: {grey ${
+        `- Error processing  {red ${toRelativePath(curr)}} [s: ${status}]: {grey ${
           (error as Error).message
         }}`
       );

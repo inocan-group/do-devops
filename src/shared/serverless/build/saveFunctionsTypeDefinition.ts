@@ -50,8 +50,8 @@ export async function saveFunctionsTypeDefinition(config: IServerlessYaml) {
     fs.writeFileSync(filename, contents, { encoding: "utf-8" });
   } catch (error) {
     console.log(
-      chalk`- Attempt to save {italic type definitions} for {bold functions} and {bold stepFunctions} failed; this will be ignored for now so build can continue.`
+      `- Attempt to save {italic type definitions} for {bold functions} and {bold stepFunctions} failed; this will be ignored for now so build can continue.`
     );
-    console.log(chalk`- The actual error received was: {dim ${(error as Error).message}}`);
+    console.log(`- The actual error received was: {dim ${(error as Error).message}}`);
   }
 }

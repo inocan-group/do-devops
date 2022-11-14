@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import process from "node:process";
 import { format } from "date-fns";
@@ -17,10 +18,10 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({
   const profile = await determineProfile({ ...opts, interactive: true }, observations);
   if (!profile) {
     console.log(
-      chalk`- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
+      `- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
     );
     console.log(
-      chalk`- alternatively use the {inverse --interactive } option to have the CLI interactively let you select`
+      `- alternatively use the {inverse --interactive } option to have the CLI interactively let you select`
     );
     process.exit();
   }
@@ -31,12 +32,12 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({
   const filterBy = argv.length > 0 ? argv[0] : undefined;
 
   if (!profile || !region) {
-    console.log(chalk`{red - missing information!}`);
+    console.log(`{red - missing information!}`);
     console.log(
-      chalk`To list SSM params the AWS {italic profile} and {italic region} must be stated. These could {bold not} be determined so exiting.`
+      `To list SSM params the AWS {italic profile} and {italic region} must be stated. These could {bold not} be determined so exiting.`
     );
     console.log(
-      chalk`{dim note that the easiest way to get an explicit profile/region is to use the {bold --profile} and {bold --region} switches on the command line.}\n`
+      `${chalk.dim(`note that the easiest way to get an explicit profile/region is to use the ${chalk.bold("--profile")} and ${chalk.bold("--region")} switches on the command line.}\n`)}`
     );
 
     process.exit();

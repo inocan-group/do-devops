@@ -85,7 +85,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
   );
 
   log.whisper(
-    chalk`{dim - using the "${rule.name}" rule, {bold ${optimized.length}} images have been resized using Sharp to fit "web formats"}`
+    `{dim - using the "${rule.name}" rule, {bold ${optimized.length}} images have been resized using Sharp to fit "web formats"}`
   );
 
   if (rule.preBlur) {
@@ -95,7 +95,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     }
     const blurred = await Promise.all(waitBlurry);
     log.whisper(
-      chalk`{dim - produced a blurred image preload for ${blurred.length} images associated to "${rule.name}" rule}`
+      `{dim - produced a blurred image preload for ${blurred.length} images associated to "${rule.name}" rule}`
     );
   }
 
@@ -146,7 +146,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     } // close resized loop
     await Promise.all(metaTransfers);
     log.whisper(
-      chalk`- Metadata properties -- {italic ${rule.preserveMeta.join(
+      `- Metadata properties -- {italic ${rule.preserveMeta.join(
         ", "
       )}} -- have been added to the web images where they were available in the source image`
     );
@@ -159,12 +159,12 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     }
     await Promise.all(cpPromises);
     log.whisper(
-      chalk`- copyright notices have been applied to the {yellow {bold ${optimized.length}}} images which were created as a result of recent changes to source files`
+      `- copyright notices have been applied to the {yellow {bold ${optimized.length}}} images which were created as a result of recent changes to source files`
     );
   }
 
   log.info(
-    chalk`- ${
+    `- ${
       emoji.party
     } all images are now up-to-date based on recent source image changes [ {dim ${format(
       Date.now(),

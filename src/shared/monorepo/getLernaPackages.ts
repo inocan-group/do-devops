@@ -25,7 +25,7 @@ export async function getLernaPackages(dir?: string) {
   const lerna = join(dir, "node_modules/.bin/lerna");
   if (!fileExists(lerna)) {
     throw new DevopsError(
-      chalk`Attempt to get {bold green Lerna} package list failed as the Lerna command was not found locally at: {blue ${lerna}}`,
+      `Attempt to get {bold green Lerna} package list failed as the Lerna command was not found locally at: {blue ${lerna}}`,
       "not-ready/lerna-missing"
     );
   }

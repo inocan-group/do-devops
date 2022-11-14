@@ -27,7 +27,7 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
     const config = findHandlerConfig(handler.source);
     if (!config) {
       console.log(
-        chalk`- ${emoji.angry} also excluding the {italic ${handler.source
+        `- ${emoji.angry} also excluding the {italic ${handler.source
           .split("/")
           .pop()}} in the generated enumeration of handlers`
       );

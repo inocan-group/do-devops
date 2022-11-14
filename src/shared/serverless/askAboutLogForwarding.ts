@@ -21,11 +21,11 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
   if (!hasServerlessLogForwarding) {
     if (hasConfigInfoForForwarding) {
       console.log(
-        chalk`{red - detected a {bold {blue logForwarding}} section in your serverless configuration but you do {italic not} have the {italic {blue serverless-log-forwarding}} plugin installed as a {bold devDep}.}`
+        `{red - detected a {bold {blue logForwarding}} section in your serverless configuration but you do {italic not} have the {italic {blue serverless-log-forwarding}} plugin installed as a {bold devDep}.}`
       );
     } else {
       console.log(
-        chalk`{dim - you are {italic not} using the {blue serverless-log-forwarding} plugin so skipping config for log forwarding}`
+        `{dim - you are {italic not} using the {blue serverless-log-forwarding} plugin so skipping config for log forwarding}`
       );
     }
     return config;
@@ -33,13 +33,13 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
 
   if (hasConfigInfoForForwarding) {
     console.log(
-      chalk`{grey - the {blue serverless-log-forwarding} is configured [ ${config?.custom?.logForwarding?.destinationARN} ]}`
+      `{grey - the {blue serverless-log-forwarding} is configured [ ${config?.custom?.logForwarding?.destinationARN} ]}`
     );
     return config;
   }
 
   console.log(
-    chalk`- you have installed the {blue {italic serverless-log-forwarding}} plugin but have not configured it.`
+    `- you have installed the {blue {italic serverless-log-forwarding}} plugin but have not configured it.`
   );
 
   enum Action {
@@ -56,7 +56,7 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
     {
       type: "list",
       name: "action",
-      message: chalk`{bold choose from one of the {italic actions} below:}`,
+      message: `{bold choose from one of the {italic actions} below:}`,
       choices: [Action.now, Action.remove, Action.later],
       default: Action.now,
       when: () => true,
@@ -90,7 +90,7 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
       }
       config.custom.logForwarding = { destinationARN: arn };
     } else {
-      console.log(chalk`{grey - ok, cancelling the config of a shipping function for now}`);
+      console.log(`{grey - ok, cancelling the config of a shipping function for now}`);
     }
   } else if (answers.action === Action.remove) {
     const pkg = getPackageJson();

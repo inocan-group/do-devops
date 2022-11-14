@@ -41,9 +41,9 @@ export async function determineStage(
 
     return stage;
   } catch (error) {
-    console.log(chalk`- attempts to get the desired "stage" have failed! ${emoji.poop}`);
-    console.log(chalk`- {red ${(error as Error).message}}`);
-    console.log(chalk`{dim ${(error as Error).stack}}`);
+    console.log(`- attempts to get the desired "stage" have failed! ${emoji.poop}`);
+    console.log(`- {red ${(error as Error).message}}`);
+    console.log(`{dim ${(error as Error).stack}}`);
     console.log();
 
     process.exit();

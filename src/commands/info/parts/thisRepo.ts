@@ -35,7 +35,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     (s) => !s.linkTo.startsWith(".pnpm/")
   );
   const pkgManagerConflict = observations.has("packageManagerConflict")
-    ? chalk`- {yellow {bold ${emoji.hazard}}} there are conflicts in lock files from more than one package manager!`
+    ? `- {yellow {bold ${emoji.hazard}}} there are conflicts in lock files from more than one package manager!`
     : false;
   if (pkgManagerConflict) {
     console.log(pkgManagerConflict);
@@ -51,7 +51,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
       ? [
           "Linked\nRepos",
           linkedRepos
-            .map((r) => chalk`{bold ${r.file} -} {dim ${path.posix.resolve(r.linkTo)}}`)
+            .map((r) => `{bold ${r.file} -} {dim ${path.posix.resolve(r.linkTo)}}`)
             .join("\n"),
         ]
       : undefined;
@@ -63,8 +63,8 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
   ].filter((i) => i.value);
   const exportsRow =
     pkgExports.length > 0
-      ? ["Exports", pkgExports.map((i) => chalk`{bold ${i.name}} - {dim ${i.value}}`).join("\n")]
-      : ["Exports", chalk`{italic no exports found in {blue package.json}}`];
+      ? ["Exports", pkgExports.map((i) => `{bold ${i.name}} - {dim ${i.value}}`).join("\n")]
+      : ["Exports", `{italic no exports found in {blue package.json}}`];
 
   const priorVersions = npm
     ? npm.versions
@@ -78,12 +78,12 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
   // GIT
   const gitLastCommit = await getGitLastCommit();
   const gitInfo = gitLastCommit
-    ? chalk`- Latest commit ${green(gitLastCommit.hash.slice(0, 8))} on {green ${
+    ? `- Latest commit ${green(gitLastCommit.hash.slice(0, 8))} on {green ${
         gitLastCommit.refs
       }}\n- committed by {green ${gitLastCommit.author_name} {dim <${
         gitLastCommit.author_email
       }>}} on {green ${format(new Date(gitLastCommit.date), dateFormat)}}`
-    : chalk`{italic {dim no commits found}}`;
+    : `{italic {dim no commits found}}`;
 
   const localFilesChanged = (
     await asyncExec("git diff --name-only", {
@@ -99,7 +99,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     [
       true,
       npm
-        ? chalk`This repo was first published on {green ${format(
+        ? `This repo was first published on {green ${format(
             parseISO(npm.time.created),
             dateFormat
           )}} and last modified on {green ${format(parseISO(npm.time.modified), dateFormat)}}.\n\n`
@@ -108,19 +108,19 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     [
       false,
       npm
-        ? chalk`The latest published version is ${chalk.bold.green(npm.version)} [ ${format(
+        ? `The latest published version is ${chalk.bold.green(npm.version)} [ ${format(
             parseISO(npm.time[npm.version]),
             dateFormat
           )} ].\nLocally in package.json, version is ${chalk.bold.green(pkg.version)}.`
-        : chalk`Locally in {italic package.json}, the version is ${chalk.bold.green(
+        : `Locally in {italic package.json}, the version is ${chalk.bold.green(
             pkg.version
           )} but this is {italic not} an npm package.`,
     ],
-    [true, chalk`\n\nPrior versions include: {italic ${priorVersions}}`],
+    [true, `\n\nPrior versions include: {italic ${priorVersions}}`],
     [
       true,
       npm && npm.author
-        ? chalk`\n\nThe author of the repo is {green {bold ${
+        ? `\n\nThe author of the repo is {green {bold ${
             typeof npm.author === "string" ? npm.author : npm.author.name
           }${typeof npm.author === "object" && npm.author.email ? ` <${npm.author.email}>` : ""}}}`
         : "",
@@ -134,17 +134,17 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
       count: Object.keys(pkg?.dependencies || {}).length,
     },
     {
-      name: chalk`{italic dev} dependencies`,
+      name: `{italic dev} dependencies`,
       prop: "devDependencies",
       count: Object.keys(pkg?.devDependencies || {}).length,
     },
     {
-      name: chalk`{italic optional} dependencies`,
+      name: `{italic optional} dependencies`,
       prop: "optionalDependencies",
       count: Object.keys(pkg?.optionalDependencies || {}).length,
     },
     {
-      name: chalk`{italic peer} dependencies`,
+      name: `{italic peer} dependencies`,
       prop: "peerDependencies",
       count: Object.keys(pkg?.peerDependencies || {}).length,
     },
@@ -152,10 +152,10 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
 
   const depsSummary =
     deps.length > 0
-      ? `This repo has ${deps.map((d) => chalk`{green ${d.count}} ${d.name}`).join(", ")}`
-      : chalk`{italic {dim no dependencies}}`;
+      ? `This repo has ${deps.map((d) => `{green ${d.count}} ${d.name}`).join(", ")}`
+      : `{italic {dim no dependencies}}`;
 
-  chalk`This repo has ${green(
+  `This repo has ${green(
     Object.keys(pkg?.dependencies || {}).length
   )} dependencies, and {green ${
     Object.keys(pkg?.devDependencies || {}).length
@@ -164,7 +164,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     Object.keys(pkg?.dependencies || {}).join("\n - ")
   )}`;
 
-  console.log(chalk`Info on package {green {bold ${pkg.name}}}\n`);
+  console.log(`Info on package {green {bold ${pkg.name}}}\n`);
   const npmInformation =
     pkg.private === true
       ? `This is a private repository (not published to NPM)`
@@ -174,14 +174,14 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
           .join("");
 
   // eslint-disable-next-line unicorn/no-await-expression-member
-  const gitRemotes = (await getGitRemotes()).map((i) => chalk`- {bold ${i.name}:} ${i.refs.fetch}`);
+  const gitRemotes = (await getGitRemotes()).map((i) => `- {bold ${i.name}:} ${i.refs.fetch}`);
 
   const repoInfo =
     pkg.repository && typeof pkg.repository === "object"
       ? convertGitUrlToHttp((pkg.repository as IDictionary).url)
       : pkg.repository
       ? convertGitUrlToHttp(pkg.repository)
-      : chalk`{red The repository is ${chalk.bold(
+      : `{red The repository is ${chalk.bold(
           "not"
         )} stated in {blue package.json}}; it may be deduced by the GIT remotes:\n${gitRemotes.join(
           "\n"
@@ -200,13 +200,13 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     [
       "Scripts",
       Object.keys(pkg?.scripts || {})
-        .map((i) => (i.includes(":") ? chalk`{dim ${i.split(":")[0]}}:${i.split(":")[1]}` : i))
+        .map((i) => (i.includes(":") ? `{dim ${i.split(":")[0]}}:${i.split(":")[1]}` : i))
         .join(", "),
     ],
     [
       "GIT",
       gitInfo +
-        chalk`\n\n- {yellow ${String(
+        `\n\n- {yellow ${String(
           localFilesChanged
         )}} files changed locally on {yellow ${await getCurrentGitBranch()}}`,
     ],

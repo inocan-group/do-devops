@@ -6,6 +6,6 @@ export const options: IOptionDefinition = {
     alias: "r",
     type: String,
     group: "local",
-    description: chalk`by default the "latest" command works off the current working dirs repo but you can specify a foreign npm repo and get the latest of that repo`,
+    description: `by default the "latest" command works off the current working dirs repo but you can specify a foreign npm repo and get the latest of that repo`,
   },
 };

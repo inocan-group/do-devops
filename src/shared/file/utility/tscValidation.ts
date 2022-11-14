@@ -31,15 +31,15 @@ export function tscValidation(filename: string, opts: Options = {}): boolean {
 
   const command = `${tsc} ${filename} --noEmit`;
   log.whisper(
-    chalk`{gray - validating the "${filename}" file with the Typescript {bold {yellow tsc}} compiler}`
+    `{gray - validating the "${filename}" file with the Typescript {bold {yellow tsc}} compiler}`
   );
   try {
     spawnSync(command, { stdio: "inherit" });
-    log.whisper(chalk`{dim - {bold {yellow tsc}} validation passed}`);
+    log.whisper(`{dim - {bold {yellow tsc}} validation passed}`);
     return true;
   } catch {
     log.shout(
-      chalk`- ${emoji.poop} failed to transpile {blue serverless.ts}: {bold tsc ${
+      `- ${emoji.poop} failed to transpile {blue serverless.ts}: {bold tsc ${
         getFileComponents(filename).filename
       } --noEmit}`
     );

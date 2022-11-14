@@ -28,7 +28,7 @@ export async function installPackageManager(
 
   await saveProjectConfig({ general: { pkgManager: manager } });
   log.whisper(
-    chalk`{gray - ${manager} package manager saved to this repos {blue .do-devops.json} config file}`
+    `{gray - ${manager} package manager saved to this repos {blue .do-devops.json} config file}`
   );
   await proxyToPackageManager("install", observations);
 }

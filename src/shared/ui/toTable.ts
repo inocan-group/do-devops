@@ -93,7 +93,7 @@ export function toTable<T extends object, K extends keyof T & string = keyof T &
 
   const hiddenColMessage =
     hiddenColumns.length > 0
-      ? chalk`\n\n{gray - {bold Note:} some columns hidden due to available width [{dim ${
+      ? `\n\n{gray - {bold Note:} some columns hidden due to available width [{dim ${
           ui.width
         }}]: {italic ${hiddenColumns.join(", ")}}}`
       : "";

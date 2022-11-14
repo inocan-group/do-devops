@@ -42,10 +42,10 @@ export function useImageApi(rules: IImageRule[], options: IImageApiOptions = {})
 
   log.whisper(
     cacheFileExists && options.clearCache !== true
-      ? chalk`{dim - cache file found on disk, loading ...}`
+      ? `{dim - cache file found on disk, loading ...}`
       : options.clearCache === true
-      ? chalk`{dim - starting with clean cache due to "clearCache" flag}`
-      : chalk`{dim - no cache file found on disk, will start with clean cache}`
+      ? `{dim - starting with clean cache due to "clearCache" flag}`
+      : `{dim - no cache file found on disk, will start with clean cache}`
   );
   const cache = (
     cacheFileExists && options.clearCache !== true

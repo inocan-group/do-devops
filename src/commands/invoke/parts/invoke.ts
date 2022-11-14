@@ -27,14 +27,14 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
     const sls = await isServerless();
     if (!sls) {
       console.log(
-        chalk`{red - This project is not configured as a {bold Serverless} project!} ${emoji.angry}\n`
+        `{red - This project is not configured as a {bold Serverless} project!} ${emoji.angry}\n`
       );
 
       process.exit();
     }
     if (argv.length > 1) {
-      console.log(chalk`{dim - you have stated more than one function to {italic invoke}.}`);
-      console.log(chalk`{dim - this command only executes one at a time; the rest are ignored.}`);
+      console.log(`{dim - you have stated more than one function to {italic invoke}.}`);
+      console.log(`{dim - this command only executes one at a time; the rest are ignored.}`);
     }
     let fn: string;
     if (argv.length === 0) {
@@ -46,10 +46,10 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
       );
       if (!availableFns.includes(fn)) {
         console.log(
-          chalk`{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`
+          `{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`
         );
         console.log("- valid functions are:");
-        console.log(chalk`{dim   - ${availableFns.join("\n  - ")}}`);
+        console.log(`{dim   - ${availableFns.join("\n  - ")}}`);
 
         process.exit();
       }
@@ -68,7 +68,7 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
         } else if (possible.length === 1) {
           data = await readDataFile(possible[0]);
         } else {
-          console.log(chalk`{red - Data file "${opts.data}" not found!}`);
+          console.log(`{red - Data file "${opts.data}" not found!}`);
           data = await askForDataFile();
         }
       }
@@ -79,7 +79,7 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
 
     if (!opts.quiet) {
       console.log(
-        chalk`{grey > sls invoke local --function {dim {white ${fn}}} --data '{dim {white ${data}}}'}`
+        `{grey > sls invoke local --function {dim {white ${fn}}} --data '{dim {white ${data}}}'}`
       );
     }
     await asyncExec(`sls invoke local --function ${fn} --data '${data}'`);

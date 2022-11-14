@@ -24,7 +24,7 @@ export async function completeSsmName(name: string, hints: ISsmNameHints = {}) {
 
   if (!lastIsUpper) {
     console.log(
-      chalk`\n- The last component of the name is intended -- {italic by convention} -- to be UPPERCASE.\n  Therefore we will convert your name to ${nameToUpper(
+      `\n- The last component of the name is intended -- {italic by convention} -- to be UPPERCASE.\n  Therefore we will convert your name to ${nameToUpper(
         parts
       )} with your permission.\n`
     );
@@ -43,11 +43,11 @@ export async function completeSsmName(name: string, hints: ISsmNameHints = {}) {
       return nameToUpper(parts);
     } else {
       console.log(
-        chalk`\nThe SSM variable {italic name} does not appear to be correctly formatted. The format\nshould be:\n`
+        `\nThe SSM variable {italic name} does not appear to be correctly formatted. The format\nshould be:\n`
       );
-      console.log(chalk`/{dim [stage]}/{dim [version]}/{dim [moduleName]}/{dim [VAR NAME]}\n`);
+      console.log(`/{dim [stage]}/{dim [version]}/{dim [moduleName]}/{dim [VAR NAME]}\n`);
       console.log(
-        chalk`In most cases the best strategy is just to state the module name and final\nvariable name and let the autocomplete do the rest.`
+        `In most cases the best strategy is just to state the module name and final\nvariable name and let the autocomplete do the rest.`
       );
 
       throw new DevopsError("Incorrect SSM variable formatting", "ssm/invalid-format");

@@ -22,15 +22,15 @@ export async function askAddImageRule(o: Observations, api: ImageApi) {
 
   rule.name = await askInputQuestion(`What will the new rule be called:`);
   rule.source = await askForNestedDirectory(
-    wordWrap(chalk`What is the root directory for {bold {blue source images}}?`),
+    wordWrap(`What is the root directory for {bold {blue source images}}?`),
     { name: "Source Directory", filter, leadChoices: [config.sourceDir] }
   );
   rule.destination = await askForNestedDirectory(
-    chalk`What is the root directory for {bold {blue destination/optimized images}}?`,
+    `What is the root directory for {bold {blue destination/optimized images}}?`,
     { name: "Destination Directory", filter, leadChoices: [config.destinationDir] }
   );
   rule.glob = await askInputQuestion(
-    wordWrap(chalk`What is the {italic glob pattern} used to identify the images: `)
+    wordWrap(`What is the {italic glob pattern} used to identify the images: `)
   );
 
   const sizeOptions = [

@@ -27,19 +27,19 @@ export const options: IOptionDefinition = {
     type: Boolean,
     alias: "c",
     group: "local",
-    description: chalk`Madge's {bold {italic circular}} circular reference checker`,
+    description: `Madge's {bold {italic circular}} circular reference checker`,
   },
   orphans: {
     type: Boolean,
     alias: "o",
     group: "local",
-    description: chalk`Madge's {bold {italic orphans}} checker which shows which modules no one is depending on`,
+    description: `Madge's {bold {italic orphans}} checker which shows which modules no one is depending on`,
   },
   leaves: {
     type: Boolean,
     alias: "l",
     group: "local",
-    description: chalk`Madge's {bold {italic leaves}} checker which shows modules with no dependencies`,
+    description: `Madge's {bold {italic leaves}} checker which shows modules with no dependencies`,
   },
   summary: {
     type: Boolean,
@@ -62,7 +62,7 @@ export const options: IOptionDefinition = {
   layout: {
     type: String,
     group: "local",
-    description: chalk`layout engine for graph; choices are: {dim {italic dot, neato, fdp, sfdp, twopi, circo}}`,
+    description: `layout engine for graph; choices are: {dim {italic dot, neato, fdp, sfdp, twopi, circo}}`,
   },
 
   "include-npm": {
@@ -74,6 +74,6 @@ export const options: IOptionDefinition = {
   extensions: {
     type: String,
     group: "local",
-    description: chalk`comma separated string of valid file extensions (uses {bold {italic js,ts}} as a default)`,
+    description: `comma separated string of valid file extensions (uses {bold {italic js,ts}} as a default)`,
   },
 };

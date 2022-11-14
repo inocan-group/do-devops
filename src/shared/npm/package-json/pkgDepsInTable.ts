@@ -4,7 +4,7 @@ import { toTable } from "src/shared/ui";
 import { getPackageJson, convertDepDictionaryToArray } from "src/shared/npm";
 
 function formatDependencies(deps: Array<{ name: string; version: string }>) {
-  return deps.map((dep) => chalk`{bold ${dep.name}} [{dim ${dep.version} }]`);
+  return deps.map((dep) => `{bold ${dep.name}} [{dim ${dep.version} }]`);
 }
 
 export interface IPkgDepsInTableOptions {

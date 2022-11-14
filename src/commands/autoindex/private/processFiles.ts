@@ -43,15 +43,15 @@ export async function processFiles(
   const { h32 } = await xxhash();
 
   if (indexFiles.length === 0) {
-    log.info(chalk`- ${emoji.confused} no {italic autoindex} files found in this package`);
+    log.info(`- ${emoji.confused} no {italic autoindex} files found in this package`);
     return;
   } else {
     log.info(
-      chalk`- {yellow ${indexFiles.length}} autoindex files found ({dim out of {yellow ${
+      `- {yellow ${indexFiles.length}} autoindex files found ({dim out of {yellow ${
         indexFiles.length + nonAutoindexFiles.length
       }} candidates})`
     );
-    log.whisper(chalk`- index files were: {gray ${indexFiles.join(", ")}}`);
+    log.whisper(`- index files were: {gray ${indexFiles.join(", ")}}`);
   }
 
   // Iterate by Index File
@@ -85,16 +85,16 @@ export async function processFiles(
     const remaining = contentFiles.length - noExports.length;
 
     log.whisper(
-      chalk`- processing the {bold {italic autoindex}} file in {blue ${dir}} [{dim ${exportType} {italic export}, ${remaining} of ${contentFiles.length} {italic files}, ${subDirs.length} {italic sub directories}}]`
+      `- processing the {bold {italic autoindex}} file in {blue ${dir}} [{dim ${exportType} {italic export}, ${remaining} of ${contentFiles.length} {italic files}, ${subDirs.length} {italic sub directories}}]`
     );
 
     if (contentFiles.length === 0) {
-      log.whisper(chalk`- there are no files in ${dir} which were found to export symbols!`);
+      log.whisper(`- there are no files in ${dir} which were found to export symbols!`);
       return;
     }
 
     log.whisper(
-      chalk`- content files are:\n\t{gray ${contentFiles
+      `- content files are:\n\t{gray ${contentFiles
         .map(
           (f) => `${highlightFilepath(relative(cwd(), f))} [${noExports.includes(f) ? "x" : "✓"}]`
         )
@@ -103,15 +103,15 @@ export async function processFiles(
 
     if (noExports.length > 0) {
       for (const f of noExports) {
-        log.whisper(chalk`- the file {red ${f}} will be ignored because it has no exports`);
+        log.whisper(`- the file {red ${f}} will be ignored because it has no exports`);
       }
       if (contentFiles.length === noExports.length) {
         log.info(
-          chalk`- the directory {blue ${dir}} had  {yellow ${contentFiles.length}} files which {italic could} have exported symbols but {bold none did}.`
+          `- the directory {blue ${dir}} had  {yellow ${contentFiles.length}} files which {italic could} have exported symbols but {bold none did}.`
         );
       } else {
         log.info(
-          chalk`- the directory {blue ${dir}} had {yellow ${contentFiles.length}} files which {italic could} have had export symbols but {yellow ${noExports.length}} {bold did not}.`
+          `- the directory {blue ${dir}} had {yellow ${contentFiles.length}} files which {italic could} have had export symbols but {yellow ${noExports.length}} {bold did not}.`
         );
       }
     }
@@ -132,25 +132,25 @@ export async function processFiles(
       const child = ts || js;
       if (!existsSync(child)) {
         log.whisper(
-          chalk`{gray - will not include the {blue ${d}} directory because there is {italic {red no index file}}}`
+          `{gray - will not include the {blue ${d}} directory because there is {italic {red no index file}}}`
         );
         noIndexFile.push(d);
         return acc;
       } else if (isOrphanedIndexFile(child)) {
         log.whisper(
-          chalk`{gray - will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
+          `{gray - will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
         );
         orphans.push(d);
         return acc;
       } else if (!explicitExcludes.every((e) => d !== e)) {
         log.whisper(
-          chalk`{gray - will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
+          `{gray - will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
         );
         explicitDirRemoval.push(d);
         return acc;
       } else if (!fileHasExports(child)) {
         log.whisper(
-          chalk`{gray - will not include the directory {blue ${d}} because it has {italic {red no exports}}}`
+          `{gray - will not include the directory {blue ${d}} because it has {italic {red no exports}}}`
         );
         noExportDir.push(d);
         return acc;
@@ -207,24 +207,27 @@ export async function processFiles(
     }
 
     switch (action) {
-      case "new-file":
+      case "new-file": {
         log.info(
-          chalk`- autoindex file ${highlightFilepath(indexFilename)} is a {italic {bold new}} file`
+          `- autoindex file ${highlightFilepath(indexFilename)} is a {italic {bold new}} file`
         );
         break;
-      case "updated":
+      }
+      case "updated": {
         log.info(
-          chalk`- autoindex file ${highlightFilepath(indexFilename)} was {italic {bold updated}}.`
+          `- autoindex file ${highlightFilepath(indexFilename)} was {italic {bold updated}}.`
         );
         break;
-      case "unchanged":
+      }
+      case "unchanged": {
         const talk = opts.explicitFiles ? log.info : log.whisper;
         talk(
-          chalk`{dim - autoindex file ${highlightFilepath(
+          `${chalk.dim(` - autoindex file ${highlightFilepath(
             indexFilename
-          )} was left {italic {bold unchanged}}}.`
+          )} was left ${chalk.italic.bold(" unchanged")}.`)}`
         );
         break;
+      }
     }
   }
 }

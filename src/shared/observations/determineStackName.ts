@@ -20,20 +20,20 @@ export async function determineStackName(
 
   if (opts.interactive) {
     log.shout(
-      chalk`- It appears that we have not set a default {bold {blue stack name}} for this repo.`
+      `- It appears that we have not set a default {bold {blue stack name}} for this repo.`
     );
     log.info(
-      chalk`{gray - a {italic stack name} acts effectively as a "namespace" for all your serverless assets.}`
+      `{gray - a {italic stack name} acts effectively as a "namespace" for all your serverless assets.}`
     );
     log.info(
-      chalk`{gray - the naming of each function, table, step function, etc. starts with this stack name. }`
+      `{gray - the naming of each function, table, step function, etc. starts with this stack name. }`
     );
     log.info(
-      chalk`{gray - its not uncommon to have the stack name be the same as your repo's name but its whatever you want it to be.}`
+      `{gray - its not uncommon to have the stack name be the same as your repo's name but its whatever you want it to be.}`
     );
     log.shout();
     const stackName = await askInputQuestion(
-      chalk`- Please choose a stack name and we will store this in your {blue .do-devops.json} config file`,
+      `- Please choose a stack name and we will store this in your {blue .do-devops.json} config file`,
       { default: pkg.name }
     );
     if (stackName && stackName.length > 0) {

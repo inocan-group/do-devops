@@ -18,14 +18,18 @@ function isDevFlag(flag: string, mngr: PackageManagerObservation) {
   }
   switch (mngr) {
     case "npm":
-    case "pnpm":
+    case "pnpm": {
       return "--save-dev";
-    case "yarn":
+    }
+    case "yarn": {
       return "--dev";
-    case "cargo":
+    }
+    case "cargo": {
       return "";
-    default:
+    }
+    default: {
       throw new Error(`unknown package manager: ${mngr}`);
+    }
   }
 }
 
@@ -36,12 +40,15 @@ function isPeerFlag(flag: string, mngr: PackageManagerObservation) {
   }
   switch (mngr) {
     case "npm":
-    case "pnpm":
+    case "pnpm": {
       return "--save-peer";
-    case "yarn":
+    }
+    case "yarn": {
       return "--peer";
-    default:
+    }
+    default: {
       throw new Error(`unknown package manager: ${mngr}`);
+    }
   }
 }
 function isOptionalFlag(flag: string, mngr: PackageManagerObservation) {
@@ -51,12 +58,15 @@ function isOptionalFlag(flag: string, mngr: PackageManagerObservation) {
   }
   switch (mngr) {
     case "npm":
-    case "pnpm":
+    case "pnpm": {
       return "--save-optional";
-    case "yarn":
+    }
+    case "yarn": {
       return "--optional";
-    default:
+    }
+    default: {
       throw new Error(`unknown package manager: ${mngr}`);
+    }
   }
 }
 
@@ -68,7 +78,7 @@ export async function proxyToPackageManager(
   // can't continue without package.json
   if (!observations.has("packageJson")) {
     console.error(
-      chalk`- ${emoji.shocked} the {green ${cmd}} command is only meant to used in the root of NodeJS which has a {blue package.json} file in it.\n`
+      `- ${emoji.shocked} the {green ${cmd}} command is only meant to used in the root of NodeJS which has a {blue package.json} file in it.\n`
     );
     process.exit();
   }
@@ -84,11 +94,12 @@ export async function proxyToPackageManager(
 
     switch (cmd) {
       case "link":
-      case "unlink":
+      case "unlink": {
         pkgCmd = `${pkgManager} ${cmd} ${args?.join(" ")}`;
         break;
+      }
 
-      case "install":
+      case "install": {
         pkgCmd =
           pkgManager === "yarn"
             ? args && args.length > 0
@@ -98,39 +109,43 @@ export async function proxyToPackageManager(
             ? `${pkgManager} install${args ? " " + args.join(" ") : ""}`
             : `${pkgManager} add${" " + args?.join(" ")}`;
         break;
+      }
       case "outdated":
       case "upgrade":
-      case "why":
+      case "why": {
         pkgCmd = `${pkgManager} ${cmd}${argv ? " " + argv.join(" ") : ""}`;
         break;
-      case "ls":
+      }
+      case "ls": {
         pkgCmd =
           pkgManager === "yarn"
             ? `yarn list --pattern "${argv?.pop()}"`
             : `${pkgManager} ls ${argv?.pop()}`;
         break;
-      default:
+      }
+      default: {
         isScriptCmd = true;
         pkgCmd = `${
           pkgManager === "yarn"
             ? `yarn ${cmd}${argv ? " " + argv.join(" ") : ""}`
             : `${pkgManager} run ${cmd}${argv ? " " + argv.join(" ") : ""}`
         }`;
+      }
     }
 
     if (NON_PROXY.has(cmd)) {
       console.error(
-        chalk`{gray - we detected use of the {blue ${pkgManager}} in this repo and will {italic proxy} "${cmd}" to: {blue ${pkgCmd}}}\n`
+        `{gray - we detected use of the {blue ${pkgManager}} in this repo and will {italic proxy} "${cmd}" to: {blue ${pkgCmd}}}\n`
       );
     } else {
       if (isScriptCmd && !hasScript(cmd)) {
         console.log(
-          chalk`{gray - we {italic would} proxy this as {blue ${pkgCmd}} but you don't have "${cmd}" defined in your scripts section.}\n`
+          `{gray - we {italic would} proxy this as {blue ${pkgCmd}} but you don't have "${cmd}" defined in your scripts section.}\n`
         );
         process.exit();
       }
 
-      console.error(chalk`{gray - we will proxy {blue ${pkgCmd}} for you}\n`);
+      console.error(`{gray - we will proxy {blue ${pkgCmd}} for you}\n`);
     }
 
     const cmdParts = pkgCmd.split(/\s+/g).filter(Boolean);
@@ -145,7 +160,7 @@ export async function proxyToPackageManager(
       throw new Error(`- ${emoji.poop} ran into problems running ${cmdParts.join(" ")}`);
     }
   } else {
-    console.log(chalk`- we can not currently tell {italic which} package manager you're using.`);
+    console.log(`- we can not currently tell {italic which} package manager you're using.`);
     const answer = await askListQuestion(
       "Would you like save the package manager to this repo in a config file?",
       ["not now, thanks", "npm", "pnpm", "yarn"] as const

@@ -11,7 +11,7 @@ export async function askImageDefaults(o: Observations, api: ImageApi) {
   const log = logger();
   const config = getProjectConfig().image as Exclude<IProjectConfig["image"], undefined>;
   log.info(
-    chalk`Current settings for image can be found in the -- {blue ${CONFIG_FILE}} {italic file} -- and are as follows:`
+    `Current settings for image can be found in the -- {blue ${CONFIG_FILE}} {italic file} -- and are as follows:`
   );
   const options = [
     `sourceDir: ${config.sourceDir}`,

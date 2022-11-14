@@ -3,7 +3,7 @@ import { toTable } from "src/shared/ui";
 import { getLayersFromPackageJson } from "src/shared/serverless";
 import { DoDevopsHandler } from "src/@types/command";
 
-const META_LINK_MSG = chalk`{dim - the results rely on meta-data tagging; check out this link for more info:\n      {blueBright https://github.com/inocan-group/do-devops/docs/layer-meta.md}}\n`;
+const META_LINK_MSG = `{dim - the results rely on meta-data tagging; check out this link for more info:\n      {blueBright https://github.com/inocan-group/do-devops/docs/layer-meta.md}}\n`;
 
 /** handler for the "layers" command */
 export const handler: DoDevopsHandler = async ({ observations }) => {
@@ -25,10 +25,10 @@ export const handler: DoDevopsHandler = async ({ observations }) => {
 
       console.log(META_LINK_MSG);
     } else {
-      console.log(chalk`- there were {italic no} layers found as dependencies to this repo`);
+      console.log(`- there were {italic no} layers found as dependencies to this repo`);
       console.log(META_LINK_MSG);
     }
   } else {
-    console.log(chalk`- the current directory is not a Serverless repo\n`);
+    console.log(`- the current directory is not a Serverless repo\n`);
   }
 };

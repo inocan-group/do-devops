@@ -18,6 +18,6 @@ export async function installGitIgnore(opts: Options<{ silent: boolean }>) {
   }
   const copied = await templateFileCopy("git/.gitignore", ".gitignore");
   if (copied) {
-    log.info(chalk`{gray - created a {blue .gitignore} file in the root directory }`);
+    log.info(`{gray - created a {blue .gitignore} file in the root directory }`);
   }
 }

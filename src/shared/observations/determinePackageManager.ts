@@ -50,7 +50,7 @@ export async function determinePackageManager(
     await saveProjectConfig({ general: { pkgManager } });
     const removed = await removeOtherLockFiles(pkgManager);
     if (removed.length > 0) {
-      console.log(chalk`- removed `);
+      console.log(`- removed `);
     }
   }
 

@@ -6,7 +6,7 @@ export const options: IOptionDefinition = {
     alias: "f",
     type: Boolean,
     group: "local",
-    description: chalk`Force a full rebuild of the image cache as well as converted images`,
+    description: `Force a full rebuild of the image cache as well as converted images`,
   },
 };
 

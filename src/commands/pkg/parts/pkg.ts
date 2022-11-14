@@ -23,43 +23,43 @@ export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts, observations
   }
 
   console.log(
-    chalk`- {bold Serverless} {italic packaging} for {bold ${stage}} stage ${emoji.party}`
+    `- {bold Serverless} {italic packaging} for {bold ${stage}} stage ${emoji.party}`
   );
   const command = `sls package --stage ${stage} --region ${region} ${
     opts.dir ? `--package ${opts.dir}` : ""
   }`;
-  console.log(chalk`{dim {italic ${command}}}\n`);
+  console.log(`{dim {italic ${command}}}\n`);
 
   await asyncExec(command, { silent: opts.quiet ? true : false });
   const directory = opts.dir ? opts.dir : ".serverless";
 
-  console.log(chalk`\n{bold {green - Packaging is complete!}} ${emoji.rocket}`);
-  console.log(chalk`- the assets can all be found in the {italic {blue ${directory}} directory.}`);
+  console.log(`\n{bold {green - Packaging is complete!}} ${emoji.rocket}`);
+  console.log(`- the assets can all be found in the {italic {blue ${directory}} directory.}`);
   await asyncExec(`ls -l ${directory}`);
   if (opts.validate) {
     console.log(
-      chalk`\n- validating the {bold cloudformation} {italic create} template ${emoji.eyeballs}`
+      `\n- validating the {bold cloudformation} {italic create} template ${emoji.eyeballs}`
     );
 
     const validateCmd = `aws cloudformation validate-template --template-body file://${directory}/cloudformation-template-create-stack.json`;
     try {
-      console.log(chalk`{dim    ${validateCmd}}`);
+      console.log(`{dim    ${validateCmd}}`);
       await asyncExec(validateCmd);
     } catch {
-      console.log(chalk`{red - Error validating the {italic create} template!}`);
+      console.log(`{red - Error validating the {italic create} template!}`);
     }
 
     console.log(
-      chalk`\n- validating the {bold cloudformation} {italic update} template ${emoji.eyeballs}`
+      `\n- validating the {bold cloudformation} {italic update} template ${emoji.eyeballs}`
     );
 
     const validateUpdate = `aws cloudformation validate-template --template-body file://${directory}/cloudformation-template-update-stack.json`;
 
     try {
-      console.log(chalk`{dim    ${validateUpdate}}`);
+      console.log(`{dim    ${validateUpdate}}`);
       await asyncExec(validateUpdate);
     } catch {
-      console.log(chalk`{red - Error validating the {italic update} template!} ${emoji.poop}`);
+      console.log(`{red - Error validating the {italic update} template!} ${emoji.poop}`);
     }
   }
 

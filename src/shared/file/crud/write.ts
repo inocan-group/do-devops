@@ -45,7 +45,7 @@ export function write(filename: string, data: any, options: IWriteOptions = {}) 
 
     if (!options.offsetIfExists && !options.allowOverwrite && fileExists(filename)) {
       throw new DevopsError(
-        chalk`The file "${filename}" already exists and the {italic overwrite} flag was not set. Write was not allowed.`,
+        `The file "${filename}" already exists and the {italic overwrite} flag was not set. Write was not allowed.`,
         "do-devops/file-exists"
       );
     }

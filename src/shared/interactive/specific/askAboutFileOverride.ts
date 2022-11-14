@@ -28,9 +28,9 @@ export async function askAboutFileOverwrite(
   opts: Observations = new Set<DoDevopObservation>()
 ) {
   const parts = getFileComponents(source, libraryDirectory("templates"));
-  const filename = chalk`{dim ${parts.filepath}}{bold /${parts.filename}}`;
+  const filename = `{dim ${parts.filepath}}{bold /${parts.filename}}`;
   const log = logger(opts);
-  log.shout(chalk`The file {blue ${filename}} already exists.\n`);
+  log.shout(`The file {blue ${filename}} already exists.\n`);
   let action: FileAction | undefined;
   while (action !== "copy" && action !== "skip") {
     action = await askListQuestion("What do you want to do?", answers);
@@ -40,17 +40,17 @@ export async function askAboutFileOverwrite(
         editorCommand = await askUserAboutEditorCommand();
         if (editorCommand) {
           log.info(
-            chalk`- the editor command "${editorCommand}" has been saved to your user configuration.`
+            `- the editor command "${editorCommand}" has been saved to your user configuration.`
           );
-          log.info(chalk`{gray - the user config file is located at {blue src/.do-devops.json}}`);
+          log.info(`{gray - the user config file is located at {blue src/.do-devops.json}}`);
         }
       }
       if (editorCommand) {
         try {
           spawnSync(editorCommand, [source, target, "&"], { stdio: "inherit" });
-          log.info(chalk`- check your editor for the two versions of the file`);
+          log.info(`- check your editor for the two versions of the file`);
         } catch {
-          log.info(chalk`- ${emoji.poop} there was a problem opening the files in your editor`);
+          log.info(`- ${emoji.poop} there was a problem opening the files in your editor`);
         }
       }
     }

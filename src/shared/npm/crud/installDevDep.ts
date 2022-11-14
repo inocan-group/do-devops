@@ -16,11 +16,11 @@ export async function installDevDep(
     pkgManager === "npm"
       ? `npm install --save-dev ${packages.join(" ")}`
       : `${pkgManager} add ${pkgManager === "yarn" ? "--dev" : "--save-dev"} ${packages.join(" ")}`;
-  log.whisper(chalk`- installing with {blue ${cmd}}`);
+  log.whisper(`- installing with {blue ${cmd}}`);
   try {
     execSync(cmd);
     log.info(
-      chalk`\n- ${emoji.checkmark} package${
+      `\n- ${emoji.checkmark} package${
         packages.length > 1 ? "s" : ""
       } [ {italic {gray ${packages.join(", ")}}} ] {italic installed} as dev dependency${
         packages.length > 1 ? "ies" : "y"
@@ -28,8 +28,8 @@ export async function installDevDep(
     );
     return true;
   } catch (error) {
-    log.info(chalk`{gray - {red failure} trying to install npm packages: ${cmd}}`);
-    log.info(chalk`\n{gray ${(error as Error).message}}\n`);
+    log.info(`{gray - {red failure} trying to install npm packages: ${cmd}}`);
+    log.info(`\n{gray ${(error as Error).message}}\n`);
     return false;
   }
 }

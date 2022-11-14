@@ -31,11 +31,11 @@ export async function getAwsProfileFromServerless() {
   ) {
     if (!sls.hasServerlessConfig) {
       console.log(
-        chalk`- it appears that the {green serverless.yml} {italic does not} exist; will build from {italic serverless-microservice} config ${emoji.robot}`
+        `- it appears that the {green serverless.yml} {italic does not} exist; will build from {italic serverless-microservice} config ${emoji.robot}`
       );
     } else {
       console.log(
-        chalk`- it appears that the {green serverless.yml} does not have the {bold provider} section; will build from {italic serverless-microservice} config ${emoji.robot}`
+        `- it appears that the {green serverless.yml} does not have the {bold provider} section; will build from {italic serverless-microservice} config ${emoji.robot}`
       );
     }
 
@@ -46,14 +46,14 @@ export async function getAwsProfileFromServerless() {
     config = await getServerlessYaml();
     if (!config.provider) {
       console.log(
-        chalk`- the {red serverless.yaml} file doesn't have a {bold provider} section! ${emoji.poop}`
+        `- the {red serverless.yaml} file doesn't have a {bold provider} section! ${emoji.poop}`
       );
       console.log("- this section must exist before you can deploy\n");
       process.exit();
     }
     return config.provider.profile;
   } catch {
-    console.log(chalk`- {red serverless.yml} file is missing! ${emoji.poop}`);
+    console.log(`- {red serverless.yml} file is missing! ${emoji.poop}`);
     console.log("- this file must exist before you can deploy\n");
     process.exit();
   }

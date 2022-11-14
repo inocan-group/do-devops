@@ -16,7 +16,7 @@ export function validateOpenSsl() {
   const hasOpenSsl = hasShellCommandInPath("openssl");
 
   if (!hasOpenSsl) {
-    console.error(chalk`- ${emoji.poop} OpenSSL is not installed so stopping!`);
+    console.error(`- ${emoji.poop} OpenSSL is not installed so stopping!`);
     exit(1);
   }
 }
@@ -25,7 +25,7 @@ export function validateSshKeygen() {
   const hasOpenSsl = hasShellCommandInPath("ssh-keygen");
 
   if (!hasOpenSsl) {
-    console.error(chalk`- ${emoji.poop} ssh-keygen is not installed so stopping!`);
+    console.error(`- ${emoji.poop} ssh-keygen is not installed so stopping!`);
     exit(1);
   }
 }
@@ -44,24 +44,24 @@ export async function ssh(o: ICertOptions) {
 export async function rsa(o: ICertOptions) {
   const pemFile = await handleDuplicateFile(`${o.name}-key.pem`);
   if (!pemFile) {
-    console.error(chalk`- keep existing file [{dim ${o.name}-key.pem}]`);
+    console.error(`- keep existing file [${chalk.dim("")} ${o.name}-key.pem}]`);
     return;
   }
   if (pemFile === "quit") {
-    console.error(chalk`- exiting RSA and certification process`);
+    console.error(`- exiting RSA and certification process`);
     exit(0);
   }
 
   const command = `openssl genrsa ${o.ssl_algo ? `-${o.ssl_algo}` : ""} -out ${pemFile} ${
     o.keyLength
   }`;
-  console.error(chalk`- generating {bold {blue RSA CA Cert}}:\n  {green ${command}}`);
+  console.error(`- generating {bold {blue RSA CA Cert}}:\n  {green ${command}}`);
 
   try {
     execSync(command, { encoding: "utf8" });
-    console.error(chalk`- RSA key created [${pemFile}] ${emoji.rocket}\n`);
+    console.error(`- RSA key created [${pemFile}] ${emoji.rocket}\n`);
   } catch {
-    console.error(chalk`- ${emoji.poop} problems generating the RSA key!`);
+    console.error(`- ${emoji.poop} problems generating the RSA key!`);
     exit(1);
   }
 }
@@ -78,13 +78,15 @@ async function appendAlternativeNames(o: ICertOptions) {
   const resolution = await avoidDuplicationInExtFile(dns, ip || "");
 
   switch (resolution) {
-    case "quit":
+    case "quit": {
       console.log("bye.\n");
       exit(0);
-    case "skip":
-      console.error("- ok, skipping update to file [{dim extfile.cnf}]");
+    }
+    case "skip": {
+      console.error(`- ok, skipping update to file [${chalk.dim(`extfile.cnf`)}]`);
       break;
-    case "overwrite":
+    }
+    case "overwrite": {
       console.error("- updating {green extfile.cnf} with the new info");
       const data = readFileSync(filename, "utf8")
         .split("\n")
@@ -92,44 +94,46 @@ async function appendAlternativeNames(o: ICertOptions) {
         .join("\n");
       writeFileSync(filename, data, "utf8");
       break;
+    }
 
-    case "no-conflict":
+    case "no-conflict": {
       const command = `echo "subjectAltName=DNS:${dns},IP:${ip}" >> extfile.cnf`;
-      console.error(chalk`- appending subject alternative name\n  {green ${command}}`);
+      console.error(`- appending subject alternative name\n  {green ${command}}`);
       try {
         execSync(command, { encoding: "utf8", stdio: "inherit" });
-        console.error(chalk`\n- appended [{dim extfile.cnf}] ${emoji.rocket}`);
+        console.error(`\n- appended [${chalk.dim("")} extfile.cnf}] ${emoji.rocket}`);
       } catch {
         console.error("- ${emoji.poop} problems appending to the 'extfile.cnf' file!");
         exit(1);
       }
       break;
+    }
   }
 }
 
 async function fullchain_cert(o: ICertOptions) {
   const command = `openssl x509 -req -sha256 -days ${o.days} -in ${o.name}.csr -CA ca.pem -CAkey ca-key.pem -out ${o.name}.pem -extfile extfile.cnf -CAcreateserial`;
   try {
-    console.error(chalk`- generating {bold {blue SSL Certificate}} for ${o.name}`);
+    console.error(`- generating {bold {blue SSL Certificate}} for ${o.name}`);
     execSync(command, { encoding: "utf8", stdio: "inherit" });
-    console.error(chalk`- SSL certificate created [${o.name}.pem] ${emoji.rocket}`);
+    console.error(`- SSL certificate created [${o.name}.pem] ${emoji.rocket}`);
   } catch (error) {
-    console.error(chalk`- ${emoji.poop} ran into problems: ${(error as Error)?.message}`);
+    console.error(`- ${emoji.poop} ran into problems: ${(error as Error)?.message}`);
     exit(1);
   }
 
   try {
     console.error(
-      chalk`- merging the created cert [{dim ${o.name}.pem}] with CA certificate [{dim ca.pem}]\n  into a fullchain cert [{dim ${o.name}.fullchain.pem}]`
+      `- merging the created cert [${chalk.dim(`${o.name}.pem`)} }] with CA certificate [${chalk.dim(`ca.pem`)} }]\n  into a fullchain cert [${chalk.dim(`${o.name}.fullchain.pem`)} ]`
     );
     const command2 = `cat ${o.name}.pem > ${o.name}.fullchain.pem && cat ca.pem >> ${o.name}.fullchain.pem`;
-    console.error(chalk`  {bold {green ${command}}}\n`);
+    console.error(`  {bold {green ${command}}}\n`);
     execSync(command2, { encoding: "utf8", stdio: "inherit" });
     console.error(
-      chalk`- Full Chain certificate created [{dim ${o.name}.fullchain.pem}] ${emoji.rocket}`
+      `- Full Chain certificate created [${chalk.dim(`${o.name}.fullchain.pem`)}] ${emoji.rocket}`
     );
   } catch (error) {
-    console.error(chalk`- ${emoji.poop} ran into problems: ${(error as Error)?.message}`);
+    console.error(`- ${emoji.poop} ran into problems: ${(error as Error)?.message}`);
     exit(1);
   }
 }
@@ -141,12 +145,12 @@ export async function pem_to_der(pemFile: string, _o: ICertOptions) {
   const derFile = `${pemFile.replace(".pem", "")}.der`;
   const command = `openssl x509 -outform der -in ${pemFile} -out ${derFile}`;
   try {
-    console.error(chalk`- generating {bold {DER}} file from PEM:\n  {green ${command}}`);
+    console.error(`- generating {bold {DER}} file from PEM:\n  {green ${command}}`);
     execSync(command, { encoding: "utf8", stdio: "inherit" });
-    console.error(chalk`- DER created [${derFile}] ${emoji.rocket}`);
+    console.error(`- DER created [${derFile}] ${emoji.rocket}`);
   } catch (error) {
     console.error(
-      chalk`- ${emoji.poop} problems generating the DER file! ${(error as Error).message}`
+      `- ${emoji.poop} problems generating the DER file! ${(error as Error).message}`
     );
     exit(1);
   }
@@ -159,12 +163,12 @@ export async function pem_to_pfx(pemFile: string, _o: ICertOptions) {
   const pfxFile = `${pemFile.replace(".pem", "")}.pfx`;
   const command = `openssl x509 -outform pfx -in ${pemFile} -out ${pfxFile}`;
   try {
-    console.error(chalk`- generating {bold {PFX}} file from PEM:\n  {green ${command}}`);
+    console.error(`- generating {bold {PFX}} file from PEM:\n  {green ${command}}`);
     execSync(command, { encoding: "utf8", stdio: "inherit" });
-    console.error(chalk`- PFX created [${pfxFile}] ${emoji.rocket}`);
+    console.error(`- PFX created [${pfxFile}] ${emoji.rocket}`);
   } catch (error) {
     console.error(
-      chalk`- ${emoji.poop} problems generating the PFX file! ${(error as Error).message}`
+      `- ${emoji.poop} problems generating the PFX file! ${(error as Error).message}`
     );
     exit(1);
   }
@@ -177,13 +181,13 @@ export async function ca_csr(o: ICertOptions) {
   const command = `openssl req -new -x509 -${o.csr_algo} -days ${o.days} -key ${o.name}-key.pem -out ${o.name}.pem`;
   try {
     console.error(
-      chalk`- generating {bold {blue Certificate Signing Request (CCR)}}:\n  {green ${command}}`
+      `- generating {bold {blue Certificate Signing Request (CCR)}}:\n  {green ${command}}`
     );
     execSync(command, { encoding: "utf8", stdio: "inherit" });
-    console.error(chalk`- CSR created [${o.name}] ${emoji.rocket}`);
+    console.error(`- CSR created [${o.name}] ${emoji.rocket}`);
   } catch {
     console.error(
-      chalk`- ${emoji.poop} problems generating the CCR (certificate signing request)!`
+      `- ${emoji.poop} problems generating the CCR (certificate signing request)!`
     );
     exit(1);
   }
@@ -198,7 +202,7 @@ export async function cert_csr(o: ICertOptions) {
   const csrFile = `${o.name}.csr`;
   const resolve = await handleDuplicateFile(csrFile);
   if (!resolve) {
-    console.error(chalk`- skipping CSR file creation [{dim ${resolve}}]`);
+    console.error(`- skipping CSR file creation [${chalk.dim("")} ${resolve}}]`);
     return;
   }
   const command = `openssl req -new -${o.csr_algo} -subj "/CN=${o.name}" -key ${caKey} -out ${csrFile}`;
@@ -207,13 +211,13 @@ export async function cert_csr(o: ICertOptions) {
 
   try {
     console.error(
-      chalk`- generating {bold {blue Certificate Signing Request (CCR)}}:\n  {green ${command}}`
+      `- generating {bold {blue Certificate Signing Request (CCR)}}:\n  {green ${command}}`
     );
     execSync(command, { encoding: "utf8", stdio: "inherit" });
-    console.error(chalk`- CSR created [${o.name}] ${emoji.rocket}`);
+    console.error(`- CSR created [${o.name}] ${emoji.rocket}`);
   } catch (error) {
     console.error(
-      chalk`- ${emoji.poop} problems generating the CCR (certificate signing request)!\n\n${error}`
+      `- ${emoji.poop} problems generating the CCR (certificate signing request)!\n\n${error}`
     );
     exit(1);
   }
@@ -255,6 +259,6 @@ export async function createSSH(o: Options<ICertOptions>) {
 }
 
 export async function certInfo(_o: Options<ICertOptions>) {
-  console.error(chalk`- sorry but this has not been implemented yet`);
+  console.error(`- sorry but this has not been implemented yet`);
   exit(0);
 }

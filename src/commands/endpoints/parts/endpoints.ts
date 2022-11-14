@@ -19,7 +19,7 @@ export const handler: DoDevopsHandler<IEndpointsOptions> = async ({ opts }) => {
   const region = opts.region ? opts.region : await determineRegion(opts);
   try {
     console.log(
-      chalk`- getting API {italic endpoints} for the profile {bold  ${profileName}} [ ${region} ]`
+      `- getting API {italic endpoints} for the profile {bold  ${profileName}} [ ${region} ]`
     );
     // const endpoints = await getLambdaFunctions(opts);
     if (region) {
@@ -47,7 +47,7 @@ export const handler: DoDevopsHandler<IEndpointsOptions> = async ({ opts }) => {
         console.log(table([["id", "name", "description"], ...restApi]));
         console.log();
       } else {
-        console.log(chalk`{gray - no REST API endpoints found}`);
+        console.log(`{gray - no REST API endpoints found}`);
         console.log();
       }
 

@@ -8,7 +8,7 @@ const command: IDoDevopsCommand = {
   handler: async ({ observations, raw }) => {
     if (!observations.has("packageJson")) {
       console.log(
-        chalk`- {italic watching} files in the repo is something which can only happen in directory with a {blue package.json}`
+        `- {italic watching} files in the repo is something which can only happen in directory with a {blue package.json}`
       );
       process.exit();
     }
@@ -16,13 +16,13 @@ const command: IDoDevopsCommand = {
     if (observations.has("serverlessFramework")) {
       if (hasScript("watch")) {
         console.log(
-          chalk`{gray - {bold note:} this is a serverless project but because you have a "watch" script, we will prefer that over the default do-devops watcher}`
+          `{gray - {bold note:} this is a serverless project but because you have a "watch" script, we will prefer that over the default do-devops watcher}`
         );
 
         proxyToPackageManager("watch", observations, raw);
         process.exit();
       } else {
-        console.log(chalk`- starting the Serverless Devops watcher`);
+        console.log(`- starting the Serverless Devops watcher`);
         //TODO: implement
         process.exit();
       }

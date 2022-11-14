@@ -46,9 +46,9 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
   const groups: AutoindexGroupDefinition[] = [];
 
   switch (kind) {
-    case "explicit-files":
+    case "explicit-files": {
       log.info(
-        chalk`- you have passed in specific {italic index} files to evaluate [{dim ${argv.length}}]; we will group by each file ...`
+        `- you have passed in specific {italic index} files to evaluate [{dim ${argv.length}}]; we will group by each file ...`
       );
       // note: it seems argv params -- if in a "glob" format are automatically converted
       // to literal filenames
@@ -71,11 +71,12 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
         groups.push(pkg);
       }
       break;
-    case "repo":
+    }
+    case "repo": {
       const { indexGlobs, indexFiles, nonAutoindexFiles } = await getIndex(".", opts);
       const { contentGlobs, contentFiles } = await getContent(".", opts);
 
-      log.info(chalk`{dim - no monorepo was detected so will run just once using glob patterns}`);
+      log.info(`{dim - no monorepo was detected so will run just once using glob patterns}`);
 
       groups.push({
         kind: "repo",
@@ -88,8 +89,9 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
         nonAutoindexFiles,
       });
       break;
+    }
 
-    case "monorepo":
+    case "monorepo": {
       const subDirs = getSubdirectories(".");
       const hasSrcOrLibAtRoot = subDirs.includes("src") || subDirs.includes("lib");
 
@@ -119,35 +121,36 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
 
       if (groups.length > 0) {
         log.info(
-          chalk`- ${emoji.eyeballs} monorepo detected with {yellow ${String(
+          `- ${emoji.eyeballs} monorepo detected with {yellow ${String(
             groups.length
           )}} packages`
         );
         for (const pkg of groups) {
-          log.info(chalk`{gray   - {bold ${pkg.name}} {italic at} {dim ${pkg.path}}}`);
+          log.info(`{gray   - {bold ${pkg.name}} {italic at} {dim ${pkg.path}}}`);
         }
-        log.info(chalk`- ⚡️ will run each package separately based on it's own configuration`);
+        log.info(`- ⚡️ will run each package separately based on it's own configuration`);
       } else {
         log.info(
-          chalk`- after excluding packages -- {gray ${opts.exclude?.join(
+          `- after excluding packages -- {gray ${opts.exclude?.join(
             ", "
           )}} -- no packages were left to run {bold autoindex} on\n`
         );
         exit(0);
       }
+    }
   }
 
   const watchlist: AutoindexGroupDefinition[] = [];
 
   for (const group of groups) {
     if (groups.length > 1) {
-      log.info(chalk`\n- ${emoji.run} starting analysis of {blue ${group.name}}`);
+      log.info(`\n- ${emoji.run} starting analysis of {blue ${group.name}}`);
     }
 
     if (group.indexFiles.length > 0) {
       await processFiles(group, opts, observations);
     } else {
-      log.info(chalk`- ${emoji.confused} no {italic index} files found in {blue ${group.name}}`);
+      log.info(`- ${emoji.confused} no {italic index} files found in {blue ${group.name}}`);
     }
 
     if (opts.watch) {

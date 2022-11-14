@@ -34,16 +34,16 @@ export function finalizeCommandDefinition(
     ? cmdDefn.subCommands(observations, options)
     : cmdDefn.subCommands;
 
-  const argv = hasArgv(cmdDefn) ? chalk` {italic {dim argv[]}}` : "";
+  const argv = hasArgv(cmdDefn) ? ` {italic {dim argv[]}}` : "";
   const argvDescription = getArgvOption(cmdDefn)?.description
-    ? chalk`\n\n\t\t{bold {blue [argv]:}} ${getArgvOption(cmdDefn)?.description}`
+    ? `\n\n\t\t{bold {blue [argv]:}} ${getArgvOption(cmdDefn)?.description}`
     : "";
 
   const subCommandSyntax =
     subCommands && subCommands.length > 0
-      ? chalk` {bold <cmd:}{dim ${subCommands
+      ? ` {bold <cmd:}{dim ${subCommands
           .map((i) => i.name)
-          .join(chalk`{blue {bold |}}`)}}{bold >}`
+          .join(`{blue {bold |}}`)}}{bold >}`
       : "";
 
   return {
@@ -51,7 +51,7 @@ export function finalizeCommandDefinition(
     handler: cmdDefn.handler,
     syntax:
       cmdDefn.syntax ||
-      chalk`dd ${cmdDefn.kind}${subCommandSyntax}${argv} [{italic options}]${argvDescription}`,
+      `dd ${cmdDefn.kind}${subCommandSyntax}${argv} [{italic options}]${argvDescription}`,
     description,
     subCommands,
     options: { ...cmdDefn.options, ...globalOptions },

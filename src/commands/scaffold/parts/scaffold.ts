@@ -60,8 +60,8 @@ export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
     let dir: string = ".";
     if (observations.has("packageJson")) {
       confirm = await askConfirmQuestion(
-        chalk`- install {bold {blue Vitesse${
-          pkg.includes("ext") ? chalk`{italic  browser extension}` : ""
+        `- install {bold {blue Vitesse${
+          pkg.includes("ext") ? `{italic  browser extension}` : ""
         }}} starter template for VueJS/ViteJS into {bold {yellow current}} directory?`
       );
     } else {
@@ -72,7 +72,7 @@ export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
       ];
       const subOrCurrent = await askListQuestion(
         wordWrap(
-          chalk`- since you're not in a dir with a {italic package.json} we need to establish which directory you want to install the {bold blue Vitesse} start template into.`
+          `- since you're not in a dir with a {italic package.json} we need to establish which directory you want to install the {bold blue Vitesse} start template into.`
         ),
         dirChoices
       );
@@ -88,11 +88,11 @@ export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
     if (confirm) {
       asyncExec(`npx degit antfu/${pkg} ${dir} --force`);
       console.log(
-        chalk`- vitesse ${pkg.includes("ext") ? "browser extension " : ""}template installed`
+        `- vitesse ${pkg.includes("ext") ? "browser extension " : ""}template installed`
       );
       await asyncExec(`pnpm install`);
       console.log(
-        chalk`\n- ${emoji.party} Vitesse ${
+        `\n- ${emoji.party} Vitesse ${
           pkg.includes("ext") ? "browser extension " : ""
         }template installed and all deps are loaded \n`
       );

@@ -13,10 +13,11 @@ export async function installTestFramework(
 
   let installed: boolean;
   switch (framework) {
-    case "uvu":
+    case "uvu": {
       installed = await installDevDep(opts, observations, "uvu", "ts-node");
       break;
-    case "jest":
+    }
+    case "jest": {
       installed = await installDevDep(
         opts,
         observations,
@@ -26,7 +27,8 @@ export async function installTestFramework(
         "jest-extended"
       );
       break;
-    case "mocha":
+    }
+    case "mocha": {
       installed = await installDevDep(
         opts,
         observations,
@@ -37,25 +39,30 @@ export async function installTestFramework(
         "ts-node"
       );
       break;
-    case "jasmine":
+    }
+    case "jasmine": {
       installed = await installDevDep(opts, observations, "jasmine");
       break;
-    case "qunit":
+    }
+    case "qunit": {
       installed = await installDevDep(opts, observations, "qunit");
       break;
-    case "ava":
+    }
+    case "ava": {
       installed = await installDevDep(opts, observations, "ava");
       break;
-    default:
+    }
+    default: {
       throw new DevopsError(
         `Unknown test framework: ${framework}`,
         "install/unknown-test-framework"
       );
+    }
   }
 
   if (installed) {
     log.whisper(
-      chalk`{gray - installed all {italic dev dependencies} for {bold {green ${framework}}}}`
+      `{gray - installed all {italic dev dependencies} for {bold {green ${framework}}}}`
     );
   }
 

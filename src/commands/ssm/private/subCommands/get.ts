@@ -15,10 +15,10 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown }) =
   const profile = await determineProfile({ ...opts, interactive: true });
   if (!profile) {
     console.log(
-      chalk`- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
+      `- Couldn't determine the AWS Profile; try setting it manually with {inverse  --profile }.`
     );
     console.log(
-      chalk`- alternatively use the {inverse --interactive } option to have the CLI interactively let you select`
+      `- alternatively use the {inverse --interactive } option to have the CLI interactively let you select`
     );
     process.exit();
   }

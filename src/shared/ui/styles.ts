@@ -11,7 +11,7 @@ export function green(...thingy: Array<string | number>) {
     .map((i) => (typeof i === "number" ? (formatNumber(i) as string) : i))
     .join("");
 
-  return chalk`{bold {green ${stringThingy}}}`;
+  return chalk.bold.green(stringThingy);
 }
 
 export function dim(thingy: string | number) {
@@ -19,5 +19,5 @@ export function dim(thingy: string | number) {
     thingy = formatNumber(thingy) as string;
   }
 
-  return chalk`{dim ${thingy}}`;
+  return chalk.dim(thingy);
 }
