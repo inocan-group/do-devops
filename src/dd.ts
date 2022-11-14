@@ -119,7 +119,7 @@ import { isDevopsError } from "./@type-guards";
               .sort()
               .join(", ")
           )}\n\n` +
-          `{dim - If you want more help with a specific command, use} ${inverted(
+          `${chalk.dim(` - If you want more help with a specific command, use`)} ${inverted(
             " dd [cmd] --help "
           )}\n`
       );

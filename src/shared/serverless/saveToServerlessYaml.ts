@@ -18,7 +18,7 @@ export async function saveToServerlessYaml(data: IServerlessYaml) {
 
     if (isDevopsError(error)) {
       console.log(error.message);
-      console.log(`{dim ${error.stack}}`);
+      console.log(chalk.dim`${error.stack}`);
       // eslint-disable-next-line unicorn/no-process-exit
       process.exit();
     }

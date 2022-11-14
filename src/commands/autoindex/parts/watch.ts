@@ -78,7 +78,7 @@ function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogge
         } else {
           deferredFiles.add(file);
           log.info(
-            `{dim - ${chalk.bold("Autoindex:")} the file has no {italic exports} yet so deferring update}`
+            chalk.dim(`- ${chalk.bold("Autoindex:")} the file has no {italic exports} yet so deferring update`)
           );
         }
         break;

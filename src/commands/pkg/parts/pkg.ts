@@ -28,13 +28,13 @@ export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts, observations
   const command = `sls package --stage ${stage} --region ${region} ${
     opts.dir ? `--package ${opts.dir}` : ""
   }`;
-  console.log(`{dim {italic ${command}}}\n`);
+  console.log(chalk.dim.italic`${command}\n`);
 
   await asyncExec(command, { silent: opts.quiet ? true : false });
-  const directory = opts.dir ? opts.dir : ".serverless";
+  const directory = opts.dir ?? ".serverless";
 
   console.log(`\n{bold {green - Packaging is complete!}} ${emoji.rocket}`);
-  console.log(`- the assets can all be found in the {italic {blue ${directory}} directory.}`);
+  console.log(`- the assets can all be found in the ${chalk.italic.blue`${directory}} directory.}`}`);
   await asyncExec(`ls -l ${directory}`);
   if (opts.validate) {
     console.log(
@@ -43,7 +43,7 @@ export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts, observations
 
     const validateCmd = `aws cloudformation validate-template --template-body file://${directory}/cloudformation-template-create-stack.json`;
     try {
-      console.log(`{dim    ${validateCmd}}`);
+      console.log(chalk.dim`   ${validateCmd}`);
       await asyncExec(validateCmd);
     } catch {
       console.log(`{red - Error validating the {italic create} template!}`);
@@ -56,10 +56,10 @@ export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts, observations
     const validateUpdate = `aws cloudformation validate-template --template-body file://${directory}/cloudformation-template-update-stack.json`;
 
     try {
-      console.log(`{dim    ${validateUpdate}}`);
+      console.log(chalk.dim`   ${validateUpdate}`);
       await asyncExec(validateUpdate);
     } catch {
-      console.log(`{red - Error validating the {italic update} template!} ${emoji.poop}`);
+      console.log(chalk.red`- Error validating the ${chalk.italic` update`} template! ${emoji.poop}`);
     }
   }
 

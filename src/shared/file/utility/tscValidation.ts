@@ -35,7 +35,7 @@ export function tscValidation(filename: string, opts: Options = {}): boolean {
   );
   try {
     spawnSync(command, { stdio: "inherit" });
-    log.whisper(`{dim - {bold {yellow tsc}} validation passed}`);
+    log.whisper(chalk.dim`- {bold {yellow tsc}} validation passed`);
     return true;
   } catch {
     log.shout(

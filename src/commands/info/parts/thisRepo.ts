@@ -191,7 +191,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     await monorepoInfo(observations),
     [
       chalk.bold("Desc"),
-      pkg.description ? pkg.description : chalk.bold.italic("no description provided!"),
+      pkg.description ?? chalk.bold.italic("no description provided!"),
     ],
     exportsRow,
     ["NPM", npmInformation],
@@ -200,7 +200,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     [
       "Scripts",
       Object.keys(pkg?.scripts || {})
-        .map((i) => (i.includes(":") ? `{dim ${i.split(":")[0]}}:${i.split(":")[1]}` : i))
+        .map((i) => (i.includes(":") ? chalk.dim`${i.split(":")[0]}}:${i.split(":")[1]}` : i))
         .join(", "),
     ],
     [

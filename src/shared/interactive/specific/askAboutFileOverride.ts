@@ -28,7 +28,7 @@ export async function askAboutFileOverwrite(
   opts: Observations = new Set<DoDevopObservation>()
 ) {
   const parts = getFileComponents(source, libraryDirectory("templates"));
-  const filename = `{dim ${parts.filepath}}{bold /${parts.filename}}`;
+  const filename = chalk.dim`${parts.filepath}}{bold /${parts.filename}`;
   const log = logger(opts);
   log.shout(`The file {blue ${filename}} already exists.\n`);
   let action: FileAction | undefined;

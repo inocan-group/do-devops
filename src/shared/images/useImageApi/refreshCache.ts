@@ -85,7 +85,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
   );
 
   log.whisper(
-    `{dim - using the "${rule.name}" rule, {bold ${optimized.length}} images have been resized using Sharp to fit "web formats"}`
+    chalk.dim`using the "${rule.name}" rule, {bold ${optimized.length}} images have been resized using Sharp to fit "web formats"`
   );
 
   if (rule.preBlur) {
@@ -95,7 +95,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     }
     const blurred = await Promise.all(waitBlurry);
     log.whisper(
-      `{dim - produced a blurred image preload for ${blurred.length} images associated to "${rule.name}" rule}`
+      chalk.dim`- produced a blurred image preload for ${blurred.length} images associated to "${rule.name}" rule`
     );
   }
 

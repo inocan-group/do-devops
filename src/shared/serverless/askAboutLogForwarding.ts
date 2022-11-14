@@ -25,7 +25,7 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
       );
     } else {
       console.log(
-        `{dim - you are {italic not} using the {blue serverless-log-forwarding} plugin so skipping config for log forwarding}`
+        chalk.dim`- you are {italic not} using the {blue serverless-log-forwarding} plugin so skipping config for log forwarding`
       );
     }
     return config;

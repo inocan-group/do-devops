@@ -13,8 +13,8 @@ export function formatCommandsSection(
   return {
     header: cmd ? `Sub-Commands for {bold ${cmd}}` : `Commands`,
     content: subCommands.map((sc, idx) => ({
-      name: isOdd(idx) ? `{dim ${sc.name}}` : sc.name,
-      summary: isOdd(idx) ? `{dim ${sc.summary}}` : sc.summary,
+      name: isOdd(idx) ? chalk.dim`${sc.name}` : sc.name,
+      summary: isOdd(idx) ? chalk.dim`${sc.summary}` : sc.summary,
     })),
   };
 }

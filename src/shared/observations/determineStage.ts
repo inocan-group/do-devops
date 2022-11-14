@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import * as process from "node:process";
 
@@ -43,7 +44,7 @@ export async function determineStage(
   } catch (error) {
     console.log(`- attempts to get the desired "stage" have failed! ${emoji.poop}`);
     console.log(`- {red ${(error as Error).message}}`);
-    console.log(`{dim ${(error as Error).stack}}`);
+    console.log(chalk.dim`${(error as Error).stack}`);
     console.log();
 
     process.exit();

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 /* eslint-disable quotes */
 import chalk from "chalk";
 import { emoji } from "src/shared/ui";
@@ -33,8 +34,8 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
       process.exit();
     }
     if (argv.length > 1) {
-      console.log(`{dim - you have stated more than one function to {italic invoke}.}`);
-      console.log(`{dim - this command only executes one at a time; the rest are ignored.}`);
+      console.log(chalk.dim`- you have stated more than one function to {italic invoke}.`);
+      console.log(chalk.dim`- this command only executes one at a time; the rest are ignored.`);
     }
     let fn: string;
     if (argv.length === 0) {
@@ -49,7 +50,7 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
           `{red - The function "{white ${fn}}" is not a valid function!} ${emoji.shocked}`
         );
         console.log("- valid functions are:");
-        console.log(`{dim   - ${availableFns.join("\n  - ")}}`);
+        console.log(chalk.dim`  - ${availableFns.join("\n  - ")}`);
 
         process.exit();
       }

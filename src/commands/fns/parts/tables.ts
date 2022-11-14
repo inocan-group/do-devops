@@ -10,9 +10,9 @@ export function functionsApiTable(fns: FunctionConfiguration[]) {
       col: "FunctionName",
       name: "Function",
       formula: (f) =>
-        `{dim ${String(f).split("-").slice(0, -1).join("-")}-}{bold ${String(f)
+        chalk.dim`${String(f).split("-").slice(0, -1).join("-")}- ${chalk.bold(String(f)
           .split("-")
-          .slice(-1)}}`,
+          .slice(-1))}`,
       format: { width: 45, alignment: "left" },
     },
     {
@@ -57,15 +57,15 @@ export function functionsLocalTable(fns: Array<IServerlessFunctionConfig & { nam
       col: "name",
       name: "Function",
       formula: (f) =>
-        `{dim ${String(f).split("-").slice(0, -1).join("-")}-}{bold ${String(f)
+        chalk.dim`${String(f).split("-").slice(0, -1).join("-")}-}{bold ${String(f)
           .split("-")
-          .slice(-1)}}`,
+          .slice(-1)}`,
       format: { width: 45, alignment: "left" },
     },
     {
       col: "memorySize",
       name: "Memory",
-      formula: (m) => (m ? m : chalk.grey("1024")),
+      formula: (m) => (m ?? chalk.grey("1024")),
       format: { width: 8, alignment: "center" },
       minWidth: 104,
     },
@@ -86,7 +86,7 @@ export function functionsLocalTable(fns: Array<IServerlessFunctionConfig & { nam
     {
       name: "Description",
       col: "description",
-      formula: (d) => (d ? d : chalk.italic.dim("no description")),
+      formula: (d) => (d ?? chalk.italic.dim("no description")),
       format: { width: 42, alignment: "left", wrapWord: true },
     }
   );

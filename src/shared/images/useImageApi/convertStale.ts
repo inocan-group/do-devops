@@ -30,9 +30,7 @@ export async function convertStale(
     const { missing, outOfDate } = await checkCacheFreshness(tools.cache, rule);
     if (missing.length > 0) {
       log.whisper(
-        `{dim - there are {bold ${
-          missing.length
-        }} images not currently in the cache: {dim ${missing.join(", ")}}}`
+        chalk.dim`there are ${chalk.bold(missing.length)} images not currently in the cache: ${missing.join(", ")}`
       );
     }
     if (outOfDate.length > 0) {
@@ -46,7 +44,7 @@ export async function convertStale(
       log.info(
         `- ${emoji.party} all images in {blue ${rule.name}} are current; no work needed.`
       );
-      log.info(`{dim - if you need to force image production use {blue dd optimize --force}}`);
+      log.info(chalk.dim`- if you need to force image production use ${chalk.blue`dd optimize --force`}`);
     } else {
       // freshen up rule
       await refreshCache(rule, tools, [...missing, ...outOfDate]);
@@ -62,10 +60,10 @@ export async function convertStale(
       }
       const resizedComplete = [...(await Promise.all(resized))].flat();
       log.whisper(
-        `{dim - the following images were {italic resized}:\n${wordWrap(
+        chalk.dim`- the following images were {italic resized}:\n${wordWrap(
           resizedComplete.map((i) => i.file).join("\t"),
           { wrapDistance: 120 }
-        )}}\n`
+        )}\n`
       );
     }
   } // rules iteration
