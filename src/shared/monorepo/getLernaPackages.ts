@@ -1,6 +1,5 @@
 /* eslint-disable unicorn/import-style */
 import { asyncExec } from "async-shelljs";
-import chalk from "chalk";
 import { semver } from "common-types";
 import parse from "destr";
 import { join } from "node:path";
@@ -21,7 +20,7 @@ function stripExtraneous(input: string) {
 }
 
 export async function getLernaPackages(dir?: string) {
-  dir = dir ? dir : currentDirectory();
+  dir = dir ?? currentDirectory();
   const lerna = join(dir, "node_modules/.bin/lerna");
   if (!fileExists(lerna)) {
     throw new DevopsError(

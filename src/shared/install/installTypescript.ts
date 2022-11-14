@@ -1,4 +1,4 @@
-import chalk from "chalk";
+
 import { Options, Observations } from "src/@types";
 import { installDevDep } from "src/shared/npm";
 import { askConfirmQuestion } from "src/shared/interactive";
@@ -15,9 +15,7 @@ export async function installTypescript(
 ) {
   const log = logger(opts);
 
-  const proceed = opts.silent
-    ? opts.silent
-    : await askConfirmQuestion(`Would you like to install and configure {blue typescript}?`);
+  const proceed = opts.silent ?? (await askConfirmQuestion(`Would you like to install and configure {blue typescript}?`));
 
   if (!proceed) {
     return false;

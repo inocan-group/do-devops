@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { DevopsError } from "src/errors";
 import { askConfirmQuestion } from "src/shared/interactive";
 

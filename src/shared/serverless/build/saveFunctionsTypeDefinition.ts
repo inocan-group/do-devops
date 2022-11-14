@@ -47,10 +47,10 @@ export async function saveFunctionsTypeDefinition(config: IServerlessYaml) {
     const dir = path.join(process.cwd(), "src/@types");
     const filename = path.join(dir, "build.ts");
     await ensureDirectory(dir);
-    fs.writeFileSync(filename, contents, { encoding: "utf-8" });
+    fs.writeFileSync(filename, contents, { encoding: "utf8" });
   } catch (error) {
     console.log(
-      `- Attempt to save {italic type definitions} for {bold functions} and {bold stepFunctions} failed; this will be ignored for now so build can continue.`
+      `- Attempt to save {italic type definitions} for ${chalk.bold`functions`} and ${chalk.bold`stepFunctions`} failed; this will be ignored for now so build can continue.`
     );
     console.log(`- The actual error received was: {dim ${(error as Error).message}}`);
   }

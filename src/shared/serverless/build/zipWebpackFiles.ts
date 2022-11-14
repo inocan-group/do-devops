@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import path from "node:path";
 
@@ -26,9 +27,9 @@ export async function zipWebpackFiles(fns: string[]) {
 
     return Promise.all(promises);
   } catch (error) {
-    console.log(`{red - Problem zipping webpack files! ${emoji.angry}}`);
+    console.log(chalk.red`Problem zipping webpack files! ${emoji.angry}`);
     console.log(`- ${(error as Error).message}`);
-    console.log(`{grey \n${(error as Error).stack}}\n`);
+    console.log(chalk.gray`\n${(error as Error).stack}\n`);
     process.exit();
   }
 }

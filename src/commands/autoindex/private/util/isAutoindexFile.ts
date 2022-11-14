@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { readFileSync, writeFileSync } from "node:fs";
 import { logger } from "src/shared/core/logger";
 import { emoji } from "src/shared/ui";

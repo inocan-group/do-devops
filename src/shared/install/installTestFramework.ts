@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { TestObservation, Observations, Options } from "src/@types";
 import { DevopsError } from "src/errors";
 import { logger } from "src/shared/core";

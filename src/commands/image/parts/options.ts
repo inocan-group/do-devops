@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { IOptionDefinition } from "src/@types";
 
 export const options: IOptionDefinition = {

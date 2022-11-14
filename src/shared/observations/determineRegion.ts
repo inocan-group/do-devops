@@ -55,7 +55,7 @@ export async function determineRegion(
     if (configIsReady(userConfig) && userConfig.aws?.defaultRegion) {
       if (!opts.quiet) {
         console.log(
-          `{bold - AWS region has been resolved using the User's config ${emoji.eyeballs}}. This is the source of "last resort" but may be intended.`
+          `${chalk.bold`- AWS region has been resolved using the User's config ${emoji.eyeballs}`}. This is the source of "last resort" but may be intended.`
         );
       }
       region = userConfig.aws.defaultRegion;

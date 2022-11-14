@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { APIGateway, ApiGatewayV2 } from "./aws-proxy";
 import { convertProfileToApiCredential, getAwsProfile } from "./index";
 import { emoji } from "../ui";

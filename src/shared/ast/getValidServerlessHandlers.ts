@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { globbySync as sync } from "globby";
 import path from "node:path";
 

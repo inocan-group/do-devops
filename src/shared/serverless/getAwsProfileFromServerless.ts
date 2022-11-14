@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 
 import { DevopsError } from "src/errors";
@@ -46,7 +47,7 @@ export async function getAwsProfileFromServerless() {
     config = await getServerlessYaml();
     if (!config.provider) {
       console.log(
-        `- the {red serverless.yaml} file doesn't have a {bold provider} section! ${emoji.poop}`
+        `- the ${chalk.red`serverless.yaml`} file doesn't have a ${chalk.bold`provider`} section! ${emoji.poop}`
       );
       console.log("- this section must exist before you can deploy\n");
       process.exit();

@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { IDoDevopsCommand } from "src/@types/command";
 import { proxyToPackageManager } from "src/shared/core";
 import { pkgDepsInTable } from "src/shared/npm";

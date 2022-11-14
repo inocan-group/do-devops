@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { IDictionary } from "common-types";
 import {
   DoDevopObservation,

@@ -1,4 +1,4 @@
-import chalk from "chalk";
+
 import { readFileSync } from "node:fs";
 import { emoji } from "src/shared/ui";
 import { filesExist } from "../existence/filesExist";

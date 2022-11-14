@@ -40,9 +40,9 @@ function warnAboutMissingTyping(config: IInlineExportConfig[]) {
       )} handler functions who defined a {italic config} but did not type it as {bold IHandlerConfig}`
     );
     console.log(
-      `{grey - the function configs needing attention are: {italic ${incorrectOrMissingTyping
+      chalk.gray`- the function configs needing attention are: {italic ${incorrectOrMissingTyping
         .map((i) => (isServerlessFunctionHandler(i.config) ? i.config.handler : i.config.image))
-        .join(", ")}}}`
+        .join(", ")}}`
     );
   }
 }
@@ -107,6 +107,6 @@ export default {
 }`;
 
   writeFileSync(path.join(process.env.PWD || "", "serverless-config/functions/inline.ts"), file, {
-    encoding: "utf-8",
+    encoding: "utf8",
   });
 }

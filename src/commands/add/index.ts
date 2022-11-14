@@ -1,4 +1,4 @@
-import chalk from "chalk";
+/* eslint-disable unicorn/no-process-exit */
 import { IDoDevopsCommand } from "src/@types/command";
 import { proxyToPackageManager } from "src/shared/core";
 

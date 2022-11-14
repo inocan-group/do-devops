@@ -52,22 +52,22 @@ export async function buildLambdaTypescriptProject(
   }
 
   console.log(
-    `- The account info for {bold ${accountInfo.name} [ }{dim ${accountInfo.accountId}} {bold ]} has been gathered`
+    `- The account info for ${chalk.bold`${accountInfo.name} [`} ${chalk.dim(accountInfo.accountId)} ${chalk.bold`]`} has been gathered`
   );
 
   const handlerInfo = await getLocalHandlerInfo();
   console.log(
-    `{grey - handler functions [ {bold ${String(handlerInfo.length)}} ] have been identified}`
+    `{grey - handler functions [ ${chalk.bold(String(handlerInfo.length))} ] have been identified}`
   );
 
   await createInlineExports(handlerInfo);
   console.log(
-    `{grey - The inline function configuration file [ {bold {italic serverless-config/functions/inline.ts}} ] has been configured}`
+    `{grey - The inline function configuration file [ ${chalk.bold.italic`serverless-config/functions/inline.ts`} ] has been configured}`
   );
 
   await createFunctionEnum(handlerInfo);
   console.log(
-    `{grey - The enumeration and type [ {bold {italic src/@types/functions.ts}} ] for the available functions has been configured }`
+    `{grey - The enumeration and type [ ${chalk.bold.italic`src/@types/functions.ts`} ] for the available functions has been configured }`
   );
 
   if (!hasWebpackPlugin) {

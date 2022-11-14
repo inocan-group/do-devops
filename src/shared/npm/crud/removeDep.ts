@@ -1,4 +1,5 @@
-import chalk from "chalk";
+/* eslint-disable unicorn/no-process-exit */
+
 import { omit } from "native-dash";
 import { DoDevopObservation, Options } from "src/@types";
 import { logger } from "src/shared/core";

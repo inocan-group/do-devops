@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { IDictionary, IServerlessFunctionHandler } from "common-types";
 import { IDiscoveredConfig } from "src/@types";
 import { namedExports, astParseWithTypescript } from "./index";

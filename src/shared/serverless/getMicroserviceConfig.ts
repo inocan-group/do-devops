@@ -19,7 +19,7 @@ export async function getMicroserviceConfig(accountInfo: IServerlessAccountInfo)
 
     return config;
   } catch (error) {
-    console.log(`{yellow - failed executing ${cliFile}}`);
+    console.log(chalk.yellow`- failed executing ${cliFile}`);
 
     throw new DevopsError(
       `Problem getting the microservice config file [ ${cliFile} ]: ${(error as Error).message}`,

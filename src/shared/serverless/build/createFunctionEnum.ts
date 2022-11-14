@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import path from "node:path";
 
 import { existsSync, mkdirSync, writeFile } from "node:fs";
@@ -33,7 +32,7 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
       );
     } else {
       const fn = handler.fn;
-      const comment = config.config.description ? config.config.description : `${fn} handler`;
+      const comment = config.config.description ?? `${fn} handler`;
       body.push(
         `
   /**
@@ -50,7 +49,7 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
   }
 
   await write(path.resolve(path.join(process.cwd(), "/src/@types/functions.ts")), fileText, {
-    encoding: "utf-8",
+    encoding: "utf8",
   });
   return fileText;
 }

@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { spawnSync } from "node:child_process";
 import { IDoDevopsCommand } from "src/@types/command";
 import { commandIsAvailable } from "src/shared/file/existence/commandIsAvailable";

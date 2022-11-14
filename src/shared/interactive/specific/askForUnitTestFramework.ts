@@ -1,4 +1,4 @@
-import chalk from "chalk";
+
 import { equal } from "native-dash";
 
 import { ICommandConfig, Options, TestObservation } from "src/@types";
@@ -22,11 +22,9 @@ export async function askForUnitTestFramework(
     `- we have not been able to determine which {italic unit testing} framework you're using.`
   );
 
-  const framework = opts.unitTestFramework
-    ? opts.unitTestFramework
-    : await askListQuestion("Choose the unit test runner you'd like to use", TEST_FRAMEWORKS, {
+  const framework = opts.unitTestFramework ?? (await askListQuestion("Choose the unit test runner you'd like to use", TEST_FRAMEWORKS, {
         default: "vitest",
-      });
+      }));
 
   const wallaby =
     framework === "uvu"
@@ -44,9 +42,7 @@ export async function askForUnitTestFramework(
   );
 
   const user = getUserConfig();
-  const defaultPostfix = user.test?.testFilePostfix
-    ? user.test?.testFilePostfix
-    : ["-spec", "-test"];
+  const defaultPostfix = user.test?.testFilePostfix ?? ["-spec", "-test"];
 
   const postfix = await askCheckboxQuestion(
     "Test files are typically distinguished by having a 'postfix' part of their name to distinguish them from other files in the same directory; choose as many as you like",

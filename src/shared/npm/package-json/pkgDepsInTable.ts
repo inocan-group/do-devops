@@ -1,4 +1,4 @@
-import chalk from "chalk";
+
 import { IDictionary } from "common-types";
 import { toTable } from "src/shared/ui";
 import { getPackageJson, convertDepDictionaryToArray } from "src/shared/npm";

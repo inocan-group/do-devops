@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { libraryDirectory } from "src/shared/file/base-paths/libraryDirectory";
 import { fileExists } from "src/shared/file/existence/fileExists";
 import { getPackageJson } from "src/shared/npm";

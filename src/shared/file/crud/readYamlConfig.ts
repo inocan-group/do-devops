@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { readFileSync } from "node:fs";
 import { load } from "js-yaml";
 import { DevopsError } from "src/errors/DevopsError";

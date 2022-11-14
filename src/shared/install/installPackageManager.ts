@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { Options, Observations, PackageManagerObservation } from "src/@types";
 import { DevopsError } from "src/errors";
 import { logger, proxyToPackageManager } from "src/shared/core";

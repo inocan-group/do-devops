@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { AwsRegion, AwsStage } from "common-types";
 import { IOptionDefinition } from "src/@types/option-types";
 

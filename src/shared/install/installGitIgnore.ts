@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { Options } from "src/@types";
 import { logger } from "src/shared/core";
 import { templateFileCopy } from "src/shared/file";

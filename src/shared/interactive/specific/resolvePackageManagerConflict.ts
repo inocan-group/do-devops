@@ -18,7 +18,7 @@ export async function resolvePackageManagerConflict(observations: Set<DoDevopObs
     console.log(
       `- removed ${removed.length} redundant lock file${
         removed.length > 1 ? "s" : ""
-      }: {italic {dim ${removed.join(", ")}}}`
+      }: ${chalk.italic.dim(removed.join(", "))}}`
     );
   }
 }

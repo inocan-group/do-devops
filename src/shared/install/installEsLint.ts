@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { Options, Observations } from "src/@types";
 import { installDevDep } from "src/shared/npm";
 import { askConfirmQuestion } from "src/shared/interactive";
@@ -15,9 +14,7 @@ export async function installEsLint(
 ) {
   const log = logger(opts);
 
-  const proceed = opts.silent
-    ? opts.silent
-    : await askConfirmQuestion(`Would you like to install and configure {blue eslint}?`);
+  const proceed = opts.silent ?? (await askConfirmQuestion(`Would you like to install and configure {blue eslint}?`));
 
   if (!proceed) {
     return false;

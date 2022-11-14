@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { globbySync } from "globby";
 import { join } from "pathe";
 import { IDictionary } from "common-types";

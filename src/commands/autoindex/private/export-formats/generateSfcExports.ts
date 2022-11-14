@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { Options } from "src/@types/global";
 import type { IAutoindexOptions } from "src/commands/autoindex/parts";
 import { IAutoindexFile, removeExtension } from "src/commands/autoindex/private";

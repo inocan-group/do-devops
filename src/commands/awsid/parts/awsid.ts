@@ -1,5 +1,3 @@
-import chalk from "chalk";
-
 import { DoDevopsHandler } from "src/@types/command";
 import { getAwsIdentityFromProfile, getAwsProfileDictionary } from "src/shared/aws";
 import { emoji } from "src/shared/ui";

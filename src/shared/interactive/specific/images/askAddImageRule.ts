@@ -1,4 +1,4 @@
-import chalk from "chalk";
+
 import { IImageRule, IProjectConfig, Observations } from "src/@types";
 import { getProjectConfig, saveProjectConfig } from "src/shared/config";
 import { logger } from "src/shared/core/logger";

@@ -1,5 +1,4 @@
 /* eslint-disable unicorn/prefer-module */
-import chalk from "chalk";
 import path, { join } from "node:path";
 import { IDirectoryOptions } from "src/@types";
 import { DevopsError } from "../../../errors/DevopsError";

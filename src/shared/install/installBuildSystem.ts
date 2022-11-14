@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { Options, Observations } from "src/@types";
 import { DevopsError } from "src/errors";
 import { installEsLint } from "src/shared/install";
@@ -33,7 +32,7 @@ export async function installBuildSystem(opts: Options, observations: Observatio
   }
 
   let pkg = getPackageJson();
-  const scripts = pkg.scripts ? pkg.scripts : {};
+  const scripts = pkg.scripts ?? {};
   if (!scripts.lint) {
     scripts.lint = `run-s lint:src lint:test lint:tsc`;
     scripts["lint:src"] = observations.has("eslint") ? "eslint src/**/*.ts" : "";

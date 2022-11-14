@@ -3,7 +3,6 @@ import { DevopsError } from "../../../errors/DevopsError";
 import { dirExists, fileExists } from "../existence";
 import { IWriteOptions } from "src/@types";
 import { interpolateFilePath } from "../../../shared/file/helpers";
-import chalk from "chalk";
 import path from "node:path";
 import { isClassification } from "../../../@type-guards";
 

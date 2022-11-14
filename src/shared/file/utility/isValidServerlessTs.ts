@@ -14,7 +14,7 @@ export function isValidServerlessTs(fn?: string, opts: Options = {}) {
   const filename = fn || currentDirectory("serverless.ts");
   const contents = readFile(filename);
 
-  log.info(`{gray - validating integrity of {blue serverless.ts} file}`);
+  log.info(chalk.gray`- validating integrity of {blue serverless.ts} file`);
 
   if (!contents) {
     return false;
@@ -22,15 +22,8 @@ export function isValidServerlessTs(fn?: string, opts: Options = {}) {
   if (!fileIncludes(filename, "aws-orchestrate", "import", "export default")) {
     return false;
   }
-  log.whisper(`{gray - {blue serverless.ts} file {italic looks} structurally valid }`);
+  log.whisper(chalk.gray`- ${chalk.blue`serverless.ts`} file ${chalk.italic`looks`} structurally valid`);
 
-  // log.whisper(
-  //   `{gray - attempting {bold tsc} transpilation of {blue serverless.ts}} to ensure validity`
-  // );
-  // if (!tscValidation(filename, opts)) {
-  //   return false;
-  // }
-  // log.whisper(`{gray - transpilation was successful}`);
 
   return true;
 }

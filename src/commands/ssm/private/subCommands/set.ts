@@ -1,5 +1,4 @@
 import { getAwsProfile, getAwsIdentityFromProfile } from "src/shared/aws";
-import chalk from "chalk";
 import { SSM } from "aws-ssm";
 import { completeSsmName } from "../index";
 import { toBase64 } from "native-dash";

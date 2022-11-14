@@ -1,4 +1,4 @@
-import chalk from "chalk";
+
 import { PackageManagerObservation, DoDevopObservation } from "src/@types/observations";
 import { DevopsError } from "src/errors";
 import { askListQuestion } from "src/shared/interactive";

@@ -28,8 +28,8 @@ export async function installDevDep(
     );
     return true;
   } catch (error) {
-    log.info(`{gray - {red failure} trying to install npm packages: ${cmd}}`);
-    log.info(`\n{gray ${(error as Error).message}}\n`);
+    log.info(chalk.gray`{red failure} trying to install npm packages: ${cmd}`);
+    log.info(chalk.gray`\n${(error as Error).message}\n`);
     return false;
   }
 }

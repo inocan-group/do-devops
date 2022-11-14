@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import { IAwsCredentials, IAwsProfile } from "src/@types";
 import { DevopsError } from "src/errors";
 import { isAwsProfile } from "./aws-type-guards";

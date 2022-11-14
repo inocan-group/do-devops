@@ -1,5 +1,4 @@
 import { exec } from "async-shelljs";
-import chalk from "chalk";
 import { exit } from "node:process";
 import { IDoDevopsCommand } from "src/@types/command";
 import { logger } from "src/shared/core";

@@ -24,20 +24,20 @@ export function getYeomanConfig(scaffold = "generator-lambda-typescript") {
 
   if (hasYo) {
     try {
-      yo = parse(readFileSync(yoFile, "utf-8"))[scaffold];
+      yo = parse(readFileSync(yoFile, "utf8"))[scaffold];
     } catch {
       console.log(
         `- there appears to {italic be} a yeoman config file but it could not be parsed ${emoji.poop}`
       );
       console.log(
-        `{grey - Note: we are looking for the "${scaffold}" as a root property, other yeoman scaffoldings are not considered}`
+        chalk.gray`- Note: we are looking for the "${scaffold}" as a root property, other yeoman scaffolding not considered`
       );
     }
   }
 
   if (hasTransient) {
     try {
-      transient = parse(readFileSync(transientFile, "utf-8"));
+      transient = parse(readFileSync(transientFile, "utf8"));
     } catch {
       console.log(
         `- there appears to be a {italic transient} yeoman config file -- {blue .yo-transient.json} -- but it could not be parsed ${emoji.poop}`

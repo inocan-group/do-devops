@@ -56,7 +56,7 @@ export async function determineTestingFramework(
       );
     }
     const installAndConfig = await askConfirmQuestion(
-      `Install and configure {italic ${config.test.unitTestFramework}} test framework for you?`
+      `Install and configure ${chalk.italic(config.test.unitTestFramework)} test framework for you?`
     );
     if (!installAndConfig) {
       return config?.test?.unitTestFramework || false;
@@ -75,7 +75,7 @@ export async function determineTestingFramework(
 
       if (installed && configured) {
         log.info(
-          `\n- ${emoji.party} {green ${config.test.unitTestFramework}} setup and ready to use in this repo!\n`
+          `\n- ${emoji.party} ${chalk.green(config.test.unitTestFramework)} setup and ready to use in this repo!\n`
         );
       }
     }
