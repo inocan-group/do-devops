@@ -68,6 +68,7 @@
     "sharp": "^0.31.2"
   },
   "dependencies": {
+    "ast-types": "^0.14.2",
     "async-shelljs": "^0.1.4",
     "aws-sdk": "^2.1253.0",
     "aws-ssm": "^0.4.0",
