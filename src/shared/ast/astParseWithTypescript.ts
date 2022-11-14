@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/prefer-module */
 import { parse } from "recast";
 import { readFileSync } from "node:fs";
-// import parser from "recast/parsers/typescript.js";
+import parser from "recast/parsers/typescript.js";
 
 /**
  * parses a given file into an AST tree
@@ -14,7 +14,7 @@ export function astParseWithTypescript(filename: string) {
 
   return filename.includes(".ts")
     ? parse(fileContents, {
-        // parser,
+        parser,
       })
     : parse(fileContents);
 }

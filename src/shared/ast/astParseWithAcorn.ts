@@ -3,7 +3,7 @@ import { parse } from "recast";
 import { IFileOrContent, isFilenameNotContent } from "src/@types";
 import { readFile } from "../file";
 import { DevopsError } from "src/errors";
-// import acorn from "recast/parsers/acorn.js";
+import acorn from "recast/parsers/acorn.js";
 
 /**
  * parses a given file into an AST tree using the recast **acorn** parser.
@@ -18,6 +18,6 @@ export function astParseWithAcorn(source: IFileOrContent) {
   }
 
   return parse(content, {
-    // parser: acorn,
+    parser: acorn,
   });
 }
