@@ -10,7 +10,7 @@ import {
   isKnownCommand,
 } from "src/shared/core/index";
 import { help } from "./shared/core/help";
-import { emoji, inverted } from "./shared/ui";
+import { emoji, inverted, wordWrap } from "./shared/ui";
 import { getObservations } from "./shared/observations/getObservations";
 import { doDevopsVersion, commandAnnouncement, hasArgv, getArgvOption } from "./shared/core/util";
 import { hasScript } from "./shared/npm";
@@ -37,7 +37,10 @@ import { isDevopsError } from "./@type-guards";
 
   // undocumented observations switch
   if (!cmdName && mainCommand._unknown && mainCommand._unknown.includes("--observations")) {
-    console.log(`Observations:`, [...observations].map((i) => chalk`{inverse  ${i} }`).join(" "));
+    console.log(
+      chalk.yellowBright`Observations:\n`,
+      wordWrap([...observations].map((i) => chalk.dim(i)).join(chalk.dim(", ")))
+    );
     process.exit();
   }
 
