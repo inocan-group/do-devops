@@ -3,7 +3,7 @@ import { toTable } from "src/shared/ui";
 import { getLayersFromPackageJson } from "src/shared/serverless";
 import { DoDevopsHandler } from "src/@types/command";
 
-const META_LINK_MSG = chalk.dim`- the results rely on meta-data tagging; check out this link for more info:\n      {blueBright https://github.com/inocan-group/do-devops/docs/layer-meta.md}\n`;
+const META_LINK_MSG = chalk.dim`- the results rely on meta-data tagging; check out this link for more info:\n      ${chalk.blueBright`https://github.com/inocan-group/do-devops/docs/layer-meta.md`}\n`;
 
 /** handler for the "layers" command */
 export const handler: DoDevopsHandler = async ({ observations }) => {

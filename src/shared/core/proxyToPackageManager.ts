@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/no-process-exit */
 // import { exec } from "async-shelljs";
+import chalk from "chalk";
 import { spawnSync } from "node:child_process";
 import { DoDevopObservation, PackageManagerObservation } from "src/@types/observations";
 import { saveProjectConfig } from "src/shared/config";
@@ -134,17 +135,17 @@ export async function proxyToPackageManager(
 
     if (NON_PROXY.has(cmd)) {
       console.error(
-        `{gray - we detected use of the {blue ${pkgManager}} in this repo and will {italic proxy} "${cmd}" to: {blue ${pkgCmd}}}\n`
+        `- we detected use of ${chalk.blue(pkgManager)} in this repo and will ${chalk.italic`proxy`} "${cmd}" to: ${chalk.blue(pkgCmd)}\n`
       );
     } else {
       if (isScriptCmd && !hasScript(cmd)) {
         console.log(
-          `{gray - we {italic would} proxy this as {blue ${pkgCmd}} but you don't have "${cmd}" defined in your scripts section.}\n`
+          `- we ${chalk.italic`would`} proxy this as ${chalk.blue(pkgCmd)} but you don't have "${cmd}" defined in your scripts section.\n`
         );
         process.exit();
       }
 
-      console.error(`{gray - we will proxy {blue ${pkgCmd}} for you}\n`);
+      console.error(`- we will proxy ${chalk.blue(pkgCmd)} for you\n`);
     }
 
     const cmdParts = pkgCmd.split(/\s+/g).filter(Boolean);

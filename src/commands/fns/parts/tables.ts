@@ -10,9 +10,13 @@ export function functionsApiTable(fns: FunctionConfiguration[]) {
       col: "FunctionName",
       name: "Function",
       formula: (f) =>
-        chalk.dim`${String(f).split("-").slice(0, -1).join("-")}- ${chalk.bold(String(f)
-          .split("-")
-          .slice(-1))}`,
+        [
+          chalk.dim`${String(f).split("-").slice(0, -1).join("-")}`,
+          "- ",
+          chalk.bold(String(f)
+            .split("-")
+            .slice(-1))
+        ].join(""),
       format: { width: 45, alignment: "left" },
     },
     {
@@ -57,9 +61,13 @@ export function functionsLocalTable(fns: Array<IServerlessFunctionConfig & { nam
       col: "name",
       name: "Function",
       formula: (f) =>
-        chalk.dim`${String(f).split("-").slice(0, -1).join("-")}-}{bold ${String(f)
+        [
+          chalk.dim(String(f).split("-").slice(0, -1).join("-")),
+          "-",
+          chalk.bold(String(f)
           .split("-")
-          .slice(-1)}`,
+          .slice(-1))
+        ].join(""),
       format: { width: 45, alignment: "left" },
     },
     {

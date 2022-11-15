@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { IOptionDefinition } from "src/@types/option-types";
 
 export interface IAutoindexOptions {
@@ -33,7 +34,7 @@ export const options: IOptionDefinition = {
     multiple: true,
     type: String,
     group: "local",
-    description: `{italic optionally} state one or more explicit autoindex files to evaluate instead of glob patterns`,
+    description: `${chalk.italic`optionally`} state one or more explicit autoindex files to evaluate instead of glob patterns`,
     typeLabel: "string[]",
   },
 

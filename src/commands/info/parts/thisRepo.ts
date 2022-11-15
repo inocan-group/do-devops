@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-await-expression-member */
 import { asyncExec } from "async-shelljs";
 import chalk from "chalk";
 import path from "node:path";
@@ -63,7 +64,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
   ].filter((i) => i.value);
   const exportsRow =
     pkgExports.length > 0
-      ? ["Exports", pkgExports.map((i) => `{bold ${i.name}} - {dim ${i.value}}`).join("\n")]
+      ? ["Exports", pkgExports.map((i) => `${chalk.bold(i.name)} - ${chalk.dim(i.value)}`).join("\n")]
       : ["Exports", `{italic no exports found in {blue package.json}}`];
 
   const priorVersions = npm
@@ -77,21 +78,23 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
 
   // GIT
   const gitLastCommit = await getGitLastCommit();
-  const gitInfo = gitLastCommit
-    ? `- Latest commit ${green(gitLastCommit.hash.slice(0, 8))} on {green ${
-        gitLastCommit.refs
-      }}\n- committed by {green ${gitLastCommit.author_name} {dim <${
-        gitLastCommit.author_email
-      }>}} on {green ${format(new Date(gitLastCommit.date), dateFormat)}}`
-    : `{italic {dim no commits found}}`;
+  // eslint-disable-next-line unicorn/no-await-expression-member
+  const gitRemotes = (await getGitRemotes()).map((i) => `- ${chalk.bold(i.name)}: ${chalk.dim(i.refs.fetch)}`);
+  let gitInfo = gitLastCommit
+    ? `- Latest commit ${green(gitLastCommit.hash.slice(0, 8))} on ${green(gitLastCommit.refs)}\n- committed by ${green(gitLastCommit.author_name)} ${chalk.dim(`<${gitLastCommit.author_email}>`)} on ${green(format(new Date(gitLastCommit.date), dateFormat))}`
+    : chalk.italic.dim`no commits found`;
 
   const localFilesChanged = (
     await asyncExec("git diff --name-only", {
       silent: true,
     })
-  )
-    // eslint-disable-next-line unicorn/no-await-expression-member
-    .split("\n").length;
+  ).split("\n").length;
+
+  const currentGitBranch = await getCurrentGitBranch();
+
+  gitInfo = gitInfo +
+  `\n- ${chalk.yellow(String(localFilesChanged))} files changed locally on ${chalk.yellow(currentGitBranch)}\n\n- Remotes are:\n  ${gitRemotes}`;
+
   /**
    * NPM Info based on verbose flag
    */
@@ -99,10 +102,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     [
       true,
       npm
-        ? `This repo was first published on {green ${format(
-            parseISO(npm.time.created),
-            dateFormat
-          )}} and last modified on {green ${format(parseISO(npm.time.modified), dateFormat)}}.\n\n`
+        ? `This repo was first published on ${green(format(parseISO(npm.time.created), dateFormat))} and last modified on ${green(format(parseISO(npm.time.modified), dateFormat))}.\n\n`
         : "",
     ],
     [
@@ -116,13 +116,13 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
             pkg.version
           )} but this is {italic not} an npm package.`,
     ],
-    [true, `\n\nPrior versions include: {italic ${priorVersions}}`],
+    [true, `\n\nPrior versions include: ${chalk.italic.dim(priorVersions)}`],
     [
       true,
       npm && npm.author
-        ? `\n\nThe author of the repo is {green {bold ${
+        ? `\n\nThe author of the repo is ${chalk.green.bold(
             typeof npm.author === "string" ? npm.author : npm.author.name
-          }${typeof npm.author === "object" && npm.author.email ? ` <${npm.author.email}>` : ""}}}`
+          )}${typeof npm.author === "object" && npm.author.email ? ` <${npm.author.email}>` : ""}`
         : "",
     ],
   ];
@@ -164,7 +164,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     Object.keys(pkg?.dependencies || {}).join("\n - ")
   )}`;
 
-  console.log(`Info on package {green {bold ${pkg.name}}}\n`);
+  console.log(`Info on package ${chalk.bold.green(pkg.name)}\n`);
   const npmInformation =
     pkg.private === true
       ? `This is a private repository (not published to NPM)`
@@ -173,17 +173,14 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
           .map((i) => i[1])
           .join("");
 
-  // eslint-disable-next-line unicorn/no-await-expression-member
-  const gitRemotes = (await getGitRemotes()).map((i) => `- {bold ${i.name}:} ${i.refs.fetch}`);
-
   const repoInfo =
     pkg.repository && typeof pkg.repository === "object"
       ? convertGitUrlToHttp((pkg.repository as IDictionary).url)
       : pkg.repository
       ? convertGitUrlToHttp(pkg.repository)
-      : `{red The repository is ${chalk.bold(
+      : chalk.red`The repository is ${chalk.bold(
           "not"
-        )} stated in {blue package.json}}; it may be deduced by the GIT remotes:\n${gitRemotes.join(
+        )} stated in ${chalk.blue`package.json`}; it may be deduced by the GIT remotes:\n${gitRemotes.join(
           "\n"
         )}`;
 
@@ -191,7 +188,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     await monorepoInfo(observations),
     [
       chalk.bold("Desc"),
-      pkg.description ?? chalk.bold.italic("no description provided!"),
+      pkg.description ?? chalk.bold.italic`no description provided!`,
     ],
     exportsRow,
     ["NPM", npmInformation],
@@ -205,10 +202,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     ],
     [
       "GIT",
-      gitInfo +
-        `\n\n- ${chalk.yellow`${String(
-          localFilesChanged
-        )}`} files changed locally on {yellow ${await getCurrentGitBranch()}}`,
+      gitInfo
     ],
     ["Tags ", pkg.keywords ? pkg.keywords.join(", ") : chalk.italic.dim("none")],
   ].filter((i) => Array.isArray(i) && i[0]) as unknown[][];

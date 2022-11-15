@@ -42,7 +42,7 @@ export function pkgDepsInTable(opts: IPkgDepsInTableOptions = {}) {
     const row: IDictionary = {};
     for (const col of columns) {
       const datum = deps.find((c) => c.name === col)?.data || [];
-      row[col] = datum[idx] ? datum[idx] : "";
+      row[col] = datum[idx] ?? "";
     }
     data.push(row);
   }
