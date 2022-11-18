@@ -78,7 +78,7 @@ export async function proxyToPackageManager(
   // can't continue without package.json
   if (!observations.has("packageJson")) {
     console.error(
-      `- ${emoji.shocked} the {green ${cmd}} command is only meant to used in the root of NodeJS which has a {blue package.json} file in it.\n`
+      `- ${emoji.shocked} the ${chalk.green(cmd)} command is only meant to used in the root of NodeJS which has a {blue package.json} file in it.\n`
     );
     process.exit();
   }
