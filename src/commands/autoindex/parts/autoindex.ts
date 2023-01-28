@@ -77,7 +77,7 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
       const { indexGlobs, indexFiles, nonAutoindexFiles } = await getIndex(".", opts);
       const { contentGlobs, contentFiles } = await getContent(".", opts);
 
-      log.shout(chalk.dim`- no monorepo detected so will run just once using glob patterns`);
+      log.whisper(chalk.dim`- no monorepo detected so will run just once using glob patterns`);
 
       groups.push({
         kind: "repo",
