@@ -107,7 +107,7 @@ import { isDevopsError } from "./@type-guards";
       const noPkgJsonMsg =
         useScriptProxy === undefined
           ? ""
-          : `\n\n{dim - Note: you're in a directory with no {italic package.json} file so if you\nwere trying to proxy a script please move to the right directory first.}`;
+          : chalk.dim`\n\n - Note: you're in a directory with no ${chalk.italic`package.json`} file so if you\nwere trying to proxy a script please move to the right directory first.`;
       console.log(
         `${emoji.poop} ${chalk.italic.yellowBright`${cmdName}`}} is an unknown command!${noPkgJsonMsg} \n\n` +
           `- Valid command syntax is: ${chalk.bold.inverse(

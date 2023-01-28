@@ -38,7 +38,7 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
   );
   if (!confirmIndexGlob) {
     console.log(`- input patterns in a CSV format that can be parsed.`);
-    console.log(`  for example {dim [ "**foobar.ts" ] }.`);
+    console.log(`  for example ${chalk.dim`[ "**foobar.ts" ] `}.`);
     console.log(
       `- Note: you should NOT include the exclusion pattern for {blue node_modules} as this will always be included`
     );

@@ -2,9 +2,10 @@
 import { IDictionary } from "common-types";
 import { toTable } from "src/shared/ui";
 import { getPackageJson, convertDepDictionaryToArray } from "src/shared/npm";
+import chalk from "chalk";
 
 function formatDependencies(deps: Array<{ name: string; version: string }>) {
-  return deps.map((dep) => `{bold ${dep.name}} [{dim ${dep.version} }]`);
+  return deps.map((dep) => `${chalk.bold(dep.name)} [ ${chalk.dim(dep.version)} ]`);
 }
 
 export interface IPkgDepsInTableOptions {

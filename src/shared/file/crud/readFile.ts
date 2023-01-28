@@ -1,4 +1,6 @@
+/* eslint-disable unicorn/no-process-exit */
 
+import chalk from "chalk";
 import { readFileSync } from "node:fs";
 import { emoji } from "src/shared/ui";
 import { filesExist } from "../existence/filesExist";
@@ -24,7 +26,7 @@ export function readFile(filename: string) {
   filename = interpolateFilePath(filename);
 
   try {
-    return filesExist(filename) ? readFileSync(filename, { encoding: "utf-8" }) : undefined;
+    return filesExist(filename) ? readFileSync(filename, { encoding: "utf8" }) : undefined;
   } catch (error) {
     console.log(
       `{red - ${
@@ -33,7 +35,7 @@ export function readFile(filename: string) {
         (error as Error).message
       }`
     );
-    console.log(`- Stack:{dim \n${(error as Error).stack}}`);
+    console.log(`- Stack:\n${chalk.dim((error as Error).stack)}`);
 
     process.exit(1);
   }

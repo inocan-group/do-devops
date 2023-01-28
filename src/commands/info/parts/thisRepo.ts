@@ -152,15 +152,15 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
 
   const depsSummary =
     deps.length > 0
-      ? `This repo has ${deps.map((d) => `{green ${d.count}} ${d.name}`).join(", ")}`
-      : `{italic {dim no dependencies}}`;
+      ? `This repo has ${deps.map((d) => chalk.green` ${d.count}} ${d.name}`).join(", ")}`
+      : chalk.italic.dim` no dependencies}}`;
 
   `This repo has ${green(
     Object.keys(pkg?.dependencies || {}).length
   )} dependencies, and {green ${
     Object.keys(pkg?.devDependencies || {}).length
   }} {italic dev} dependencies`;
-  const depDetails = `${depsSummary}\n\nThe dependencies are:\n - ${dim(
+  const depDetails = `${depsSummary}\n\nThe dependencies are:\n - ${chalk.dim(
     Object.keys(pkg?.dependencies || {}).join("\n - ")
   )}`;
 

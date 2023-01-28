@@ -37,7 +37,7 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
 
       if (fns) {
         console.log(
-          `- AWS functions found using {blue {bold ${opts.profile}}} profile {dim [ ${region} ]}${stageFilterMsg}\n`
+          `- AWS functions found using {blue {bold ${opts.profile}}} profile ${chalk.dim`[ ${region} ]`}${stageFilterMsg}\n`
         );
         if (opts.json) {
           console.log(

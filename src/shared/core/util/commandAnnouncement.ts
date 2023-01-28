@@ -13,7 +13,7 @@ export function commandAnnouncement(cmdDefn?: IDoDevopsCommand, cmd?: ICommandPa
 
   const argv = cmd && cmd.argv.length > 0 ? ` {italic ${cmd.argv.join(" ")}}` : "";
 
-  const subCmd = cmd && cmd.subCommand ? ` {dim ${cmd.subCommand}}` : "";
+  const subCmd = cmd && cmd.subCommand ? chalk.dim`  ${cmd.subCommand}` : "";
 
   const helpText =
     (!cmdDefn && !cmd) || (cmd && cmd.opts?.help)

@@ -52,6 +52,6 @@ export async function saveFunctionsTypeDefinition(config: IServerlessYaml) {
     console.log(
       `- Attempt to save {italic type definitions} for ${chalk.bold`functions`} and ${chalk.bold`stepFunctions`} failed; this will be ignored for now so build can continue.`
     );
-    console.log(`- The actual error received was: {dim ${(error as Error).message}}`);
+    console.log(`- The actual error received was: ${chalk.dim((error as Error).message)}`);
   }
 }

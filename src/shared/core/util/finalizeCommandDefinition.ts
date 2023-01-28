@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { IDictionary } from "common-types";
 import {
   DoDevopObservation,
@@ -33,16 +34,16 @@ export function finalizeCommandDefinition(
     ? cmdDefn.subCommands(observations, options)
     : cmdDefn.subCommands;
 
-  const argv = hasArgv(cmdDefn) ? ` {italic {dim argv[]}}` : "";
+  const argv = hasArgv(cmdDefn) ? chalk.italic.dim` argv[]}}` : "";
   const argvDescription = getArgvOption(cmdDefn)?.description
     ? `\n\n\t\t{bold {blue [argv]:}} ${getArgvOption(cmdDefn)?.description}`
     : "";
 
   const subCommandSyntax =
     subCommands && subCommands.length > 0
-      ? ` {bold <cmd:}{dim ${subCommands
+      ? ` ${chalk.bold`<cmd:`}${chalk.dim(subCommands
           .map((i) => i.name)
-          .join(`{blue {bold |}}`)}}{bold >}`
+          .join(`{blue {bold |}}`))}${chalk.bold`>`}`
       : "";
 
   return {
@@ -50,7 +51,7 @@ export function finalizeCommandDefinition(
     handler: cmdDefn.handler,
     syntax:
       cmdDefn.syntax ||
-      `dd ${cmdDefn.kind}${subCommandSyntax}${argv} [{italic options}]${argvDescription}`,
+      `dd ${cmdDefn.kind}${subCommandSyntax}${argv} [${chalk.italic`options`}]${argvDescription}`,
     description,
     subCommands,
     options: { ...cmdDefn.options, ...globalOptions },

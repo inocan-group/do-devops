@@ -1,6 +1,6 @@
+import chalk from "chalk";
 import { DoDevopObservation, INpmDep, INpmDependencies, INpmDepProperty } from "src/@types";
 import { askListQuestion } from "src/shared/interactive";
-
 import { dependencies } from "src/shared/npm";
 
 export const LOOKUP = (p: INpmDependencies) =>
@@ -57,7 +57,7 @@ export async function askForDependency(
 
   const answer = await askListQuestion(
     `- Choose the {italic specific} dependency to run "ls" on`,
-    Object.fromEntries(depChoices.map((i) => [i.name, `${i.name} {dim - ${i.version}}`]))
+    Object.fromEntries(depChoices.map((i) => [i.name, `${i.name} ${chalk.dim`- ${i.version}`}`]))
   );
 
   return answer;

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-await-expression-member */
 import chalk from "chalk";
 import { IImageCacheRef, IImageRule } from "src/@types/image-types";
 import { getProjectConfig } from "src/shared/config";
@@ -23,9 +24,7 @@ export async function convertStale(
   // iterate over rules
   for (const [i, rule] of rules.entries()) {
     log.info(
-      `- checking rule {blue ${rule.name}} for stale source images [ {dim ${
-        i + 1
-      } {italic of} ${rules.length}} ]`
+      `- checking rule {blue ${rule.name}} for stale source images [ ${chalk.dim(i + 1)} ${chalk.italic`of`} ${rules.length}} ]`
     );
     const { missing, outOfDate } = await checkCacheFreshness(tools.cache, rule);
     if (missing.length > 0) {
@@ -35,9 +34,9 @@ export async function convertStale(
     }
     if (outOfDate.length > 0) {
       log.whisper(
-        `- there are ${outOfDate.length} images who are out of date: {dim ${missing.join(
+        `- there are ${outOfDate.length} images who are out of date: ${chalk.dim(missing.join(
           ", "
-        )}}`
+        ))}`
       );
     }
     if (missing.length === 0 && outOfDate.length === 0) {
@@ -58,7 +57,7 @@ export async function convertStale(
           })
         );
       }
-      const resizedComplete = [...(await Promise.all(resized))].flat();
+      const resizedComplete = (await Promise.all(resized)).flat();
       log.whisper(
         chalk.dim`- the following images were {italic resized}:\n${wordWrap(
           resizedComplete.map((i) => i.file).join("\t"),

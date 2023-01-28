@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import { getAwsProfile, getAwsIdentityFromProfile } from "src/shared/aws";
 import { SSM } from "aws-ssm";
 import { completeSsmName } from "../index";
@@ -7,6 +8,7 @@ import { askForStage } from "src/shared/serverless";
 import { emoji } from "src/shared/ui";
 import { DoDevopsHandler } from "src/@types";
 import { ISsmOptions } from "../../parts";
+import chalk from "chalk";
 
 export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: argv }) => {
   if (argv.length < 2) {
@@ -39,7 +41,7 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: arg
     process.env.AWS_STAGE ||
     process.env.NODE_ENV ||
     (await askForStage(
-      `SSM variables should be namespaced to a STAGE, what stage are you setting for {dim [ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]}?`
+      `SSM variables should be namespaced to a STAGE, what stage are you setting for ${chalk.dim`[ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]`}?`
     ));
 
   const ssm = new SSM({ profile, region });
@@ -55,16 +57,16 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: arg
       override: opts.force,
     });
     console.log(
-      `\n- ${emoji.party} the {bold {yellow ${name}}} variable was set successfully to the {italic ${region}} region {dim [ profile: {italic ${profile}}, region: {italic ${region}}, account: {italic ${identity.accountId}} ]}\n`
+      `\n- ${emoji.party} the {bold {yellow ${name}}} variable was set successfully to the {italic ${region}} region ${chalk.dim`[ profile: ${chalk.italic(profile)}, region: ${chalk.italic(region)}, account: ${chalk.italic(identity.accountId)} ]`}\n`
     );
   } catch (error) {
     console.log();
     if ((error as any)?.code === "ParameterAlreadyExists") {
       console.log(
-        `- {red {bold Paramater Already Exists!}} to overwrite a parameter which already exists you must add {blue --force} to the CLI command`
+        `- {red {bold Parameter Already Exists!}} to overwrite a parameter which already exists you must add {blue --force} to the CLI command`
       );
     } else {
-      console.log(`{red {bold Error:}} ${(error as Error).message}`);
+      console.log(`${chalk.red.bold`Error:`} ${(error as Error).message}`);
     }
 
     console.log();

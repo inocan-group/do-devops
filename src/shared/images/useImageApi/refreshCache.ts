@@ -38,11 +38,11 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
               sharpMeta: m,
             } as IImageCacheRef)
         ),
-        (rule.metaDetail !== "basic"
-          ? rule.metaDetail === "categorical"
+        (rule.metaDetail === "basic"
+          ? Promise.resolve()
+          : rule.metaDetail === "categorical"
             ? tools.exif.categorizedMetadata(file)
-            : tools.exif.getMetadata(file)
-          : Promise.resolve()) as Promise<IExifToolMetadata | undefined>,
+            : tools.exif.getMetadata(file)) as Promise<IExifToolMetadata | undefined>,
       ])
     );
 
@@ -101,14 +101,14 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
 
   const metaMessages: string[] = [];
 
-  if (!rule.preserveMeta) {
+  if (rule.preserveMeta) {
     metaMessages.push(
-      "all meta data from the original image will be preserved in the converted image",
-      "note that colorspace profile was converted to sRGB in conversion process and this will not be reverted back"
+      "all meta data from the original image was removed and a web friendly sRGB color profile was added to the converted image"
     );
   } else {
     metaMessages.push(
-      "all meta data from the original image was removed and a web friendly sRGB color profile was added to the converted image"
+      "all meta data from the original image will be preserved in the converted image",
+      "note that colorspace profile was converted to sRGB in conversion process and this will not be reverted back"
     );
   }
 
@@ -166,9 +166,9 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
   log.info(
     `- ${
       emoji.party
-    } all images are now up-to-date based on recent source image changes [ {dim ${format(
+    } all images are now up-to-date based on recent source image changes [ ${chalk.dim(format(
       Date.now(),
       "h:mm:ss aaaa"
-    )}} ]`
+    ))} ]`
   );
 }

@@ -123,7 +123,7 @@ export async function otherPackages(
       latest: opts.verbose
         ? `${latest?.version} - {italic ${latest?.timing.replace("about ", "")}}${
             prior
-              ? `\n{dim ${prior?.version} - {italic ${prior?.timing.replace("about ", "")}}}`
+              ? chalk.dim`\n ${prior?.version} - ${chalk.italic(prior?.timing.replace("about ", ""))}`
               : ""
           }`
         : getLatest(repo.value),

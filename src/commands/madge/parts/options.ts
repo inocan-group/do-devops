@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { IOptionDefinition } from "src/@types";
 
 export interface IMadgeOptions {
@@ -61,7 +62,7 @@ export const options: IOptionDefinition = {
   layout: {
     type: String,
     group: "local",
-    description: `layout engine for graph; choices are: {dim {italic dot, neato, fdp, sfdp, twopi, circo}}`,
+    description: `layout engine for graph; choices are: ${chalk.dim.italic` dot, neato, fdp, sfdp, twopi, circo`}`,
   },
 
   "include-npm": {

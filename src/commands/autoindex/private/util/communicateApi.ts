@@ -23,6 +23,6 @@ export function communicateApi(paths: string[]) {
       chalk.italic("named,defaults")
   );
   console.log(
-    `  {white {bold Note:}}\n    {dim {italic you can also add the "--add" flag to look for other regex files patterns}}`
+    `  ${chalk.white.bold`Note:`}\n    ${chalk.dim.italic`you can also add the "--add" flag to look for other regex files patterns`}`
   );
 }
