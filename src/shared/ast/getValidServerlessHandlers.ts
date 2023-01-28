@@ -21,7 +21,7 @@ export function getValidServerlessHandlers(opts: IDictionary = {}) {
       if (!ast.program.body[0].source) {
         if (opts.verbose) {
           console.log(
-            `{grey - the file ${chalk.blue(toRelativePath(curr))} has no source content; will be ignored}`
+            chalk.gray`- the file ${chalk.blue(toRelativePath(curr))} has no source content; will be ignored`
           );
         }
 

@@ -11,7 +11,7 @@ export function commandAnnouncement(cmdDefn?: IDoDevopsCommand, cmd?: ICommandPa
   const log = logger(cmd ? cmd.opts : {});
   const version = doDevopsVersion();
 
-  const argv = cmd && cmd.argv.length > 0 ? ` {italic ${cmd.argv.join(" ")}}` : "";
+  const argv = cmd && cmd.argv.length > 0 ? ` ${chalk.italic(cmd.argv.join(" "))}` : "";
 
   const subCmd = cmd && cmd.subCommand ? chalk.dim`  ${cmd.subCommand}` : "";
 

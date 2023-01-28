@@ -113,7 +113,7 @@ export async function otherPackages(
 
     const license = repo.value.license
       ? repo.value.license.slice(0, 8)
-      : `{red {italic missing}}`;
+      : chalk.red.italic`missing`;
     const urlDescription = `{bold Repo:} ${urls.repo}${
       urls.homepage ? `\n{bold Homepage:} ${urls.homepage}` : ""
     }${author ? `\n{bold Author:} ${author}` : ""}`;
@@ -121,7 +121,7 @@ export async function otherPackages(
     data.push({
       repo: repo.name,
       latest: opts.verbose
-        ? `${latest?.version} - {italic ${latest?.timing.replace("about ", "")}}${
+        ? `${latest?.version} - ${chalk.italic(latest?.timing.replace("about ", ""))}${
             prior
               ? chalk.dim`\n ${prior?.version} - ${chalk.italic(prior?.timing.replace("about ", ""))}`
               : ""

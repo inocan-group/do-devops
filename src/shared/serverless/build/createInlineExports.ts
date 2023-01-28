@@ -37,12 +37,12 @@ function warnAboutMissingTyping(config: IInlineExportConfig[]) {
     console.log(
       `- there were ${String(
         incorrectOrMissingTyping.length
-      )} handler functions who defined a {italic config} but did not type it as {bold IHandlerConfig}`
+      )} handler functions who defined a ${chalk.italic`config`} but did not type it as {bold IHandlerConfig}`
     );
     console.log(
-      chalk.gray`- the function configs needing attention are: {italic ${incorrectOrMissingTyping
+      chalk.gray`- the function configs needing attention are: ${chalk.italic(incorrectOrMissingTyping
         .map((i) => (isServerlessFunctionHandler(i.config) ? i.config.handler : i.config.image))
-        .join(", ")}}`
+        .join(", "))}`
     );
   }
 }

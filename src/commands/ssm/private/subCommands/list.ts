@@ -34,7 +34,7 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({
   if (!profile || !region) {
     console.log(`{red - missing information!}`);
     console.log(
-      `To list SSM params the AWS {italic profile} and {italic region} must be stated. These could {bold not} be determined so exiting.`
+      `To list SSM params the AWS ${chalk.italic`profile`} and ${chalk.italic`region`} must be stated. These could {bold not} be determined so exiting.`
     );
     console.log(
       `${chalk.dim(`note that the easiest way to get an explicit profile/region is to use the ${chalk.bold("--profile")} and ${chalk.bold("--region")} switches on the command line.}\n`)}`

@@ -64,7 +64,7 @@ export async function askConfigureImageOptimization(_o: Observations) {
   log.info();
   log.shout(
     wordWrap(
-      `The ${chalk.italic`general`} configuration of the image service is now complete but {italic rules} are a key component of having a complete setup. For this reason we will add one rule now and if you want to add more later simply run ${chalk.blue`dd image config`} again and choose "add rule" from the options.\n\n`
+      `The ${chalk.italic`general`} configuration of the image service is now complete but ${chalk.italic`rules`} are a key component of having a complete setup. For this reason we will add one rule now and if you want to add more later simply run ${chalk.blue`dd image config`} again and choose "add rule" from the options.\n\n`
     )
   );
 
@@ -109,7 +109,7 @@ export async function askConfigureImageOptimization(_o: Observations) {
     ) +
       ` 1. the responsive breakpoints we use for responsive design\n  2. the idea of what percentage the screen width the image will typically occupy\n\n` +
       wordWrap(
-        `Note:\n  - some smaller displays {italic do} have much higher DPI so they can display high resolution;\n  - also due to {italic responsive design} sometimes smaller displays take up more width on a percentage basis\n\nChoose from the defaults or design your own:`
+        `Note:\n  - some smaller displays ${chalk.italic`do`} have much higher DPI so they can display high resolution;\n  - also due to ${chalk.italic`responsive design`} sometimes smaller displays take up more width on a percentage basis\n\nChoose from the defaults or design your own:`
       ),
     sizeOptions,
     { default: "full-width [ 640, 768, 1024, 1280, 1536 ]" }

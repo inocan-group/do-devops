@@ -30,13 +30,13 @@ export async function getAwsProfileFromServerless() {
     (!sls.hasServerlessConfig || !sls.hasProviderSection) &&
     sls.isUsingTypescriptMicroserviceTemplate
   ) {
-    if (!sls.hasServerlessConfig) {
+    if (sls.hasServerlessConfig) {
       console.log(
-        `- it appears that the {green serverless.yml} {italic does not} exist; will build from {italic serverless-microservice} config ${emoji.robot}`
+        `- it appears that the {green serverless.yml} does not have the {bold provider} section; will build from ${chalk.italic`serverless microservice`} config ${emoji.robot}`
       );
     } else {
       console.log(
-        `- it appears that the {green serverless.yml} does not have the {bold provider} section; will build from {italic serverless-microservice} config ${emoji.robot}`
+        `- it appears that the {green serverless.yml} ${chalk.italic`does not`} exist; will build from ${chalk.italic`serverless microservice`} config ${emoji.robot}`
       );
     }
 

@@ -14,7 +14,7 @@ export async function installBuildSystem(opts: Options, observations: Observatio
   const log = logger(opts);
 
   const confirm = await askConfirmQuestion(
-    `You do not currently have a ${chalk.blue`build`} {italic system} defined. Would you like to have one setup?`
+    `You do not currently have a ${chalk.blue`build`} ${chalk.italic`system`} defined. Would you like to have one setup?`
   );
   if (!confirm) {
     return false;

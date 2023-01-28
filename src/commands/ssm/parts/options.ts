@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { IOptionDefinition } from "src/@types/option-types";
 
 export const options: IOptionDefinition = {
@@ -33,7 +34,7 @@ export const options: IOptionDefinition = {
     alias: "f",
     type: Boolean,
     group: "local",
-    description: `force a {italic set} operation to complete even when the variable being set alread exists`,
+    description: `force a ${chalk.italic`set`} operation to complete even when the variable being set already exists`,
   },
   base64: {
     type: Boolean,

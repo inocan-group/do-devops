@@ -12,7 +12,7 @@ export const handler: DoDevopsHandler<{ all: boolean }> = async ({ unknown: argv
 
   if (!profiles) {
     console.log(
-      `- ${emoji.robot} you do not have {italic any} AWS profiles in your credentials file!\n`
+      `- ${emoji.robot} you do not have ${chalk.italic`any`} AWS profiles in your credentials file!\n`
     );
     process.exit();
   }
@@ -53,7 +53,9 @@ export const handler: DoDevopsHandler<{ all: boolean }> = async ({ unknown: argv
       } which encountered errors trying to authenticate, the rest were fine.`
     );
     for (const e of errors) {
-      console.log(`- {bold {red ${e.profile}}}: {grey ${(e as any)?.error?.message}}`);
+      console.log(
+        `- ${chalk.bold.red(e.profile)}: ${chalk.grey((e as any)?.error?.message)}`
+      );
     }
   }
 };

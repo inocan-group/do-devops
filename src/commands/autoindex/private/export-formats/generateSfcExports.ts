@@ -49,7 +49,7 @@ export function generateSfcExports(indexFile: IAutoindexFile, opts: Options<IAut
   } else {
     if (opts.sfc && pc.autoindex?.asyncSfc === undefined) {
       log.info(
-        `- you have stated that you want SFC exported but {italic not} if you want them to be asynchronous. Consider setting the ${chalk.blue`autoindex.asyncSfc`} property in your do-devops config file.`
+        `- you have stated that you want SFC exported but ${chalk.italic`not`} if you want them to be asynchronous. Consider setting the ${chalk.blue`autoindex.asyncSfc`} property in your do-devops config file.`
       );
     }
     vueFiles.map((f) => syncExport(f, content));

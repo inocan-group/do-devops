@@ -23,11 +23,11 @@ export function write(filename: string, data: any, options: IWriteOptions = {}) 
   try {
     // get data into a string form
     const content =
-      typeof data !== "string"
-        ? options.pretty
+      typeof data === "string"
+        ? data
+        : options.pretty
           ? JSON.stringify(data, null, 2)
-          : JSON.stringify(data)
-        : data;
+          : JSON.stringify(data);
 
     filename = interpolateFilePath(filename);
 
@@ -36,7 +36,7 @@ export function write(filename: string, data: any, options: IWriteOptions = {}) 
     while (options.offsetIfExists && fileExists(filename)) {
       const before = new RegExp(`-${offset}.(.*)$`);
       filename = offset ? filename.replace(before, ".$1") : filename;
-      offset = !offset ? 1 : offset++;
+      offset = offset ? offset++ : 1;
       // const after = new RegExp(`-${offset}$`);
       const parts = filename.split(".");
       filename = parts.slice(0, -1).join(".") + `-${offset}.` + parts.slice(-1);
@@ -44,7 +44,7 @@ export function write(filename: string, data: any, options: IWriteOptions = {}) 
 
     if (!options.offsetIfExists && !options.allowOverwrite && fileExists(filename)) {
       throw new DevopsError(
-        `The file "${filename}" already exists and the {italic overwrite} flag was not set. Write was not allowed.`,
+        `The file "${filename}" already exists and the ${chalk.italic`overwrite`} flag was not set. Write was not allowed.`,
         "do-devops/file-exists"
       );
     }

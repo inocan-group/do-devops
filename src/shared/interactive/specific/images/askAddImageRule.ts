@@ -31,7 +31,7 @@ export async function askAddImageRule(o: Observations, api: ImageApi) {
     { name: "Destination Directory", filter, leadChoices: [config.destinationDir] }
   );
   rule.glob = await askInputQuestion(
-    wordWrap(`What is the {italic glob pattern} used to identify the images: `)
+    wordWrap(`What is the ${chalk.italic`glob pattern`} used to identify the images: `)
   );
 
   const sizeOptions = [

@@ -17,7 +17,7 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
       `- ${emoji.eyeballs} this project is a monorepo; you should configure 'packages' in your monorepo separately.`
     );
     const continueOn = await askConfirmQuestion(
-      "You can still configure the root of the monorepo if there are index files, {italic not} in the individual packages. Otherwise there is no point. Shall we continue?"
+      `You can still configure the root of the monorepo if there are index files, ${chalk.italic`not`} in the individual packages. Otherwise there is no point. Shall we continue?`
     );
     if (!continueOn) {
       exit(0);
@@ -58,7 +58,7 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
           `- you ${chalk.italic("can")} specify a particular whitelist -- or set of whitelists -- to identify files to be included in index files but typically you should leave as the default which is to include all JS and TS files. Continue without setting explicit whitelist?`
         )
       : await askConfirmQuestion(
-          `- you have whitelists currently in your configuration; can we keep these {italic as is}?`
+          `- you have whitelists currently in your configuration; can we keep these ${chalk.italic`as is`}?`
         );
 
   if (!confirmWhitelist) {
@@ -74,7 +74,7 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
         { default: false }
       ))
     : await askConfirmQuestion(
-        `- you have blacklists in your configuration; can we keep these {italic as is}?`
+        `- you have blacklists in your configuration; can we keep these ${chalk.italic`as is`}?`
       );
 
   if (!confirmBlacklist) {

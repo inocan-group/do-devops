@@ -34,7 +34,7 @@ export const handler: DoDevopsHandler<Options<ICertOptions>> = async ({ opts, su
 
   switch (subCommand.toLowerCase()) {
     case "ca": {
-      console.error(`- creating a {italic local} {green CA Certificate} pairing`);
+      console.error(`- creating a ${chalk.italic`local`} {green CA Certificate} pairing`);
       await createCA(o);
       break;
     }

@@ -150,6 +150,7 @@ export async function proxyToPackageManager(
 
     const cmdParts = pkgCmd.split(/\s+/g).filter(Boolean);
 
+    // eslint-disable-next-line unicorn/no-useless-spread
     const thread = spawnSync(cmdParts[0], [...cmdParts.slice(1)], {
       env: { ...process.env, FORCE_COLOR: "true", TERM: "xterm-256color" },
       timeout: 0,
@@ -160,7 +161,7 @@ export async function proxyToPackageManager(
       throw new Error(`- ${emoji.poop} ran into problems running ${cmdParts.join(" ")}`);
     }
   } else {
-    console.log(`- we can not currently tell {italic which} package manager you're using.`);
+    console.log(`- we can not currently tell ${chalk.italic`which`} package manager you're using.`);
     const answer = await askListQuestion(
       "Would you like save the package manager to this repo in a config file?",
       ["not now, thanks", "npm", "pnpm", "yarn"] as const

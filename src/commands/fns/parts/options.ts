@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { AwsRegion, AwsStage } from "common-types";
 import { IOptionDefinition } from "src/@types/option-types";
 
@@ -6,7 +7,7 @@ export const options: IOptionDefinition = {
     alias: "f",
     type: Boolean,
     group: "local",
-    description: `by default functions will be derived from {italic serverless.yml} but if you are in a {italic typescript-microservice} project you can force a rebuild prior to listing the functions`,
+    description: `by default functions will be derived from ${chalk.italic`serverless.yml`} but if you are in a ${chalk.italic`typescript-microservice`} project you can force a rebuild prior to listing the functions`,
   },
   profile: {
     type: String,

@@ -61,7 +61,7 @@ export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
     if (observations.has("packageJson")) {
       confirm = await askConfirmQuestion(
         `- install ${chalk.bold.blue`Vitesse${
-          pkg.includes("ext") ? `{italic  browser extension}` : ""
+          pkg.includes("ext") ? chalk.italic` browser extension` : ""
         }`} starter template for VueJS/ViteJS into ${chalk.bold.yellow`current`} directory?`
       );
     } else {
@@ -72,7 +72,7 @@ export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
       ];
       const subOrCurrent = await askListQuestion(
         wordWrap(
-          `- since you're not in a dir with a {italic package.json} we need to establish which directory you want to install the {bold blue Vitesse} start template into.`
+          `- since you're not in a dir with a ${chalk.italic`package.json`} we need to establish which directory you want to install the {bold blue Vitesse} start template into.`
         ),
         dirChoices
       );

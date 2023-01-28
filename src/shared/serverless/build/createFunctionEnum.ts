@@ -6,6 +6,7 @@ import { emoji } from "../../ui";
 import { findHandlerConfig } from "../../ast/findHandlerConfig";
 import { promisify } from "node:util";
 import { IWebpackHandlerDates } from "src/@types";
+import chalk from "chalk";
 
 const write = promisify(writeFile);
 
@@ -24,13 +25,7 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
   const body: string[] = [];
   for (const handler of handlers) {
     const config = findHandlerConfig(handler.source);
-    if (!config) {
-      console.log(
-        `- ${emoji.angry} also excluding the {italic ${handler.source
-          .split("/")
-          .pop()}} in the generated enumeration of handlers`
-      );
-    } else {
+    if (config) {
       const fn = handler.fn;
       const comment = config.config.description ?? `${fn} handler`;
       body.push(
@@ -39,6 +34,12 @@ export type IAvailableFunction = keyof typeof AvailableFunction;
    * ${comment}
    **/
   ${fn} = "${fn}"`
+      );
+    } else {
+      console.log(
+        `- ${emoji.angry} also excluding the ${chalk.italic(handler.source
+          .split("/")
+          .pop())} in the generated enumeration of handlers`
       );
     }
   }

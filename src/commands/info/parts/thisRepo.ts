@@ -65,7 +65,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
   const exportsRow =
     pkgExports.length > 0
       ? ["Exports", pkgExports.map((i) => `${chalk.bold(i.name)} - ${chalk.dim(i.value)}`).join("\n")]
-      : ["Exports", `{italic no exports found in ${chalk.blue`package.json`}`];
+      : ["Exports", chalk.italic`no exports found in ${chalk.blue`package.json`}`];
 
   const priorVersions = npm
     ? npm.versions
@@ -112,9 +112,9 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
             parseISO(npm.time[npm.version]),
             dateFormat
           )} ].\nLocally in package.json, version is ${chalk.bold.green(pkg.version)}.`
-        : `Locally in {italic package.json}, the version is ${chalk.bold.green(
+        : `Locally in ${chalk.italic`package.json`}, the version is ${chalk.bold.green(
             pkg.version
-          )} but this is {italic not} an npm package.`,
+          )} but this is ${chalk.italic`not`} an npm package.`,
     ],
     [true, `\n\nPrior versions include: ${chalk.italic.dim(priorVersions)}`],
     [
@@ -134,17 +134,17 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
       count: Object.keys(pkg?.dependencies || {}).length,
     },
     {
-      name: `{italic dev} dependencies`,
+      name: `${chalk.italic`dev`} dependencies`,
       prop: "devDependencies",
       count: Object.keys(pkg?.devDependencies || {}).length,
     },
     {
-      name: `{italic optional} dependencies`,
+      name: `${chalk.italic`optional`} dependencies`,
       prop: "optionalDependencies",
       count: Object.keys(pkg?.optionalDependencies || {}).length,
     },
     {
-      name: `{italic peer} dependencies`,
+      name: `${chalk.italic`peer`} dependencies`,
       prop: "peerDependencies",
       count: Object.keys(pkg?.peerDependencies || {}).length,
     },
@@ -159,7 +159,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
     Object.keys(pkg?.dependencies || {}).length
   )} dependencies, and {green ${
     Object.keys(pkg?.devDependencies || {}).length
-  }} {italic dev} dependencies`;
+  }} ${chalk.italic`dev`} dependencies`;
   const depDetails = `${depsSummary}\n\nThe dependencies are:\n - ${chalk.dim(
     Object.keys(pkg?.dependencies || {}).join("\n - ")
   )}`;

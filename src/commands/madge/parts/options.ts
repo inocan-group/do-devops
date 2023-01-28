@@ -27,25 +27,25 @@ export const options: IOptionDefinition = {
     type: Boolean,
     alias: "c",
     group: "local",
-    description: `Madge's {bold {italic circular}} circular reference checker`,
+    description: `Madge's ${chalk.bold.italic`circular`} circular reference checker`,
   },
   orphans: {
     type: Boolean,
     alias: "o",
     group: "local",
-    description: `Madge's {bold {italic orphans}} checker which shows which modules no one is depending on`,
+    description: `Madge's ${chalk.bold.italic`orphans`} checker which shows which modules no one is depending on`,
   },
   leaves: {
     type: Boolean,
     alias: "l",
     group: "local",
-    description: `Madge's {bold {italic leaves}} checker which shows modules with no dependencies`,
+    description: `Madge's ${chalk.bold.italic`leaves`} checker which shows modules with no dependencies`,
   },
   summary: {
     type: Boolean,
     alias: "s",
     group: "local",
-    description: "Madge's {bold {italic summary}} command which provides an overview to repo",
+    description: `Madge's ${chalk.bold.italic`summary`} command which provides an overview to repo`,
   },
   json: {
     type: Boolean,
@@ -74,6 +74,6 @@ export const options: IOptionDefinition = {
   extensions: {
     type: String,
     group: "local",
-    description: `comma separated string of valid file extensions (uses {bold {italic js,ts}} as a default)`,
+    description: `comma separated string of valid file extensions (uses ${chalk.bold.italic`js,ts`} as a default)`,
   },
 };

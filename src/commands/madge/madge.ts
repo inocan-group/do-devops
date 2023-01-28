@@ -29,7 +29,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
         log.info(
           `- ${emoji.warn} you passed in ${chalk.red`${opts.layout}`} for a ${chalk.italic`layout`}; this will likely not be recognized by ${chalk.blue`madge`} CLI`
         );
-        log.info(chalk.gray`{ - valid layouts include: {italic ${valid.join(", ")}}}`);
+        log.info(chalk.gray`{ - valid layouts include: ${chalk.italic(valid.join(", "))}`);
       }
       flags.push(`--layout ${opts.layout}`);
     }
@@ -44,7 +44,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
 
     if (!opts.circular && !opts.summary && !opts.orphans && !opts.leaves) {
       const which = await askListQuestion(
-        `Which {italic Madge} command(s) would you like to run?`,
+        `Which ${chalk.italic`Madge`} command(s) would you like to run?`,
         ["circular", "summary", "orphans", "leaves"] as const
       );
       opts[which] = true as any;
@@ -53,7 +53,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
     // commands
     if (opts.circular) {
       const cmd = `pnpx madge ${dir} --circular ${flags.join(" ")}`;
-      log.info(`\n- running {bold madge} with following command: ${chalk.blue(cmd)}`);
+      log.info(`\n- running ${chalk.bold`madge`} with following command: ${chalk.blue(cmd)}`);
       const response = exec(cmd);
       if (response.code !== 0) {
         exit(response.code);
@@ -62,7 +62,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
 
     if (opts.summary) {
       const cmd = `npx madge ${dir} --summary ${flags.join(" ")}`;
-      log.info(`\n- running {bold madge} with following command: ${chalk.blue(cmd)}`);
+      log.info(`\n- running ${chalk.bold`madge`} with following command: ${chalk.blue(cmd)}`);
       const response = exec(cmd);
       if (response.code !== 0) {
         exit(response.code);
@@ -71,7 +71,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
 
     if (opts.orphans) {
       const cmd = `npx madge ${dir} --orphans ${flags.join(" ")}`;
-      log.info(`\n- running {bold madge} with following command: ${chalk.blue(cmd)}`);
+      log.info(`\n- running ${chalk.bold`madge`} with following command: ${chalk.blue(cmd)}`);
       const response = exec(cmd);
       if (response.code !== 0) {
         exit(response.code);
@@ -80,7 +80,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
 
     if (opts.leaves) {
       const cmd = `npx madge --leaves ${flags.join(" ")}`;
-      log.info(`\n- running {bold madge} with following command: ${chalk.blue(cmd)}`);
+      log.info(`\n- running ${chalk.bold`madge`} with following command: ${chalk.blue(cmd)}`);
       const response = exec(cmd);
       if (response.code !== 0) {
         exit(response.code);
@@ -89,7 +89,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
 
     return;
   },
-  description: `provides a proxy of the highly useful {bold madge} utilities; by default running across all javascript and typescript files in the ${chalk.blue`src`} directory.`,
+  description: `provides a proxy of the highly useful ${chalk.bold`madge`} utilities; by default running across all javascript and typescript files in the ${chalk.blue`src`} directory.`,
   options,
 };
 

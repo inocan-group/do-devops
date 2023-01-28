@@ -39,14 +39,14 @@ export async function installEsLint(
     return false;
   }
   log.whisper(
-    chalk.gray` - all {italic eslint} and {italic prettier} dependencies have been installed`
+    chalk.gray` - all ${chalk.italic`eslint`} and ${chalk.italic`prettier`} dependencies have been installed`
   );
 
   await templateFileCopy("eslint/.eslintrc", "/.eslintrc");
   await templateFileCopy("eslint/.prettierrc.js", "/.prettierrc.js");
 
   log.whisper(
-    chalk.gray` - configuration files for both {italic eslint} and {italic prettier} have been saved`
+    chalk.gray` - configuration files for both ${chalk.italic`eslint`} and ${chalk.italic`prettier`} have been saved`
   );
 
   log.info(`- ${emoji.party} ${chalk.blue`eslint`} has been installed and configured\n`);

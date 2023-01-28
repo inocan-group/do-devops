@@ -57,17 +57,17 @@ export async function buildLambdaTypescriptProject(
 
   const handlerInfo = await getLocalHandlerInfo();
   console.log(
-    `{grey - handler functions [ ${chalk.bold(String(handlerInfo.length))} ] have been identified}`
+    chalk.gray`- handler functions [ ${chalk.bold(String(handlerInfo.length))} ] have been identified`
   );
 
   await createInlineExports(handlerInfo);
   console.log(
-    `{grey - The inline function configuration file [ ${chalk.bold.italic`serverless-config/functions/inline.ts`} ] has been configured}`
+    chalk.gray`- The inline function configuration file [ ${chalk.bold.italic`serverless-config/functions/inline.ts`} ] has been configured`
   );
 
   await createFunctionEnum(handlerInfo);
   console.log(
-    `{grey - The enumeration and type [ ${chalk.bold.italic`src/@types/functions.ts`} ] for the available functions has been configured }`
+    chalk.gray`- The enumeration and type [ ${chalk.bold.italic`src/@types/functions.ts`} ] for the available functions has been configured `
   );
 
   if (hasWebpackPlugin) {
@@ -75,14 +75,14 @@ export async function buildLambdaTypescriptProject(
     if (exist) {
       rm(...exist);
       console.log(
-        `- ${emoji.eyeballs} removed webpack entry point files so as not to confuse with what the {italic serverless-webpack} plugin is doing}`
+        `- ${emoji.eyeballs} removed webpack entry point files so as not to confuse with what the ${chalk.italic`serverless-webpack`} plugin is doing}`
       );
     }
   } else {
     // the preferred means of bundling using webpack
     await createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
     console.log(
-      `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
+      chalk.gray`- added webpack ${chalk.italic`entry files`} to facilitate code build and watch operations`
     );
   }
 
@@ -91,7 +91,7 @@ export async function buildLambdaTypescriptProject(
     await saveToServerlessYaml(serverless);
   } else {
     console.log(
-      `- handing off the build of the {green {bold serverless.yml}} to the repo's {bold build} script\n`
+      `- handing off the build of the ${chalk.green.bold`serverless.yml`} to the repo's ${chalk.bold`build`} script\n`
     );
 
     await asyncExec("yarn ts-node serverless-config/build.ts --color=always", {
@@ -102,7 +102,7 @@ export async function buildLambdaTypescriptProject(
       },
     });
     rm(ACCOUNT_INFO_YAML);
-    console.log(`{grey - removed the temporary ${chalk.blue`account-info.yml`} file from the repo}`);
+    console.log(chalk.gray`- removed the temporary ${chalk.blue`account-info.yml`} file from the repo`);
   }
 
   console.log(

@@ -28,7 +28,7 @@ export function functionsApiTable(fns: FunctionConfiguration[]) {
     {
       col: "CodeSize",
       name: "Code Size",
-      formula: (cs) => `${Math.floor(Number(cs) / 10_000) * 10} {italic kb}`,
+      formula: (cs) => `${Math.floor(Number(cs) / 10_000) * 10} ${chalk.italic`kb`}`,
       format: { width: 12, alignment: "right" },
       minWidth: 130,
     },

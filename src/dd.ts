@@ -81,10 +81,10 @@ import { isDevopsError } from "./@type-guards";
       }
     } catch (error) {
       console.error(
-        `\n{red An Error has occurred while running: {italic {bold do-devops ${cmdName}}}}`
+        `\n{red An Error has occurred while running: ${chalk.italic.bold`do-devops ${cmdName}`}`
       );
       console.error(`- ${(error as Error).message}`);
-      console.error(`{grey   ${(error as Error).stack}}\n`);
+      console.error(chalk.gray`  ${(error as Error).stack}\n`);
 
       process.exit();
     }

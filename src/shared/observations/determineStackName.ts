@@ -23,7 +23,7 @@ export async function determineStackName(
       `- It appears that we have not set a default ${chalk.bold.blue`stack name`} for this repo.`
     );
     log.info(
-      chalk.gray`- a {italic stack name} acts effectively as a "namespace" for all your serverless assets.`
+      chalk.gray`- a ${chalk.italic`stack name`} acts effectively as a "namespace" for all your serverless assets.`
     );
     log.info(
       chalk.gray`- the naming of each function, table, step function, etc. starts with this stack name.`

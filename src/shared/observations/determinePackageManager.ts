@@ -11,6 +11,7 @@ import {
 } from "src/shared/config";
 import { removeOtherLockFiles } from "src/shared/npm";
 import { Options } from "src/@types";
+import chalk from "chalk";
 
 /**
  * Based on all observations made at startup, this function will try to
@@ -38,7 +39,7 @@ export async function determinePackageManager(
 
   if (observations.has("packageManagerConflict")) {
     console.log(
-      `- ${emoji.warn}} there are indications of {italic more} than one package manager being used!`
+      `- ${emoji.warn}} there are indications of ${chalk.italic`more`} than one package manager being used!`
     );
     const pkgManager = await askListQuestion(
       "Which package manager do you expect to use in this repo?",
@@ -81,10 +82,10 @@ export async function determinePackageManager(
       ["npm", "pnpm", "yarn", "no thanks"] as const,
       { default: "pnpm" }
     );
-    if (manager !== "no thanks") {
+    if (manager === "no thanks") {} else {
       await saveUserConfig({ general: { pkgManager: manager } });
       return manager;
-    } else {}
+    }
   }
 
   return false;

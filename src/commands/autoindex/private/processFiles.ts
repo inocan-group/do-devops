@@ -41,7 +41,7 @@ export async function processFiles(
   const { h32 } = await xxhash();
 
   if (indexFiles.length === 0) {
-    log.info(`- ${emoji.confused} no {italic autoindex} files found in this package`);
+    log.info(`- ${emoji.confused} no ${chalk.italic`autoindex`} files found in this package`);
     return;
   } else {
     log.info(
@@ -103,7 +103,7 @@ export async function processFiles(
       }
       if (contentFiles.length === noExports.length) {
         log.info(
-          `- the directory ${chalk.blue(dir)} had  ${chalk.yellow(contentFiles.length)} files which {italic could} have exported symbols but {bold none did}.`
+          `- the directory ${chalk.blue(dir)} had  ${chalk.yellow(contentFiles.length)} files which ${chalk.italic`could`} have exported symbols but ${chalk.bold`none did`}.`
         );
       } else {
         log.info(
@@ -128,25 +128,25 @@ export async function processFiles(
       const child = ts || js;
       if (!existsSync(child)) {
         log.whisper(
-          chalk.gray(` - will not include the ${chalk.blue(d)}} directory because there is {italic {red no index file}}}`
+          chalk.gray(` - will not include the ${chalk.blue(d)}} directory because there is ${chalk.italic.red`no index file`}`
         ));
         noIndexFile.push(d);
         return acc;
       } else if (isOrphanedIndexFile(child)) {
         log.whisper(
-          chalk.gray(` - will not include the directory ${chalk.blue(d)}} because it is configured as an {italic {red orphan}}}`
+          chalk.gray(` - will not include the directory ${chalk.blue(d)}} because it is configured as an ${chalk.italic.red`orphan`}`
         ));
         orphans.push(d);
         return acc;
       } else if (!explicitExcludes.every((e) => d !== e)) {
         log.whisper(
-          chalk.gray(` - will not include the directory ${chalk.blue(d)}} because it is configured as an {italic {red orphan}}}`
+          chalk.gray(` - will not include the directory ${chalk.blue(d)}} because it is configured as an ${chalk.italic.red`orphan`}`
         ));
         explicitDirRemoval.push(d);
         return acc;
       } else if (!fileHasExports(child)) {
         log.whisper(
-          chalk.gray` - will not include the directory ${chalk.blue(d)}} because it has {italic {red no exports}}}`
+          chalk.gray` - will not include the directory ${chalk.blue(d)}} because it has ${chalk.italic.red`no exports`}`
         );
         noExportDir.push(d);
         return acc;

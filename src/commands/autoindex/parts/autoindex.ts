@@ -48,7 +48,7 @@ export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observ
   switch (kind) {
     case "explicit-files": {
       log.info(
-        `- you have passed in specific {italic index} files to evaluate [${chalk.dim(argv.length)}]; we will group by each file ...`
+        `- you have passed in specific ${chalk.italic`index`} files to evaluate [${chalk.dim(argv.length)}]; we will group by each file ...`
       );
       // note: it seems argv params -- if in a "glob" format are automatically converted
       // to literal filenames

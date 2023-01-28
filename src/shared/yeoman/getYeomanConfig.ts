@@ -27,7 +27,7 @@ export function getYeomanConfig(scaffold = "generator-lambda-typescript") {
       yo = parse(readFileSync(yoFile, "utf8"))[scaffold];
     } catch {
       console.log(
-        `- there appears to {italic be} a yeoman config file but it could not be parsed ${emoji.poop}`
+        `- there appears to ${chalk.italic`be`} a yeoman config file but it could not be parsed ${emoji.poop}`
       );
       console.log(
         chalk.gray`- Note: we are looking for the "${scaffold}" as a root property, other yeoman scaffolding not considered`
@@ -40,7 +40,7 @@ export function getYeomanConfig(scaffold = "generator-lambda-typescript") {
       transient = parse(readFileSync(transientFile, "utf8"));
     } catch {
       console.log(
-        `- there appears to be a {italic transient} yeoman config file -- ${chalk.blue`.yo-transient.json`} -- but it could not be parsed ${emoji.poop}`
+        `- there appears to be a ${chalk.italic`transient`} yeoman config file -- ${chalk.blue`.yo-transient.json`} -- but it could not be parsed ${emoji.poop}`
       );
     }
   }

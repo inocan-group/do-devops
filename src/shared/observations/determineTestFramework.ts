@@ -24,12 +24,7 @@ export async function determineTestingFramework(
   }
   let config = getProjectConfig();
   if (config.test?.unitTestFramework) {
-    if (!opts.interactive) {
-      log.info(
-        `- the test framework is configured as "${config.test.unitTestFramework}" in your do-devops config file but we {italic don't detect} the npm deps!`
-      );
-      return config.test.unitTestFramework;
-    } else {
+    if (opts.interactive) {
       log.shout(
         `- in the past, this project was setup to use the {yellow {bold ${config.test.unitTestFramework}}} unit test framework.`
       );
@@ -38,6 +33,11 @@ export async function determineTestingFramework(
       if (!install) {
         return config.test.unitTestFramework;
       }
+    } else {
+      log.info(
+        `- the test framework is configured as "${config.test.unitTestFramework}" in your do-devops config file but we ${chalk.italic`don't detect`} the npm deps!`
+      );
+      return config.test.unitTestFramework;
     }
   }
 

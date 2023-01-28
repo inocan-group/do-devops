@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { IDictionary, IServerlessFunctionHandler } from "common-types";
 import { IDiscoveredConfig } from "src/@types";
 import { namedExports, astParseWithTypescript } from "./index";
@@ -15,9 +16,7 @@ export function findHandlerConfig(
   const hash: IDictionary = {};
   const config = namedExports(ast).find((i) => i.name === "config");
 
-  if (!config) {
-    return;
-  } else {
+  if (config) {
     const fn = (filename.split("/").pop() || "").replace(".ts", "");
 
     for (const i of config.properties || []) {
@@ -29,7 +28,7 @@ export function findHandlerConfig(
     if (isWebpackZip) {
       if (hash.package) {
         console.log(
-          `{grey - the handler function "${fn}" had a defined package config but it will be replaced by a {italic artifact} reference}`
+          chalk.gray`- the handler function "${fn}" had a defined package config but it will be replaced by a ${chalk.italic`artifact`} reference`
         );
       }
       hash.package = { artifact: `.webpack/${fn}.zip` };
@@ -39,5 +38,7 @@ export function findHandlerConfig(
       interface: config.interface as string,
       config: hash as IServerlessFunctionHandler,
     };
+  } else {
+    return;
   }
 }

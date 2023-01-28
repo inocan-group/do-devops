@@ -34,7 +34,7 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
       process.exit();
     }
     if (argv.length > 1) {
-      console.log(chalk.dim`- you have stated more than one function to {italic invoke}.`);
+      console.log(chalk.dim`- you have stated more than one function to ${chalk.italic`invoke`}.`);
       console.log(chalk.dim`- this command only executes one at a time; the rest are ignored.`);
     }
     let fn: string;
@@ -80,7 +80,7 @@ export const handler: DoDevopsHandler<IInvokeOptions> = async ({
 
     if (!opts.quiet) {
       console.log(
-        `{grey > sls invoke local --function {dim {white ${fn}}} --data '{dim {white ${data}}}'}`
+        chalk.gray` > sls invoke local --function ${chalk.dim`white ${fn}`} --data '${chalk.dim.white(data)}'`
       );
     }
     await asyncExec(`sls invoke local --function ${fn} --data '${data}'`);

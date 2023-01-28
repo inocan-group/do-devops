@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import { DevopsError } from "src/errors";
 import { askConfirmQuestion } from "src/shared/interactive";
@@ -24,7 +25,7 @@ export async function completeSsmName(name: string, hints: ISsmNameHints = {}) {
 
   if (!lastIsUpper) {
     console.log(
-      `\n- The last component of the name is intended -- {italic by convention} -- to be UPPERCASE.\n  Therefore we will convert your name to ${nameToUpper(
+      `\n- The last component of the name is intended -- ${chalk.italic`by convention`} -- to be UPPERCASE.\n  Therefore we will convert your name to ${nameToUpper(
         parts
       )} with your permission.\n`
     );
@@ -43,7 +44,7 @@ export async function completeSsmName(name: string, hints: ISsmNameHints = {}) {
       return nameToUpper(parts);
     } else {
       console.log(
-        `\nThe SSM variable {italic name} does not appear to be correctly formatted. The format\nshould be:\n`
+        `\nThe SSM variable ${chalk.italic`name`} does not appear to be correctly formatted. The format\nshould be:\n`
       );
       console.log(`/${chalk.dim` [stage]`}/${chalk.dim` [version]`}/${chalk.dim` [moduleName]`}/${chalk.dim` [VAR NAME]`}\n`);
       console.log(

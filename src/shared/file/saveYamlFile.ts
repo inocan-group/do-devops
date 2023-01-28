@@ -19,7 +19,7 @@ export const saveYamlFile = async (filename: string, data: IDictionary) => {
     return;
   } catch (error) {
     console.log(
-      `- {red writing the {bold {italic ${filename}} YAML file has failed!} ${emoji.poop}}`
+      `- {red writing the ${chalk.bold.italic(filename)} YAML file has failed!} ${emoji.poop}}`
     );
     console.log((error as Error).message);
     console.log(chalk.dim`${(error as Error).stack}`);

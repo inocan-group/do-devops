@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import { buildLambdaTypescriptProject } from "src/shared/serverless";
 import { subCommands } from "src/commands/ssm/private";
@@ -10,9 +11,7 @@ export const handler: DoDevopsHandler<ISsmOptions> = async (input) => {
 
   if (!subCommand) {
     console.log(
-      `- the SSM command requires you pick a valid sub-command; choose from: {italic ${validSubCommands.join(
-        ", "
-      )}}`
+      `- the SSM command requires you pick a valid sub-command; choose from: ${chalk.italic(validSubCommands.join(", "))}`
     );
     process.exit();
   }
@@ -40,7 +39,7 @@ export const handler: DoDevopsHandler<ISsmOptions> = async (input) => {
         (error as Error).message
       }\n`
     );
-    console.log(`{grey - ${(error as Error).stack}}`);
+    console.log(chalk.gray`- ${(error as Error).stack}`);
 
     process.exit(1);
   }

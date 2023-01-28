@@ -13,7 +13,7 @@ export const handler: DoDevopsHandler = async ({ opts }) => {
   const pkg = getPackageJson();
   if (!pkg) {
     console.log(
-      `- the "latest" command provides you with the latest version of the repo in the {italic current} directory`
+      `- the "latest" command provides you with the latest version of the repo in the ${chalk.italic`current`} directory`
     );
     console.log(
       `   however it appears you're in directory without a package.json file! ${emoji.shocked}\n`

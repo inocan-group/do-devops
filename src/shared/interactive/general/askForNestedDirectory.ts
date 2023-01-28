@@ -60,7 +60,7 @@ export async function askForNestedDirectory(ask: string, options: INestedDirOpti
         const created = await ensureDirectory(operatingDir);
         if (created) {
           console.log(
-            chalk.dim`- the {bold ${choice}} directory {italic didn't exist} so we've created it for you.`
+            chalk.dim`- the {bold ${choice}} directory ${chalk.italic`didn't exist`} so we've created it for you.`
           );
           choice = COMPLETED;
         }

@@ -57,7 +57,7 @@ export const execute: DoDevopsHandler<ISsmOptions> = async ({ opts, unknown: arg
       override: opts.force,
     });
     console.log(
-      `\n- ${emoji.party} the {bold {yellow ${name}}} variable was set successfully to the {italic ${region}} region ${chalk.dim`[ profile: ${chalk.italic(profile)}, region: ${chalk.italic(region)}, account: ${chalk.italic(identity.accountId)} ]`}\n`
+      `\n- ${emoji.party} the {bold {yellow ${name}}} variable was set successfully to the ${chalk.italic(region)} region ${chalk.dim`[ profile: ${chalk.italic(profile)}, region: ${chalk.italic(region)}, account: ${chalk.italic(identity.accountId)} ]`}\n`
     );
   } catch (error) {
     console.log();

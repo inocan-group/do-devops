@@ -60,7 +60,7 @@ function recheckAutoindexFile(changedFile: string, log: ILogger) {
     recheck(autoindexFile, log);
   } else {
     log.info(
-      `- ${emoji.confused} there was a problem identifying the right {italic autoindex} file for ${chalk.blue(changedFile)}`
+      `- ${emoji.confused} there was a problem identifying the right ${chalk.italic`autoindex`} file for ${chalk.blue(changedFile)}`
     );
   }
 }
@@ -71,21 +71,21 @@ function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogge
     switch (op) {
       case "add": {
         log.info(
-          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} {italic added the file }${highlightFilepath(file)}}`
+          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} ${chalk.italic`added the file `}${highlightFilepath(file)}}`
         );
         if (fileHasExports(join(process.cwd(), file))) {
           recheckAutoindexFile(file, log);
         } else {
           deferredFiles.add(file);
           log.info(
-            chalk.dim(`- ${chalk.bold("Autoindex:")} the file has no {italic exports} yet so deferring update`)
+            chalk.dim(`- ${chalk.bold("Autoindex:")} the file has no ${chalk.italic`exports`} yet so deferring update`)
           );
         }
         break;
       }
       case "unlink": {
         log.info(
-          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} {italic removed the file }${highlightFilepath(file)}}`
+          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} ${chalk.italic`removed the file `}${highlightFilepath(file)}}`
         );
         recheckAutoindexFile(file, log);
         break;
@@ -113,7 +113,7 @@ function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogge
       }
       default: {
         log.info(
-          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} {italic did "${op}" to }${highlightFilepath(file)}}`
+          `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} ${chalk.italic`did "${op}" to `}${highlightFilepath(file)}}`
         );
       }
     }

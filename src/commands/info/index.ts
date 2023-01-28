@@ -40,7 +40,7 @@ const command: IDoDevopsCommand<IInfoOptions> = {
   options: {
     argv: {
       type: String,
-      description: `{italic optionally} pass in npm packages to get info on them`,
+      description: `${chalk.italic`optionally`} pass in npm packages to get info on them`,
       group: "local",
       defaultOption: true,
       multiple: true,

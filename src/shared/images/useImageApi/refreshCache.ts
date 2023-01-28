@@ -146,9 +146,7 @@ export async function refreshCache(rule: IImageRule, tools: IImageTools, stale: 
     } // close resized loop
     await Promise.all(metaTransfers);
     log.whisper(
-      `- Metadata properties -- {italic ${rule.preserveMeta.join(
-        ", "
-      )}} -- have been added to the web images where they were available in the source image`
+      `- Metadata properties -- ${chalk.italic(rule.preserveMeta.join(", "))} -- have been added to the web images where they were available in the source image`
     );
   } // preserveMeta
 

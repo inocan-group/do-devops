@@ -23,7 +23,7 @@ export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts, observations
   }
 
   console.log(
-    `- {bold Serverless} {italic packaging} for {bold ${stage}} stage ${emoji.party}`
+    `- ${chalk.bold`Serverless`} ${chalk.italic`packaging`} for {bold ${stage}} stage ${emoji.party}`
   );
   const command = `sls package --stage ${stage} --region ${region} ${
     opts.dir ? `--package ${opts.dir}` : ""
@@ -38,7 +38,7 @@ export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts, observations
   await asyncExec(`ls -l ${directory}`);
   if (opts.validate) {
     console.log(
-      `\n- validating the {bold cloudformation} {italic create} template ${emoji.eyeballs}`
+      `\n- validating the ${chalk.bold`cloudformation`} ${chalk.italic`create`} template ${emoji.eyeballs}`
     );
 
     const validateCmd = `aws cloudformation validate-template --template-body file://${directory}/cloudformation-template-create-stack.json`;
@@ -46,11 +46,11 @@ export const handler: DoDevopsHandler<IPkgOptions> = async ({ opts, observations
       console.log(chalk.dim`   ${validateCmd}`);
       await asyncExec(validateCmd);
     } catch {
-      console.log(`{red - Error validating the {italic create} template!}`);
+      console.log(`{red - Error validating the ${chalk.italic`create`} template!}`);
     }
 
     console.log(
-      `\n- validating the {bold cloudformation} {italic update} template ${emoji.eyeballs}`
+      `\n- validating the {bold cloudformation} ${chalk.italic`update`} template ${emoji.eyeballs}`
     );
 
     const validateUpdate = `aws cloudformation validate-template --template-body file://${directory}/cloudformation-template-update-stack.json`;

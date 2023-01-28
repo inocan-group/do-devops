@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 /* eslint-disable unicorn/import-style */
 import { getApiGatewayEndpoints } from "src/shared/aws";
 import { determineProfile, determineRegion } from "src/shared/observations";
@@ -7,7 +8,7 @@ import { table } from "table";
 import chalk from "chalk";
 
 export const handler: DoDevopsHandler<IEndpointsOptions> = async ({ opts }) => {
-  const profileName = opts.profile ? opts.profile : await determineProfile(opts);
+  const profileName = opts.profile ?? (await determineProfile(opts));
   if (!profileName) {
     console.log(
       `- couldn't determine the AWS profile to use; try setting it manually with ${chalk.inverse(
@@ -16,10 +17,10 @@ export const handler: DoDevopsHandler<IEndpointsOptions> = async ({ opts }) => {
     );
     process.exit(1);
   }
-  const region = opts.region ? opts.region : await determineRegion(opts);
+  const region = opts.region ?? (await determineRegion(opts));
   try {
     console.log(
-      `- getting API {italic endpoints} for the profile {bold  ${profileName}} [ ${region} ]`
+      `- getting API ${chalk.italic`endpoints`} for the profile {bold  ${profileName}} [ ${region} ]`
     );
     // const endpoints = await getLambdaFunctions(opts);
     if (region) {

@@ -14,7 +14,7 @@ export async function installGit(opts: Options<{ silent: boolean }>) {
   if (!opts.silent) {
     const confirm = await askConfirmQuestion(`Should we initialize ${chalk.blue`git`} for you?`);
     setupRemote = await askConfirmQuestion(
-      `Would you like to set a {italic remote} for this repo now?`
+      `Would you like to set a ${chalk.italic`remote`} for this repo now?`
     );
     if (setupRemote) {
       remoteName = await askInputQuestion("What should the remote's name be?", {

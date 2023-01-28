@@ -59,7 +59,7 @@ export async function convertStale(
       }
       const resizedComplete = (await Promise.all(resized)).flat();
       log.whisper(
-        chalk.dim`- the following images were {italic resized}:\n${wordWrap(
+        chalk.dim`- the following images were ${chalk.italic`resized`}:\n${wordWrap(
           resizedComplete.map((i) => i.file).join("\t"),
           { wrapDistance: 120 }
         )}\n`

@@ -25,7 +25,7 @@ export const handler: DoDevopsHandler = async ({ observations }) => {
 
       console.log(META_LINK_MSG);
     } else {
-      console.log(`- there were {italic no} layers found as dependencies to this repo`);
+      console.log(`- there were ${chalk.italic`no`} layers found as dependencies to this repo`);
       console.log(META_LINK_MSG);
     }
   } else {

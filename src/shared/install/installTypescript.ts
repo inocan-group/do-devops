@@ -34,7 +34,7 @@ export async function installTypescript(
     log.shout(`- ${emoji.poop} there was a problem installing the Typescript dev dependencies`);
     return false;
   }
-  log.whisper(chalk.gray` - all {italic typescript} dependencies have been installed`);
+  log.whisper(chalk.gray` - all ${chalk.italic`typescript`} dependencies have been installed`);
 
   await templateDirCopy("typescript", "/");
 

@@ -60,9 +60,7 @@ export function getValidStepFunctions(opts: IDictionary = {}) {
         return agg;
       } catch (error) {
         console.log(
-          `- Error processing  {red ${toRelativePath(cur)}} [s: ${status}]: {grey ${
-            (error as Error).message
-          }}`
+          `- Error processing  {red ${toRelativePath(cur)}} [s: ${status}]: ${chalk.gray((error as Error).message)}`
         );
         return agg;
       }

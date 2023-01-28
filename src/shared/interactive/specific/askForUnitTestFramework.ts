@@ -1,4 +1,5 @@
 
+import chalk from "chalk";
 import { equal } from "native-dash";
 
 import { ICommandConfig, Options, TestObservation } from "src/@types";
@@ -19,7 +20,7 @@ export async function askForUnitTestFramework(
   const log = logger(opts);
 
   log.shout(
-    `- we have not been able to determine which {italic unit testing} framework you're using.`
+    `- we have not been able to determine which ${chalk.italic`unit testing`} framework you're using.`
   );
 
   const framework = opts.unitTestFramework ?? (await askListQuestion("Choose the unit test runner you'd like to use", TEST_FRAMEWORKS, {

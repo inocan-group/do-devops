@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { IOptionDefinition } from "src/@types/option-types";
 
 export const globalOptions: IOptionDefinition = {
@@ -5,7 +6,7 @@ export const globalOptions: IOptionDefinition = {
     alias: "q",
     type: Boolean,
     group: "global",
-    description: "stops all output to {italic stdout}",
+    description: `stops all output to ${chalk.italic`stdout`}`,
   },
   verbose: {
     alias: "v",
