@@ -16,7 +16,7 @@ export async function installTypescript(
 ) {
   const log = logger(opts);
 
-  const proceed = opts.silent ?? (await askConfirmQuestion(`Would you like to install and configure {blue typescript}?`));
+  const proceed = opts.silent ?? (await askConfirmQuestion(`Would you like to install and configure ${chalk.blue`typescript`}?`));
 
   if (!proceed) {
     return false;
@@ -40,7 +40,7 @@ export async function installTypescript(
 
   log.whisper(chalk.gray` - tsconfig file saved to root`);
 
-  log.info(`- ${emoji.party} {blue typescript} has been installed and configured\n`);
+  log.info(`- ${emoji.party} ${chalk.blue`typescript`} has been installed and configured\n`);
 
   return true;
 }

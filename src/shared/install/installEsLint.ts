@@ -15,7 +15,7 @@ export async function installEsLint(
 ) {
   const log = logger(opts);
 
-  const proceed = opts.silent ?? (await askConfirmQuestion(`Would you like to install and configure {blue eslint}?`));
+  const proceed = opts.silent ?? (await askConfirmQuestion(`Would you like to install and configure ${chalk.blue`eslint`}?`));
 
   if (!proceed) {
     return false;
@@ -49,7 +49,7 @@ export async function installEsLint(
     chalk.gray` - configuration files for both {italic eslint} and {italic prettier} have been saved`
   );
 
-  log.info(`- ${emoji.party} {blue eslint} has been installed and configured\n`);
+  log.info(`- ${emoji.party} ${chalk.blue`eslint`} has been installed and configured\n`);
 
   return true;
 }

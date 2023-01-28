@@ -65,7 +65,7 @@ export async function thisRepo(opts: Options, observations: Set<DoDevopObservati
   const exportsRow =
     pkgExports.length > 0
       ? ["Exports", pkgExports.map((i) => `${chalk.bold(i.name)} - ${chalk.dim(i.value)}`).join("\n")]
-      : ["Exports", `{italic no exports found in {blue package.json}}`];
+      : ["Exports", `{italic no exports found in ${chalk.blue`package.json`}`];
 
   const priorVersions = npm
     ? npm.versions

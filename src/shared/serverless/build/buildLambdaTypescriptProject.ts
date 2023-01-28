@@ -70,13 +70,7 @@ export async function buildLambdaTypescriptProject(
     `{grey - The enumeration and type [ ${chalk.bold.italic`src/@types/functions.ts`} ] for the available functions has been configured }`
   );
 
-  if (!hasWebpackPlugin) {
-    // the preferred means of bundling using webpack
-    await createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
-    console.log(
-      `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
-    );
-  } else {
+  if (hasWebpackPlugin) {
     const exist = filesExist("webpack.js-entry-points.json", "webpack.js-entry-points.json");
     if (exist) {
       rm(...exist);
@@ -84,6 +78,12 @@ export async function buildLambdaTypescriptProject(
         `- ${emoji.eyeballs} removed webpack entry point files so as not to confuse with what the {italic serverless-webpack} plugin is doing}`
       );
     }
+  } else {
+    // the preferred means of bundling using webpack
+    await createWebpackEntryDictionaries(handlerInfo.map((i) => i.source));
+    console.log(
+      `{grey - added webpack {italic entry files} to facilitate code build and watch operations}`
+    );
   }
 
   if (modern && configFn) {
@@ -102,10 +102,10 @@ export async function buildLambdaTypescriptProject(
       },
     });
     rm(ACCOUNT_INFO_YAML);
-    console.log(`{grey - removed the temporary {blue account-info.yml} file from the repo}`);
+    console.log(`{grey - removed the temporary ${chalk.blue`account-info.yml`} file from the repo}`);
   }
 
   console.log(
-    `{green - {bold serverless.yml} has been updated successfully ${emoji.rocket}}\n`
+    chalk.green`- ${chalk.bold`serverless.yml`} has been updated successfully ${emoji.rocket}\n`
   );
 }

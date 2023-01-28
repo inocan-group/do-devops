@@ -60,9 +60,9 @@ export const handler: DoDevopsHandler<Options<IScaffoldOptions>> = async ({
     let dir: string = ".";
     if (observations.has("packageJson")) {
       confirm = await askConfirmQuestion(
-        `- install {bold {blue Vitesse${
+        `- install ${chalk.bold.blue`Vitesse${
           pkg.includes("ext") ? `{italic  browser extension}` : ""
-        }}} starter template for VueJS/ViteJS into ${chalk.bold.yellow`current`} directory?`
+        }`} starter template for VueJS/ViteJS into ${chalk.bold.yellow`current`} directory?`
       );
     } else {
       const dirChoices = [

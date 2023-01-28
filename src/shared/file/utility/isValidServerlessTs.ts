@@ -14,7 +14,7 @@ export function isValidServerlessTs(fn?: string, opts: Options = {}) {
   const filename = fn || currentDirectory("serverless.ts");
   const contents = readFile(filename);
 
-  log.info(chalk.gray`- validating integrity of {blue serverless.ts} file`);
+  log.info(chalk.gray`- validating integrity of ${chalk.blue`serverless.ts`} file`);
 
   if (!contents) {
     return false;

@@ -35,7 +35,7 @@ export async function ssh(o: ICertOptions) {
   const keyLength = o.keyLength && o.keyLength > 0 ? `-b ${o.keyLength}` : "";
   const emailTail = o.email ? ` -C ${o.email}` : "";
   const command = `ssh-keygen -t ${o.ssh_algo} ${keyLength}${emailTail} ${filename}`;
-  console.error(`- generating {bold {blue SSH key}}: {green ${command}}`);
+  console.error(`- generating ${chalk.bold.blue`SSH key`}: ${chalk.green(command)}`);
 }
 
 /**
@@ -55,7 +55,7 @@ export async function rsa(o: ICertOptions) {
   const command = `openssl genrsa ${o.ssl_algo ? `-${o.ssl_algo}` : ""} -out ${pemFile} ${
     o.keyLength
   }`;
-  console.error(`- generating {bold {blue RSA CA Cert}}:\n  {green ${command}}`);
+  console.error(`- generating ${chalk.bold.blue`RSA CA Cert`}:\n  ${chalk.green(command)}`);
 
   try {
     execSync(command, { encoding: "utf8" });
@@ -114,7 +114,7 @@ async function appendAlternativeNames(o: ICertOptions) {
 async function fullchain_cert(o: ICertOptions) {
   const command = `openssl x509 -req -sha256 -days ${o.days} -in ${o.name}.csr -CA ca.pem -CAkey ca-key.pem -out ${o.name}.pem -extfile extfile.cnf -CAcreateserial`;
   try {
-    console.error(`- generating {bold {blue SSL Certificate}} for ${o.name}`);
+    console.error(`- generating ${chalk.bold.blue`SSL Certificate`} for ${o.name}`);
     execSync(command, { encoding: "utf8", stdio: "inherit" });
     console.error(`- SSL certificate created [${o.name}.pem] ${emoji.rocket}`);
   } catch (error) {
@@ -181,7 +181,7 @@ export async function ca_csr(o: ICertOptions) {
   const command = `openssl req -new -x509 -${o.csr_algo} -days ${o.days} -key ${o.name}-key.pem -out ${o.name}.pem`;
   try {
     console.error(
-      `- generating {bold {blue Certificate Signing Request (CCR)}}:\n  {green ${command}}`
+      `- generating ${chalk.bold.blue`Certificate Signing Request (CCR)`}:\n  ${chalk.green(command)}`
     );
     execSync(command, { encoding: "utf8", stdio: "inherit" });
     console.error(`- CSR created [${o.name}] ${emoji.rocket}`);
@@ -211,7 +211,7 @@ export async function cert_csr(o: ICertOptions) {
 
   try {
     console.error(
-      `- generating {bold {blue Certificate Signing Request (CCR)}}:\n  {green ${command}}`
+      `- generating ${chalk.bold.blue`Certificate Signing Request (CCR)`}:\n  ${chalk.green(command)}`
     );
     execSync(command, { encoding: "utf8", stdio: "inherit" });
     console.error(`- CSR created [${o.name}] ${emoji.rocket}`);

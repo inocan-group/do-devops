@@ -16,7 +16,7 @@ export async function installDevDep(
     pkgManager === "npm"
       ? `npm install --save-dev ${packages.join(" ")}`
       : `${pkgManager} add ${pkgManager === "yarn" ? "--dev" : "--save-dev"} ${packages.join(" ")}`;
-  log.whisper(`- installing with {blue ${cmd}}`);
+  log.whisper(`- installing with ${chalk.blue(cmd)}`);
   try {
     execSync(cmd);
     log.info(

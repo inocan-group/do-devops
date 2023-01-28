@@ -1,4 +1,5 @@
 
+import chalk from "chalk";
 import { IImageRule, IProjectConfig, Observations } from "src/@types";
 import { getProjectConfig, saveProjectConfig } from "src/shared/config";
 import { logger } from "src/shared/core/logger";
@@ -22,11 +23,11 @@ export async function askAddImageRule(o: Observations, api: ImageApi) {
 
   rule.name = await askInputQuestion(`What will the new rule be called:`);
   rule.source = await askForNestedDirectory(
-    wordWrap(`What is the root directory for {bold {blue source images}}?`),
+    wordWrap(`What is the root directory for ${chalk.bold.blue`source images`}?`),
     { name: "Source Directory", filter, leadChoices: [config.sourceDir] }
   );
   rule.destination = await askForNestedDirectory(
-    `What is the root directory for {bold {blue destination/optimized images}}?`,
+    `What is the root directory for ${chalk.bold.blue`destination images`}?`,
     { name: "Destination Directory", filter, leadChoices: [config.destinationDir] }
   );
   rule.glob = await askInputQuestion(
@@ -47,11 +48,11 @@ export async function askAddImageRule(o: Observations, api: ImageApi) {
     sizeOptions,
     { default: "full-width [ 640, 768, 1024, 1280, 1536 ]" }
   );
-  if (sizeName !== "custom") {
-    rule.widths = JSON.parse(sizeName.replace(/.*\[/, "["));
-  } else {
+  if (sizeName === "custom") {
     const customName = await askInputQuestion(`Add your own values as CSV (e.g., "64,128,256"):`);
     rule.widths = csvParser<number[]>(customName);
+  } else {
+    rule.widths = JSON.parse(sizeName.replace(/.*\[/, "["));
   }
 
   rule.preBlur = await askConfirmQuestion(

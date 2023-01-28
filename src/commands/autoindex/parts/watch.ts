@@ -60,7 +60,7 @@ function recheckAutoindexFile(changedFile: string, log: ILogger) {
     recheck(autoindexFile, log);
   } else {
     log.info(
-      `- ${emoji.confused} there was a problem identifying the right {italic autoindex} file for {blue ${changedFile}}`
+      `- ${emoji.confused} there was a problem identifying the right {italic autoindex} file for ${chalk.blue(changedFile)}`
     );
   }
 }
@@ -95,17 +95,17 @@ function contentWatcher(group: AutoindexGroupDefinition, op: string, log: ILogge
         const wasDeferred = deferredFiles.has(file);
         if (hasExports && wasDeferred) {
           log.info(
-            `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} {blue ${
+            `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(
               group.name
-            }} {italic changed }${highlightFilepath(file)} {italic which now has exports}}`
+            )} ${chalk.italic`changed`}${highlightFilepath(file)} ${chalk.italic`which now has exports`}`
           );
           deferredFiles.delete(file);
           recheckAutoindexFile(file, log);
         } else if (!hasExports) {
           log.info(
-            `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} {blue ${
+            `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(
               group.name
-            }} {italic changed }${highlightFilepath(file)} {italic and no longer has exports}}`
+            )} ${chalk.italic`changed`}${highlightFilepath(file)} ${chalk.italic`and no longer has exports`}`
           );
           recheckAutoindexFile(file, log);
         }
@@ -133,9 +133,7 @@ function idxWatcher(group: AutoindexGroupDefinition, op: string, log: ILogger) {
       case "add": {
         if (isAutoindexFile(file)) {
           log.info(
-            `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} {blue ${
-              group.name
-            }} {italic added a new autoindex file }${highlightFilepath(file)}}`
+            `- ${chalk.bold("Autoindex:")} ${chalk.dim.italic(" repo ")} ${chalk.blue(group.name)} ${chalk.italic`added a new autoindex file `}${highlightFilepath(file)}}`
           );
           recheck(file, log).then((successful: boolean) => {
             if (successful) {

@@ -31,7 +31,7 @@ export function readFile(filename: string) {
     console.log(
       `{red - ${
         emoji.poop
-      } ran into a problem reading file {blue ${filename}}.} Error message: ${
+      } ran into a problem reading file ${chalk.blue`${filename}}.`} Error message: ${
         (error as Error).message
       }`
     );

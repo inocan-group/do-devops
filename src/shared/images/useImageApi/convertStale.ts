@@ -24,7 +24,7 @@ export async function convertStale(
   // iterate over rules
   for (const [i, rule] of rules.entries()) {
     log.info(
-      `- checking rule {blue ${rule.name}} for stale source images [ ${chalk.dim(i + 1)} ${chalk.italic`of`} ${rules.length}} ]`
+      `- checking rule ${chalk.blue(rule.name)}} for stale source images [ ${chalk.dim(i + 1)} ${chalk.italic`of`} ${rules.length}} ]`
     );
     const { missing, outOfDate } = await checkCacheFreshness(tools.cache, rule);
     if (missing.length > 0) {
@@ -41,7 +41,7 @@ export async function convertStale(
     }
     if (missing.length === 0 && outOfDate.length === 0) {
       log.info(
-        `- ${emoji.party} all images in {blue ${rule.name}} are current; no work needed.`
+        `- ${emoji.party} all images in ${chalk.blue(rule.name)} are current; no work needed.`
       );
       log.info(chalk.dim`- if you need to force image production use ${chalk.blue`dd optimize --force`}`);
     } else {

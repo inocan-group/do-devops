@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/import-style */
 import { asyncExec } from "async-shelljs";
+import chalk from "chalk";
 import { semver } from "common-types";
 import parse from "destr";
 import { join } from "node:path";
@@ -24,7 +25,7 @@ export async function getLernaPackages(dir?: string) {
   const lerna = join(dir, "node_modules/.bin/lerna");
   if (!fileExists(lerna)) {
     throw new DevopsError(
-      `Attempt to get {bold green Lerna} package list failed as the Lerna command was not found locally at: {blue ${lerna}}`,
+      `Attempt to get {bold green Lerna} package list failed as the Lerna command was not found locally at: ${chalk.blue(lerna)}`,
       "not-ready/lerna-missing"
     );
   }

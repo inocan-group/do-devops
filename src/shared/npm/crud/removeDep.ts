@@ -22,7 +22,7 @@ export async function removeDep(
   const log = logger(opts);
   const pkgManager = await determinePackageManager({}, observations);
   const cmd = ["remove", ...packages];
-  log.whisper(`- removing with {blue ${pkgManager} ${cmd}}`);
+  log.whisper(`- removing with ${chalk.blue`${pkgManager} ${cmd}`}`);
   if (!pkgManager) {
     log.shout("package manager undetermined!");
     process.exit(1);

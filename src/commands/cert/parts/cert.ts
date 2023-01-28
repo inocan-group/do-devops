@@ -7,7 +7,7 @@ import { ICertOptions } from "./options";
 export const handler: DoDevopsHandler<Options<ICertOptions>> = async ({ opts, subCommand }) => {
   if (!subCommand) {
     console.log(
-      `{red - no {bold cert} sub-command found;} valid options are:\n    - {green ca} or {green ssl} for SSL certs\n    - {green ssh} to create an SSH key pair, and\n    - {green info} for information on a particular certificate\n\n- type {blue dd cert --help} for more info`
+      `{red - no {bold cert} sub-command found;} valid options are:\n    - {green ca} or {green ssl} for SSL certs\n    - {green ssh} to create an SSH key pair, and\n    - {green info} for information on a particular certificate\n\n- type ${chalk.blue`dd cert --help`} for more info`
     );
     exit(1);
   }

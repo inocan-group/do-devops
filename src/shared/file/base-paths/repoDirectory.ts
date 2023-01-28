@@ -1,4 +1,5 @@
 /* eslint-disable unicorn/prefer-module */
+import chalk from "chalk";
 import path, { join } from "node:path";
 import { IDirectoryOptions } from "src/@types";
 import { DevopsError } from "../../../errors/DevopsError";
@@ -29,7 +30,7 @@ export function repoDirectory(offset?: string, opts: Omit<IDirectoryOptions, "of
   const dir = findPackageJson(parentDirectory());
   if (!dir) {
     throw new DevopsError(
-      `Attempt to locate the root of the repo for the current directory failed. No "package.json" was found above the {blue ${start}} directory`,
+      `Attempt to locate the root of the repo for the current directory failed. No "package.json" was found above the ${chalk.blue(start)} directory`,
       "directory/not-found"
     );
   }

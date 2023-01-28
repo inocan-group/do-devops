@@ -21,10 +21,10 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
     case "config":
     case "configure": {
       // eslint-disable-next-line unicorn/prefer-ternary
-      if (!config) {
-        await askConfigureImageOptimization(observations);
-      } else {
+      if (config) {
         await askImageConfiguration(observations, api);
+      } else {
+        await askConfigureImageOptimization(observations);
       }
       break;
     }
@@ -64,7 +64,7 @@ export const handler: DoDevopsHandler<IImageOptions> = async ({
     case "": {
       if (config) {
         log.info(
-          `- the valid sub-commands for {blue dd image} are: ${chalk.italic`config, optimize,`} and ${chalk.italic`watch`}`
+          `- the valid sub-commands for ${chalk.blue`dd image`} are: ${chalk.italic`config, optimize,`} and ${chalk.italic`watch`}`
         );
       }
       break;

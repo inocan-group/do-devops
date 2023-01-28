@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { find } from "native-dash";
 import { emoji } from "src/shared/ui";
 import { askListQuestion } from "src/shared/interactive";
+import chalk from "chalk";
 
 export type ExtFileResolutions = "no-conflict" | "overwrite" | "skip" | "quit";
 
@@ -20,15 +21,15 @@ export const avoidDuplicationInExtFile = async (
     );
     if (ipAddress.trim() === ip.trim()) {
       console.error(
-        `- using {blue nslookup} we see that the IP address does match that DNS entry ${emoji.thumbsUp}`
+        `- using ${chalk.blue`nslookup`} we see that the IP address does match that DNS entry ${emoji.thumbsUp}`
       );
     } else if (ipAddress.trim() === "") {
       console.error(
-        `- using {blue nslookup} was of no use as {green ${dns}} didn't produce any results ${emoji.poop}`
+        `- using ${chalk.blue`nslookup`} was of no use as {green ${dns}} didn't produce any results ${emoji.poop}`
       );
     } else {
       console.error(
-        `- using {blue nslookup} came back with an IP address of ${ipAddress}, which in case you weren't paying attention doesn't match your file where the record is ${emoji.shocked}`
+        `- using ${chalk.blue`nslookup`} came back with an IP address of ${ipAddress}, which in case you weren't paying attention doesn't match your file where the record is ${emoji.shocked}`
       );
     }
 

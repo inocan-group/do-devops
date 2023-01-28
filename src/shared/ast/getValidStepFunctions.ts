@@ -6,6 +6,7 @@ import { describe } from "native-dash";
 import { astParseWithTypescript, astParseWithAcorn } from "./index";
 import { fileIncludes, getFileComponents, toRelativePath, write } from "../file";
 import { getDefaultExport } from "./getDefaultExport";
+import chalk from "chalk";
 
 /**
  * Gets a list of all typescript files under the `src/handlers`
@@ -36,9 +37,7 @@ export function getValidStepFunctions(opts: IDictionary = {}) {
         if (!ast.program.body[0].source) {
           if (opts.verbose) {
             console.log(
-              `{grey - the file {blue ${toRelativePath(
-                cur
-              )}} has no source content; will be ignored}`
+              chalk.gray`- the file ${chalk.blue(toRelativePath(cur))} has no source content; will be ignored`
             );
           }
 

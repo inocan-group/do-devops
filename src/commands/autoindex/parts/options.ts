@@ -71,7 +71,7 @@ export const options: IOptionDefinition = {
     alias: "w",
     type: Boolean,
     group: "local",
-    description: `watches for changes and runs {italic autoindex} when detected`,
+    description: `watches for changes and runs ${chalk.italic`autoindex`} when detected`,
   },
   force: {
     alias: "f",
@@ -84,6 +84,6 @@ export const options: IOptionDefinition = {
     alias: "p",
     type: Boolean,
     group: "local",
-    description: `exports -- by default -- will {italic not} include the file's {blue .js} extension but sometimes with ES modules you want to include this. If you do then you should set this flag.`,
+    description: `exports -- by default -- will ${chalk.italic`not`} include the file's ${chalk.blue`.js`} extension but sometimes with ES modules you want to include this. If you do then you should set this flag.`,
   },
 };

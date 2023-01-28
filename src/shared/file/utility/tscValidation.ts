@@ -39,9 +39,9 @@ export function tscValidation(filename: string, opts: Options = {}): boolean {
     return true;
   } catch {
     log.shout(
-      `- ${emoji.poop} failed to transpile {blue serverless.ts}: {bold tsc ${
+      `- ${emoji.poop} failed to transpile ${chalk.blue`serverless.ts`}: ${chalk.bold`tsc ${
         getFileComponents(filename).filename
-      } --noEmit}`
+      } --noEmit`}`
     );
     return false;
   }

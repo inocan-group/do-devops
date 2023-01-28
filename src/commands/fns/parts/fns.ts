@@ -37,7 +37,7 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
 
       if (fns) {
         console.log(
-          `- AWS functions found using {blue {bold ${opts.profile}}} profile ${chalk.dim`[ ${region} ]`}${stageFilterMsg}\n`
+          `- AWS functions found using ${chalk.bold.blue`${opts.profile}`} profile ${chalk.dim`[ ${region} ]`}${stageFilterMsg}\n`
         );
         if (opts.json) {
           console.log(
@@ -71,7 +71,7 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
       await buildLambdaTypescriptProject();
     } else {
       console.log(
-        `- detected use of the {blue typescript-microservice} template; use {bold {blue --forceBuild}} to rebuild prior to listing functions.\n`
+        `- detected use of the ${chalk.blue`typescript-microservice`} template; use ${chalk.bold.blue`--forceBuild`} to rebuild prior to listing functions.\n`
       );
     }
   }

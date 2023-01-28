@@ -74,9 +74,9 @@ export async function askForAccountInfo(
     console.log(
       `- you are deploying with the {green ${merged.profile} AWS profile but you do not have this defined yet! ${emoji.angry}`
     );
-    console.log(chalk.grey`- AWS profiles must be added in {blue src/.aws/credentials}`);
+    console.log(chalk.grey`- AWS profiles must be added in ${chalk.blue`src/.aws/credentials`}`);
     console.log(
-      chalk.grey`- if you want to override the default behavior you can state a different profile with the {blue --profile} tag`
+      chalk.grey`- if you want to override the default behavior you can state a different profile with the ${chalk.blue`--profile`} tag`
     );
     process.exit();
   }
@@ -87,9 +87,9 @@ export async function askForAccountInfo(
   }
   if (!(await userHasAwsProfile(merged.profile))) {
     console.log(
-      `- you do {bold NOT} have the credentials for the profile {blue ${merged.profile}}! Please add this before\n  trying again. ${emoji.angry}\n`
+      `- you do {bold NOT} have the credentials for the profile ${chalk.blue(merged.profile)}! Please add this before\n  trying again. ${emoji.angry}\n`
     );
-    console.log(chalk.grey`- the credentials file is located at {blue src/.aws/credentials}\n`);
+    console.log(chalk.grey`- the credentials file is located at ${chalk.blue`src/.aws/credentials`}\n`);
 
     process.exit();
   }

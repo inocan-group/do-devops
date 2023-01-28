@@ -50,9 +50,7 @@ export async function askForNestedDirectory(ask: string, options: INestedDirOpti
         dirs.length === 0
           ? await askListQuestion(ask, [...subDirs, COMPLETED])
           : await askListQuestion(
-              `Thanks. The selected path so far is: {blue ${dirs.join(
-                "/"
-              )}}\nNow choose either a subdirectory or "COMPLETED" to finish the selection.`,
+              `Thanks. The selected path so far is: ${chalk.blue(dirs.join("/"))}\nNow choose either a subdirectory or "COMPLETED" to finish the selection.`,
               [COMPLETED, ...subDirs]
             );
       if (choice !== COMPLETED) {

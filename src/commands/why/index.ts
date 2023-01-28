@@ -9,11 +9,11 @@ const command: IDoDevopsCommand = {
   handler: async ({ observations, raw }) => {
     if (raw.length === 0) {
       console.log(
-        `- invalid command syntax, you must state a repo to report on: {blue dd {bold [repo]} {italic [opts]}}\n`
+        `- invalid command syntax, you must state a repo to report on: ${chalk.blue`dd {bold [repo]`} ${chalk.italic`[opts]`}\n`
       );
       if (observations.has("packageJson")) {
         console.log(
-          chalk.gray` - you often want to target a repo that is listed as a dependency in this repo.\n- The deps in this repo are ({italic excluding dev deps}):}\n`
+          chalk.gray` - you often want to target a repo that is listed as a dependency in this repo.\n- The deps in this repo are (${chalk.italic`excluding dev deps`}):\n`
         );
         console.log(pkgDepsInTable({ ignoreDevDeps: true }));
       }

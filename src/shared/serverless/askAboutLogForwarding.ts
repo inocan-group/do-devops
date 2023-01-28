@@ -21,11 +21,11 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
   if (!hasServerlessLogForwarding) {
     if (hasConfigInfoForForwarding) {
       console.log(
-        `{red - detected a {bold {blue logForwarding}} section in your serverless configuration but you do {italic not} have the {italic {blue serverless-log-forwarding}} plugin installed as a {bold devDep}.}`
+        `{red - detected a ${chalk.bold.blue`logForwarding`} section in your serverless configuration but you do {italic not} have the {italic ${chalk.blue.italic`serverless-log-forwarding`} plugin installed as a ${chalk.bold`devDep`}.`
       );
     } else {
       console.log(
-        chalk.dim`- you are {italic not} using the {blue serverless-log-forwarding} plugin so skipping config for log forwarding`
+        chalk.dim`- you are ${chalk.italic`not`} using the ${chalk.blue`serverless-log-forwarding`} plugin so skipping config for log forwarding`
       );
     }
     return config;
@@ -33,13 +33,13 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
 
   if (hasConfigInfoForForwarding) {
     console.log(
-      `{grey - the {blue serverless-log-forwarding} is configured [ ${config?.custom?.logForwarding?.destinationARN} ]}`
+      `{grey - the ${chalk.blue`serverless-log-forwarding`} is configured [ ${config?.custom?.logForwarding?.destinationARN} ]}`
     );
     return config;
   }
 
   console.log(
-    `- you have installed the {blue {italic serverless-log-forwarding}} plugin but have not configured it.`
+    `- you have installed the ${chalk.blue.italic`serverless-log-forwarding`} plugin but have not configured it.`
   );
 
   enum Action {
@@ -56,7 +56,7 @@ export async function askAboutLogForwarding(config: IServerlessYaml) {
     {
       type: "list",
       name: "action",
-      message: `{bold choose from one of the {italic actions} below:}`,
+      message: `${chalk.bold`choose from one of the ${chalk.italic`actions`} below:`}`,
       choices: [Action.now, Action.remove, Action.later],
       default: Action.now,
       when: () => true,

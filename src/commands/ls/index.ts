@@ -9,7 +9,7 @@ const command: IDoDevopsCommand = {
   handler: async ({ observations, raw, argv }) => {
     if (!observations.has("packageJson")) {
       console.log(
-        `- the ${chalk.italic`ls`} command is only useful in a directory with a {blue package.json}`
+        `- the ${chalk.italic`ls`} command is only useful in a directory with a ${chalk.blue`package.json`}`
       );
       process.exit();
     }

@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { readFileSync, writeFileSync } from "node:fs";
 import { logger } from "src/shared/core/logger";
 import { emoji } from "src/shared/ui";
@@ -16,9 +17,9 @@ export function isAutoindexFile(filename: string) {
   const isEmpty = file.trim() === "";
   const hasSignature = /\/\/\s*#autoindex/.test(file);
   if (isEmpty) {
-    log.shout(`- ${emoji.shocked} the index file {blue ${filename}} was EMPTY!`);
+    log.shout(`- ${emoji.shocked} the index file ${chalk.blue`${filename}} was EMPTY!`}`);
     writeFileSync(filename, NEW_AUTOINDEX_CONTENT);
-    log.shout(`- ${emoji.robot} made this file into an {italic autoindex} file\n`);
+    log.shout(`- ${emoji.robot} made this file into an ${chalk.italic`autoindex`} file\n`);
     return true;
   }
   return isEmpty || hasSignature;

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import { formatDistance } from "date-fns";
 import { IImageCacheRef, IImageRule } from "src/@types/image-types";
@@ -16,7 +17,7 @@ export function summarize(rules: IImageRule[], tools: IImageTools) {
   if (!tools.cache.source) {
     console.log(
       wordWrap(
-        `- ${emoji.eyeballs} there appears to be something wrong with your image cache as the cache file does exist but the "source" folder is missing. Please have a look but it is probably best that you re-build the cache with {blue dd image optimize --force}`
+        `- ${emoji.eyeballs} there appears to be something wrong with your image cache as the cache file does exist but the "source" folder is missing. Please have a look but it is probably best that you re-build the cache with ${chalk.blue`dd image optimize --force`}`
       )
     );
     process.exit();

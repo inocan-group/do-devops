@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-process-exit */
+import chalk from "chalk";
 import { DoDevopsHandler } from "src/@types/command";
 import { getAwsIdentityFromProfile, getAwsProfileDictionary } from "src/shared/aws";
 import { emoji } from "src/shared/ui";
@@ -23,7 +25,7 @@ export const handler: DoDevopsHandler<{ all: boolean }> = async ({ unknown: argv
     chosen = argv.filter((i) => profileNames.includes(i));
     if (chosen.length === 0) {
       console.log(`- there were {red no} valid profiles provided!`);
-      console.log(`- valid profile names are: {blue ${profileNames.join(", ")}`);
+      console.log(`- valid profile names are: ${chalk.blue(profileNames.join(", "))}`);
     }
     if (chosen.length !== argv.length) {
       console.log(`- some profiles provided were not valid; valid ones are listed below`);

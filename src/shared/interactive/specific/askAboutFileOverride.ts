@@ -30,7 +30,7 @@ export async function askAboutFileOverwrite(
   const parts = getFileComponents(source, libraryDirectory("templates"));
   const filename = chalk.dim`${parts.filepath}}{bold /${parts.filename}`;
   const log = logger(opts);
-  log.shout(`The file {blue ${filename}} already exists.\n`);
+  log.shout(`The file ${chalk.blue(filename)} already exists.\n`);
   let action: FileAction | undefined;
   while (action !== "copy" && action !== "skip") {
     action = await askListQuestion("What do you want to do?", answers);

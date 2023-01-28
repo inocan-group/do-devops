@@ -4,6 +4,7 @@ import path from "node:path";
 import { astParseWithTypescript } from "./astParseWithTypescript";
 import { toRelativePath } from "../file";
 import { IDictionary } from "common-types";
+import chalk from "chalk";
 
 /**
  * Gets a list of all typescript files under the `src/handlers`
@@ -20,9 +21,7 @@ export function getValidServerlessHandlers(opts: IDictionary = {}) {
       if (!ast.program.body[0].source) {
         if (opts.verbose) {
           console.log(
-            `{grey - the file {blue ${toRelativePath(
-              curr
-            )}} has no source content; will be ignored}`
+            `{grey - the file ${chalk.blue(toRelativePath(curr))} has no source content; will be ignored}`
           );
         }
 
@@ -45,9 +44,7 @@ export function getValidServerlessHandlers(opts: IDictionary = {}) {
       return agg;
     } catch (error) {
       console.log(
-        `- Error processing  {red ${toRelativePath(curr)}} [s: ${status}]: {grey ${
-          (error as Error).message
-        }}`
+        `- Error processing  ${chalk.red(toRelativePath(curr))} [s: ${status}]: ${chalk.grey((error as Error).message)}`
       );
       return agg;
     }

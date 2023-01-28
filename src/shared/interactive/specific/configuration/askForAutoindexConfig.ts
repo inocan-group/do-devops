@@ -25,7 +25,7 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
   }
 
   log.info(
-    `- configuring this project for ${chalk.bold.yellow`do-devops`}'s {blue autoindex} command\n`
+    `- configuring this project for ${chalk.bold.yellow`do-devops`}'s ${chalk.blue`autoindex`} command\n`
   );
   if (hasProjectConfig) {
     log.info(`- ${emoji.eyeballs} has existing project configuration to work from`);
@@ -40,7 +40,7 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
     console.log(`- input patterns in a CSV format that can be parsed.`);
     console.log(`  for example ${chalk.dim`[ "**foobar.ts" ] `}.`);
     console.log(
-      `- Note: you should NOT include the exclusion pattern for {blue node_modules} as this will always be included`
+      `- Note: you should NOT include the exclusion pattern for ${chalk.blue`node_modules`} as this will always be included`
     );
 
     indexGlobs = [
@@ -95,5 +95,5 @@ export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o:
     },
   });
 
-  log.info(`- ${emoji.party} configuration for {blue autoindex} has been saved to project`);
+  log.info(`- ${emoji.party} configuration for ${chalk.blue`autoindex`} has been saved to project`);
 }

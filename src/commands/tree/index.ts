@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-process-exit */
+import chalk from "chalk";
 import { spawnSync } from "node:child_process";
 import { IDoDevopsCommand } from "src/@types/command";
 import { commandIsAvailable } from "src/shared/file/existence/commandIsAvailable";
@@ -11,7 +13,7 @@ const command: IDoDevopsCommand = {
         ? ["modules", "generate", "tree", "--with-types"]
         : ["modules", "generate", "tree"];
       console.error(
-        `- proxying the "tree" command to {blue {bold cargo} ${params.join(" ")}}`
+        `- proxying the "tree" command to ${chalk.blue.bold`cargo`} ${params.join(" ")}}`
       );
       const thread = spawnSync("cargo", params, { stdio: "inherit" });
       if (thread.error) {

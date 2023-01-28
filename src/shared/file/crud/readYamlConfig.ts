@@ -25,7 +25,7 @@ export function readYamlConfig<T extends object>(filename: string): T | undefine
   filename = interpolateFilePath(filename);
   try {
     return filesExist(filename)
-      ? (load(readFileSync(filename, { encoding: "utf-8" })) as T)
+      ? (load(readFileSync(filename, { encoding: "utf8" })) as T)
       : undefined;
   } catch (error) {
     throw new DevopsError(

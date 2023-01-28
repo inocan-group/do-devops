@@ -30,13 +30,13 @@ export async function askConfigureImageOptimization(_o: Observations) {
 
   log.shout(
     wordWrap(
-      `Welcome weary traveler! It appears you've not configured {bold {blue images}} for this repo before. Let's get that out of the way now.\n`
+      `Welcome weary traveler! It appears you've not configured ${chalk.bold.blue`images`} for this repo before. Let's get that out of the way now.\n`
     )
   );
 
   const sourceDir = await askForNestedDirectory(
     wordWrap(
-      `You are expected to choose a {blue source directory} to act as the {italic default} dir for all your rule's source images. Choose from the directories below ({italic dirs with image will be at top of list}):`
+      `You are expected to choose a ${chalk.blue`source directory`} to act as the ${chalk.italic`default`} dir for all your rule's source images. Choose from the directories below (${chalk.italic`dirs with image will be at top of list`}):`
     ),
     {
       name: "Source Directory",
@@ -48,10 +48,10 @@ export async function askConfigureImageOptimization(_o: Observations) {
 
   const destinationDir = await askForNestedDirectory(
     wordWrap(
-      `Now choose a {italic default} {blue destination directory} for images; {bold rules} will still need choose this too but they'll default to whatever you choose.\n\n`
+      `Now choose a ${chalk.italic`default`} ${chalk.blue`destination directory`} for images; ${chalk.bold`rules`} will still need choose this too but they'll default to whatever you choose.\n\n`
     ) +
       wordWrap(
-        `Note: the most common directory to target would be the {blue /public} directory as this is typically where build tools look for static assets like images.`
+        `Note: the most common directory to target would be the ${chalk.blue`/public`} directory as this is typically where build tools look for static assets like images.`
       ) +
       `\n\nChoose from list:`,
     {
@@ -64,7 +64,7 @@ export async function askConfigureImageOptimization(_o: Observations) {
   log.info();
   log.shout(
     wordWrap(
-      `The {italic general} configuration of the image service is now complete but {italic rules} are a key component of having a complete setup. For this reason we will add one rule now and if you want to add more later simply run {blue dd image config} again and choose "add rule" from the options.\n\n`
+      `The ${chalk.italic`general`} configuration of the image service is now complete but {italic rules} are a key component of having a complete setup. For this reason we will add one rule now and if you want to add more later simply run ${chalk.blue`dd image config`} again and choose "add rule" from the options.\n\n`
     )
   );
 
@@ -76,19 +76,19 @@ export async function askConfigureImageOptimization(_o: Observations) {
 
   rule.source = await askForNestedDirectory(
     wordWrap(
-      `Each rule must state a root directory for their {bold {blue source}} images;\nit is already defaulted to the general setting you chose earlier but if this rule should start somewhere else feel free to change`
+      `Each rule must state a root directory for their ${chalk.bold.blue`source`} images;\nit is already defaulted to the general setting you chose earlier but if this rule should start somewhere else feel free to change`
     ),
     { name: "Rule Source Directory", filter, leadChoices: [sourceDir] }
   );
 
   rule.destination = await askForNestedDirectory(
-    `Similarly, a rule has a default {bold {blue destination}} directory`,
+    `Similarly, a rule has a default ${chalk.bold.blue`destination`} directory`,
     { name: "Rule Destination Directory", filter, leadChoices: [destinationDir] }
   );
 
   rule.glob = await askInputQuestion(
     wordWrap(
-      `Finally, a rule must express a "glob pattern" for picking up the images it sees as source images (the glob pattern will be applied in the source directory you just chose). An example glob pattern to find all PNG images recurssively would be ${chalk.bgWhite.blackBright(
+      `Finally, a rule must express a "glob pattern" for picking up the images it sees as source images (the glob pattern will be applied in the source directory you just chose). An example glob pattern to find all PNG images recursively would be ${chalk.bgWhite.blackBright(
         "**/*.png"
       )}: `
     )
@@ -114,11 +114,11 @@ export async function askConfigureImageOptimization(_o: Observations) {
     sizeOptions,
     { default: "full-width [ 640, 768, 1024, 1280, 1536 ]" }
   );
-  if (sizeName !== "custom") {
-    rule.widths = JSON.parse(sizeName.replace(/.*\[/, "["));
-  } else {
+  if (sizeName === "custom") {
     const customName = await askInputQuestion(`Add your own values as CSV (e.g., "64,128,256"):`);
     rule.widths = csvParser<number[]>(customName);
+  } else {
+    rule.widths = JSON.parse(sizeName.replace(/.*\[/, "["));
   }
 
   rule.preBlur = await askConfirmQuestion(
@@ -158,12 +158,12 @@ export async function askConfigureImageOptimization(_o: Observations) {
   log.info(
     `\n\nFantastic, you have default properties configured {bold plus} your first rule defined!\n`
   );
-  log.info(`- to convert images run {blue dd image optimize} and your rule will be executed.`);
+  log.info(`- to convert images run ${chalk.blue`dd image optimize`} and your rule will be executed.`);
   log.info(
-    `- the {blue .do-devop.json} file in the root of the repo will host your configuration.`
+    `- the ${chalk.blue`.do-devop.json`} file in the root of the repo will host your configuration.`
   );
   log.info(
-    `- you can always edit the config directly in the config file or if you prefer use the {blue dd image config} menu`
+    `- you can always edit the config directly in the config file or if you prefer use the ${chalk.blue`dd image config`} menu`
   );
 
   return { sourceDir, targetDir: destinationDir, rules };

@@ -59,7 +59,7 @@ export async function checkCacheFreshness(
   }
 
   log.whisper(
-    chalk.dim`- there were {bold ${targetFiles.length}} source images discovered for the {blue ${rule.name}} rule. Of which ${missing.length} were {italic missing} from the cache and ${outOfDate.length} were in the cache but stale.`
+    chalk.dim`- there were {bold ${targetFiles.length}} source images discovered for the ${chalk.blue(rule.name)} rule. Of which ${missing.length} were {italic missing} from the cache and ${outOfDate.length} were in the cache but stale.`
   );
 
   return { missing, outOfDate };

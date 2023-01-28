@@ -36,7 +36,7 @@ export function finalizeCommandDefinition(
 
   const argv = hasArgv(cmdDefn) ? chalk.italic.dim` argv[]}}` : "";
   const argvDescription = getArgvOption(cmdDefn)?.description
-    ? `\n\n\t\t{bold {blue [argv]:}} ${getArgvOption(cmdDefn)?.description}`
+    ? `\n\n\t\t${chalk.bold.blue`[argv]:`} ${getArgvOption(cmdDefn)?.description}`
     : "";
 
   const subCommandSyntax =

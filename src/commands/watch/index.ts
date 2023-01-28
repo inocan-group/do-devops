@@ -1,4 +1,5 @@
 /* eslint-disable unicorn/no-process-exit */
+import chalk from "chalk";
 import { IDoDevopsCommand } from "src/@types/command";
 import { proxyToPackageManager } from "src/shared/core";
 import { hasScript } from "src/shared/npm";
@@ -8,7 +9,7 @@ const command: IDoDevopsCommand = {
   handler: async ({ observations, raw }) => {
     if (!observations.has("packageJson")) {
       console.log(
-        `- {italic watching} files in the repo is something which can only happen in directory with a {blue package.json}`
+        `- ${chalk.italic`watching`} files in the repo is something which can only happen in directory with a ${chalk.blue`package.json`}`
       );
       process.exit();
     }

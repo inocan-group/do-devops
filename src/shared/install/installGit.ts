@@ -12,7 +12,7 @@ export async function installGit(opts: Options<{ silent: boolean }>) {
   let remoteUrl = "";
 
   if (!opts.silent) {
-    const confirm = await askConfirmQuestion(`Should we initialize {blue git} for you?`);
+    const confirm = await askConfirmQuestion(`Should we initialize ${chalk.blue`git`} for you?`);
     setupRemote = await askConfirmQuestion(
       `Would you like to set a {italic remote} for this repo now?`
     );
@@ -30,7 +30,7 @@ export async function installGit(opts: Options<{ silent: boolean }>) {
   const g = git();
 
   await g.init();
-  log.info(chalk.gray` - initialized {blue git}`);
+  log.info(chalk.gray` - initialized ${chalk.blue`git`}`);
   if (setupRemote) {
     await g.addRemote(remoteName, remoteUrl);
     log.info(chalk.gray` - ${chalk.blue(remoteName)} remote setup`);
