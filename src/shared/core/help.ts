@@ -28,10 +28,7 @@ export function help(
         syntax: "dd [cmd] [options]",
         options: globalOptions,
       } as Finalized<IDoDevopsCommand>);
-
-  console.log({kind,subCommands,description,syntax,options});
   
-
   const sections: commandLineUsage.Section[] = [
     {
       header: "Description",
