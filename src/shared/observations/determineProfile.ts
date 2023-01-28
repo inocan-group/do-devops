@@ -1,5 +1,5 @@
 import { getServerlessYaml } from "src/shared/serverless";
-import { configIsReady, Options, IIntegratedConfig, IProjectConfig, IUserConfig } from "src/@types";
+import { configIsReady, GlobalOptions, IIntegratedConfig, IProjectConfig, IUserConfig } from "src/@types";
 import { getIntegratedConfig, saveProjectConfig } from "src/shared/config";
 import { askForAwsProfile } from "src/shared/aws";
 import { DoDevopObservation } from "src/@types/observations";
@@ -7,7 +7,7 @@ import { DoDevopObservation } from "src/@types/observations";
 /** ensure that during one CLI operation we cache this value */
 let profile: string;
 
-export interface IProfileOptions extends Options {
+export interface IProfileOptions extends GlobalOptions {
   profile?: string;
   interactive?: boolean;
 }

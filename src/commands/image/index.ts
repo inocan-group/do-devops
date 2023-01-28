@@ -1,7 +1,7 @@
-import type { IDoDevopsCommand } from "src/@types";
+import type { Command } from "src/@types";
 import { IImageOptions, handler, options } from "./parts";
 
-const command: IDoDevopsCommand<IImageOptions> = {
+const command: Command<IImageOptions> = {
   kind: "image",
   handler,
   description:

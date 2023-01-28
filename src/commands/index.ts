@@ -22,7 +22,7 @@ import { default as upgrade } from "./upgrade/index";
 import { default as watch } from "./watch/index";
 import { default as why } from "./why/index";
 
-export default {
+export const commands = {
   add,
   autoindex,
   awsid,
@@ -47,3 +47,7 @@ export default {
   watch,
   why,
 };
+
+export type Commands = typeof commands;
+
+export default commands;

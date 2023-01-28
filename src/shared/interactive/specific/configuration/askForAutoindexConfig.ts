@@ -1,13 +1,13 @@
 import chalk from "chalk";
 import { exit } from "node:process";
-import { Options, Observations } from "src/@types";
+import { GlobalOptions, Observations } from "src/@types";
 import { IAutoindexOptions } from "src/commands/autoindex/parts";
 import { getProjectConfig, saveProjectConfig } from "src/shared/config";
 import { logger } from "src/shared/core";
 import { askConfirmQuestion, askInputQuestion } from "src/shared/interactive";
 import { emoji } from "src/shared/ui";
 
-export async function askForAutoindexConfig(opts: Options<IAutoindexOptions>, o: Observations) {
+export async function askForAutoindexConfig(opts: GlobalOptions<IAutoindexOptions>, o: Observations) {
   const log = logger(opts);
   const projectConfig = getProjectConfig();
   const hasProjectConfig = projectConfig.autoindex !== undefined;

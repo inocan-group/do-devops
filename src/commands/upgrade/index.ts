@@ -1,7 +1,7 @@
-import { IDoDevopsCommand } from "src/@types/command";
+import { Command } from "src/@types/command";
 import { proxyToPackageManager } from "src/shared/core";
 
-const command: IDoDevopsCommand = {
+const command: Command = {
   kind: "upgrade",
   handler: async ({ observations, raw }) => {
     await proxyToPackageManager("upgrade", observations, raw);

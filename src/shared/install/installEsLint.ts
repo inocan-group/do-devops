@@ -1,4 +1,4 @@
-import { Options, Observations } from "src/@types";
+import { GlobalOptions, Observations } from "src/@types";
 import { installDevDep } from "src/shared/npm";
 import { askConfirmQuestion } from "src/shared/interactive";
 import { logger } from "src/shared/core";
@@ -10,7 +10,7 @@ import chalk from "chalk";
  * Installs and configures both **eslint** and **prettier**
  */
 export async function installEsLint(
-  opts: Options<{ silent: boolean }>,
+  opts: GlobalOptions<{ silent: boolean }>,
   observations: Observations
 ) {
   const log = logger(opts);

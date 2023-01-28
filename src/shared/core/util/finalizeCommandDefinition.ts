@@ -3,7 +3,7 @@ import { IDictionary } from "common-types";
 import {
   DoDevopObservation,
   Finalized,
-  IDoDevopsCommand,
+  Command,
   isCommandDescriptor,
   isDynamicCommandDefinition,
 } from "src/@types";
@@ -16,12 +16,12 @@ import { getArgvOption, hasArgv } from "./argv";
  * by passing in the _observations_ and parsed _options_ available at this time
  */
 export function finalizeCommandDefinition(
-  cmdDefn: IDoDevopsCommand,
+  cmdDefn: Command,
   /** all known observations available at this time */
   observations: Set<DoDevopObservation>,
   /** any/all parsed options available at this time */
   options: IDictionary = {}
-): Finalized<IDoDevopsCommand> {
+): Finalized<Command> {
   const isGlobal = cmdDefn ? false : true;
 
   // description

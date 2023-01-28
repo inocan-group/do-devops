@@ -1,5 +1,5 @@
 import { ICommandDescription } from "src/@types";
-import { IDoDevopsCommand } from "src/@types/command";
+import { Command } from "src/@types/command";
 import { handler, description, options } from "./parts";
 
 const subCommands: ICommandDescription[] = [
@@ -9,7 +9,7 @@ const subCommands: ICommandDescription[] = [
   { name: "info", summary: "info on a cert" },
 ];
 
-const command: IDoDevopsCommand = {
+const command: Command = {
   kind: "cert",
   handler,
   description,

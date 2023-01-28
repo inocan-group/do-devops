@@ -1,6 +1,6 @@
-import { IOptionDefinition } from "src/@types/option-types";
+import { OptionDefn } from "src/@types/option-types";
 
-export const options: IOptionDefinition = {
+export const options: OptionDefn = {
   all: {
     alias: "a",
     type: Boolean,

@@ -1,9 +1,9 @@
 import chalk from "chalk";
-import { IOptionDefinition } from "src/@types/option-types";
+import { OptionDefn } from "src/@types/option-types";
 
 export const description = `Package up resources for {bold Serverless} publishing but do not actually ${chalk.italic`deploy`}.`;
 
-export const options: IOptionDefinition = {
+export const options: OptionDefn = {
   stage: {
     type: String,
     typeLabel: "<stage>",

@@ -1,22 +1,35 @@
 /* eslint-disable no-use-before-define */
 
 import { IDictionary, isNonNullObject } from "common-types";
-import { Keys } from "inferred-types";
+import { Keys, Narrowable } from "inferred-types";
 import { Observations } from ".";
 import { ICommandDescription } from "./general";
-import { Options } from "./global";
+import { GlobalOptions } from "./global";
 import { DoDevopObservation } from "./observations";
-import { IOptionDefinition } from "./option-types";
+import {  OptionDefn } from "./option-types";
 import commands from "src/commands";
+import { ILogger } from "src/shared/core";
 
 export type KnownCommand = Keys<typeof commands>;
 export type CommandDefinitions = typeof commands;
 
 /**
+ * An interactive configurator for given command.
+ */
+export type CommandConfigurator = <
+  TCmd extends string
+>(cmd: TCmd) => <TOpt extends GlobalOptions<any>>(options: TOpt, obs: Observations) => void;
+
+/**
  * When a command is kicked off by `do-devops` it is provided the following
  * inputs to its task.
  */
-export interface ICommandInput<T extends object = {}> {
+export interface CommandInput<
+  TCmd extends KnownCommand,
+  TOpt extends OptionDefn<N>,
+  N extends Narrowable
+> {
+  command: TCmd;
   /**
    * If the command declares _sub-commands_ then the first element from the CLI
    * will be pulled off and added as the `subCommand` (note: the user may have put
@@ -33,25 +46,36 @@ export interface ICommandInput<T extends object = {}> {
    */
   raw: string[];
   /**
-   * All command line options defined locally by the command and/or globally defined
-   * options.
+   * All values for the CLI options/flags; this includes both global and locally 
+   * defined properties.
    */
-  opts: Partial<T> & Options;
+  opts: TOpt;
+
   /**
    * An array of observations about the environment that the user is running the
    * command in.
    */
   observations: Set<DoDevopObservation>;
+  /**
+   * any unknown parsed values from CLI
+   */
   unknown: string[];
+
+  /**
+   * Logging interface pre-configured with input from the CLI options
+   */
+  log: ILogger;
 }
 
 /**
- * **IDoDevopsHandler**
+ * **DoDevopsHandler**
  *
  * Every recognized **command** in `do-devops` must provide an
- * asynchronous _handler_ function that matches this format.
+ * asynchronous **handler function** that matches this format.
  */
-export type DoDevopsHandler<T extends object = {}> = (input: ICommandInput<T>) => Promise<any>;
+export type DoDevopsHandler<
+  T extends OptionDefn
+> = (input: CommandInput<T>) => Promise<any>;
 
 /**
  * This two property descriptor allows a command to have a succinct description displayed
@@ -96,19 +120,21 @@ export function isDynamicCommandDefinition<T extends unknown | DynamicCommandDef
 }
 
 /**
- * **IDoDevopsCommand**
+ * **Command**`<TCmd,TOpt,THidden>`
  *
- * Every command must export the following symbols. This will be picked
- * up by the `getCommmands()` function where the structure will
- * tested as an interface definition.
+ * The properties required to define a command in `do-devops`
  */
-export interface IDoDevopsCommand<T extends {} = {}> {
+export interface Command<
+  TCmd extends string = string,
+  TOpt extends OptionDefn<any> = {},
+  THidden extends boolean = false
+> {
   /** a unique type alias assigned to each command */
-  kind: KnownCommand;
+  kind: TCmd;
   /**
    * The handler function which handles the command's execution
    */
-  handler: DoDevopsHandler<T>;
+  handler: DoDevopsHandler<TOpt>;
   syntax?: string;
   /**
    * A description of the command.
@@ -135,21 +161,27 @@ export interface IDoDevopsCommand<T extends {} = {}> {
    * first and the remaining will be sent to `argv`
    */
   greedy?: boolean;
-  options?: IOptionDefinition;
+  options: TOpt;
+  /**
+   * Examples can be provided and will be displayed in help system
+   */
   examples?: string[];
   /**
    * If turned on that this command will not show up in the command
    * list unless the user explicitly requests it with `dd --showHidden`
    */
-  hiddenCommand?: boolean;
+  hiddenCommand?: THidden;
 
-  config?: <T extends Options<any>, O extends Observations>(
+  /**
+   * Allows a command to interactively be configured.
+   */
+  config?: <T extends GlobalOptions<any>, O extends Observations>(
     opts: T,
     observations: O
   ) => Promise<void>;
 }
 
-export type Finalized<T extends IDoDevopsCommand> = Omit<
+export type Finalized<T extends Command> = Omit<
   T,
   "syntax" | "description" | "subCommand"
 > & {
@@ -161,7 +193,10 @@ export type Finalized<T extends IDoDevopsCommand> = Omit<
 /**
  * a type guard which detects a valid shape for the `do-devops` command definition
  */
-export function isDoDevopsCommand(cmd: unknown): cmd is IDoDevopsCommand {
+export function isCommand<
+  TCmd extends string,
+  TOpt extends OptionDefn
+>(cmd: unknown): cmd is Command<TCmd,TOpt> {
   return (
     typeof cmd === "object" &&
     typeof (cmd as IDictionary).handler === "function" &&

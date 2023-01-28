@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { IOptionDefinition } from "src/@types/option-types";
+import { OptionDefn } from "src/@types/option-types";
 
-export const globalOptions: IOptionDefinition = {
+export const globalOptions = {
   quiet: {
     alias: "q",
     type: Boolean,
@@ -20,4 +20,4 @@ export const globalOptions: IOptionDefinition = {
     group: "global",
     description: "shows help for given command",
   },
-};
+} satisfies OptionDefn;

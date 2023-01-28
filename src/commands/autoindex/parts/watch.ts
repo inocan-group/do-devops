@@ -3,7 +3,7 @@ import { spawn } from "node:child_process";
 import w, { WatchOptions } from "chokidar";
 import { existsSync } from "node:fs";
 import { dirname, join } from "pathe";
-import { Options } from "src/@types";
+import { GlobalOptions } from "src/@types";
 import { fileHasExports } from "src/shared/ast";
 import { ILogger, logger } from "src/shared/core/logger";
 import { emoji, highlightFilepath } from "src/shared/ui";
@@ -209,7 +209,7 @@ function addWatcher(
   return watcher;
 }
 
-export function watch(group: AutoindexGroupDefinition, opts: Options<IAutoindexOptions>) {
+export function watch(group: AutoindexGroupDefinition, opts: GlobalOptions<IAutoindexOptions>) {
   const log = logger(opts);
   // add watcher for index files
   const indexWatcher = addWatcher(

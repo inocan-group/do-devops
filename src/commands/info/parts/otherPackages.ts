@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { IDictionary, INpmInfo, isNpmInfoRepository } from "common-types";
-import { DoDevopObservation, Options, INpmInfoTable } from "src/@types";
+import { DoDevopObservation, GlobalOptions, INpmInfoTable } from "src/@types";
 import { convertGitUrlToHttp } from "src/shared/git";
 import { getExternalPackageJson } from "src/shared/npm";
 import { consoleDimensions, TableColumn, toTable } from "src/shared/ui";
@@ -90,7 +90,7 @@ const colPaddingRequirement = (cols: number) => 2 * COL_WIDTH + (cols - 1) * COL
  */
 export async function otherPackages(
   pkgs: string[],
-  opts: Options,
+  opts: GlobalOptions,
   _observations: Set<DoDevopObservation>
 ) {
   const info = await getNpmInfo(pkgs, opts);

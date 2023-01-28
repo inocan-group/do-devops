@@ -2,7 +2,6 @@
 /* eslint-disable unicorn/number-literal-case */
 import chalk from "chalk";
 import { detectExportType, exclusions, createAutoindexContent } from "./index";
-import { IAutoindexFile } from "./reference";
 import {
   getEmbeddedHashCode,
   hasOldHelpContent,
@@ -12,9 +11,8 @@ import {
 } from "./util";
 import { emoji, highlightFilepath } from "src/shared/ui";
 import { logger } from "src/shared/core";
-import { Options, Observations } from "src/@types";
+import { GlobalOptions, Observations } from "src/@types";
 import { dirname, join } from "pathe";
-import { IAutoindexOptions } from "../parts";
 import { writeFile } from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
 import { fileHasExports } from "src/shared/ast";
@@ -32,7 +30,7 @@ import { relative } from "node:path";
  */
 export async function processFiles(
   group: AutoindexGroupDefinition,
-  options: Options<IAutoindexOptions>,
+  options: GlobalOptions<any>,
   _o: Observations
 ) {
   const log = logger(options);
@@ -174,7 +172,7 @@ export async function processFiles(
       }),
       0xcafebabe
     ));
-
+AutoindexFile;
     const content: IAutoindexFile = {
       exportType,
       files: fileSymbols,

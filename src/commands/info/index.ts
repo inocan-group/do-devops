@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
-import { IDoDevopsCommand } from "src/@types/command";
+import { Command } from "src/@types/command";
 import { getPackageJson, pkgDepsInTable } from "src/shared/npm";
 import { emoji } from "src/shared/ui";
 import { otherPackages, thisRepo } from "./parts";
@@ -10,7 +10,7 @@ export interface IInfoOptions {
   listDeps?: boolean;
 }
 
-const command: IDoDevopsCommand<IInfoOptions> = {
+const command: Command<IInfoOptions> = {
   kind: "info",
   handler: async ({ argv, opts, observations }) => {
     if (opts.listDeps) {

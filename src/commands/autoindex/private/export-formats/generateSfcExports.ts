@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { Options } from "src/@types/global";
+import { GlobalOptions } from "src/@types/global";
 import type { IAutoindexOptions } from "src/commands/autoindex/parts";
-import { IAutoindexFile, removeExtension } from "src/commands/autoindex/private";
+import { AutoindexFile, removeExtension } from "src/commands/autoindex/private";
 import { getProjectConfig } from "src/shared/config";
 import { logger } from "src/shared/core/logger";
 
@@ -23,7 +23,7 @@ function asyncExport(f: string, content: string) {
  * Checks to see that the **sfc** option has been turned on and if it has,
  * will export all the `.vue` files it finds in the appropriate format.
  */
-export function generateSfcExports(indexFile: IAutoindexFile, opts: Options<IAutoindexOptions>) {
+export function generateSfcExports(indexFile: AutoindexFile, opts: GlobalOptions<IAutoindexOptions>) {
   const log = logger(opts);
   const vueFiles = indexFile.files.filter((f) => f.includes(".vue"));
   if (!opts.sfc || vueFiles.length === 0) {

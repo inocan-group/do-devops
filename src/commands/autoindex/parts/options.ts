@@ -1,4 +1,4 @@
-import { IOptionDefinition } from "src/@types/option-types";
+import { OptionDefn } from "src/@types/option-types";
 
 export interface IAutoindexOptions {
   config: boolean;
@@ -30,7 +30,7 @@ export interface IAutoindexOptions {
   explicitFiles: boolean;
 }
 
-export const options: IOptionDefinition = {
+export const options = {
   // argv
   explicitFiles: {
     defaultOption: true,
@@ -88,4 +88,4 @@ export const options: IOptionDefinition = {
     group: "local",
     description: `by default exports do not include the file's .js extension but sometimes with ES modules you want to include this. If you do then you should set this flag.`,
   },
-};
+} satisfies OptionDefn;

@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
 import {
-  IDoDevopsCommand,
-  IOptionDefinition,
+  Command,
+  OptionDefn,
   isCommandDescriptor,
   isDynamicCommandDefinition,
 } from "src/@types";
@@ -21,7 +21,7 @@ export function getSyntax(fn?: string): string {
   if (fn) {
     const validCommands = keys(commands);
     if ((validCommands as string[]).includes(fn)) {
-      const defn: IDoDevopsCommand<any> = commands[fn as keyof typeof commands];
+      const defn: Command<any> = commands[fn as keyof typeof commands];
       const hasSubCommands = defn?.subCommands ? true : false;
       return defn.syntax ?? `do ${fn} ${hasSubCommands ? "[command] " : ""}`;
     } else {
@@ -54,7 +54,7 @@ export function getDescription(opts: IDictionary, fn?: keyof typeof commands) {
     : `Help content for the {bold do}'s ${chalk.bold.green.italic(fn)} command.`;
 }
 
-export function getExamples(_opts: IOptionDefinition, fn?: keyof typeof commands) {
+export function getExamples(_opts: OptionDefn, fn?: keyof typeof commands) {
   // nothing to do if no function is chosen
   if (fn) {
     const defn = commands[fn];
@@ -64,6 +64,6 @@ export function getExamples(_opts: IOptionDefinition, fn?: keyof typeof commands
   return [] as string[];
 }
 
-export async function getOptions(opts: IOptionDefinition, _fn?: string) {
+export async function getOptions(opts: OptionDefn, _fn?: string) {
   return convertOptionsToArray(opts);
 }

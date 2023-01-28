@@ -1,6 +1,6 @@
-import { IOptionDefinition } from "src/@types";
+import { OptionDefn } from "src/@types";
 
-export const options: IOptionDefinition = {
+export const options: OptionDefn = {
   force: {
     alias: "f",
     type: Boolean,

@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import commandLineUsage, { OptionDefinition } from "command-line-usage";
-import { DoDevopObservation, Finalized, IDoDevopsCommand } from "src/@types";
+import { DoDevopObservation, Finalized, Command } from "src/@types";
 import { emoji } from "src/shared/ui";
 import { globalOptions } from "./index";
 import {
@@ -17,7 +17,7 @@ import {
 export function help(
   observations: Set<DoDevopObservation>,
   /** optionally pass in the command which help is being asked for */
-  cmdDefn?: IDoDevopsCommand
+  cmdDefn?: Command
 ) {
   const { kind, subCommands, description, syntax, options } = cmdDefn
     ? finalizeCommandDefinition(cmdDefn, observations)
@@ -27,7 +27,7 @@ export function help(
           "do-devops is a set of utility functions designed to make DevOps more fun in less time",
         syntax: "dd [cmd] [options]",
         options: globalOptions,
-      } as Finalized<IDoDevopsCommand>);
+      } as Finalized<Command>);
   
   const sections: commandLineUsage.Section[] = [
     {

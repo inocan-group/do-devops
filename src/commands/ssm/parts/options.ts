@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { IOptionDefinition } from "src/@types/option-types";
+import { OptionDefn } from "src/@types/option-types";
 
-export const options: IOptionDefinition = {
+export const options: OptionDefn = {
   profile: {
     type: String,
     typeLabel: "<profileName>",

@@ -1,4 +1,4 @@
-import { Options, Observations } from "src/@types";
+import { GlobalOptions, Observations } from "src/@types";
 import { DevopsError } from "src/errors";
 import { installEsLint } from "src/shared/install";
 import { saveProjectConfig } from "src/shared/config";
@@ -10,7 +10,7 @@ import { templateDirCopy, templateFileCopy } from "../file";
 import { getObservations } from "../observations";
 import chalk from "chalk";
 
-export async function installBuildSystem(opts: Options, observations: Observations) {
+export async function installBuildSystem(opts: GlobalOptions, observations: Observations) {
   const log = logger(opts);
 
   const confirm = await askConfirmQuestion(

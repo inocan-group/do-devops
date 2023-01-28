@@ -1,12 +1,12 @@
 import chalk from "chalk";
 import { execSync } from "node:child_process";
-import { DoDevopObservation, Options } from "src/@types";
+import { DoDevopObservation, GlobalOptions } from "src/@types";
 import { logger } from "src/shared/core";
 import { determinePackageManager } from "src/shared/observations";
 import { emoji } from "src/shared/ui";
 
 export async function installDevDep(
-  opts: Options,
+  opts: GlobalOptions,
   observations: Set<DoDevopObservation>,
   ...packages: string[]
 ) {

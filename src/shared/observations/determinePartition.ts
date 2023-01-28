@@ -1,9 +1,9 @@
-import { DoDevopObservation, IAwsOptions, Options } from "src/@types";
+import { DoDevopObservation, IAwsOptions, GlobalOptions } from "src/@types";
 import { getProjectConfig, saveProjectConfig } from "src/shared/config";
 import { askListQuestion } from "src/shared/interactive";
 
 export async function determinePartition(
-  opts: Options<IAwsOptions>,
+  opts: GlobalOptions<IAwsOptions>,
   _observations: Set<DoDevopObservation>
 ) {
   // const log = logger(opts);

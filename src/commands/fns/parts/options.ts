@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { AwsRegion, AwsStage } from "common-types";
-import { IOptionDefinition } from "src/@types/option-types";
+import { OptionDefn } from "src/@types/option-types";
 
-export const options: IOptionDefinition = {
+export const options: OptionDefn = {
   forceBuild: {
     alias: "f",
     type: Boolean,

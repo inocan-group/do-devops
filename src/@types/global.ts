@@ -6,18 +6,18 @@ export type IDoDevopsGlobalOptions = typeof globalOptions;
 /**
  * Option values derives from the global options
  */
-export type Options<T extends object = {}> = {
+export type GlobalOptions = {
   quiet?: boolean;
   verbose?: boolean;
   dryRun?: boolean;
   help?: boolean;
-} & Partial<T>;
+};
 
 export interface CommandParsing {
   observations: Set<DoDevopObservation>;
   subCommand?: string | undefined;
   argv: string[];
   raw: string[];
-  opts: Options<Record<string, unknown>>;
+  opts: GlobalOptions;
   unknown: string[];
 }

@@ -1,13 +1,13 @@
 import { exec } from "async-shelljs";
 import chalk from "chalk";
 import { exit } from "node:process";
-import { IDoDevopsCommand } from "src/@types/command";
+import { Command } from "src/@types/command";
 import { logger } from "src/shared/core";
 import { askListQuestion } from "src/shared/interactive";
 import { emoji } from "src/shared/ui";
 import { IMadgeOptions, options } from "./parts/options";
 
-const command: IDoDevopsCommand<IMadgeOptions> = {
+const command: Command<IMadgeOptions> = {
   kind: "madge",
   handler: async ({ opts, argv }) => {
     const log = logger(opts);

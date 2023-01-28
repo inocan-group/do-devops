@@ -10,7 +10,7 @@ import {
   saveUserConfig,
 } from "src/shared/config";
 import { removeOtherLockFiles } from "src/shared/npm";
-import { Options } from "src/@types";
+import { GlobalOptions } from "src/@types";
 import chalk from "chalk";
 
 /**
@@ -23,7 +23,7 @@ import chalk from "chalk";
  * Note: if there's no `package.json` in current directory it will throw an error.
  */
 export async function determinePackageManager(
-  opts: Options<{
+  opts: GlobalOptions<{
     silent: boolean;
     manager?: PackageManagerObservation;
     interactive: boolean;

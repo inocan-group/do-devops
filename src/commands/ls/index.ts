@@ -1,10 +1,10 @@
 /* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
-import { IDoDevopsCommand } from "src/@types/command";
+import { Command } from "src/@types/command";
 import { proxyToPackageManager } from "src/shared/core";
 import { askForDependency } from "src/shared/interactive";
 
-const command: IDoDevopsCommand = {
+const command: Command = {
   kind: "ls",
   handler: async ({ observations, raw, argv }) => {
     if (!observations.has("packageJson")) {

@@ -1,11 +1,11 @@
-import { Options } from "src/@types";
+import { GlobalOptions } from "src/@types";
 import { logger } from "src/shared/core";
 import { askConfirmQuestion, askInputQuestion } from "src/shared/interactive";
 import { git } from "src/shared/git";
 import { installGitIgnore } from "src/shared/install";
 import chalk from "chalk";
 
-export async function installGit(opts: Options<{ silent: boolean }>) {
+export async function installGit(opts: GlobalOptions<{ silent: boolean }>) {
   const log = logger(opts);
   let setupRemote = false;
   let remoteName = "origin";

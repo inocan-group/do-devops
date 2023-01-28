@@ -16,6 +16,7 @@ import { doDevopsVersion, commandAnnouncement, hasArgv, getArgvOption } from "./
 import { hasScript } from "./shared/npm";
 import { CommandParsing } from "./@types/global";
 import { isDevopsError } from "./@type-guards";
+import { Command } from "./@types";
 
 // eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {
@@ -52,11 +53,12 @@ import { isDevopsError } from "./@type-guards";
 
   if (isKnownCommand(cmdName)) {
     const cmdDefn = getCommand(cmdName);
-    let cmdInput: CommandParsing = { ...parseCmdArgs(cmdDefn, remaining), observations };
+    const parsedInput = parseCmdArgs(cmdDefn, remaining);
+    
 
     // Show help on the command
-    if (cmdInput.opts.help) {
-      commandAnnouncement(cmdDefn, cmdInput);
+    if (parsedInput.opts?.help) {
+      commandAnnouncement(cmdDefn, parsedInput);
       
       help(observations, cmdDefn);
       process.exit();
@@ -67,6 +69,7 @@ import { isDevopsError } from "./@type-guards";
       commandAnnouncement(cmdDefn, cmdInput);
       cmdInput = {
         ...cmdInput,
+        observations,
         argv: hasArgv(cmdDefn) ? cmdInput.opts[getArgvOption(cmdDefn)?.name as any] : [],
       } as CommandParsing;
       await cmdDefn.handler(cmdInput);

@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { IOptionDefinition } from "src/@types";
+import { OptionDefn } from "src/@types";
 
 export interface IMadgeOptions {
   /** circular command */
@@ -22,7 +22,7 @@ export interface IMadgeOptions {
   extensions: string;
 }
 
-export const options: IOptionDefinition = {
+export const options: OptionDefn = {
   circular: {
     type: Boolean,
     alias: "c",

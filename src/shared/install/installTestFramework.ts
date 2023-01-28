@@ -1,12 +1,12 @@
 import chalk from "chalk";
-import { TestObservation, Observations, Options } from "src/@types";
+import { TestObservation, Observations, GlobalOptions } from "src/@types";
 import { DevopsError } from "src/errors";
 import { logger } from "src/shared/core";
 import { installDevDep } from "src/shared/npm";
 
 export async function installTestFramework(
   framework: TestObservation,
-  opts: Options,
+  opts: GlobalOptions,
   observations: Observations
 ) {
   const log = logger(observations);

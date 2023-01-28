@@ -5,7 +5,7 @@ import path from "node:path";
 import { IDictionary, INpmInfo, IPackageJson } from "common-types";
 import { format, parseISO } from "date-fns";
 import { table, TableUserConfig } from "table";
-import { DoDevopObservation, Options } from "src/@types";
+import { DoDevopObservation, GlobalOptions } from "src/@types";
 import { getObservations } from "src/shared/observations";
 import {
   convertGitUrlToHttp,
@@ -23,7 +23,7 @@ import { symlinks } from "src/shared/file/utility/symlinks";
 /**
  * if user adds packages to the `pp info [p1] [p2]` this function will respond
  */
-export async function thisRepo(opts: Options, observations: Set<DoDevopObservation>) {
+export async function thisRepo(opts: GlobalOptions, observations: Set<DoDevopObservation>) {
   // const config = await getConfig();
   let npm: INpmInfo | undefined;
   try {

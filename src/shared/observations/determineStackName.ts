@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { DoDevopObservation, IAwsOptions, Options } from "src/@types";
+import { DoDevopObservation, IAwsOptions, GlobalOptions } from "src/@types";
 import { DevopsError } from "src/errors";
 import { logger } from "src/shared/core";
 import { getProjectConfig, saveProjectConfig } from "../config";
@@ -7,7 +7,7 @@ import { askInputQuestion } from "../interactive";
 import { getPackageJson } from "../npm";
 
 export async function determineStackName(
-  opts: Options<IAwsOptions>,
+  opts: GlobalOptions<IAwsOptions>,
   _observations: Set<DoDevopObservation>
 ) {
   const log = logger(opts);

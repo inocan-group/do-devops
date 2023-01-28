@@ -1,7 +1,7 @@
 import commandLineArgs from "command-line-args";
-import { IOptionDefinition } from "src/@types";
-import { ICommandInput, IDoDevopsCommand } from "src/@types/command";
-import { convertOptionsToArray, globalOptions } from "./index";
+import {   OptionDefn } from "src/@types";
+import {  Command, CommandInput, KnownCommand } from "src/@types/command";
+import { convertOptionsToArray, globalOptions, ILogger, logger } from "./index";
 
 /**
  * Given a known command to the CLI, this function will
@@ -9,12 +9,16 @@ import { convertOptionsToArray, globalOptions } from "./index";
  * an `argv` array and `opts` hash to be passed to the
  * command.
  */
-export function parseCmdArgs(cmd: IDoDevopsCommand, incomingArgv: string[]) {
+export function parseCmdArgs<
+  TCmd extends Command
+>(
+  cmd: TCmd, 
+  incomingArgv: string[]
+): CommandInput<TCmd["kind"] & KnownCommand, TCmd["options"]> {
   // to ensure that what we'd see as "argv" from the perspective of a
   // command, we must build an "option" for it
-  const subCommandDefn: IOptionDefinition = {
+  const subCommandDefn: OptionDefn = {
     command: {
-      
         type: String,
         group: "subCommand",
         defaultOption: true
@@ -23,7 +27,7 @@ export function parseCmdArgs(cmd: IDoDevopsCommand, incomingArgv: string[]) {
     },
   };
 
-  const greedyCommandDefn: IOptionDefinition = {
+  const greedyCommandDefn: OptionDefn = {
     argv: {
       type: String,
       group: "argv",
@@ -52,13 +56,24 @@ export function parseCmdArgs(cmd: IDoDevopsCommand, incomingArgv: string[]) {
   // combine "local" and "global" options
   const opts = { ...global, ...local };
 
-  const sc = subCommand ? (cmd.greedy ? subCommand?.command[0] : subCommand?.command) : undefined;
+  const sc: string | undefined = subCommand 
+    ? (cmd.greedy 
+        ? subCommand?.command[0] 
+        : subCommand?.command
+      ) 
+    : undefined;
 
   return {
     subCommand: sc,
-    argv: cmd.greedy ? (sc ? sc?.slice(1) || [] : argv.argv || []) : [],
+    argv: (
+      cmd.greedy 
+      ? (sc ? sc?.slice(1) || [] 
+      : argv.argv || []) : []
+    ) as string[],
     raw: incomingArgv,
     opts,
+    optConfig: cmd.config,
     unknown: _unknown || [],
-  } as Omit<ICommandInput<typeof opts>, "observations">;
+    log: logger(opts) as ILogger
+  } as unknown as CommandInput<TCmd["kind"] & KnownCommand, TCmd["options"]>; 
 }

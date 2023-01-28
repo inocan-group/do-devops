@@ -1,10 +1,10 @@
 /* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
-import { IDoDevopsCommand } from "src/@types/command";
+import { Command } from "src/@types/command";
 import { proxyToPackageManager } from "src/shared/core";
 import { hasScript } from "src/shared/npm";
 
-const command: IDoDevopsCommand = {
+const command: Command = {
   kind: "watch",
   handler: async ({ observations, raw }) => {
     if (!observations.has("packageJson")) {

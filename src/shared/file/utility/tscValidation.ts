@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { spawnSync } from "node:child_process";
-import { Options } from "src/@types";
+import { GlobalOptions } from "src/@types";
 import { DevopsError } from "src/errors";
 import { logger } from "src/shared/core";
 import { emoji } from "src/shared/ui";
@@ -18,7 +18,7 @@ import { getFileComponents } from "./getFileComponents";
  * Errors:
  *  - `file/file-does-not-exist`
  */
-export function tscValidation(filename: string, opts: Options = {}): boolean {
+export function tscValidation(filename: string, opts: GlobalOptions = {}): boolean {
   const log = logger(opts);
   const localTsc = currentDirectory("node_modules/.bin/tsc");
   const localExists = fileExists(localTsc);

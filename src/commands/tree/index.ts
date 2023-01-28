@@ -1,11 +1,11 @@
 /* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
 import { spawnSync } from "node:child_process";
-import { IDoDevopsCommand } from "src/@types/command";
+import { Command } from "src/@types/command";
 import { commandIsAvailable } from "src/shared/file/existence/commandIsAvailable";
 import { emoji } from "src/shared/ui";
 
-const command: IDoDevopsCommand = {
+const command: Command = {
   kind: "tree",
   handler: async ({ observations, raw, opts }) => {
     if (observations.has("cargo")) {

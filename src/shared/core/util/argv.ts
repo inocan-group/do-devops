@@ -1,13 +1,13 @@
 import { OptionDefinition } from "command-line-usage";
-import { IDoDevopsCommand } from "src/@types/command";
-import { IOptionDefinition } from "src/@types/option-types";
+import { Command } from "src/@types/command";
+import { OptionDefn } from "src/@types/option-types";
 
 /**
  * Determines if a given command has an `argv` parameter
  */
-export function hasArgv(cmd: IDoDevopsCommand<any>) {
+export function hasArgv(cmd: Command<any>) {
   return !Object.keys(cmd?.options || {}).every(
-    (k) => !(cmd?.options as IOptionDefinition)[k]?.defaultOption
+    (k) => !(cmd?.options as OptionDefn)[k]?.defaultOption
   );
 }
 
@@ -17,7 +17,7 @@ export function hasArgv(cmd: IDoDevopsCommand<any>) {
  *
  * Returns `undefined` if there is no default option.
  */
-export function getArgvOption(cmd: IDoDevopsCommand<any>) {
+export function getArgvOption(cmd: Command<any>) {
   const o = cmd?.options || {};
   return Object.keys(o).reduce((acc, key) => {
     if (o[key].defaultOption) {

@@ -106,6 +106,7 @@
     "xxhash-wasm": "^1.0.2"
   },
   "devDependencies": {
+    "@type-challenges/utils": "^0.1.1",
     "@types/command-line-args": "^5.2.0",
     "@types/command-line-usage": "^5.0.2",
     "@types/diff": "^5.0.2",

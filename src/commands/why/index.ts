@@ -1,10 +1,10 @@
 /* eslint-disable unicorn/no-process-exit */
 import chalk from "chalk";
-import { IDoDevopsCommand } from "src/@types/command";
+import { Command } from "src/@types/command";
 import { proxyToPackageManager } from "src/shared/core";
 import { pkgDepsInTable } from "src/shared/npm";
 
-const command: IDoDevopsCommand = {
+const command: Command = {
   kind: "why",
   handler: async ({ observations, raw }) => {
     if (raw.length === 0) {

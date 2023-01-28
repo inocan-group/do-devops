@@ -12,11 +12,11 @@ import { getAwsLambdaFunctions } from "src/shared/aws";
 import type { FunctionConfiguration } from "aws-sdk/clients/lambda";
 import { determineRegion } from "src/shared/observations";
 import { functionsApiTable } from "./tables";
-import { Options } from "src/@types";
+import { GlobalOptions } from "src/@types";
 import { write } from "src/shared/file/crud/write";
 import { exit } from "node:process";
 
-export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
+export const handler: DoDevopsHandler<GlobalOptions<IFnsOptions>> = async ({
   unknown: argv,
   opts,
   observations,

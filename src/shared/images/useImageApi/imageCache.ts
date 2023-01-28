@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { IDictionary } from "common-types";
 import { keys } from "native-dash";
-import { Options, IImageCacheRef, IRefreshCacheOptions } from "src/@types";
+import { GlobalOptions, IImageCacheRef, IRefreshCacheOptions } from "src/@types";
 import { IMAGE_CACHE } from "src/constants";
 import { logger } from "../../core";
 import { currentDirectory } from "../../file";
@@ -42,7 +42,7 @@ export function clearCache() {
   MEM_CACHE = {};
 }
 
-export function getFromImageCache(image: string, opts: Options) {
+export function getFromImageCache(image: string, opts: GlobalOptions) {
   const log = logger(opts);
   if (MEM_CACHE[image]) {
     return MEM_CACHE[image];
@@ -58,7 +58,7 @@ export function getFromImageCache(image: string, opts: Options) {
  * then disk) but if not yet available it will create it and make sure
  * the memory and file caches are updated.
  */
-export async function refreshCache(_images: string[], _opts: Options<IRefreshCacheOptions> = {}) {
+export async function refreshCache(_images: string[], _opts: GlobalOptions<IRefreshCacheOptions> = {}) {
   // TODO: bring back once compiling
   // const log = logger(opts);
   const cache = loadImageCache();

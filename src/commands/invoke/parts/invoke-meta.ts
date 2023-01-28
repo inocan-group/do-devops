@@ -1,9 +1,9 @@
-import { IOptionDefinition } from "src/@types/option-types";
+import { OptionDefn } from "src/@types/option-types";
 
 export const description =
   "invoke serverless functions locally, leveraging test data where desired";
 
-export const options: IOptionDefinition = {
+export const options: OptionDefn = {
   stage: {
     type: String,
     typeLabel: "<stage>",

@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { DoDevopsHandler } from "src/@types/command";
-import { IOptionDefinition } from "src/@types/option-types";
+import { OptionDefn } from "src/@types/option-types";
 import { proxyToPackageManager } from "src/shared/core/proxyToPackageManager";
 
 export const defaultConfig = {
@@ -15,7 +15,7 @@ export const description = "Deployment services for {bold Serverless}";
 export const syntax =
   `dd deploy [fn1] [fn2] <options>\n\n${chalk.dim`Note: ${chalk.italic`stating particular functions is optional and if excluded will result in a full deployment of all functions.`}`}`;
 
-export const options: IOptionDefinition = {
+export const options: OptionDefn = {
   interactive: {
     alias: "i",
     type: Boolean,

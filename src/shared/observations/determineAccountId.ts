@@ -1,5 +1,5 @@
 import { isAwsAccountId } from "common-types";
-import { DoDevopObservation, IAwsOptions, Options } from "src/@types";
+import { DoDevopObservation, IAwsOptions, GlobalOptions } from "src/@types";
 import { DevopsError } from "src/errors";
 
 import { getAwsAccountId } from "../aws";
@@ -7,7 +7,7 @@ import { getProjectConfig, saveProjectConfig } from "../config";
 import { askInputQuestion } from "../interactive";
 
 export async function determineAccountId(
-  opts: Options<IAwsOptions>,
+  opts: GlobalOptions<IAwsOptions>,
   _observations: Set<DoDevopObservation>
 ) {
   // const log = logger(opts);

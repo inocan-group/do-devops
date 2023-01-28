@@ -1,12 +1,12 @@
 import { IDictionary } from "common-types";
-import { IAutoindexFile } from "../reference/types";
+import { AutoindexFile } from "../reference/types";
 import { removeExtension } from "../util/removeExtension";
 
 /**
  * Given a set of files and directories that are exportable, this function will
  * boil this down to just the string needed for the autoindex block.
  */
-export function defaultExports(ai: IAutoindexFile, opts: IDictionary = {}) {
+export function defaultExports(ai: AutoindexFile, opts: IDictionary = {}) {
   const file = (file: string) =>
     `export { default as ${removeExtension(file)} } from "./${
       opts.preserveExtension ? removeExtension(file) + ".js" : removeExtension(file)

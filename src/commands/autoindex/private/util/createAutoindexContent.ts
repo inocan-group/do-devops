@@ -5,33 +5,37 @@ import {
   defaultExports,
   END_REGION,
   ExportType,
-  IAutoindexFile,
+  AutoindexFile,
   namedExports,
   namedOffsetExports,
   START_REGION,
   timestamp,
 } from "../index";
 import { generateSfcExports } from "../export-formats/generateSfcExports";
-import { Options } from "src/@types/global";
+import { GlobalOptions } from "src/@types/global";
 
 export function createAutoindexContent(
-  indexFile: IAutoindexFile,
-  opts: Options<IAutoindexOptions>
+  indexFile: AutoindexFile,
+  opts: GlobalOptions<IAutoindexOptions>
 ) {
   let autoIndexContent = "";
 
   switch (indexFile.exportType) {
-    case ExportType.default:
+    case ExportType.default: {
       autoIndexContent = defaultExports(indexFile, opts);
       break;
-    case ExportType.namedOffset:
+    }
+    case ExportType.namedOffset: {
       autoIndexContent = namedOffsetExports(indexFile, opts);
       break;
-    case ExportType.named:
+    }
+    case ExportType.named: {
       autoIndexContent = namedExports(indexFile, opts);
       break;
-    default:
+    }
+    default: {
       throw new DevopsError(`Unknown export type: ${indexFile.exportType}!`, "invalid-export-type");
+    }
   }
 
   return `${START_REGION}

@@ -1,7 +1,7 @@
-import { IDoDevopsCommand } from "src/@types/command";
+import { Command } from "src/@types/command";
 import { handler, description, options } from "./parts";
 
-const command: IDoDevopsCommand = {
+const command: Command = {
   kind: "fns",
   handler,
   description,

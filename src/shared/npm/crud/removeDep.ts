@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/no-process-exit */
 
 import { omit } from "native-dash";
-import { DoDevopObservation, Options } from "src/@types";
+import { DoDevopObservation, GlobalOptions } from "src/@types";
 import { logger } from "src/shared/core";
 import { determinePackageManager } from "src/shared/observations";
 import { emoji } from "src/shared/ui";
@@ -15,7 +15,7 @@ import chalk from "chalk";
  * The dep removed can be any of the dependency types: _prod, dev, optional, or peer_.
  */
 export async function removeDep(
-  opts: Options,
+  opts: GlobalOptions,
   observations: Set<DoDevopObservation>,
   ...packages: string[]
 ) {

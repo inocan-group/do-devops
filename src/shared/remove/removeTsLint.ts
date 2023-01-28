@@ -1,6 +1,6 @@
-import { Options, Observations } from "src/@types";
+import { GlobalOptions, Observations } from "src/@types";
 import { removeDep } from "src/shared/npm";
 
-export async function removeTslint(opts: Options, observations: Observations) {
+export async function removeTslint(opts: GlobalOptions, observations: Observations) {
   await removeDep(opts, observations, "tslint");
 }

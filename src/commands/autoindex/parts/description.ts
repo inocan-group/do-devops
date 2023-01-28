@@ -1,9 +1,9 @@
 
-import { IDoDevopsCommand } from "src/@types";
+import { Command } from "src/@types";
 // const autoindex = chalk.bgWhite.black`autoindex`;
 // const autoindexComment = chalk.bgWhiteBright.blackBright`// autoindex`;
 
-export const description: IDoDevopsCommand["description"] = {
+export const description: Command["description"] = {
   short: `Automates the building of index files`,
   complete: `Automates the building of index files`
 };

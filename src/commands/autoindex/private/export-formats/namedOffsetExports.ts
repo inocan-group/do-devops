@@ -1,11 +1,11 @@
 import { IAutoindexOptions } from "../../parts";
-import { IAutoindexFile, removeExtension } from "../index";
+import { AutoindexFile, removeExtension } from "../index";
 
 /**
  * Given a set of files and directories that are exportable, this function will
  * boil this down to just the string needed for the autoindex block.
  */
-export function namedOffsetExports(ai: IAutoindexFile, opts: Partial<IAutoindexOptions> = {}) {
+export function namedOffsetExports(ai: AutoindexFile, opts: Partial<IAutoindexOptions> = {}) {
   const file = (file: string) =>
     `export * as ${removeExtension(file)} from "./${
       opts.preserveExtension ? removeExtension(file) + ".js" : removeExtension(file)

@@ -3,7 +3,7 @@ import { emoji } from "src/shared/ui";
 import { hasShellCommandInPath } from "src/shared/observations/hasShellCommandInPath";
 import { exit } from "node:process";
 import { ICertOptions } from "./options";
-import { Options } from "src/@types/global";
+import { GlobalOptions } from "src/@types/global";
 import { execSync } from "node:child_process";
 import { askInputQuestion } from "src/shared/interactive";
 import { nslookup } from "src/shared/network";
@@ -223,7 +223,7 @@ export async function cert_csr(o: ICertOptions) {
   }
 }
 
-export async function createCA(o: Options<ICertOptions>) {
+export async function createCA(o: GlobalOptions<ICertOptions>) {
   validateOpenSsl();
 
   await rsa(o);
@@ -240,7 +240,7 @@ export function verify_pem_cert(pemFile: string): [boolean, null | Error] {
   }
 }
 
-export async function createCertificate(o: Options<ICertOptions>) {
+export async function createCertificate(o: GlobalOptions<ICertOptions>) {
   validateOpenSsl();
   o.name = o.name || (await askInputQuestion("what is the name of the server?"));
   o.ssl_algo = undefined; // no signature needed
@@ -253,12 +253,12 @@ export async function createCertificate(o: Options<ICertOptions>) {
   // await pem_to_pfx(pemFile, o);
 }
 
-export async function createSSH(o: Options<ICertOptions>) {
+export async function createSSH(o: GlobalOptions<ICertOptions>) {
   validateSshKeygen();
   await ssh(o);
 }
 
-export async function certInfo(_o: Options<ICertOptions>) {
+export async function certInfo(_o: GlobalOptions<ICertOptions>) {
   console.error(`- sorry but this has not been implemented yet`);
   exit(0);
 }

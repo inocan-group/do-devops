@@ -1,4 +1,4 @@
-import { Options, Observations, PackageManagerObservation } from "src/@types";
+import { GlobalOptions, Observations, PackageManagerObservation } from "src/@types";
 import { DevopsError } from "src/errors";
 import { logger, proxyToPackageManager } from "src/shared/core";
 import { askListQuestion } from "src/shared/interactive";
@@ -6,7 +6,7 @@ import { saveProjectConfig } from "src/shared/config";
 import chalk from "chalk";
 
 export async function installPackageManager(
-  opts: Options<{ silent: boolean; manager?: PackageManagerObservation }>,
+  opts: GlobalOptions<{ silent: boolean; manager?: PackageManagerObservation }>,
   observations: Observations
 ) {
   const log = logger(opts);
