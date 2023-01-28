@@ -13,7 +13,7 @@ import { getArgvOption, hasArgv } from "./argv";
 /**
  * Gets _finalized_ meta information about the specific functions where being
  * _finalized_ indicates that dynamic values have been resolved to static values
- * by passing in the _observervations_ and parsed _options_ available at this time
+ * by passing in the _observations_ and parsed _options_ available at this time
  */
 export function finalizeCommandDefinition(
   cmdDefn: IDoDevopsCommand,
@@ -34,7 +34,7 @@ export function finalizeCommandDefinition(
     ? cmdDefn.subCommands(observations, options)
     : cmdDefn.subCommands;
 
-  const argv = hasArgv(cmdDefn) ? chalk.italic.dim` argv[]` : "";
+  const argv = hasArgv(cmdDefn) ? ` [${chalk.dim`argv`}]` : "";
   const argvStatic = chalk.bold.blue("[argv]:");
   console.log({argvOption: getArgvOption(cmdDefn)?.description, argvStatic});
   
