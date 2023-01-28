@@ -34,9 +34,12 @@ export function finalizeCommandDefinition(
     ? cmdDefn.subCommands(observations, options)
     : cmdDefn.subCommands;
 
-  const argv = hasArgv(cmdDefn) ? chalk.italic.dim` argv[]}}` : "";
+  const argv = hasArgv(cmdDefn) ? chalk.italic.dim` argv[]` : "";
+  const argvStatic = chalk.bold.blue("[argv]:");
+  console.log({argvOption: getArgvOption(cmdDefn)?.description, argvStatic});
+  
   const argvDescription = getArgvOption(cmdDefn)?.description
-    ? `\n\n\t\t${chalk.bold.blue`[argv]:`} ${getArgvOption(cmdDefn)?.description}`
+    ? `\n\n\t\t${argvStatic} ${getArgvOption(cmdDefn)?.description}`
     : "";
 
   const subCommandSyntax =
@@ -51,7 +54,7 @@ export function finalizeCommandDefinition(
     handler: cmdDefn.handler,
     syntax:
       cmdDefn.syntax ||
-      `dd ${cmdDefn.kind}${subCommandSyntax}${argv} [${chalk.italic`options`}]${argvDescription}`,
+      `dd ${cmdDefn.kind}${subCommandSyntax}${argv} [${chalk.dim.italic`options`}]${argvDescription}`,
     description,
     subCommands,
     options: { ...cmdDefn.options, ...globalOptions },

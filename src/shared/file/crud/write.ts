@@ -5,6 +5,7 @@ import { IWriteOptions } from "src/@types";
 import { interpolateFilePath } from "../../../shared/file/helpers";
 import path from "node:path";
 import { isClassification } from "../../../@type-guards";
+import chalk from "chalk";
 
 /**
  * **write**
@@ -31,7 +32,7 @@ export function write(filename: string, data: any, options: IWriteOptions = {}) 
 
     filename = interpolateFilePath(filename);
 
-    // avoid collisions if offset avoidence is enabled
+    // avoid collisions if offset avoidance is enabled
     let offset: number | undefined;
     while (options.offsetIfExists && fileExists(filename)) {
       const before = new RegExp(`-${offset}.(.*)$`);

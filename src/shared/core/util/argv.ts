@@ -3,7 +3,7 @@ import { IDoDevopsCommand } from "src/@types/command";
 import { IOptionDefinition } from "src/@types/option-types";
 
 /**
- * Determines if a given commmand has an `argv` parameter
+ * Determines if a given command has an `argv` parameter
  */
 export function hasArgv(cmd: IDoDevopsCommand<any>) {
   return !Object.keys(cmd?.options || {}).every(

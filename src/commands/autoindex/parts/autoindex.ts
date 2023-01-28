@@ -20,6 +20,7 @@ import { getMonoRepoPackages, getSubdirectories } from "src/shared/file";
  * the file's current directory
  */
 export const handler: DoDevopsHandler<IAutoindexOptions> = async ({ opts, observations, argv }) => {
+
   // the sfc flag on CLI is inverted logically
   opts = {
     ...opts,

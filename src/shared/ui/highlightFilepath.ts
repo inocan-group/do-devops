@@ -37,5 +37,5 @@ export function highlightFilepath(
       ? chalk[highForeground]`${file}}`
       : `${file}}`;
 
-  return `${filePath}${fileName}`;
+  return `${fp}${fileName}`;
 }

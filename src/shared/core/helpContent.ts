@@ -18,17 +18,18 @@ import { getObservations } from "../observations";
  * command. If not provided a default syntax will be used.
  */
 export function getSyntax(fn?: string): string {
-  if (!fn) {
-    return "dd [command] <options>";
-  } else {
+  if (fn) {
     const validCommands = keys(commands);
     if ((validCommands as string[]).includes(fn)) {
       const defn: IDoDevopsCommand<any> = commands[fn as keyof typeof commands];
       const hasSubCommands = defn?.subCommands ? true : false;
       return defn.syntax ?? `do ${fn} ${hasSubCommands ? "[command] " : ""}`;
     } else {
-      return `dd [command] <options>\nnote: the command {red ${fn}} is not recognized!`;
+      const fnName = chalk.red(fn);
+      return `dd [command] <options>\nnote: the command ${fnName} is not recognized!`;
     }
+  } else {
+    return "dd [command] <options>";
   }
 }
 

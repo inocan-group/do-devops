@@ -3,7 +3,6 @@ lockfileVersion: 5.4
 overrides:
   simple-git@<3.3.0: '>=3.3.0'
   simple-git@<3.5.0: '>=3.5.0'
-  sharp@<0.30.5: '>=0.30.5'
 
 specifiers:
   '@types/command-line-args': ^5.2.0
@@ -2364,7 +2363,7 @@ packages:
     engines: {node: '>=0.10.0'}
 
   /events/1.1.1:
-    resolution: {integrity: sha512-kEcvvCBByWXGnZy6JUlgAp2gBIUjfCAV6P6TgT1/aaQKcmuAEC4OZTV1I4EWQLz2gxZw76atuVyvHhTxvi0Flw==}
+    resolution: {integrity: sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=}
     engines: {node: '>=0.4.x'}
     dev: false
 
@@ -4920,7 +4919,7 @@ packages:
       punycode: 2.3.0
 
   /url/0.10.3:
-    resolution: {integrity: sha512-hzSUW2q06EqL1gKM/a+obYHLIO6ct2hwPuviqTTOcfFVc61UbfJ2Q32+uGL/HCPxKqrdGB5QUwIe7UqlDgwsOQ==}
+    resolution: {integrity: sha1-Ah5NnHcF8hu/N9A861h2dAJ3TGQ=}
     dependencies:
       punycode: 1.3.2
       querystring: 0.2.0

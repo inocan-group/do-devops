@@ -10,23 +10,26 @@ import { doDevopsVersion } from "./doDevopsVersion";
 export function commandAnnouncement(cmdDefn?: IDoDevopsCommand, cmd?: ICommandParsing) {
   const log = logger(cmd ? cmd.opts : {});
   const version = doDevopsVersion();
-
-  const argv = cmd && cmd.argv.length > 0 ? ` ${chalk.italic(cmd.argv.join(" "))}` : "";
-
+  const argv = cmd && cmd.argv.length > 0 
+    ? chalk.italic` ${cmd.argv.join(" ")}` 
+    : "";
+  
   const subCmd = cmd && cmd.subCommand ? chalk.dim`  ${cmd.subCommand}` : "";
 
   const helpText =
     (!cmdDefn && !cmd) || (cmd && cmd.opts?.help)
       ? cmdDefn
-        ? chalk.gray`  [help, v${version}]`
-        : chalk.gray`  v${version}`
+        ? ` [ help, v${version} ]`
+        : `  v${version}`
       : "";
 
+  const brand = cmdDefn 
+    ? chalk.green.italic.bold(`${cmdDefn.kind}${subCmd}${argv}`)
+    : chalk.green.italic.bold("Help");
+    
   log.info(
     chalk.bold(
-      `\ndo-devops ${chalk.green.italic.bold(
-        cmdDefn ? `${cmdDefn.kind}${subCmd}${argv}` : "Help"
-      )}${helpText}\n`
+      `\ndo-devops ${brand}${chalk.gray(helpText)}\n`
     )
   );
 }

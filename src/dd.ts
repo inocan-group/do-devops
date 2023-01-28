@@ -57,6 +57,7 @@ import { isDevopsError } from "./@type-guards";
     // Show help on the command
     if (cmdInput.opts.help) {
       commandAnnouncement(cmdDefn, cmdInput);
+      
       help(observations, cmdDefn);
       process.exit();
     }

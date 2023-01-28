@@ -15,7 +15,7 @@ import {
 } from "src/shared/git";
 import { askConfirmQuestion, resolvePackageManagerConflict } from "src/shared/interactive";
 import { getExternalPackageJson, getPackageJson } from "src/shared/npm";
-import { dim, emoji, green } from "src/shared/ui";
+import {  emoji, green } from "src/shared/ui";
 import { monorepoInfo } from "./components/monorepo";
 import { currentDirectory } from "src/shared/file/base-paths/currentDirectory";
 import { symlinks } from "src/shared/file/utility/symlinks";

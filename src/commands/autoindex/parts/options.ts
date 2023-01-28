@@ -1,10 +1,12 @@
-import chalk from "chalk";
 import { IOptionDefinition } from "src/@types/option-types";
 
 export interface IAutoindexOptions {
   config: boolean;
   add: string;
   glob: string;
+  /**
+   * Reports what would happen _if_ you were to run the command without actually making any changes
+   */
   dryRun: boolean;
   /**
    * boolean flag to indicate whether VueJS SFC files should have their default
@@ -35,7 +37,7 @@ export const options: IOptionDefinition = {
     multiple: true,
     type: String,
     group: "local",
-    description: `${chalk.italic`optionally`} state one or more explicit autoindex files to evaluate instead of glob patterns`,
+    description: `optionally state one or more explicit autoindex files to evaluate instead of glob patterns`,
     typeLabel: "string[]",
   },
 
@@ -71,7 +73,7 @@ export const options: IOptionDefinition = {
     alias: "w",
     type: Boolean,
     group: "local",
-    description: `watches for changes and runs ${chalk.italic`autoindex`} when detected`,
+    description: `watches for changes and runs autoindex when detected`,
   },
   force: {
     alias: "f",
@@ -84,6 +86,6 @@ export const options: IOptionDefinition = {
     alias: "p",
     type: Boolean,
     group: "local",
-    description: `exports -- by default -- will ${chalk.italic`not`} include the file's ${chalk.blue`.js`} extension but sometimes with ES modules you want to include this. If you do then you should set this flag.`,
+    description: `by default exports do not include the file's .js extension but sometimes with ES modules you want to include this. If you do then you should set this flag.`,
   },
 };
