@@ -39,13 +39,14 @@ export async function processFiles(
   // eslint-disable-next-line prefer-const
   let { contentFiles, indexFiles, nonAutoindexFiles } = group;
   const { h32 } = await xxhash();
+  const totalCount = indexFiles.length + nonAutoindexFiles.length;
 
   if (indexFiles.length === 0) {
     log.info(`- ${emoji.confused} no ${chalk.italic`autoindex`} files found in this package`);
     return;
   } else {
     log.info(
-      `- ${chalk.yellow.bold(indexFiles.length)} autoindex files found (${chalk.dim`out of ${chalk.yellow(indexFiles.length + nonAutoindexFiles.length)}`} candidates)`
+      `- ${chalk.yellow.bold(indexFiles.length)} autoindex files found (${chalk.dim`out of ${chalk.yellow(String(totalCount))}`} candidates)`
     );
     log.whisper(`- index files were: ${chalk.gray`${indexFiles.join(", ")}}`}`);
   }
