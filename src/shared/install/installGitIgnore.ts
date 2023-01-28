@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { Options } from "src/@types";
 import { logger } from "src/shared/core";
 import { templateFileCopy } from "src/shared/file";
@@ -17,6 +18,6 @@ export async function installGitIgnore(opts: Options<{ silent: boolean }>) {
   }
   const copied = await templateFileCopy("git/.gitignore", ".gitignore");
   if (copied) {
-    log.info(`{gray - created a {blue .gitignore} file in the root directory }`);
+    log.info(chalk.gray` - created a ${chalk.blue(".gitignore")} file in the root directory`);
   }
 }

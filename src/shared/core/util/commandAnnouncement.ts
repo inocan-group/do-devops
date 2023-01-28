@@ -5,7 +5,7 @@ import { logger } from "../logger";
 import { doDevopsVersion } from "./doDevopsVersion";
 
 /**
- * Annouces the command being executed to the console
+ * Announces the command being executed to the console
  */
 export function commandAnnouncement(cmdDefn?: IDoDevopsCommand, cmd?: ICommandParsing) {
   const log = logger(cmd ? cmd.opts : {});
@@ -18,8 +18,8 @@ export function commandAnnouncement(cmdDefn?: IDoDevopsCommand, cmd?: ICommandPa
   const helpText =
     (!cmdDefn && !cmd) || (cmd && cmd.opts?.help)
       ? cmdDefn
-        ? `{gray  [help, v${version}]}`
-        : `{gray  v${version}}`
+        ? chalk.gray`  [help, v${version}]`
+        : chalk.gray`  v${version}`
       : "";
 
   log.info(

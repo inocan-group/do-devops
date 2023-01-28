@@ -3,6 +3,7 @@ import { DevopsError } from "src/errors";
 import { logger, proxyToPackageManager } from "src/shared/core";
 import { askListQuestion } from "src/shared/interactive";
 import { saveProjectConfig } from "src/shared/config";
+import chalk from "chalk";
 
 export async function installPackageManager(
   opts: Options<{ silent: boolean; manager?: PackageManagerObservation }>,
@@ -27,7 +28,7 @@ export async function installPackageManager(
 
   await saveProjectConfig({ general: { pkgManager: manager } });
   log.whisper(
-    `{gray - ${manager} package manager saved to this repos {blue .do-devops.json} config file}`
+    chalk.gray` - ${manager} package manager saved to this repos {blue .do-devops.json} config file`
   );
   await proxyToPackageManager("install", observations);
 }

@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-process-exit */
+import chalk from "chalk";
 import { IDoDevopsCommand } from "src/@types/command";
 import { proxyToPackageManager } from "src/shared/core";
 import { pkgDepsInTable } from "src/shared/npm";
@@ -11,7 +13,7 @@ const command: IDoDevopsCommand = {
       );
       if (observations.has("packageJson")) {
         console.log(
-          `{gray - you often want to target a repo that is listed as a dependency in this repo.\n- The deps in this repo are ({italic excluding dev deps}):}\n`
+          chalk.gray` - you often want to target a repo that is listed as a dependency in this repo.\n- The deps in this repo are ({italic excluding dev deps}):}\n`
         );
         console.log(pkgDepsInTable({ ignoreDevDeps: true }));
       }

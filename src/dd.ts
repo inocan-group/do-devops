@@ -73,12 +73,11 @@ import { isDevopsError } from "./@type-guards";
         const plural = cmdInput.unknown.length === 1 ? false : true;
         const preposition = cmdInput.unknown.length === 1 ? "was" : "were";
         console.error(
-          `- Note: {italic there ${preposition} ${
+          `- Note: ${chalk.italic`there ${preposition}`} ${
             cmdInput.unknown.length
-          } {italic unknown} parameter${
+          } ${chalk.italic`unknown`} parameter${
             plural ? "s" : ""
-          } received (and ignored): {gray ${cmdInput.unknown.join(", ")}}}`
-        );
+          } received (and ignored): ${chalk.gray(cmdInput.unknown.join(", "))}`;
       }
     } catch (error) {
       console.error(
@@ -106,7 +105,7 @@ import { isDevopsError } from "./@type-guards";
       proxyToPackageManager(cmdName, observations, mainCommand._unknown);
     } else {
       const noPkgJsonMsg =
-        typeof useScriptProxy === "undefined"
+        useScriptProxy === undefined
           ? ""
           : `\n\n{dim - Note: you're in a directory with no {italic package.json} file so if you\nwere trying to proxy a script please move to the right directory first.}`;
       console.log(

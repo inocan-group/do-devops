@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { TestObservation, Observations, Options } from "src/@types";
 import { DevopsError } from "src/errors";
 import { logger } from "src/shared/core";
@@ -61,7 +62,7 @@ export async function installTestFramework(
 
   if (installed) {
     log.whisper(
-      `{gray - installed all {italic dev dependencies} for {bold {green ${framework}}}}`
+      chalk.gray` - installed all {italic dev dependencies} for ${chalk.bold.green(framework)}`
     );
   }
 

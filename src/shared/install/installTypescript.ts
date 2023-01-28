@@ -5,6 +5,7 @@ import { askConfirmQuestion } from "src/shared/interactive";
 import { logger } from "src/shared/core";
 import { emoji } from "src/shared/ui";
 import { templateDirCopy } from "src/shared/file";
+import chalk from "chalk";
 
 /**
  * Installs and configures both **eslint** and **prettier**
@@ -33,11 +34,11 @@ export async function installTypescript(
     log.shout(`- ${emoji.poop} there was a problem installing the Typescript dev dependencies`);
     return false;
   }
-  log.whisper(`{gray - all {italic typescript} dependencies have been installed}`);
+  log.whisper(chalk.gray` - all {italic typescript} dependencies have been installed`);
 
   await templateDirCopy("typescript", "/");
 
-  log.whisper(`{gray - tsconfig file saved to root}`);
+  log.whisper(chalk.gray` - tsconfig file saved to root`);
 
   log.info(`- ${emoji.party} {blue typescript} has been installed and configured\n`);
 

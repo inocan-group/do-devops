@@ -1,4 +1,5 @@
 import { exec } from "async-shelljs";
+import chalk from "chalk";
 import { exit } from "node:process";
 import { IDoDevopsCommand } from "src/@types/command";
 import { logger } from "src/shared/core";
@@ -28,7 +29,7 @@ const command: IDoDevopsCommand<IMadgeOptions> = {
         log.info(
           `- ${emoji.warn} you passed in {red ${opts.layout}} for a {italic layout}; this will likely not be recognized by {blue madge} CLI`
         );
-        log.info(`{gray - valid layouts include: {italic ${valid.join(", ")}}}`);
+        log.info(chalk.gray`{ - valid layouts include: {italic ${valid.join(", ")}}}`);
       }
       flags.push(`--layout ${opts.layout}`);
     }

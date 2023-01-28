@@ -54,7 +54,7 @@ export function summarize(rules: IImageRule[], tools: IImageTools) {
     const sourceFromRule = sourceImages.filter((i) => i?.rule === r.name);
     const convertedFromRule = convertedImages.filter((i) => i?.rule === r.name);
     log.info(
-      `    - ${r.name}: {dim source: {gray "}${r.source}}${chalk.gray`"`}, destination: }${chalk.gray`"`}${r.destination}}${chalk.gray`"`}, glob: }${chalk.gray`"`}${r.glob}${chalk.gray`"`}, source images: ${sourceFromRule.length}, optimized images: ${convertedFromRule.length}}`
+      `    - ${r.name}: ${chalk.dim(" source: ")}${chalk.gray(r.source)}}${chalk.gray`"`}, destination: }${chalk.gray`"`}${r.destination}}${chalk.gray`"`}, glob: }${chalk.gray`"`}${r.glob}${chalk.gray`"`}, source images: ${sourceFromRule.length}, optimized images: ${convertedFromRule.length}`
     );
   }
 }

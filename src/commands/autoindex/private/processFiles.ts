@@ -23,10 +23,8 @@ import { getFileComponents } from "src/shared/file/utility/getFileComponents";
 import { getSubdirectories } from "src/shared/file/utility/getSubdirectories";
 import { AutoindexGroupDefinition } from "../parts/getGlobs";
 import { cwd } from "node:process";
-import { directoryFiles, repoDirectory } from "src/shared/file";
+import { directoryFiles } from "src/shared/file";
 import { relative } from "node:path";
-import { hasDependency, hasDevDependency } from "src/shared/npm";
-import { spawnSync } from "node:child_process";
 
 /**
  * Reach into each file and look to see if it is a "autoindex" file; if it is
@@ -34,10 +32,10 @@ import { spawnSync } from "node:child_process";
  */
 export async function processFiles(
   group: AutoindexGroupDefinition,
-  opts: Options<IAutoindexOptions>,
+  options: Options<IAutoindexOptions>,
   _o: Observations
 ) {
-  const log = logger(opts);
+  const log = logger(options);
   // eslint-disable-next-line prefer-const
   let { contentFiles, indexFiles, nonAutoindexFiles } = group;
   const { h32 } = await xxhash();
@@ -75,7 +73,7 @@ export async function processFiles(
 
     contentFiles = filesAtSameLevel.filter(
       (f) =>
-        (f.endsWith(".js") || f.endsWith(".ts") || (f.endsWith(".vue") && opts.sfc)) &&
+        (f.endsWith(".js") || f.endsWith(".ts") || (f.endsWith(".vue") && options.sfc)) &&
         !f.endsWith("index.js") &&
         !f.endsWith("index.ts")
     );
@@ -92,11 +90,11 @@ export async function processFiles(
     }
 
     log.whisper(
-      `- content files are:\n\t{gray ${contentFiles
+      `- content files are:\n\t${chalk.gray(contentFiles
         .map(
           (f) => `${highlightFilepath(relative(cwd(), f))} [${noExports.includes(f) ? "x" : "✓"}]`
         )
-        .join("\n\t")}}`
+        .join("\n\t"))}`
     );
 
     if (noExports.length > 0) {
@@ -109,7 +107,7 @@ export async function processFiles(
         );
       } else {
         log.info(
-          `- the directory ${chalk.blue(dir)} had ${chalk.yellow(contentFiles.length)} files which ${chalk`could`} have had export symbols but ${chalk.yellow(noExports.length)} ${chalk.bold`did not`}.`
+          `- the directory ${chalk.blue(dir)} had ${chalk.yellow(contentFiles.length)} files which ${chalk.italic(`could`)} have had export symbols but ${chalk.yellow(noExports.length)} ${chalk.bold`did not`}.`
         );
       }
     }
@@ -130,25 +128,25 @@ export async function processFiles(
       const child = ts || js;
       if (!existsSync(child)) {
         log.whisper(
-          `{gray - will not include the {blue ${d}} directory because there is {italic {red no index file}}}`
-        );
+          chalk.gray(` - will not include the ${chalk.blue(d)}} directory because there is {italic {red no index file}}}`
+        ));
         noIndexFile.push(d);
         return acc;
       } else if (isOrphanedIndexFile(child)) {
         log.whisper(
-          `{gray - will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
-        );
+          chalk.gray(` - will not include the directory ${chalk.blue(d)}} because it is configured as an {italic {red orphan}}}`
+        ));
         orphans.push(d);
         return acc;
       } else if (!explicitExcludes.every((e) => d !== e)) {
         log.whisper(
-          `{gray - will not include the directory {blue ${d}} because it is configured as an {italic {red orphan}}}`
-        );
+          chalk.gray(` - will not include the directory ${chalk.blue(d)}} because it is configured as an {italic {red orphan}}}`
+        ));
         explicitDirRemoval.push(d);
         return acc;
       } else if (!fileHasExports(child)) {
         log.whisper(
-          `{gray - will not include the directory {blue ${d}} because it has {italic {red no exports}}}`
+          chalk.gray` - will not include the directory ${chalk.blue(d)}} because it has {italic {red no exports}}}`
         );
         noExportDir.push(d);
         return acc;
@@ -161,7 +159,7 @@ export async function processFiles(
     const priorHash = isNewAutoindexFile(indexFileContent)
       ? undefined
       : getEmbeddedHashCode(indexFileContent);
-    const hashCode = h32(
+    const hashCode = String(h32(
       JSON.stringify({
         fileSymbols,
         dirs,
@@ -171,10 +169,10 @@ export async function processFiles(
         exportType,
         explicitDirRemoval,
         noExportDir,
-        sfc: opts.sfc || false,
+        sfc: options.sfc || false,
       }),
       0xcafebabe
-    );
+    ));
 
     const content: IAutoindexFile = {
       exportType,
@@ -184,47 +182,52 @@ export async function processFiles(
     };
 
     const hasChanged =
-      priorHash !== hashCode || opts.force === true || hasOldHelpContent(indexFileContent);
+      priorHash !== hashCode || options.force === true || hasOldHelpContent(indexFileContent);
 
     // if change to hash code or has the old help content then re-write index file
     if (hasChanged) {
       action = isNewAutoindexFile(indexFileContent) ? "new-file" : "updated";
-      const result = createAutoindexContent(content, opts);
-      // const prettierConfig = await prettier.resolveConfig(join(cwd(), indexFilename));
-
+      const result = createAutoindexContent(content, options);
       const fileContent = action === "new-file" ? result : replaceRegion(indexFileContent, result);
-
-      writeFile(indexFilename, fileContent, "utf8");
-      if (hasDependency("eslint") || hasDevDependency("eslint")) {
-        spawnSync("eslint", [indexFilename, "--fix"], {
-          cwd: repoDirectory(),
-        });
+      // WRITE INDEX FILE
+      if (options.dryRun) {
+        log.dryRun(`index file "${indexFilename}" would be written because: ${action}`);
+      } else {
+        writeFile(indexFilename, fileContent, "utf8");
       }
     } else {
       action = "unchanged";
+      if(options.dryRun) {
+        log.dryRun(chalk.dim(`index file "${chalk.bold(indexFilename)}" will not be changed as it has not changed`));
+      }
     }
 
-    switch (action) {
-      case "new-file": {
-        log.info(
-          `- autoindex file ${highlightFilepath(indexFilename)} is a {italic {bold new}} file`
-        );
-        break;
-      }
-      case "updated": {
-        log.info(
-          `- autoindex file ${highlightFilepath(indexFilename)} was {italic {bold updated}}.`
-        );
-        break;
-      }
-      case "unchanged": {
-        const talk = opts.explicitFiles ? log.info : log.whisper;
-        talk(
-          `${chalk.dim(` - autoindex file ${highlightFilepath(
-            indexFilename
-          )} was left ${chalk.italic.bold(" unchanged")}.`)}`
-        );
-        break;
+    if(!options.dryRun) {
+      switch (action) {
+        case "new-file": {
+          log.info(
+            `- autoindex file ${highlightFilepath(indexFilename)} is a ${chalk.bold.italic("new")}} file")`
+          );
+          break;
+        }
+        case "updated": {
+          log.info(
+            `- autoindex file ${highlightFilepath(indexFilename)} was ${chalk.bold.italic("updated")}.`
+          );
+          break;
+        }
+        case "unchanged": {
+          const talk = options.explicitFiles 
+            ? log.info 
+            : log.whisper;
+  
+          talk(
+            `${chalk.dim(` - autoindex file ${highlightFilepath(
+              indexFilename
+            )} was left ${chalk.italic.bold(" unchanged")}.`)}`
+          );
+          break;
+        }
       }
     }
   }

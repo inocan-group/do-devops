@@ -9,6 +9,7 @@ export type IDoDevopsGlobalOptions = typeof globalOptions;
 export type Options<T extends object = {}> = {
   quiet?: boolean;
   verbose?: boolean;
+  dryRun?: boolean;
   help?: boolean;
 } & Partial<T>;
 

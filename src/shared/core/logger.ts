@@ -5,6 +5,8 @@ let options: Options;
 export type ILogger = {
   info(...args: any[]): void;
   shout(...args: any[]): void;
+
+  dryRun(...args: any[]): void;
   whisper(...args: any[]): void;
 };
 
@@ -26,6 +28,12 @@ export function logger(opts?: Options): ILogger {
     },
     shout(...args: any[]) {
       console.error(...args);
+    },
+    dryRun(...args: any[]) {
+      if(options.dryRun) {
+        args[0] = `- [DRY RUN] ${args[0]}`;
+        console.log(...args);
+      }
     },
     whisper(...args: any[]) {
       if (options.verbose) {

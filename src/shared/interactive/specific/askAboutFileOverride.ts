@@ -42,7 +42,7 @@ export async function askAboutFileOverwrite(
           log.info(
             `- the editor command "${editorCommand}" has been saved to your user configuration.`
           );
-          log.info(`{gray - the user config file is located at {blue src/.do-devops.json}}`);
+          log.info(chalk.gray` - the user config file is located at ${chalk.blue`src/.do-devops.json}`}`);
         }
       }
       if (editorCommand) {

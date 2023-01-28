@@ -5,6 +5,7 @@ export interface IAutoindexOptions {
   config: boolean;
   add: string;
   glob: string;
+  dryRun: boolean;
   /**
    * boolean flag to indicate whether VueJS SFC files should have their default
    * export added to the index file.
@@ -47,6 +48,11 @@ export const options: IOptionDefinition = {
     type: Boolean,
     group: "local",
     description: `by default VueJS SFC files will be extracted as a default import but this can be turned off with this flag`,
+  },
+  dryRun: {
+    type: Boolean,
+    group: "local",
+    description: `allows getting a report on changes without actually making the changes`
   },
   dir: {
     type: String,

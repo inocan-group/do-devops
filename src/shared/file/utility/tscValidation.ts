@@ -31,7 +31,7 @@ export function tscValidation(filename: string, opts: Options = {}): boolean {
 
   const command = `${tsc} ${filename} --noEmit`;
   log.whisper(
-    `{gray - validating the "${filename}" file with the Typescript {bold {yellow tsc}} compiler}`
+    chalk.gray` - validating the "${filename}" file with the Typescript {bold {yellow tsc}} compiler`
   );
   try {
     spawnSync(command, { stdio: "inherit" });

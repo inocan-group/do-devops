@@ -8,6 +8,7 @@ import { removeTslint } from "src/shared/remove";
 import { logger } from "src/shared/core";
 import { templateDirCopy, templateFileCopy } from "../file";
 import { getObservations } from "../observations";
+import chalk from "chalk";
 
 export async function installBuildSystem(opts: Options, observations: Observations) {
   const log = logger(opts);
@@ -97,7 +98,7 @@ export async function installBuildSystem(opts: Options, observations: Observatio
   // https://swc.rs/
 
   await templateDirCopy("typescript", "/");
-  log.whisper(`{gray - {blue tsconfig} files transferred}`);
+  log.whisper(chalk.gray` - ${chalk.blue("tsconfig")} files transferred}`);
 
   const installed = await installDevDep(
     opts,
@@ -113,7 +114,7 @@ export async function installBuildSystem(opts: Options, observations: Observatio
   if (!installed) {
     throw new DevopsError(`Problem installing dev dependencies for "tsc" build/bundle solution`);
   }
-  log.whisper(`{gray - dev dependencies for {blue ${bundler}} are installed}`);
+  log.whisper(chalk.gray` - dev dependencies for ${chalk.blue(bundler)} are installed`);
   pkg = getPackageJson(undefined, true);
   pkg.scripts = scripts;
   await savePackageJson(pkg);

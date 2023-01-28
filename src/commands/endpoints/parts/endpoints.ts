@@ -47,7 +47,7 @@ export const handler: DoDevopsHandler<IEndpointsOptions> = async ({ opts }) => {
         console.log(table([["id", "name", "description"], ...restApi]));
         console.log();
       } else {
-        console.log(`{gray - no REST API endpoints found}`);
+        console.log(chalk.gray` - no REST API endpoints found`);
         console.log();
       }
 

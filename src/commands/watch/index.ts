@@ -16,7 +16,7 @@ const command: IDoDevopsCommand = {
     if (observations.has("serverlessFramework")) {
       if (hasScript("watch")) {
         console.log(
-          `{gray - {bold note:} this is a serverless project but because you have a "watch" script, we will prefer that over the default do-devops watcher}`
+          chalk.gray`y - {bold note:} this is a serverless project but because you have a "watch" script, we will prefer that over the default do-devops watcher`
         );
 
         proxyToPackageManager("watch", observations, raw);

@@ -22,13 +22,13 @@ export async function installDevDep(
     log.info(
       `\n- ${emoji.checkmark} package${
         packages.length > 1 ? "s" : ""
-      } [ {italic {gray ${packages.join(", ")}}} ] {italic installed} as dev dependency${
+      } [ ${chalk.italic.gray(packages.join(", "))} ] ${chalk.italic`installed`} as dev dependency${
         packages.length > 1 ? "ies" : "y"
       }\n`
     );
     return true;
   } catch (error) {
-    log.info(chalk.gray`{red failure} trying to install npm packages: ${cmd}`);
+    log.info(chalk.gray`${chalk.red`failure`} trying to install npm packages: ${cmd}`);
     log.info(chalk.gray`\n${(error as Error).message}\n`);
     return false;
   }

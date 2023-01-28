@@ -7,6 +7,7 @@ import { determinePackageManager } from "src/shared/observations";
 import { emoji } from "src/shared/ui";
 import { getPackageJson, savePackageJson } from "src/shared/npm";
 import { spawnSync } from "node:child_process";
+import chalk from "chalk";
 
 /**
  * Removes a dependency from the repo's package.json file.
@@ -29,9 +30,9 @@ export async function removeDep(
   try {
     spawnSync(pkgManager, cmd, { stdio: "inherit" });
     log.info(
-      `- ${emoji.party} Packages [{italic {gray {dim ${packages.join(
+      `- ${emoji.party} Packages [ ${chalk.italic.gray.dim(packages.join(
         ", "
-      )}}}}] {italic removed}`
+      ))} ] ${chalk.italic`removed`}`
     );
     const pkg = getPackageJson();
     let pkgChanged = false;

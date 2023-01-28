@@ -23,7 +23,7 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
 }) => {
   const filterBy = argv.length > 0 ? (fn: string) => fn.includes(argv[0]) : () => true;
   const isServerlessProject = observations.has("serverlessFramework");
-  const region = opts.region ? opts.region : await determineRegion(opts);
+  const region = opts.region ?? (await determineRegion(opts));
   const stageFilterMsg = opts.stage
     ? `, filtered down to only those in the {bold ${opts.stage.toUpperCase()}} stage.`
     : "";
@@ -41,7 +41,7 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
         );
         if (opts.json) {
           console.log(
-            `{gray - using {inverse  json } output directly from AWS api instead of a table}`
+            chalk.gray` - using ${chalk.inverse(opts.json) } output directly from AWS api instead of a table}`
           );
           console.log(fns);
         } else {
@@ -52,12 +52,12 @@ export const handler: DoDevopsHandler<Options<IFnsOptions>> = async ({
         }
       }
       console.log(
-        `{gray - the AWS CLI provides access to data like this with} {bold aws lambda list-functions --profile ${opts.profile}}`
+        chalk.gray` - the AWS CLI provides access to data like this with} {bold aws lambda list-functions --profile ${opts.profile}}`
       );
     } else {
       console.log("- this project does not appear to be a Serverless project!");
       console.log(
-        `{gray - if you want a list of functions, you can still get this by stating an AWS profile with the "--profile" option}\n`
+        chalk.gray` - if you want a list of functions, you can still get this by stating an AWS profile with the "--profile" option}\n`
       );
     }
     exit();

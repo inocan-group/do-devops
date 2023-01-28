@@ -1,13 +1,12 @@
-/* eslint-disable unicorn/import-style */
-import chalk from "chalk";
-import type { ForegroundColorName, BackgroundColorName } from "chalk";
+// eslint-disable-next-line unicorn/import-style
+import chalk, { BackgroundColorName, ForegroundColorName } from "chalk";
 
 /**
  * Uses `` to present a nicely formatted
  * filepath and file where the file name itself is highlighted
  */
 export function highlightFilepath(
-  fp: string,
+  filePath: string,
   color: [ForegroundColorName | undefined, BackgroundColorName | undefined] = ["blue", undefined],
   highlight: [ForegroundColorName | undefined, BackgroundColorName | undefined] = [
     "blueBright",
@@ -24,11 +23,11 @@ export function highlightFilepath(
   const [modifier, foreground] = color;
   const [highModifier, highForeground] = highlight;
 
-  const parts = fp.split(/[/\\]/);
+  const parts = filePath.split(/[/\\]/);
   const file = parts.pop();
   const path = parts.join("/").replace(/^(\S)/, "./$1");
 
-  const filePath = modifier
+  const fp = modifier
     ? chalk[modifier]`{${foreground} ${path + "/"}}`
     : `{${foreground} ${path + "/"}}`;
 

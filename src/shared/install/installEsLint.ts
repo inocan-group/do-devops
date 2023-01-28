@@ -4,6 +4,7 @@ import { askConfirmQuestion } from "src/shared/interactive";
 import { logger } from "src/shared/core";
 import { emoji } from "src/shared/ui";
 import { templateFileCopy } from "src/shared/file";
+import chalk from "chalk";
 
 /**
  * Installs and configures both **eslint** and **prettier**
@@ -38,14 +39,14 @@ export async function installEsLint(
     return false;
   }
   log.whisper(
-    `{gray - all {italic eslint} and {italic prettier} dependencies have been installed}`
+    chalk.gray` - all {italic eslint} and {italic prettier} dependencies have been installed`
   );
 
   await templateFileCopy("eslint/.eslintrc", "/.eslintrc");
   await templateFileCopy("eslint/.prettierrc.js", "/.prettierrc.js");
 
   log.whisper(
-    `{gray - configuration files for both {italic eslint} and {italic prettier} have been saved}`
+    chalk.gray` - configuration files for both {italic eslint} and {italic prettier} have been saved`
   );
 
   log.info(`- ${emoji.party} {blue eslint} has been installed and configured\n`);
