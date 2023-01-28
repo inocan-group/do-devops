@@ -43,7 +43,7 @@ export function finalizeCommandDefinition(
     subCommands && subCommands.length > 0
       ? ` ${chalk.bold`<cmd:`}${chalk.dim(subCommands
           .map((i) => i.name)
-          .join(`{blue {bold |}}`))}${chalk.bold`>`}`
+          .join(`${chalk.blue.bold`|}`}`))}${chalk.bold`>`}`
       : "";
 
   return {

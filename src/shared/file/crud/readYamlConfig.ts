@@ -3,6 +3,7 @@ import { load } from "js-yaml";
 import { DevopsError } from "src/errors/DevopsError";
 import { filesExist } from "../existence/filesExist";
 import { interpolateFilePath } from "../helpers";
+import chalk from "chalk";
 
 /**
  * Reads a file from the filesystem and returns as a string.
@@ -29,7 +30,7 @@ export function readYamlConfig<T extends object>(filename: string): T | undefine
       : undefined;
   } catch (error) {
     throw new DevopsError(
-      `Problem loading YAML config from file {blue ${filename}}: ${(error as Error).message}`,
+      `Problem loading YAML config from file ${chalk.blue(filename)}: ${(error as Error).message}`,
       "read-yaml-config/unknown"
     );
   }

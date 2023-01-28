@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { exiftool, Tags, WriteTags } from "exiftool-vendored";
 import { IExifToolMetadata, IptcCreatorContactInfo } from "src/@types/image-types";
 import { DevopsError } from "../../errors";
@@ -115,7 +116,7 @@ export function useExifTools(options: IExifToolOptions = {}) {
       }
       if (cache[file][tag] !== undefined) {
         throw new DevopsError(
-          `Attempt to add "${tag}" on the image {blue ${file}} failed as this property already exists; use setTag() instead if you want to be able to overwrite.`,
+          `Attempt to add "${tag}" on the image ${chalk.blue(file)} failed as this property already exists; use setTag() instead if you want to be able to overwrite.`,
           "exif-tool/tag-exists"
         );
       }
