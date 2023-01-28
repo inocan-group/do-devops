@@ -73,11 +73,8 @@ import { isDevopsError } from "./@type-guards";
         const plural = cmdInput.unknown.length === 1 ? false : true;
         const preposition = cmdInput.unknown.length === 1 ? "was" : "were";
         console.error(
-          `- Note: ${chalk.italic`there ${preposition}`} ${
-            cmdInput.unknown.length
-          } ${chalk.italic`unknown`} parameter${
-            plural ? "s" : ""
-          } received (and ignored): ${chalk.gray(cmdInput.unknown.join(", "))}`;
+          `- Note: ${chalk.italic`there ${preposition}`} ${cmdInput.unknown.length} ${chalk.italic`unknown`} parameter${plural ? "s" : ""} received (and ignored): ${chalk.gray(cmdInput.unknown.join(", "))}`
+        );
       }
     } catch (error) {
       console.error(

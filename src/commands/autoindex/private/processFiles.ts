@@ -45,7 +45,7 @@ export async function processFiles(
     return;
   } else {
     log.info(
-      `- ${chalk.yellow.bold(indexFiles.length)} autoindex files found (${chalk.dim`out of ${chalk.yellow(indexFiles.length + nonAutoindexFiles.length)} candidates`})`
+      `- ${chalk.yellow.bold(indexFiles.length)} autoindex files found (${chalk.dim`out of ${chalk.yellow(indexFiles.length + nonAutoindexFiles.length)}`} candidates)`
     );
     log.whisper(`- index files were: ${chalk.gray`${indexFiles.join(", ")}}`}`);
   }
