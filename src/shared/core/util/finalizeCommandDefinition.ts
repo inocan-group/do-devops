@@ -36,7 +36,6 @@ export function finalizeCommandDefinition(
 
   const argv = hasArgv(cmdDefn) ? ` [${chalk.dim`argv`}]` : "";
   const argvStatic = chalk.bold.blue("[argv]:");
-  console.log({argvOption: getArgvOption(cmdDefn)?.description, argvStatic});
   
   const argvDescription = getArgvOption(cmdDefn)?.description
     ? `\n\n\t\t${argvStatic} ${getArgvOption(cmdDefn)?.description}`
