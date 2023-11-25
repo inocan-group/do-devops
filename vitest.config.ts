@@ -13,5 +13,7 @@ export default defineConfig({
       "test/": `${resolve(fileURLToPath(new URL(".", import.meta.url)), "test")}/`,
     },
   },
+  
   plugins: [],
+  
 });
